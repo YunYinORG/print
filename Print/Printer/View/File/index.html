@@ -2,11 +2,7 @@
 <extend name="Public/template/printerbase.html"/>
 <block name='title'>{$title}</block>
 <block name='header'>
-<IF condition='$history'>
-<include file="./Public/template/printernav.html" list="current_page_item"/>
-<ELSE/>
 <include file="./Public/template/printernav.html" manage="current_page_item"/>
-</IF>
 </block>
 <block name='content'>
 <div class="title" >
@@ -22,10 +18,7 @@
                 <th>上传者</th>
                 <th>上传时间</th>               
                 <th>打印状态</th>
-                <if condition="$history">
-                <else />
                 <th>操作</th>
-                </if>
             </tr>
         </thead>
         <tbody id="tablehead">
@@ -62,8 +55,6 @@
                     <default />未知状态
                     </switch>
                 </td>
-                <if condition="$history">
-                <else />
                 <td>                    
                     <switch name="vo['status']">
                     <case value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></case>
@@ -73,7 +64,6 @@
                     <default />不可操作
                     </switch>                   
                 </td>
-                </if>
             </tr>
             </volist>
         </tbody>
@@ -81,8 +71,6 @@
 </div>
 </block>
 <block name='end'>
-  <IF condition="$history">
-  <ELSE/>
 <script>
 $("table").on('click', '.set', function() {
     var URL = "/Printer/File/set";
@@ -98,7 +86,7 @@ $("table").on('click', '.set', function() {
     } else if (sid == 4) {
         set_s = 5;
     }
-    $.post(URL, {
+    $.get(URL, {
         fid: fid,
         status: set_s
     }, function(data) {
@@ -110,7 +98,6 @@ $("table").on('click', '.set', function() {
             } else if (set_s == 2) {
                 $('#' + fid + '_button').html('通知已打印').removeClass("btn btn-primary").addClass("btn btn-success");
                 status.html('已下载');
-                btn.removeClass('set').removeAttr('fid');
             } else {
                 btn.parent().parent().hide(1600);
             }
@@ -144,5 +131,4 @@ $(document).ready(function() {
     setInterval(refresh, 15000);
 });
 </script>
-</IF>
 </block>

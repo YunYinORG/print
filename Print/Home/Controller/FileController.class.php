@@ -39,8 +39,12 @@ class FileController extends Controller
             $condition['use_id']            = $uid;
             $condition['status']            = array('between', '1,5');
             $File       = D('FileView');
-            $cache_key=cache_name('user',$uid);
-            $this->data = $File->where($condition)->order('file.id desc')->cache($cache_key)->select();
+            $count      = $File->where($condition)->count();
+            $Page       = new \Think\Page($count,2);
+            $show       = $Page->show();
+//            $cache_key=cache_name('user',$uid);
+            $this->data = $File->where($condition)->order('file.id desc')->limit($Page->firstRow.','.$Page->listRows)->select();//cache($cache_key)->select();
+            $this->assign('page',$show);
             $this->display();
         } else
         {

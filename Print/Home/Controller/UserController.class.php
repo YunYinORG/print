@@ -101,23 +101,13 @@ class UserController extends Controller
             if ($User->create()) 
             {
                 import(C('VERIFY_WAY'), COMMON_PATH,'.php');
-                if ($name   = getName($student_number, I('post.password'))) 
+                if ($name   = getName($student_number, I('post.password')))
                 {
-                    $data['name']        = $name;
-                    $data['student_number']        = $student_number;
-                    $data['password']        = $password;
-                    $result = $User->add($data);
-                    if ($result) 
-                    {
-                        session('use_id', $result);
-                        session('student_number', $student_number);
-                        session('first_name', $name);
-                        S($key, null);
-                        $this->redirect('User/notice');
-                    } else
-                    {
-                        $this->error('注册失败：' . $User->getError());
-                    }
+                    session('student_number', $student_number);
+                    session('first_name', $name);
+                    session('password',$password);
+                    S($key, null);
+                    $this->redirect('User/notice');
                 } else
                 {
                     $this->error('学校账号实名认证失败！');
@@ -128,19 +118,20 @@ class UserController extends Controller
             }
         }
     }
-    
+
     //首次注册
     public function notice() 
     {
-        $uid         = session('use_id');
         $stu_number  = session('student_number');
-        
-        if (session('first_name') && $stu_number) 
+        $name = session('first_name');
+        $urp_password = session('password');
+        $User           = D('User');
+        if ($name && $stu_number && $urp_password) 
         {
-            
+            $jump = I('jump');
             $password    = I('post.password');
             $re_password = I('post.re_password');
-            if (!$password) 
+            if (!$password && !$jump) 
             {
                 $this->data  = session('first_name');
                 $this->display();
@@ -148,16 +139,37 @@ class UserController extends Controller
             {
                 $this->data = session('first_name') . '[密码不一致重新输入]';
                 $this->display();
-            } else
-            {
-                $result = M('User')->where('id=' . $uid)->setField('password', encode($password, $stu_number));
+            } elseif ($jump) {
+                $data['name']        = $name;
+                $data['student_number']        = $stu_number;
+                $data['password']        = $urp_password;
+                $result = $User->add($data);
                 if ($result) 
                 {
+                    session('use_id', $result);
                     session('first_name', null);
-                    $this->redirect('File/add', null, 0, '密码修改成功！');
+                    session('password', null);
+                    $this->success('注册成功');
                 } else
                 {
-                    $this->error('密码修改失败！');
+                    echo "dssdafdsfdsafs";
+//                    $this->error('注册失败：' . $User->getError());
+                }
+            } else
+            {
+                $data['name']        = $name;
+                $data['student_number']        = $stu_number;
+                $data['password']        = encode($password,$stu_number);
+                $result = $User->add($data);
+                if ($result) 
+                {
+                    session('use_id', $result);
+                    session('first_name', null);
+                    session('password', null);                    
+                    $this->redirect('File/add', null, 0, '密码设置成功！');
+                } else
+                {
+                    $this->error('注册失败：' . $User->getError());
                 }
             }
         } else

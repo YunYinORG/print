@@ -1,0 +1,52 @@
+{//打印管理界面}
+<extend name="Public/template/printerbase.html"/>
+<block name='title'>{$title}</block>
+<block name='header'>
+<include file="./Public/template/printernav.html" list="current_page_item"/>
+</block>
+<block name='content'>
+<div class="title" >
+    <h2>{$title}</h2>
+</div>
+<div class="container">
+    <table class=" table table-responsive">
+        <thead>
+            <tr>
+                <th>文件</th>
+                <th>份数</th>
+                <th>单双</th>
+                <th>上传者</th>
+                <th>上传时间</th>               
+            </tr>
+        </thead>
+        <tbody id="tablehead">
+            <volist name="data" id="vo">
+            <tr file_id="{$vo.id}">
+                <if condition="$vo.status eq 1">
+                    <td><a target='_blank' class="set" fid='{$vo.id}' href="__UPLOAD__/{$vo.url}">[{$vo.id}]{$vo.name}</a></td>
+                <else />
+                    <td><a target='_blank' href="__UPLOAD__/{$vo.url}">[{$vo.id}]{$vo.name}</a></td>
+                </if>
+                <td>
+<if condition="$vo.copies gt 0">
+ {$vo.copies}
+                <else/>
+                现打
+                </if>
+                </td>
+                <td>
+                <if condition="$vo.double_side gt 0">
+                双面
+                <else/>
+                单面
+                </if>
+                </td>
+                <td>{$vo.use_name}[{$vo.student_number}]</td>
+                 <td>{$vo.time}</td>               
+            </tr>
+            </volist>
+        </tbody>
+    </table>
+    <div class="result page">{$page}</div>
+</div>
+</block>

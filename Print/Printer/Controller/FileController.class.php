@@ -35,24 +35,14 @@ class FileController extends Controller
 	public function index() 
 	{
 		$pid    = pri_id(U('Index/index'));
-		$status = I('status', null, 'intval');
 		if ($pid) 
 		{
 			$condition['pri_id']        = $pid;
-			if ($status == 5) 
-			{
-				$cache_key   = fasle;
-				$condition['status']        = $status;
-				$this->assign('history', true);
-				$this->title = '已打印文件历史记录';
-			} else
-			{
 				$cache_key   = cache_name('printer', $pid);
 				$condition['status']             = array('between', '1,4');
 				$this->assign('history', false);
 				$this->title = '打印任务列表';
-			}
-			$File        = D('FileView');
+				$File        = D('FileView');
 			$this->data  = $File->where($condition)->order('file.id desc')->cache($cache_key, 10)->select();
 			$this->display();
 		} else
@@ -60,7 +50,31 @@ class FileController extends Controller
 			$this->redirect('Printer/Index/index');
 		}
 	}
-	
+
+	public function history() 
+	{
+		$pid    = pri_id(U('Index/index'));
+		if ($pid) 
+		{
+			$condition['pri_id']        = $pid;
+				$status = 5;
+				$condition['status']        = $status;
+				$this->assign('history', true);
+				$this->title = '已打印文件历史记录';
+			$File        = D('FileView');
+			$count      = $File->where($condition)->count();
+            $Page       = new \Think\Page($count,2);
+            $show       = $Page->show();
+			$this->data  = $File->where($condition)->order('file.id desc')->limit($Page->firstRow.','.$Page->listRows)->select();//cache($cache_key, 10)->select();
+            $this->assign('page',$show);
+			$this->display();
+		} else
+		{
+			$this->redirect('Printer/Index/index');
+		}
+	}
+
+
 	public function refresh() 
 	{
 		$pid        = pri_id(U('Index/index'));

@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
+        <script src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
     </head>
     <body>
         <div class="container">
@@ -41,8 +42,29 @@
                             <button type="submit" class="btn btn-success">设定新密码</button>
                         </div>
                         <div class="btn-group">
-                            <a href="/File/add" title='使用认证密码' class="btn btn-danger">跳过设置</a>
+                            <a href="/File/add" title='使用认证密码' class="btn btn-danger" id="jump">跳过设置</a>
                         </div>
+                        <script type="text/javascript">
+                            $(document).ready(function(){
+                                $('#jump').click(function(event){
+                                      event.preventDefault();
+                                      URL = '/User/notice';
+                                      $.post(URL,{
+                                        jump:true
+                                      },function(data)
+                                      {
+                                        if(data.status)
+                                        {
+                                            window.location.href="/File/add"; 
+                                        }
+                                        else
+                                        {
+                                            alert('Sorry,try again later');
+                                        }
+                                      })
+                                })
+                            });
+                        </script>
                     </div>
                 </div>
             </form>
