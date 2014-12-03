@@ -7,7 +7,17 @@
 	<style type="text/css">
 
 	body{
+		background-color:rgb(233,226,221);
 		margin: 0;
+	}
+	#page1{
+
+	}
+	#page2{
+		display: none;
+	}
+	#page3{
+		display: none;
 	}
 	/*style of page1*/
 	#page_1{
@@ -175,12 +185,6 @@
 	#break2:hover{
 		background-color: rgb(255,153,0);
 	}
-	#break3{
-		height: 2em;
-		background: rgb(145,145,229);
-		margin: 0;
-
-	}
 	/*style of page4*/
 	#page_4{
 
@@ -229,102 +233,149 @@
 		left: 10%;
 		top:-1em;
 	}
+	/*arrow*/
+	.arrow{
+		text-align: center;
+	}
+	#arrow1_down{
+		position: relative;
+		top: 3em;		
+	}
+	#arrow2_down{
+		position: relative;
+		top: 3em;	
+	}
 
 </style>
+<script type="text/javascript">
+	function showpage1(){
+		document.getElementById('page1').style.display="block";
+		document.getElementById('page2').style.display="none";
+		document.getElementById('page3').style.display="none";
+
+		document.body.style.backgroundColor="rgb(233,226,221)";
+	}
+	function showpage2(){
+		document.getElementById('page1').style.display="none";
+		document.getElementById('page2').style.display="block";
+		document.getElementById('page3').style.display="none";
+
+		document.body.style.backgroundColor="rgb(145,145,229)";
+	}
+	function showpage3() {
+		document.getElementById('page1').style.display="none";
+		document.getElementById('page2').style.display="none";
+		document.getElementById('page3').style.display="block";
+
+		document.body.style.backgroundColor="rgb(44,44,45)";
+	}
+</script>
 </head>
-<body>
-	<div id="page_1">
-		<h1>云印南开</h1>
-		<hr>
-		<p id="page_1_p1">Designing for you</p>
-		<p id="page_1_p2">Waiting for you !</p>
-		<div id="page_1_div">
-			<p id="page_1_div_p1">节省您在打印店排队等候的时间<img src="image\coffee.png"></p>			
-			<p id="page_1_div_p2">指尖一动，轻松上传需打印的文档<img src="image\sync.png"></p>			
-			<p id="page_1_div_p3">随时可取，让您再无后顾之忧<img src="image\printer.png"></p>
-				
-		</div>
-	</div>
-	<div id="page_2">
-		<p id="page_2_p1">建议与需求征集：</p>
-		<div id="page_2_div1">
-			<p >我们做的是为南开人的云印服务，离不开南开人的建议与需求</p>
-			<p >我们欢迎一切建议与用户需求，并将认真考虑，完善本项目</p>
-			<p>您可以发送邮件至print@nkumstc.cn 我们十分感谢您的支持</p>
-		</div>
-	</div>
-	<p id="break">所有提出建议或需求的同学将会收到此项目的内测邀请</p>
-	<div id="page_3">
-		<p id="page_3_p1">招募职位：</p>
-		<div id="page_3_div1">
-			<div id="page_3_div1_div1">
-				<ol>
-					<li>UI/UE 设计（界面和交互设计）</li>
-					<li>前端开发（web实现或移动端适配</li>
-					<li>后端开发（php或服务器部署）</li>
-					<li>桌面版（打印店驱动）</li>
-					<li>测试和运营</li>
-				</ol>
+<body 	>
+	<!-- 第一页 -->
+	<div id="page1">
+		<div id="page_1">
+			<h1>云印南开</h1>
+			<hr>
+			<p id="page_1_p1">Designing for you</p>
+			<p id="page_1_p2">Waiting for you !</p>
+			<div id="page_1_div">
+				<p id="page_1_div_p1">节省您在打印店排队等候的时间<img src="image\coffee.png"></p>			
+				<p id="page_1_div_p2">指尖一动，轻松上传需打印的文档<img src="image\sync.png"></p>			
+				<p id="page_1_div_p3">随时可取，让您再无后顾之忧<img src="image\printer.png"></p>
+					
 			</div>
-			<div id="page_3_div1_div2">
-				<ul>
-					<li>0~2 人</li>
-					<li>1~2 人</li>
-					<li>1~3 人</li>
-					<li>0~2 人</li>
-					<li>0~2 人</li>
-				</ul>
-			</div>
-
+			<div class="arrow" id="arrow1_down"><img onclick="showpage2();" src="image/downarrow_1.png"></div>
 		</div>
-		<div id="clear">   </div>
-	</div>	
-	<div id="break2">
-		<p>所有参与开发和运营的同学将被邀请为NKUMSTC正式会员</p>
-		<p>贡献突出者将授予证书并且有机会被推荐至微软亚洲研究院的实习岗位</p>
-	</div>
-	<div id="break3">	</div>
-	
-	<div id="page_4">
-		<p id="page_4_p1">时间安排:12月份第二周开始,共计三周</p>
-		<img id="page_4_img1" src="image/plan.png">
-		<table>
-			<tr>
-				<th>活动地点</th>
-				<th>伯苓楼601</th>
-			</tr>
-			<tr>
-				<th>联系邮箱</th>
-				<th>print@nkumstc.cn</th>
-			</tr>
-			<tr>
-				<th>发起人</th>
-				<th>李旭昇</th>
-			</tr>
-			<tr>
-				<th>项目指导</th>
-				<th>刘未来</th>
-			</tr>
-			<tr>
-				<th>宣传制作</th>
-				<th>姜帆 华伟彤</th>
-			</tr>
-			<tr>
-				<th>合作打印店</th>
-				<th>
-					<ul>
-						<li>光辉岁月(浴园附近)</li>
-						<li>伟钰印务(数码小院职工食堂附近)</li>
-						<li>天达印务社(西门22宿附近)</li>
-						<li>快捷复印社(南开出版社附近)</li>
-					</ul>
-				</th>
-			</tr>
-		</table>
-
 		
-		<img id="page_4_img_2"src="image/logo.png">
-		<span id="page_4_span">南开大学微软学生俱乐部</span>
+	</div>
+	<!-- 第二页 -->
+	<div id="page2">		
+			<div id="page_2">
+				<div class="arrow" id="arrow2_up"><img onclick="showpage1();" src="image/uparrow_2.png"></div>
+				<p id="page_2_p1">建议与需求征集：</p>
+				<div id="page_2_div1">
+					<p >我们做的是为南开人的云印服务，离不开南开人的建议与需求</p>
+					<p >我们欢迎一切建议与用户需求，并将认真考虑，完善本项目</p>
+					<p>您可以发送邮件至print@nkumstc.cn 我们十分感谢您的支持</p>
+				</div>
+			</div>
+			<p id="break">所有提出建议或需求的同学将会收到此项目的内测邀请</p>
+			<div id="page_3">
+				<p id="page_3_p1">招募职位：</p>
+				<div id="page_3_div1">
+					<div id="page_3_div1_div1">
+						<ol>
+							<li>UI/UE 设计（界面和交互设计）</li>
+							<li>前端开发（web实现或移动端适配</li>
+							<li>后端开发（php或服务器部署）</li>
+							<li>桌面版（打印店驱动）</li>
+							<li>测试和运营</li>
+						</ol>
+					</div>
+					<div id="page_3_div1_div2">
+						<ul>
+							<li>0~2 人</li>
+							<li>1~2 人</li>
+							<li>1~3 人</li>
+							<li>0~2 人</li>
+							<li>0~2 人</li>
+						</ul>
+					</div>
+
+				</div>
+				<div id="clear">   </div>
+			</div>	
+			<div id="break2">
+				<p>所有参与开发和运营的同学将被邀请为NKUMSTC正式会员</p>
+				<p>贡献突出者将授予证书并且有机会被推荐至微软亚洲研究院的实习岗位</p>
+			</div>
+			<div class="arrow" id="arrow2_down"><img onclick="showpage3();"src="image/downarrow_2.png"></div>
+	</div>	
+	<!-- 第三页 -->
+	<div id="page3">		
+			<div id="page_4">
+				<div id="arrow3_up" class="arrow "><img onclick="showpage2();"src="image/uparrow_3.png"></div>
+				<p id="page_4_p1">时间安排:12月份第二周开始,共计三周</p>
+				<img id="page_4_img1" src="image/plan.png">
+				<table>
+					<tr>
+						<th>活动地点</th>
+						<th>伯苓楼601</th>
+					</tr>
+					<tr>
+						<th>联系邮箱</th>
+						<th>print@nkumstc.cn</th>
+					</tr>
+					<tr>
+						<th>发起人</th>
+						<th>李旭昇</th>
+					</tr>
+					<tr>
+						<th>项目指导</th>
+						<th>刘未来</th>
+					</tr>
+					<tr>
+						<th>宣传制作</th>
+						<th>姜帆 华伟彤</th>
+					</tr>
+					<tr>
+						<th>合作打印店</th>
+						<th>
+							<ul>
+								<li>光辉岁月(浴园附近)</li>
+								<li>伟钰印务(数码小院职工食堂附近)</li>
+								<li>天达印务社(西门22宿附近)</li>
+								<li>快捷复印社(南开出版社附近)</li>
+							</ul>
+						</th>
+					</tr>
+				</table>
+
+				
+				<img id="page_4_img_2"src="image/logo.png">
+				<span id="page_4_span">南开大学微软学生俱乐部</span>
+			</div>
 	</div>
 </body>
 </html>
