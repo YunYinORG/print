@@ -6,360 +6,366 @@
         <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
         <link rel="icon" href="http://nkumstc.cn/favicon.ico" />
         <style type="text/css">
-                        body{
-                        background-color:rgb(233,226,221);
-                        margin: 0;
+                                        body{
+                                        background-color:rgb(233,226,221);
+                                        margin: 0;
+                                        }
+                                        #page2{
+                                        display: none;
+                                        }
+                                        #page3{
+                                        display: none;
+                                        }
+                                        /*style of page1*/
+                                        #page_1{
+                                        background-color: rgb(233,226,221);
+                                        padding-left: 20%;
+                                        padding-right: 20%;
+                                        padding-top: 1%;
+                                        padding-bottom: 10%;
+                                        font-family: "微软雅黑";
+                                        font-weight: 400;
+                                        }
+                                        h1{
+                                        color: #0099ff;
+                                        text-align: center;
+                                        font-size: 62px;
+                                        margin: 3%;
+                                        }
+                                        hr{
+                                        background-color: black;
+                                        border: black;
+                                        height: 1px;
+                                        }
+                                        #page_1_p1{
+                                        text-align: left;
+                                        float: left;
+                                        font-size: 40px;
+                                        margin: 3%;
+                                        }
+                                        #page_1_p2{
+                                        text-align: right;
+                                        float: right;
+                                        position: relative;
+                                        font-size: 40px;
+                                        top: 30px;
+                                        margin: 3%;
+                                        }
+                                        #page_1_div{
+                                        position: relative;
+                                        clear: both;
+                                        font-size: 32px;
+                                        font-family: Arial;
+                                        text-align: left;
+                                        }
+                                        #page_1_div img{
+                                        width: 45px;
+                                        height: 45px;
+                                        position: relative;
+                                        left: 10%;
+                                        }
+                                        #page_1_div_p1{
+                                        position: relative;
+                                        left: 10%;
+                                        top:1em;
+                                        }
+                                        #page_1_div_p2{
+                                        position: relative;
+                                        left: 20%;
+                                        top:1em;
+                                        }
+                                        #page_1_div_p2 img{
+                                        left: 5%;
+                                        }
+                                        #page_1_div_p3{
+                                        position: relative;
+                                        left: 30%;
+                                        top:1em;
+                                        }
+                                        /*style of page2*/
+                                        #page_2{
+                                        background: rgb(145,145,229);
+                                        padding-left: 20%;
+                                        padding-right: 20%;
+                                        padding-top: 1%;
+                                        padding-bottom: 1%;
+                                        font-family: Arial;
+                                        }
+                                        #page_2_p1{
+                                        font-weight: 700;
+                                        font-size: 1.7em;
+                                        margin-bottom: 2em;
+                                        margin-top: 2em;
+                                        }
+                                        #page_2_div1{
+                                        font-size: 1.3em;
+                                        position: relative;
+                                        left: 10%;
+                                        }
+                                        #page_2_div1 p{
+                                        margin-bottom: 2em;
+                                        margin-bottom: 2em;
+                                        }
+                                        /************/
+                                        #break{
+                                        font-size: 1.3em;
+                                        color: white;
+                                        text-align: center;
+                                        background-color: rgb(0,153,255);
+                                        padding-top: 0.7em;
+                                        padding-bottom: 0.7em;
+                                        padding-left: 0;
+                                        padding-right:0;
+                                        margin:0;
+                                        }
+                                        /**********/
+                                        #break:hover{
+                                        background-color: rgb(0,204,255);
+                                        }
+                                        /**********/
+                                        /*style of page3*/
+                                        #page_3{
+                                        background: rgb(145,145,229);
+                                        padding-left: 20%;
+                                        padding-right: 20%;
+                                        padding-top: 1%;
+                                        padding-bottom: 1%;
+                                        font-family: Arial;
+                                        }
+                                        #page_3_p1{
+                                        font-weight: 700;
+                                        font-size: 1.7em;
+                                        }
+                                        #page_3_div1{
+                                        position: relative;
+                                        left: 10%;
+                                        color: #0d0d0d;
+                                        font-size: 1.3em;
+                                        font-weight: 400;
+                                        }
+                                        #page_3_div1_div1{
+                                        float: left;
+                                        }
+                                        #page_3_div1_div2{
+                                        float: right;
+                                        position: relative;
+                                        right: 30%;
+                                        }
+                                        #page_3_div1_div2 ul{
+                                        list-style: none;
+                                        }
+                                        #contact{
+                                        text-align: center;
+                                        font-family: "微软雅黑";
+                                        font-weight: 100;
+                                        font-size:1em;
+                                        }
+                                        #clear{
+                                        clear:both;
+                                        }
+                                        /***********/
+                                        #break2{
+                                        margin: 0;
+                                        padding: 0.3em;
+                                        background-color: rgb(255,102,0);
+                                        text-align: center;
+                                        color: white;
+                                        font-weight: 400;
+                                        font-size: 1.3em;
+                                        }
+                                        #break2 p{
+                                        margin: 1px;
+                                        padding: 0;
+                                        }
+                                        #break2:hover{
+                                        background-color: rgb(255,153,0);
+                                        }
+                                        /*style of page4*/
+                                        #page_4{
+                                        background: rgb(44,44,45);
+                                        padding-left: 20%;
+                                        padding-right: 20%;
+                                        padding-top: 1%;
+                                        padding-bottom: 1%;
+                                        font-family: Arial;
+                                        color: #fff;
+                                        font-size: 1.3em;
+                                        text-align: left;
+                                        }
+                                        #page_4_p1{
+                                        font-size: 1.3em;
+                                        font-weight: 400;
+                                        text-align: left;
+                                        font-style: normal;
+                                        }
+                                        #page_4 ul{
+                                        list-style: none;
+                                        }
+                                        #page_4 table{
+                                        top: 1em;
+                                        position: relative;
+                                        left: 10%;
+                                        font-size: 1em;
+                                        font-weight: 300;
+                                        text-align: left;
+                                        font-style: normal;
+                                        }
+                                        #page_4_img1{
+                                        width: 70%;
+                                        height: 70%;
+                                        }
+                                        #page_4_img_2{
+                                        width: 10%;
+                                        height:10%;
+                                        }
+                                        #page_4_span{
+                                        font-weight: 700;
+                                        font-size: 1.4em;
+                                        color: #c9c9c9;
+                                        position: relative;
+                                        left: 10%;
+                                        top:-1em;
+                                        }
+                                        #page_4_span a{
+                                        color: #c9c9c9;
+                                        }
+                                        #page_4_span a:hover{
+                                        color:  white;
+                                        }
+                                        #qrcode{
+                                        float: right;
+                                        position: relative;
+                                        top:-90px;
+                                        width: 20%;
+                                        height: 20%;
+                                        }
+                                        /*arrow*/
+                                        .arrow{
+                                        text-align: center;
+                                        }
+                                        #arrow1_down{
+                                        position: relative;
+                                        top: 3em;
+                                        }
+                                        #arrow2_down{
+                                        position: relative;
+                                        top: 3em;
+                                        }
+                                        /*链接*/
+                                        a{
+                                        font-weight: 100;
+                                        text-decoration: none;
+                                        }
+                                        @media all and (max-width:800px){
+                                        #qrcode{
+                                        display: none;
+                                        }
+                                        #page_1 *{
+                                        text-align: center;
+                                        /*	margin: 0.1em;
+                                        padding: 0.1em;*/
+                                        position: inherit;
+                                        }
+                                        #page_1 hr{
+                                        padding: 0.1em;
+                                        margin: 1em;
+                                        }
+                                        #page_1 .icon{
+                                        display: none;
+                                        }
+                                        #page_1 .adv{
+                                        font-size: 0.75em;
+                                        margin-bottom: 1em;
+                                        margin-top: 1em;
+                                        }
+                                        h1{
+                                        font-size: 2em;
+                                        margin: 3%;
+                                        }
+                                        #page_1_p2,#page_1_p1{
+                                        text-align: center;
+                                        font-size: 1.2em;
+                                        color: green;
+                                        font-weight: 800;
+                                        float: none;
+                                        margin: 2%;
+                                        }
+                                    #page_1_p1{
+                                    padding-top:0.8em;
+                                    }
+                                    #page_1_p2{
+                                    padding-bottom: 1em;
+                                    }
+                                    #page_2{
+                                    padding: 5%;
+                                    }
+                        #page_2 *{
+                        left: auto;
+                        right: auto;
                         }
-                        #page2{
-                        display: none;
-                        }
-                        #page3{
-                        display: none;
-                        }
-                        /*style of page1*/
-                        #page_1{
-                        background-color: rgb(233,226,221);
-                        padding-left: 20%;
-                        padding-right: 20%;
-                        padding-top: 1%;
-                        padding-bottom: 10%;
-                        font-family: "微软雅黑";
-                        font-weight: 400;
-                        }
-                        h1{
-                        color: #0099ff;
-                        text-align: center;
-                        font-size: 62px;
-                        margin: 3%;
-                        }
-                        hr{
-                        background-color: black;
-                        border: black;
-                        height: 1px;
-                        }
-                        #page_1_p1{
-                        text-align: left;
-                        float: left;
-                        font-size: 40px;
-                        margin: 3%;
-                        }
-                        #page_1_p2{
-                        text-align: right;
-                        float: right;
-                        position: relative;
-                        font-size: 40px;
-                        top: 30px;
-                        margin: 3%;
-                        }
-                        #page_1_div{
-                        position: relative;
-                        clear: both;
-                        font-size: 32px;
-                        font-family: Arial;
-                        text-align: left;
-                        }
-                        #page_1_div img{
-                        width: 45px;
-                        height: 45px;
-                        position: relative;
-                        left: 10%;
-                        }
-                        #page_1_div_p1{
-                        position: relative;
-                        left: 10%;
-                        top:1em;
-                        }
-                        #page_1_div_p2{
-                        position: relative;
-                        left: 20%;
-                        top:1em;
-                        }
-                        #page_1_div_p2 img{
-                        left: 5%;
-                        }
-                        #page_1_div_p3{
-                        position: relative;
-                        left: 30%;
-                        top:1em;
-                        }
-                        /*style of page2*/
-                        #page_2{
-                        background: rgb(145,145,229);
-                        padding-left: 20%;
-                        padding-right: 20%;
-                        padding-top: 1%;
-                        padding-bottom: 1%;
-                        font-family: Arial;
-                        }
-                        #page_2_p1{
-                        font-weight: 700;
-                        font-size: 1.7em;
-                        margin-bottom: 2em;
-                        margin-top: 2em;
-                        }
-                        #page_2_div1{
-                        font-size: 1.3em;
-                        position: relative;
-                        left: 10%;
-                        }
-                        #page_2_div1 p{
-                        margin-bottom: 2em;
-                        margin-bottom: 2em;
-                        }
-                        /************/
-                        #break{
-                        font-size: 1.3em;
-                        color: white;
-                        text-align: center;
-                        background-color: rgb(0,153,255);
-                        padding-top: 0.7em;
-                        padding-bottom: 0.7em;
-                        padding-left: 0;
-                        padding-right:0;
-                        margin:0;
-                        }
-                        /**********/
-                        #break:hover{
-                        background-color: rgb(0,204,255);
-                        }
-                        /**********/
-                        /*style of page3*/
-                        #page_3{
-                        background: rgb(145,145,229);
-                        padding-left: 20%;
-                        padding-right: 20%;
-                        padding-top: 1%;
-                        padding-bottom: 1%;
-                        font-family: Arial;
-                        }
-                        #page_3_p1{
-                        font-weight: 700;
-                        font-size: 1.7em;
+                        #page_3 {
+                    padding: 5%;
                         }
                         #page_3_div1{
-                        position: relative;
-                        left: 10%;
-                        color: #0d0d0d;
-                        font-size: 1.3em;
-                        font-weight: 400;
+                left: auto;
+                        right: auto;
                         }
-                        #page_3_div1_div1{
-                        float: left;
-                        }
-                        #page_3_div1_div2{
-                        float: right;
-                        position: relative;
-                        right: 30%;
-                        }
-                        #page_3_div1_div2 ul{
-                        list-style: none;
-                        }
-                        #contact{
-                        text-align: center;
-                        font-family: "微软雅黑";
-                        font-weight: 100;
-                        font-size:1em;
-                        }
-                        #clear{
-                        clear:both;
-                        }
-                        /***********/
-                        #break2{
-                        margin: 0;
-                        padding: 0.3em;
-                        background-color: rgb(255,102,0);
-                        text-align: center;
-                        color: white;
-                        font-weight: 400;
-                        font-size: 1.3em;
-                        }
-                        #break2 p{
-                        margin: 1px;
-                        padding: 0;
-                        }
-                        #break2:hover{
-                        background-color: rgb(255,153,0);
-                        }
-                        /*style of page4*/
-                        #page_4{
-                        background: rgb(44,44,45);
-                        padding-left: 20%;
-                        padding-right: 20%;
-                        padding-top: 1%;
-                        padding-bottom: 1%;
-                        font-family: Arial;
-                        color: #fff;
-                        font-size: 1.3em;
-                        text-align: left;
-                        }
-                        #page_4_p1{
-                        font-size: 1.3em;
-                        font-weight: 400;
-                        text-align: left;
-                        font-style: normal;
-                        }
-                        #page_4 ul{
-                        list-style: none;
-                        }
+        #page_4{
+        padding:2%;
+        text-align: center;
+        }
                         #page_4 table{
-                        top: 1em;
-                        position: relative;
-                        left: 10%;
-                        font-size: 1em;
-                        font-weight: 300;
-                        text-align: left;
-                        font-style: normal;
-                        }
-                        #page_4_img1{
-                        width: 70%;
-                        height: 70%;
-                        }
-                        #page_4_img_2{
-                        width: 10%;
-                        height:10%;
-                        }
-                        #page_4_span{
-                        font-weight: 700;
-                        font-size: 1.4em;
-                        color: #c9c9c9;
-                        position: relative;
-                        left: 10%;
-                        top:-1em;
-                        }
-                        #page_4_span a{
-                        color: #c9c9c9;
-                        }
-                        #page_4_span a:hover{
-                        color:  white;
-                        }
-                        #qrcode{
-                        float: right;
-                        position: relative;
-                        top:-90px;
-                        width: 20%;
-                        height: 20%;
-                        }
-                        /*arrow*/
-                        .arrow{
-                        text-align: center;
-                        }
-                        #arrow1_down{
-                        position: relative;
-                        top: 3em;
-                        }
-                        #arrow2_down{
-                        position: relative;
-                        top: 3em;
-                        }
-                        /*链接*/
-                        a{
-                        font-weight: 100;
-                        text-decoration: none;
-                        }
-                        @media all and (max-width:800px){
-                        #qrcode{
-                        display: none;
-                        }
-                        #page_1 *{
-                        text-align: center;
-                        /*	margin: 0.1em;
-                        padding: 0.1em;*/
-                        position: inherit;
-                        }
-                        #page_1 hr{
-                        padding: 0.1em;
-                        margin: 1em;
-                        }
-                        #page_1 .icon{
-                        display: none;
-                        }
-                        #page_1 .adv{
-                        font-size: 0.75em;
-                        margin-bottom: 1em;
-                        margin-top: 1em;
-                        }
-                        h1{
-                        font-size: 2em;
-                        margin: 3%;
-                        }
-                        #page_1_p2,#page_1_p1{
-                        text-align: center;
-                        font-size: 1.2em;
-                        color: green;
-                        font-weight: 800;
-                        float: none;
-                        margin: 2%;
-                        }
-                    #page_1_p1{
-                    padding-top:0.8em;
-                    }
-                    #page_1_p2{
-                    padding-bottom: 1em;
-                    }
-                    #page_2{
-                    padding: 5%;
-                    }
-        #page_2 *{
-        left: auto;
-        right: auto;
+                                        top: 1em;
+                                        position: static;
+                                        left: 1%;
+                                        font-size: 1em;
+                                        font-weight: 300;
+                                        text-align: left;
+                                        font-style: normal;
+                                        }
+        th{
+        font-size: 0.6em;
         }
-        #page_3 {
-      padding: 5%; 
+                                        tr th:first-child{
+                                        font-size: 0.5em;
+                                        }
+        table{
+        padding-top: 1em;
+        padding-bottom: 1.5em;
         }
-
-        #page_3_div1{
- left: auto;
-        right: auto;
-        }
-                /*  .arrow{
-                    }*/
-                        /*#page_1_div{
-                        clear: both;
-                        font-size: 32px;
-                        font-family: Arial;
-                        text-align: left;
-                        }
-                        #page_1_div img{
-                        width: 45px;
-                        height: 45px;
-                        }
-                        #page_1_div_p1{
-                        top:1em;
-                        }
-                        #page_1_div_p2{
-                        position: relative;
-                        left: 20%;
-                        top:1em;
-                        }
-                        #page_1_div_p2 img{
-                        left: 5%;
-                        }
-                        #page_1_div_p3{
-                        position: relative;
-                        left: 30%;
-                        top:1em;
-                        }*/
-                        }
+                                #page_4_span{
+                                font-size: 0.85em;
+                                    }
+                                        #page_4 ul{
+                	padding:0;
+                }
+                }
+            
         </style>
         <script type="text/javascript">
-                        function showpage1(){
-                        document.getElementById('page1').style.display="block";
-                        document.getElementById('page2').style.display="none";
-                        document.getElementById('page3').style.display="none";
-                        document.body.style.backgroundColor="rgb(233,226,221)";
-                        }
-                        function showpage2(){
-                        document.getElementById('page1').style.display="none";
-                        document.getElementById('page2').style.display="block";
-                        document.getElementById('page3').style.display="none";
-                        document.body.style.backgroundColor="rgb(145,145,229)";
-                        }
-                        function showpage3() {
-                        document.getElementById('page1').style.display="none";
-                        document.getElementById('page2').style.display="none";
-                        document.getElementById('page3').style.display="block";
-                        document.body.style.backgroundColor="rgb(44,44,45)";
-                        }
+
+        var page=1;
+                                    function showpage1(){
+                                    page=1;
+                                        document.getElementById('page1').style.display="block";
+                                        document.getElementById('page2').style.display="none";
+                                        document.getElementById('page3').style.display="none";
+                                        document.body.style.backgroundColor="rgb(233,226,221)";
+                                        }
+                                        function showpage2(){
+                                        page=2;
+                                        document.getElementById('page1').style.display="none";
+                                        document.getElementById('page2').style.display="block";
+                                        document.getElementById('page3').style.display="none";
+                                        document.body.style.backgroundColor="rgb(145,145,229)";
+                                        }
+                                        function showpage3() {
+                                        page=3;
+                                        document.getElementById('page1').style.display="none";
+                                        document.getElementById('page2').style.display="none";
+                                        document.getElementById('page3').style.display="block";
+                                        document.body.style.backgroundColor="rgb(44,44,45)";
+                                        }
         </script>
     </head>
     <body 	>
@@ -391,10 +397,8 @@
                 </div>
             </div>
             <div id="break">
-
                 <p>所有提出建议或需求的同学将会收到此项目的内测邀请</p><p>您可以发送建议至<a href="mailto:print@nkumstc.cn?subject=建议">print@nkumstc.cn</a>(点击发送)</p>
             </div>
-
             <hr/>
             <div id="page_3">
                 <p id="page_3_p1">招募职位：</p>
@@ -420,7 +424,7 @@
         <div id="page3">
             <div id="page_4">
                 <div id="arrow3_up" class="arrow "><img onclick="showpage2();"src="image/uparrow_3.png"></div>
-                <p id="page_4_p1">时间安排:12月份第二周开始,共计三周</p>
+                <p id="page_4_p1"><span>时间安排:</span><span>12月份第二周开始,共计三周</span></p>
                 <img id="page_4_img1" src="image/plan.png">
                 <table>
                     <tr>
@@ -444,7 +448,7 @@
                         <th>姜帆 华伟彤 刘策</th>
                     </tr>
                     <tr>
-                        <th>合作打印店</th>
+                        <th>合作店社</th>
                         <th>
                             <ul>
                                 <li>光辉岁月(浴园附近)</li>
