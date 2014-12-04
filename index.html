@@ -212,11 +212,11 @@
                                         }
                                         #page_4_img1{
                                         width: 70%;
-                                        height: 70%;
+                                  /*      height: 70%;*/
                                         }
                                         #page_4_img_2{
                                         width: 10%;
-                                        height:10%;
+                                        /*height:10%;*/
                                         }
                                         #page_4_span{
                                         font-weight: 700;
@@ -253,8 +253,9 @@
                                         }
                                         /*链接*/
                                         a{
-                                        font-weight: 100;
+                                        font-weight: 800;
                                         text-decoration: none;
+                                        color: white;
                                         }
                                         @media all and (max-width:800px){
                                         #qrcode{
@@ -314,6 +315,11 @@
         padding:2%;
         text-align: center;
         }
+        #page_4_p1 *{
+        	font-size: 1.0em;
+        	text-align: center;
+        	clear: both;
+        }
                         #page_4 table{
                                         top: 1em;
                                         position: static;
@@ -339,33 +345,37 @@
                                         #page_4 ul{
                 	padding:0;
                 }
+
                 }
             
         </style>
         <script type="text/javascript">
-
-        var page=1;
-                                    function showpage1(){
-                                    page=1;
-                                        document.getElementById('page1').style.display="block";
-                                        document.getElementById('page2').style.display="none";
-                                        document.getElementById('page3').style.display="none";
-                                        document.body.style.backgroundColor="rgb(233,226,221)";
-                                        }
-                                        function showpage2(){
-                                        page=2;
-                                        document.getElementById('page1').style.display="none";
-                                        document.getElementById('page2').style.display="block";
-                                        document.getElementById('page3').style.display="none";
-                                        document.body.style.backgroundColor="rgb(145,145,229)";
-                                        }
-                                        function showpage3() {
-                                        page=3;
-                                        document.getElementById('page1').style.display="none";
-                                        document.getElementById('page2').style.display="none";
-                                        document.getElementById('page3').style.display="block";
-                                        document.body.style.backgroundColor="rgb(44,44,45)";
-                                        }
+var page = 1;
+ 
+function showpage(p) {
+ 
+    var color = '';
+    switch (p) {
+    case 1:
+        color = "rgb(233,226,221)";
+        break;
+    case 2:
+        color = "rgb(145,145,229)";
+        break;
+    case 3:
+        color = "rgb(44,44,45)";
+        break;
+    default:
+        return false;
+    }
+    page = p;
+    document.getElementById('page1').style.display = "none";
+    document.getElementById('page2').style.display = "none";
+    document.getElementById('page3').style.display = "none";
+    document.getElementById('page' + p).style.display = "block";
+    document.body.style.backgroundColor = color;
+ 
+}
         </script>
     </head>
     <body 	>
@@ -383,13 +393,13 @@
                     <p id="page_1_div_p2" class="adv">无须U盘再也不必担心病毒<img class="icon" src="image\sync.png"></p>
                     <p id="page_1_div_p3" class="adv">随时可取让您再无后顾之忧<img class="icon" src="image\printer.png"></p>
                 </div>
-                <div class="arrow" id="arrow1_down"><img onclick="showpage2();" src="image/downarrow_1.png"></div>
+                <div class="arrow" id="arrow1_down"><img onclick="showpage(2);" src="image/downarrow_1.png"></div>
             </div>
         </div>
         <!-- 第二页 -->
         <div id="page2">
             <div id="page_2">
-                <div class="arrow" id="arrow2_up"><img onclick="showpage1();" src="image/uparrow_2.png"></div>
+                <div class="arrow" id="arrow2_up"><img onclick="showpage(1);" src="image/uparrow_2.png"></div>
                 <p id="page_2_p1">建议与需求征集：</p>
                 <div id="page_2_div1">
                     <p >这是南开人的云印服务，离不开南开人的建议与需求</p>
@@ -399,7 +409,7 @@
             <div id="break">
                 <p>所有提出建议或需求的同学将会收到此项目的内测邀请</p><p>您可以发送建议至<a href="mailto:print@nkumstc.cn?subject=建议">print@nkumstc.cn</a>(点击发送)</p>
             </div>
-            <hr/>
+            <!-- <hr/> -->
             <div id="page_3">
                 <p id="page_3_p1">招募职位：</p>
                 <div id="page_3_div1">
@@ -415,16 +425,16 @@
             </div>
             <div id="break2">
                 <p>所有参与开发和运营的同学将被邀请为NKUMSTC正式会员;</p>
-                <p>贡献突出者将授予证书并且有机会被推荐至微软亚洲研究院的实习岗位!</p>
+                <p>贡献突出者将授予证书并且有机推荐微软亚洲研究院的实习!</p>
                 <p id="contact">发送100字内的个人信息到<a href="mailto:print@nkumstc.cn?subject=加入">print@nkumstc.cn</a>(点击发送)</p>
             </div>
-            <div class="arrow" id="arrow2_down"><img onclick="showpage3();"src="image/downarrow_2.png"></div>
+            <div class="arrow" id="arrow2_down"><img onclick="showpage(3);"src="image/downarrow_2.png"></div>
         </div>
         <!-- 第三页 -->
         <div id="page3">
             <div id="page_4">
-                <div id="arrow3_up" class="arrow "><img onclick="showpage2();"src="image/uparrow_3.png"></div>
-                <p id="page_4_p1"><span>时间安排:</span><span>12月份第二周开始,共计三周</span></p>
+                <div id="arrow3_up" class="arrow "><img onclick="showpage(2);"src="image/uparrow_3.png"></div>
+                <p id="page_4_p1"><span>时间安排:</span><span class="value">12月份第二周开始,共计三周</span></p>
                 <img id="page_4_img1" src="image/plan.png">
                 <table>
                     <tr>
@@ -459,6 +469,7 @@
                         </th>
                     </tr>
                 </table>
+                <p><a href="https://github.com/nkumstc/print">Github上查看项目进展</a></p>
                 <img id='qrcode' src="image/qrcode.png"/>
                 <img id="page_4_img_2"src="image/logo.png">
                 <span id="page_4_span"><a href="http://nkumstc.cn">南开大学微软学生俱乐部</a></span>
