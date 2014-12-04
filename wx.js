@@ -233,7 +233,7 @@
         }
     };
 })(window);
-// WeixinApi.enableDebugMode();
+WeixinApi.enableDebugMode();
 WeixinApi.ready(function(Api) {
     var wxData = {
         "appId": "",
