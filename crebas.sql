@@ -19,13 +19,14 @@ create table file
    use_id               int not null,
    pri_id               int not null,
    name                 char(32),
-   location             char(64),
+   url             char(64),
    time                 datetime,
-   printed              bool default 0,
+   ---printed              bool default 0,
    requirements         char(100),
-   print_amount         int,
-   sides_info           char(10),
-   file_status          char(10),
+   amount         int,
+   ---
+   is_double           char(10),
+   status          char(10),
    primary key (id)
 );
 
@@ -39,7 +40,10 @@ create table printer
    account              char(30),
    password             char(32),
    address              char(30),
-   printer_tel          char(20),
+  ---
+   phone          char(20),
+   QQ
+
    primary key (id)
 );
 
@@ -52,9 +56,10 @@ create table user
    student_number       char(10),
    password             char(32),
    name                 char(6),
-   major                char(20),
-   sex                  char(3),
-   user_tel             char(20),
+---
+   email                char(20),
+   gender                  char(3),
+   phone             char(20),
    primary key (id)
 );
 

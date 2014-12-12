@@ -11,3 +11,8 @@
 	* 统一小写
 	* 用户电话号码（user和printer）
 	* 打印数量，单双面信息，文件状态（file）
+
+
+* id自增
+* file 文件状态 tinyint；删除printed
+			
