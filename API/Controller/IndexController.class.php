@@ -45,18 +45,19 @@ class IndexController extends RestController
 	 */
 	public function index() 
 	{
-		$id          = I('post.id');
-		$pwd         = I('post.pwd');
+		$pwd         = I('post.password');
 		$type        = I('post.type');
-		
+		$Model       = null;
 		switch ($type) 
 		{
 		case C('STUDENT'):
-			$table       = 'user';
+			$num         = I('post.number', 0, 'intval');
+			$Model       = M('user')->where("student_number='$num'");
 			break;
 
 		case C('PRINTER'):
-			$table = 'printer';
+			$account = I('post.account', null);
+			$Model   = M('printer')->where("account='$account'");
 			break;
 
 		default:
@@ -65,7 +66,9 @@ class IndexController extends RestController
 		
 		if (!isset($data)) 
 		{
-			$password = M($table)->getFieldById($id, 'password');
+			$info     = $Model->field('id,password')->find();
+			$id       = $info['id'];
+			$password = $info['password'];
 			if ($password == encode($id, $pwd)) 
 			{
 				$data['token']          = token($oid);
