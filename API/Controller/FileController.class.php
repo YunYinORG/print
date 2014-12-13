@@ -99,7 +99,7 @@ class FileController extends RestController
 			if ($info['type'] == C('PRINTER')) 
 			{
 				$where['pri_id']       = $info['oid'];
-				$where['id']       = I('id');
+				$where['id']       = I('id',null,'intval');
 				$File  = M('File')->where($where)->cache(true, 120);
 				switch ($this->_method) 
 				{
