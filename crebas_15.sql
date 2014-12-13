@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2014/12/13 14:21:21                          */
+/* Created on:     2014/12/14 0:17:45                           */
 /*==============================================================*/
 
 
@@ -11,6 +11,8 @@ drop table if exists file;
 drop table if exists notification;
 
 drop table if exists printer;
+
+drop table if exists token;
 
 drop table if exists user;
 
@@ -57,6 +59,8 @@ create table notification
    id                   int not null auto_increment comment 'id',
    fil_id               int not null comment '文件_id',
    content              text comment '内容',
+   to_id                int comment '通知对象id',
+   to_type              char(10) comment '通知对象类型',
    primary key (id)
 );
 
@@ -78,6 +82,22 @@ create table printer
 );
 
 alter table printer comment '打印店';
+
+/*==============================================================*/
+/* Table: token                                                 */
+/*==============================================================*/
+create table token
+(
+   id                   int not null comment 'id',
+   type                 char(8) comment 'type',
+   token                char(32) comment 'token',
+   to_id                int comment 'token对象id',
+   to_type              char(10) comment 'token对象类型',
+   primary key (id),
+   unique key AK_token_unique (token)
+);
+
+alter table token comment 'token';
 
 /*==============================================================*/
 /* Table: user                                                  */
