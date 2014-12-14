@@ -6,11 +6,11 @@ class PrinterController extends Controller {
 
 
     public function index(){
-        //profile
-        if(session('?account'))
+        //Display profile and table to make a change
+        if(session('?pri_id'))
         {
             $Printer = M('Printer');
-            $data = $Printer->where("account=".cookie('account'))->find();
+            $data = $Printer->where("id=".session('pri_id'))->find();
             $this->data = $data;
             $this->display();
         }
@@ -21,7 +21,8 @@ class PrinterController extends Controller {
     }
     
     public function change(){
-        if(session('?account'))
+    //Not supported to change password
+        if(session('?pri_id'))
         {
             $Printer = M('Printer');
             if($Printer->create()) 
@@ -50,6 +51,7 @@ class PrinterController extends Controller {
     
     public function logout()
     {
+        delete_token(cookie('token'));        
         session(null);
         cookie(null);
     }
@@ -64,27 +66,36 @@ class PrinterController extends Controller {
     
     
     public function get(){
-        //list of file,unproceeded and proceeded
-        $Notification = M();
-        $files = $Notification->query("SELECT * FROM file INNER JOIN notification WHERE file.id=notification.fil_id AND file.printed=0 AND file.pri_id=".session('pri_id'));
-       /*
-        foreach($files as $file)
+        if(session('?pri_id'))
         {
-           // var_dump($file);
-            $file['fil_id'];
-            $File = M('File');
-            $detail
+        
+            //list of file,unproceeded and proceeded
+            $Notification = M();
+            $files = $Notification->query("SELECT * FROM file INNER JOIN notification WHERE file.id=notification.fil_id AND file.printed=0 AND file.pri_id=".session('pri_id'));
+           /*
+            foreach($files as $file)
+            {
+               // var_dump($file);
+                $file['fil_id'];
+                $File = M('File');
+                $detail
+            }
+            */
+            $this->data = $files;
+            /*
+            $this->data['download']=U('Printer/download?id='.$files['fil_id']);
+            $this->data['printed']=U('Printer/printed?id='.$files['fil_id']);
+            $this->data['paid']=U('Printer/paid?id='.$files['fil_id']);
+            */
+            $this->display();
         }
-        */
-        $this->data = $files;
-        /*
-        $this->data['download']=U('Printer/download?id='.$files['fil_id']);
-        $this->data['printed']=U('Printer/printed?id='.$files['fil_id']);
-        $this->data['paid']=U('Printer/paid?id='.$files['fil_id']);
-        */
-        $this->display();
-
+        else
+        {
+            echo("Unauth");
+        }
     }
+    
+//Status change methods
     public function download($fil_id){
         $File = M('File');
         $result = $File->where("id=".$fil_id)->setField('printed',1);//File downloaded
@@ -109,47 +120,58 @@ class PrinterController extends Controller {
     
     
     public function signup(){
-        if(session('?account'))
+        if(session('?pri_id'))
         {
             print_r($_COOKIE);
         //    $this->success('Should not be here');
         }
         else
         {
-            $this->display();
-        }
-    }
-    
-    public function signin(){
-        if(session('?account'))
-        {
-            print_r($_COOKIE);
-        //    $this->success('Should not be here');
-        }
-        else
-        {
-            if(cookie('?account')&&cookie('?password'))
+            if(cookie('?token'))
             {
-                $Printer = M('Printer');
-                $account = cookie('account');
-                $password = cookie('password');
-                $result = $Printer->where("account={$account} and password={$password}")->find();
-                if($result) 
-                {
-                    session('account', $Printer->account);
-                    cookie('account',$Printer->account,3600);
-                    cookie('password',$Printer->password,3600);
-//                $this->success('Successfully sign in');
+
+                $info = auth_token(cookie('token'));
+                if($info)
+                {      
+                    session('pri_id',$info['id']);//Needed when file upload
                     print_r($_COOKIE);
                 }
                 else
                 {
-                    $this->display();
+                    $this->display();//Fake token
                 }
             }
             else
             {
-                $this->display();
+                $this->display();//First time to sign up or in?
+            }
+        }
+    }
+    
+    public function signin(){
+        if(session('?pri_id'))
+        {
+            print_r($_COOKIE);
+        }
+        else
+        {
+            if(cookie('?token'))
+            {
+
+                $info = auth_token(cookie('token'));
+                if($info)
+                {      
+                    session('pri_id',$info['id']);//Needed when file upload
+                    print_r($_COOKIE);
+                }
+                else
+                {
+                    $this->display();//Fake token
+                }
+            }
+            else
+            {
+                $this->display();//First time to sign up or in?
             }
         }
     }
@@ -158,18 +180,21 @@ class PrinterController extends Controller {
     public function add(){
         $Printer = D('Printer');
         
-        $account = I('post.account');
-        $password = I('post.password');
+        $data['account'] = I('post.account');
+        $data['password'] = I('post.password','','md5');
+        $data['name'] = I('post.name');
+        $data['address'] = I('post.address');
+        $data['phone'] = I('post.phone');
+        $data['qq'] = I('post.qq');
+                
         if($Printer->create()) 
         {
-            $result = $Printer->add();
+            $result = $Printer->add($data);
             if($result) 
             {                
-                session('account',$account);
                 session('pri_id',$result);
-                cookie('account',$account,3600);
-                cookie('password',$password,3600);
-//                $this->success('Successfully sign in');
+                $token = update_token($result,2);
+                cookie('token',$token,3600);
                 print_r($_COOKIE);
             }
             else
@@ -186,20 +211,18 @@ class PrinterController extends Controller {
     public function auth(){
         $Printer = D('Printer');
             $account = I('post.account');
-            $password = I('post.password');
-            $result = $Printer->where("account={$account} and password={$password}")->find();
-            if($result) 
+            $password = I('post.password','','md5')
+            $result = $Printer->where("account={$account}")->find();
+            if($result["password"]==$password) 
             {
-                session('account',$Printer->account);
-                session('pri_id',$Printer->id);
-                cookie('account',$Printer->account,3600);
-                cookie('password',$Printer->password,3600);
-//                $this->success('Successfully sign in');
+                session('use_id',$Printer->id);
+                $token = update_token($Printer->id,1);
+                cookie('token',$token,3600);
                 print_r($_COOKIE);
             }
             else
             {
-                $this->error('Not sign up yet');
+                var_dump($result);
             }
     }
             
