@@ -57,7 +57,7 @@ class PrinterController extends Controller {
     }
     
     
-    
+    //Still in plan
     /*
     public function detail(){
         //ditail of file?
@@ -118,12 +118,12 @@ class PrinterController extends Controller {
     }
     
     
-    
+//Not available now
+ 
     public function signup(){
         if(session('?pri_id'))
         {
             var_dump($_COOKIE);
-        //    $this->success('Should not be here');
         }
         else
         {
@@ -147,11 +147,17 @@ class PrinterController extends Controller {
             }
         }
     }
+
+    
     
     public function signin(){
         if(session('?pri_id'))
         {
             var_dump($_COOKIE);
+            	    echo("<a href='".U('Printer/Printer/index')."'>Change password without recomfirmation</a><br>");
+	    echo("<a href='".U('Printer/Printer/logout')."'>Logout</a><br>");	    
+	    echo("<a href='".U('Printer/Printer/get')."'>Processing file list</a><br>");	    
+
         }
         else
         {
@@ -163,10 +169,15 @@ class PrinterController extends Controller {
                 {      
                     session('pri_id',$info['id']);//Needed when file upload
                     var_dump($_COOKIE);
+                    	    echo("<a href='".U('Printer/Printer/index')."'>Change password without recomfirmation</a><br>");
+	    echo("<a href='".U('Printer/Printer/logout')."'>Logout</a><br>");	    
+	    echo("<a href='".U('Printer/Printer/get')."'>Processing file list</a><br>");	    
+
                 }
                 else
                 {
-                    $this->display();//Fake token
+                    var_dump($info);
+//                    $this->display();//Fake token
                 }
             }
             else
@@ -176,12 +187,14 @@ class PrinterController extends Controller {
         }
     }
 
-    
+
+//Not available now
+
     public function add(){
         $Printer = D('Printer');
         
         $data['account'] = I('post.account');
-        $data['password'] = I('post.password','','md5');
+        $data['password'] = encode(I('post.password'),I('post.account'));
         $data['name'] = I('post.name');
         $data['address'] = I('post.address');
         $data['phone'] = I('post.phone');
@@ -208,18 +221,24 @@ class PrinterController extends Controller {
         }
     }
     
+    
     public function auth(){
         $Printer = D('Printer');
             $account = I('post.account');
-            $password = I('post.password','','md5');
+            $password = encode(I('post.password'),$account);
+//            var_dump($password);
             $result = $Printer->where("account={$account}")->find();
             if($result["password"]==$password) 
             {
-                session('use_id',$Printer->id);
+                session('pri_id',$Printer->id);
                 $token = update_token($Printer->id,2);
-                var_dump($token);
+//                var_dump($token);
                 cookie('token',$token,3600);
                 var_dump($_COOKIE);
+                	    echo("<a href='".U('Printer/Printer/index')."'>Change password without recomfirmation</a><br>");
+	    echo("<a href='".U('Printer/Printer/logout')."'>Logout</a><br>");	    
+	    echo("<a href='".U('Printer/Printer/get')."'>Processing file list</a><br>");	    
+
             }
             else
             {
