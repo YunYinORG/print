@@ -1,4 +1,5 @@
 <?php
+
 // ===================================================================
 // | FileName: 		IndexController.class.php
 // ===================================================================
@@ -71,20 +72,17 @@ class IndexController extends RestController
 			$password = $info['password'];
 			if ($password == encode($id, $pwd)) 
 			{
-				$data['token']          = token($oid);
-				$data['oid']          = $id;
-				$data['type']          = $type;
-				$Token    = M('token');
-				$Token->where($data)->delete();
-				if (!$Token->add($data)) 
+				$token    = update_token($id, $type);
+				if ($token) 
 				{
-					$data = array(
-						'err'      => '创建令牌失败'
-					);
+					$data['token']          = $token;
+				} else
+				{
+					$data['err']          = '创建令牌失败';
 				}
 			} else
 			{
-				$data['err']      = '验证失败';
+				$data['err']          = '验证失败';
 			}
 		}
 		$this->response($data, (($this->_type == 'xml') ? 'xml' : 'json'));
@@ -117,5 +115,10 @@ class IndexController extends RestController
 			break;
 		}
 		$this->response($data, (($this->_type == 'xml') ? 'xml' : 'json'));
+	}
+
+	public function t()
+	{
+		echo $this->_type;
 	}
 }
