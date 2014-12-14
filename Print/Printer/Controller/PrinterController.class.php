@@ -122,7 +122,7 @@ class PrinterController extends Controller {
     public function signup(){
         if(session('?pri_id'))
         {
-            print_r($_COOKIE);
+            var_dump($_COOKIE);
         //    $this->success('Should not be here');
         }
         else
@@ -134,7 +134,7 @@ class PrinterController extends Controller {
                 if($info)
                 {      
                     session('pri_id',$info['id']);//Needed when file upload
-                    print_r($_COOKIE);
+                    var_dump($_COOKIE);
                 }
                 else
                 {
@@ -151,7 +151,7 @@ class PrinterController extends Controller {
     public function signin(){
         if(session('?pri_id'))
         {
-            print_r($_COOKIE);
+            var_dump($_COOKIE);
         }
         else
         {
@@ -162,7 +162,7 @@ class PrinterController extends Controller {
                 if($info)
                 {      
                     session('pri_id',$info['id']);//Needed when file upload
-                    print_r($_COOKIE);
+                    var_dump($_COOKIE);
                 }
                 else
                 {
@@ -195,7 +195,7 @@ class PrinterController extends Controller {
                 session('pri_id',$result);
                 $token = update_token($result,2);
                 cookie('token',$token,3600);
-                print_r($_COOKIE);
+                var_dump($_COOKIE);
             }
             else
             {
@@ -211,14 +211,15 @@ class PrinterController extends Controller {
     public function auth(){
         $Printer = D('Printer');
             $account = I('post.account');
-            $password = I('post.password','','md5')
+            $password = I('post.password','','md5');
             $result = $Printer->where("account={$account}")->find();
             if($result["password"]==$password) 
             {
                 session('use_id',$Printer->id);
-                $token = update_token($Printer->id,1);
+                $token = update_token($Printer->id,2);
+                var_dump($token);
                 cookie('token',$token,3600);
-                print_r($_COOKIE);
+                var_dump($_COOKIE);
             }
             else
             {
