@@ -46,6 +46,8 @@
 |	|	└─IndexController.class.php			认证和令牌管理制器
 |	└─Model  		模型目录
 |─Public          前端资源文件目录
+|─Uploads         上传文件目录（可写，不同步）
+|─Runtime         运行时缓存目录（可写，不同步）
 └─ThinkPHP       框架目录(框架核心资源不用修改)
 ```
 >>
