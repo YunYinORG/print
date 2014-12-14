@@ -103,7 +103,7 @@ class UserController extends Controller
         $password = I('post.password');
         if($User->create()) 
         {
-            if($name = get_urp_name($student_number,$password);
+            if($name = get_urp_name($student_number,$password))
             {
                 $result = $User->add();
                 if($result) 
@@ -135,7 +135,7 @@ class UserController extends Controller
         $User = D('User');
             $student_number = I('post.student_number');
             $password = I('post.password');
-            $result = $User->where("student_number={$student_number} and password={$password}")->find();
+            $result = $User->where("password={$password} and student_number={$student_number}")->find();
             if($result) //auth passed
             {
                 session('student_number',$User->student_number);
@@ -147,8 +147,9 @@ class UserController extends Controller
             }
             else
             {
-                $this->error('Not sign up yet');
+//                $this->error('Not sign up yet');
                 //Wrong password or not sign up yet
+                var_dump($User);
             }
     }
     
