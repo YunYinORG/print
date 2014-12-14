@@ -1,4 +1,5 @@
 <?php
+
 // ===================================================================
 // | FileName: 		NotificationController.class.php
 // ===================================================================
@@ -11,11 +12,24 @@
 // | Copyright (c) 2014 云印南开团队 All rights reserved.
 // +------------------------------------------------------------------
 
+/**
+ * Class and Function List:
+ * Function list:
+ * - auth()
+ * Classes list:
+ */
+
+/**
+ *auth_token()
+ *验证信息
+ *@return array  $info 验证失败返回空值null
+ *					$info['id']用户id
+ *					$info['type']用户类型
+ *@version 1.0
+ *@author NewFuture
+ */
 function auth() 
 {
 	$token = I('get.token');
-	if ($token) 
-	{		
-		return M('token')->cache(true, 60)->field('type,oid')->getByToken($token);
-	}
+	return auth_token($token);
 }

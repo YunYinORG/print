@@ -18,7 +18,5 @@ return array(
 		'File/:id' => 'File/id',
 		'Notification/:id' => 'Notification/id',
 	) ,
-	'STUDENT' => 1,
-	'PRINTER' => 2,
 );
 
