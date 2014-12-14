@@ -9,4 +9,5 @@
 
 # ToDo
 
-			
+			Token表设计 to_id和type？
+			注释问题，不够清楚
