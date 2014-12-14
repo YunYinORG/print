@@ -1,5 +1,5 @@
 <?php
-namespace Home\Controller;
+namespace Printer\Controller;
 use Think\Controller;
 class IndexController extends Controller {
     public function index(){

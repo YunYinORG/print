@@ -21,6 +21,8 @@
 */
 namespace Home\Controller;
 use Think\Controller;
+import('Common.Urp',COMMON_PATH);
+
 class UserController extends Controller
 {
 
@@ -28,11 +30,33 @@ class UserController extends Controller
         if(session('?student_number'))
         {
             print_r($_COOKIE);
-        //    $this->success('Should not be here');
         }
         else
         {
-            $this->display();
+            if(cookie('?student_number')&&cookie('?password'))
+            {
+                $User = D('User');
+                    $student_number = cookie('student_number');
+                    $password = cookie('password');
+                    $result = $User->where("student_number={$student_number} and password={$password}")->find();
+                    if($result) 
+                    {
+                        session('student_number',$User->student_number);
+                        session('use_id',$User->id);//FK to file upload
+                        cookie('student_number',$User->student_number,3600);
+                        cookie('password',$User->password,3600);
+
+                        print_r($_COOKIE);
+                    }
+                    else
+                    {
+                        $this->display();//Fake cookie?
+                    }
+            }
+            else
+            {
+                $this->display();//First time to sign up or in?
+            }
         }
     }
     
@@ -79,19 +103,26 @@ class UserController extends Controller
         $password = I('post.password');
         if($User->create()) 
         {
-            $result = $User->add();
-            if($result) 
-            {                
-                session('student_number',$student_number);
-                session('use_id', $result);
-                cookie('student_number',$student_number,3600);
-                cookie('password',$password,3600);
-//                $this->success('Successfully sign in');
-                print_r($_COOKIE);
+            if($name = get_urp_name($student_number,$password);
+            {
+                $result = $User->add();
+                if($result) 
+                {                
+                    session('student_number',$student_number);
+                    session('use_id', $result);
+                    cookie('student_number',$student_number,3600);
+                    cookie('password',$password,3600);
+    //                $this->success('Successfully sign in');
+                    print_r($_COOKIE);
+                }
+                else
+                {
+                    $this->error('Can not insert to database');
+                }
             }
             else
             {
-                $this->error('Can not insert to database');
+                $this->error('Student ID not match with password in urp');
             }
         }
         else
