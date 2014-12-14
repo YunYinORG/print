@@ -56,7 +56,7 @@ function update_token($id, $type)
 	$Token = M('token');
 	$Token->where($data)->delete();
 	$data['token'] = token($id);
-	if (!$Token->add($data)) 
+	if ($Token->add($data)) 
 	{
 		return $data['token'];
 	} else
