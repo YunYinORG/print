@@ -1,6 +1,6 @@
-﻿/*==============================================================*/
+/*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2014/12/14 0:17:45                           */
+/* Created on:     2014/12/14 12:57:27                          */
 /*==============================================================*/
 
 
@@ -22,7 +22,7 @@ drop table if exists user;
 create table code
 (
    id                   int not null auto_increment comment 'id',
-   use_id               int not null comment '用户_id',
+   use_id               int not null comment 'id',
    code                 char(32) comment '码',
    start_time           datetime comment '产生的时间',
    type                 char(8) comment '类型',
@@ -37,18 +37,15 @@ alter table code comment '验证码';
 create table file
 (
    id                   int not null auto_increment comment 'id',
-   use_id               int not null comment '用户_id',
-   pri_id               int not null comment '打印店_id',
+   use_id               int not null comment 'id',
+   pri_id               int not null comment 'id',
    name                 char(32) comment '文件名',
    url                  char(64) comment '文件存放位置',
    time                 datetime comment '文件上传的时间',
    requirements         char(100) comment '打印要求（备注）',
    copies               int comment '打印数量',
-   ---copies
-   double_side           boolean comment '单双面信息',
----名字和类型
+   double_side          bool comment '单双面信息',
    status               tinyint comment '文件状态',
-    --------tinyint
    primary key (id)
 );
 
@@ -60,11 +57,10 @@ alter table file comment '文件';
 create table notification
 (
    id                   int not null auto_increment comment 'id',
-   fil_id               int not null comment '文件_id',
+   fil_id               int not null comment 'id',
    content              text comment '内容',
    to_id                int comment '通知对象id',
-   type              tinyint comment '通知对象类型',
-   ----type ，tinyint
+   type                 tinyint comment '通知对象类型',
    primary key (id)
 );
 
@@ -92,14 +88,10 @@ alter table printer comment '打印店';
 /*==============================================================*/
 create table token
 (
-   id                   int not null comment 'id',
+   id                   int not null auto_increment comment 'id',
    token                char(64) comment 'token',
----长度64
    type                 tinyint comment 'type',
---------tinyint
    to_id                int comment 'token对象id',
----删除   to_type              tinyint comment 'token对象类型',
-
    primary key (id),
    unique key AK_token_unique (token)
 );
