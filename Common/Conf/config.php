@@ -8,7 +8,7 @@
 // | Copyright (c) 2014 云印南开团队 All rights reserved.
 // +------------------------------------------------------------------
 return array(
-	
+	'SHOW_PAGE_TRACE' => 1,
 	//'配置项'=>'配置值'
 	// 'MODULE_ALLOW_LIST'    =>    array('Home','Printer'),
 
