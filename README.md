@@ -10,7 +10,8 @@
 |─api.php         api接口入口文件-->API
 |─Common          后端公共模块目录
 |   |─Common		        公共库目录
-|   |  └─function.php       	公共函数文件
+|	|	|─Urp.class.php        	urp验证文件
+|   |	└─function.php       	公共函数文件
 |   └─Conf        			公共配置目录
 |		└─config.php        		公共配置文件
 |
@@ -40,7 +41,9 @@
 |	|─Conf        	配置文件目录
 |	|─Common      	公共函数目录
 |	|─Controller  	控制器目录
-|	|	└─IndexController.class.php		默认控制器
+|	|	|─NotificationController.class.php	消息接口控制器
+|	|	|─FileController.class.php			文件接口控制器
+|	|	└─IndexController.class.php			认证和令牌管理制器
 |	└─Model  		模型目录
 |─Public          前端资源文件目录
 └─ThinkPHP       框架目录(框架核心资源不用修改)
@@ -75,6 +78,9 @@
 3. [printer](https://github.com/nkumstc/print/tree/printer) 打印店客户端和源码仓库分支
 
 ##其他
+
+[API相关说明](https://github.com/nkumstc/print/blob/master/API.md)
+
 本项目由南开大学学生发起，免费开源，同时欢迎所有人贡献代码和想法
 
 项目起步阶段由[南开大学微软技术俱乐部](http://nkumstc.cn)提供支持

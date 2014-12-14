@@ -1,8 +1,121 @@
 <?php
+// ===================================================================
+// | FileName: 		IndexController.class.php
+// ===================================================================
+// | Discription：	IndexController 默认控制器
+//		<命名规范：>
+// ===================================================================
+// +------------------------------------------------------------------
+// | 云印南开
+// +------------------------------------------------------------------
+// | Copyright (c) 2014 云印南开团队 All rights reserved.
+// +------------------------------------------------------------------
+/**
+ * Class and Function List:
+ * Function list:
+ * - index()
+ * - token()
+ * Classes list:
+ * - IndexController extends RestController
+ */
 namespace API\Controller;
-use Think\Controller;
-class IndexController extends Controller {
-    public function index(){
-        $this->show('<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} body{ background: #fff; font-family: "微软雅黑"; color: #333;font-size:24px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.8em; font-size: 36px }</style><div style="padding: 24px 48px;"> <h1>:)</h1><p>欢迎使用 <b>ThinkPHP</b>！</p><br/>[ 您现在访问的是API模块的Index控制器 ]</div><script type="text/javascript" src="http://tajs.qq.com/stats?sId=9347272" charset="UTF-8"></script>','utf-8');
-    }
+use Think\Controller\RestController;
+class IndexController extends RestController
+{
+	
+	protected $allowMethod = array(
+		
+		'post',
+		'delete',
+	);
+	protected $defaultType = 'json';
+	
+	// REST允许请求的资源类型列表
+	protected $allowType   = array(
+		'xml',
+		'json'
+	);
+	
+	/**
+	 *index
+	 *api令牌生成
+	 * 支持操作post
+	 *@return json,xml
+	 *@author NewFuture
+	 */
+	public function index() 
+	{
+		$pwd         = I('post.password');
+		$type        = I('post.type');
+		$Model       = null;
+		switch ($type) 
+		{
+		case C('STUDENT'):
+			$num         = I('post.number', 0, 'intval');
+			$Model       = M('user')->where("student_number='$num'");
+			break;
+
+		case C('PRINTER'):
+			$account = I('post.account', null);
+			$Model   = M('printer')->where("account='$account'");
+			break;
+
+		default:
+			$data['err']          = '未知类型';
+		}
+		
+		if (!isset($data)) 
+		{
+			$info     = $Model->field('id,password')->find();
+			$id       = $info['id'];
+			$password = $info['password'];
+			if ($password == encode($id, $pwd)) 
+			{
+				$data['token']          = token($oid);
+				$data['oid']          = $id;
+				$data['type']          = $type;
+				$Token    = M('token');
+				$Token->where($data)->delete();
+				if (!$Token->add($data)) 
+				{
+					$data = array(
+						'err'      => '创建令牌失败'
+					);
+				}
+			} else
+			{
+				$data['err']      = '验证失败';
+			}
+		}
+		$this->response($data, (($this->_type == 'xml') ? 'xml' : 'json'));
+	}
+	
+	/**
+	 *index
+	 *api令牌管理
+	 * 支持操作delete
+	 *@return json,xml
+	 *@author NewFuture
+	 */
+	public function token() 
+	{
+		$token = I('token');
+		switch ($this->_method) 
+		{
+		case 'delete':
+			if (M('token')->where('token="%s"', $token)->delete() === false) 
+			{
+				$data['msg']       = '删除成功！';
+			} else
+			{
+				$data['err']       = '删除失败！';
+			}
+			break;
+
+		default:
+			$data['err'] = '非法操作！';
+			break;
+		}
+		$this->response($data, (($this->_type == 'xml') ? 'xml' : 'json'));
+	}
 }

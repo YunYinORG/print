@@ -1,6 +1,9 @@
 <?php
 // ===================================================================
-// | FileName: 	/API/Conf/config.php api配置
+// | FileName: 		NotificationController.class.php
+// ===================================================================
+// | Discription：	NotificationController 消息查询接口
+//		<命名规范：>
 // ===================================================================
 // +------------------------------------------------------------------
 // | 云印南开
@@ -8,17 +11,11 @@
 // | Copyright (c) 2014 云印南开团队 All rights reserved.
 // +------------------------------------------------------------------
 
-return array(
-	
-	//'配置项'=>'配置值'
-	'URL_ROUTER_ON' => true,
-	
-	'URL_ROUTE_RULES' => array(
-		'Token' => 'Index/token' ,
-		'File/:id' => 'File/id',
-		'Notification/:id' => 'Notification/id',
-	) ,
-	'STUDENT' => 1,
-	'PRINTER' => 2,
-);
-
+function auth() 
+{
+	$token = I('get.token');
+	if ($token) 
+	{		
+		return M('token')->cache(true, 60)->field('type,oid')->getByToken($token);
+	}
+}
