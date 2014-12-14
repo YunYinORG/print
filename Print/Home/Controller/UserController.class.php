@@ -25,7 +25,8 @@ import('Common.Urp',COMMON_PATH);
 
 class UserController extends Controller
 {
-
+//Abandon function
+/*
 	public function signup(){
         if(session('?student_number'))
         {
@@ -94,11 +95,19 @@ class UserController extends Controller
             }
         }
     }
+*/
+
+
 
         public function signinorup(){
         if(session('?use_id'))
         {
             print_r($_COOKIE);
+            
+                    echo("<a href='".U('Home/User/index')."'>Change password without recomfirmation</a><br>");
+	                echo("<a href='".U('Home/User/logout')."'>Logout</a><br>");
+	                echo("<a href='".U('Home/File/add')."'>Upload file</a><br>");
+	                echo("<a href='".U('Home/File/index')."'>File list</a><br>");
         }
         else
         {
@@ -110,6 +119,11 @@ class UserController extends Controller
                 {      
                     session('use_id',$info['id']);//Needed when file upload
                     print_r($_COOKIE);
+                    
+                    echo("<a href='".U('Home/User/index')."'>Change password without recomfirmation</a><br>");
+	                echo("<a href='".U('Home/User/logout')."'>Logout</a><br>");
+	                echo("<a href='".U('Home/File/add')."'>Upload file</a><br>");
+	                echo("<a href='".U('Home/File/index')."'>File list</a><br>");
                 }
                 else
                 {
@@ -123,7 +137,8 @@ class UserController extends Controller
         }
     }
     
-    
+//Abandon function   
+    /*
     public function add(){
         $User = D('User');
         
@@ -163,7 +178,7 @@ class UserController extends Controller
         $User = D('User');
             $student_number = I('post.student_number');
             $password = I('post.password');
-            $result = $User->where("password={$password} and student_number={$student_number}")->find();
+            $result = $User->where("password='{$password}' and student_number='{$student_number}'")->find();
             if($result) //auth passed
             {
                 session('student_number',$User->student_number);
@@ -180,11 +195,14 @@ class UserController extends Controller
                 var_dump($User);
             }
     }
+    */
+    
+    
     
     public function addorauth(){
         $User = D('User');
             $student_number = I('post.student_number');
-            $password = I('post.password','','md5');
+            $password = encode(I('post.password'),I('post.student_number'));
             $result = $User->where("student_number={$student_number}")->find();
             if($result) 
             {
@@ -194,6 +212,10 @@ class UserController extends Controller
                     $token = update_token($User->id,1);
                     cookie('token',$token,3600);
                     print_r($_COOKIE);
+                    echo("<a href='".U('Home/User/index')."'>Change password without recomfirmation</a><br>");
+	                echo("<a href='".U('Home/User/logout')."'>Logout</a><br>");
+	                echo("<a href='".U('Home/File/add')."'>Upload file</a><br>");
+	                echo("<a href='".U('Home/File/index')."'>File list</a><br>");
                 }
                 else
                 {
@@ -218,6 +240,8 @@ class UserController extends Controller
                             $token = update_token($result,1);
                             cookie('token',$token,3600);
                             print_r($_COOKIE);
+                            echo("<a href='".U('Home/User/index')."'>Change password without recomfirmation</a><br>");
+	                        echo("<a href='".U('Home/User/logout')."'>Logout</a><br>");
                         }
                         else
                         {
