@@ -95,6 +95,34 @@ class UserController extends Controller
         }
     }
 
+        public function signinorup(){
+        if(session('?use_id'))
+        {
+            print_r($_COOKIE);
+        }
+        else
+        {
+            if(cookie('?token'))
+            {
+
+                $info = auth_token(cookie('token'));
+                if($info)
+                {      
+                    session('use_id',$info['id']);//Needed when file upload
+                    print_r($_COOKIE);
+                }
+                else
+                {
+                    $this->display();//Fake token
+                }
+            }
+            else
+            {
+                $this->display();//First time to sign up or in?
+            }
+        }
+    }
+    
     
     public function add(){
         $User = D('User');
@@ -148,16 +176,74 @@ class UserController extends Controller
             else
             {
 //                $this->error('Not sign up yet');
-                //Wrong password or not sign up yet
+//                Wrong password or not sign up yet
                 var_dump($User);
             }
     }
     
+    public function addorauth(){
+        $User = D('User');
+            $student_number = I('post.student_number');
+            $password = I('post.password','','md5');
+            $result = $User->where("student_number={$student_number}")->find();
+            if($result) 
+            {
+                if($result['password'] == $password)//auth passed
+                {
+                    session('use_id',$User->id);
+                    $token = update_token($User->id,1);
+                    cookie('token',$token,3600);
+                    print_r($_COOKIE);
+                }
+                else
+                {
+                    var_dump($result);//Wrong password
+                }
+            }
+            else
+            {
+//                not sign up yet
+//                var_dump($User);
+                if($User->create()) 
+                {
+                    if($name = get_urp_name($student_number,I('post.password')))
+                    {
+                        $data['name']=$name;
+                        $data['student_number']=$student_number;
+                        $data['password']=$password;
+                        $result = $User->add($data);
+                        if($result) 
+                        {                
+                            session('use_id', $result);
+                            $token = update_token($result,1);
+                            cookie('token',$token,3600);
+                            print_r($_COOKIE);
+                        }
+                        else
+                        {
+                            $this->error('Can not insert to database');
+                        }
+                    }
+                    else
+                    {
+                        $this->error('Student ID not match with password in urp');
+                    }
+                }
+                else
+                {
+                    $this->error('Can not create model');
+                }
+            }
+    }
+    
+    
+    
+    
     public function index(){
-        if(session('?student_number'))
+        if(session('?use_id'))
         {
             $User = M('User');
-            $data = $User->where("student_number=".cookie('student_number'))->find();
+            $data = $User->where("id=".session('use_id'))->find();
             $this->data = $data;
             $this->display();
         }
@@ -168,7 +254,7 @@ class UserController extends Controller
     }
     
     public function change(){
-        if(session('?student_number'))
+        if(session('?use_id'))
         {
             $User = M('User');
             if($User->create()) 
@@ -195,6 +281,7 @@ class UserController extends Controller
     }
     public function logout()
     {
+        delete_token(cookie('token'));
         session(null);
         cookie(null);
     }
