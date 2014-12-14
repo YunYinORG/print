@@ -92,7 +92,7 @@ alter table printer comment '打印店';
 /*==============================================================*/
 create table token
 (
-   id                   int not null auto_increment comment 'id',
+   id                   int not null comment 'id',
    token                char(64) comment 'token',
 ---长度64
    type                 tinyint comment 'type',
