@@ -71,23 +71,15 @@ class PrinterController extends Controller {
         
             //list of file,unproceeded and proceeded
             $Notification = M();
-            $files = $Notification->query("SELECT * FROM file INNER JOIN notification WHERE file.id=notification.fil_id AND file.printed=0 AND file.pri_id=".session('pri_id'));
-           /*
+            $files = $Notification->query("SELECT * FROM file INNER JOIN notification WHERE file.id=notification.fil_id AND file.status=0 AND file.pri_id=".session('pri_id'));
+            echo("<h1>For each file displayed here</h1><br><p>You can change its status by clicking those links,but you can't see the change<p><br>Instead, it change in User File List");
             foreach($files as $file)
             {
-               // var_dump($file);
-                $file['fil_id'];
-                $File = M('File');
-                $detail
+                var_dump($file);
+                echo("<br><a href='".U('Printer/Printer/download?id='.$files['fil_id'])."'>Downloaded</a><br>");
+                echo("<a href='".U('Printer/Printer/printed?id='.$files['fil_id'])."'>Printed</a><br>");
+                echo("<a href='".U('Printer/Printer/paid?id='.$files['fil_id'])."'>Paid</a><br><br><br>");
             }
-            */
-            $this->data = $files;
-            /*
-            $this->data['download']=U('Printer/download?id='.$files['fil_id']);
-            $this->data['printed']=U('Printer/printed?id='.$files['fil_id']);
-            $this->data['paid']=U('Printer/paid?id='.$files['fil_id']);
-            */
-            $this->display();
         }
         else
         {
@@ -98,20 +90,20 @@ class PrinterController extends Controller {
 //Status change methods
     public function download($fil_id){
         $File = M('File');
-        $result = $File->where("id=".$fil_id)->setField('printed',1);//File downloaded
+        $result = $File->where("id=".$fil_id)->setField('status',1);//File downloaded
         $Notification = M();
         $result = $Notification->query("UPDATE notification SET content=1 WHERE fil_id=".$fil_id);
     }
     public function printed($fil_id){
         $File = M('File');
-        $result = $File->where("id=".$fil_id)->setField('printed',2);//File printed
+        $result = $File->where("id=".$fil_id)->setField('status',2);//File printed
         $Notification = M();
         $result = $Notification->query("UPDATE notification SET content=2 WHERE fil_id=".$fil_id);
     }
     
     public function paid($fil_id){
         $File = M('File');
-        $result = $File->where("id=".$fil_id)->setField('printed',3);//File paid
+        $result = $File->where("id=".$fil_id)->setField('status',3);//File paid
         $Notification = M();
         $result = $Notification->query("DELETE FROM notification WHERE fil_id=".$fil_id);
         var_dump($result);
