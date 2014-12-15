@@ -27,6 +27,7 @@ class FileController extends Controller
 	    {
             $File = M('File');
             $this->data = $File->where("use_id=".session('use_id'))->order('time')->select();
+            echo("<a href='".U('Home/File/add')."'>Upload file</a><br>");
             $this->display();
     //        var_dump($data);
         }
@@ -73,23 +74,24 @@ class FileController extends Controller
                     $data['time'] = date("Y-m-d H:i:s",time());//This is the upload time...not the specify time
                     $data['requirements'] = I('post.requirements');
                     $data['url'] = urlencode($file['savepath'].$file['savename']);
-                    $data['status'] = 'sended';//Not downloaded yet
+                    $data['status'] = 0;//status = 0 means sended ,not downloaded yet
                     $data['use_id'] = session('use_id');
-                    $data['amount'] = I('post.amount'); 
-                    $data['sides_info'] = I('post.sides_info'); 
+                    $data['copies'] = I('post.copies'); 
+                    $data['double_side'] = I('post.double_side'); 
                     
                     $File   =   M('File');
                     if($File->create($data)) {
                         $result =   $File->add();
                         if($result) {
     //                        $this->success('Successed');
-                            var_dump($file);
+   //                         var_dump($file);
                             $Notification = M();
-                            $Notification->query("INSERT INTO notification VALUES(NULL,{$result},0)");
-                            var_dump($Notification);
+                            $Notification->query("INSERT INTO notification VALUES(NULL,{$result},0,{$data['use_id']},1)");
+     //                       var_dump($Notification);
+	                        echo("<a href='".U('Home/File/index')."'>File list</a><br>");
                         }else{
     //                        $this->error('Error');
-    //                        var_dump($File);
+                            var_dump($File);
                             var_dump($Notification);
                         }
                     }else{
