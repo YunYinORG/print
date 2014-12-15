@@ -36,7 +36,7 @@ return array(
     'DB_BIND_PARAM'         =>  false, // 数据库写入数据自动参数绑定
     'DB_DEBUG'              =>  false,  // 数据库调试模式 3.2.3新增 
 */
-
+    'URL_PARAMS_BIND'       =>  TRUE,
 	
 	'STUDENT' => 1,
 	'PRINTER' => 2,
