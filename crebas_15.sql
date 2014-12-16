@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2014/12/14 12:57:27                          */
+/* Created on:     2014/12/16 17:25:41                          */
 /*==============================================================*/
 
 
@@ -22,7 +22,7 @@ drop table if exists user;
 create table code
 (
    id                   int not null auto_increment comment 'id',
-   use_id               int not null comment 'id',
+   use_id               int not null comment '用户_id',
    code                 char(32) comment '码',
    start_time           datetime comment '产生的时间',
    type                 char(8) comment '类型',
@@ -37,8 +37,8 @@ alter table code comment '验证码';
 create table file
 (
    id                   int not null auto_increment comment 'id',
-   use_id               int not null comment 'id',
-   pri_id               int not null comment 'id',
+   use_id               int not null comment '用户_id',
+   pri_id               int not null comment '打印店_id',
    name                 char(32) comment '文件名',
    url                  char(64) comment '文件存放位置',
    time                 datetime comment '文件上传的时间',
@@ -57,7 +57,7 @@ alter table file comment '文件';
 create table notification
 (
    id                   int not null auto_increment comment 'id',
-   fil_id               int not null comment 'id',
+   fil_id               int not null comment '文件_id',
    content              text comment '内容',
    to_id                int comment '通知对象id',
    type                 tinyint comment '通知对象类型',
@@ -88,15 +88,15 @@ alter table printer comment '打印店';
 /*==============================================================*/
 create table token
 (
-   id                   int not null auto_increment comment 'id',
    token                char(64) comment 'token',
-   type                 tinyint comment 'type',
-   to_id                int comment 'token对象id',
-   primary key (id),
+   type                 tinyint not null comment 'type',
+   to_id                int not null comment 'token对象id',
+   to_time              datetime not null default CURRENT_TIMESTAMP comment '时间戳',
+   primary key (type, to_id),
    unique key AK_token_unique (token)
 );
 
-alter table token comment 'token';
+alter table token comment '令牌';
 
 /*==============================================================*/
 /* Table: user                                                  */
@@ -126,4 +126,3 @@ alter table file add constraint FK_file_of_user foreign key (use_id)
 
 alter table notification add constraint FK_notification_of_file foreign key (fil_id)
       references file (id) on delete restrict on update restrict;
-
