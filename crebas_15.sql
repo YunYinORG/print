@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2014/12/16 17:25:41                          */
+/* Created on:     2014/12/16 17:40:20                          */
 /*==============================================================*/
 
 
@@ -91,7 +91,7 @@ create table token
    token                char(64) comment 'token',
    type                 tinyint not null comment 'type',
    to_id                int not null comment 'token对象id',
-   to_time              datetime not null default CURRENT_TIMESTAMP comment '时间戳',
+   time                 datetime not null default CURRENT_TIMESTAMP comment '时间戳',
    primary key (type, to_id),
    unique key AK_token_unique (token)
 );
@@ -126,3 +126,4 @@ alter table file add constraint FK_file_of_user foreign key (use_id)
 
 alter table notification add constraint FK_notification_of_file foreign key (fil_id)
       references file (id) on delete restrict on update restrict;
+
