@@ -1,3 +1,37 @@
+
+	<div id="main">
+	
+		  <div class="title" >
+				<h2>文档记录</h2>
+		  </div>
+	    <div class="row">
+		<form action="#" method="post" id="contact" role="form">
+		    <div class="col-md-7">
+			    <div class="form-group left-inner-addon">
+				    <div align="left">
+					    <table width="682" border="0" align="center">
+						    <tr>
+							    <td width="329" align="center">当前打印文件</td>
+							    <td width="343" align="center">文件打印状态</td>
+						    </tr>
+						    <volist name="data" id="vo">
+						        <tr>
+                                <td>{$vo.pri_id}</td><td>{$vo.name}</td><td>{$vo.url}</td><td>{$vo.time}</td><td>{$vo.status}</td><td>
+                                <tr/>
+                            </volist>
+					    </table>									  				
+					</div>
+			    </div>							
+		    </div>
+        </form>
+		</div> <!-- row -->
+
+
+
+
+
+
+<!--
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,4 +42,4 @@
             {$vo.pri_id}--{$vo.name}--{$vo.url}--{$vo.time}--{$vo.status}<br>
         </volist>
     <body>
-</html>
+</html>-->
