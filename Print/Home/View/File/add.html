@@ -1,71 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>打印信息设置_云印</title>
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-<!--
-<link href="css/default.css" rel="stylesheet" type="text/css" media="all" />
-<link href="css/fonts.css" rel="stylesheet" type="text/css" media="all" />
-<link href="css/modal.css" rel="stylesheet" type="text/css" media="all" />
-
- <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
- <script type="text/javascript" charset="utf-8" src="js/jquery.leanModal.min.js"></script>
- -->
- <load href="/Public/css/default.css" />
- <load href="/Public/css/fonts.css" />
- <load href="/Public/css/modal.css" />
- <load href="/Public/js/jquery-1.9.1.min.js" /> 
- <load href="/Public/js/jqueryleanModal.min.js" />
-
-<script language="javascript">
- 
-function getFileName(obj)
-{
-	var pos = obj.value.lastIndexOf("/");
-	return obj.value.substring(pos+1);
-}
-function display(obj)
-{
-	var file = getFileName(this);
-	document.getElementById('myfile').value="当前欲打印的文件为"+file;
-}
-</script>
-
-<style type="text/css">
-.press {
-	font-size: 36px;
-}
-#page #main form #featured .style1 {
-}
-.file {
-	font-weight: bolder;
-}
-#page #main form #save {
-}
-</style>
-</head>
-<body>
-<div id="page" class="container">
-	<div id="header">
-		<div id="logo">
-		  <p><img src="images/logo.png" alt="" width="100%" height="25%" /></p>
-		  <h1><a href="#">云印服务平台</a></h1>
-	    </div>
-		<nav>
-			<ul>
-				<li class="current_page_item" style=""><a href="#" accesskey="1" title="">开始打印</a></li>
-				<li><a href="record.html" accesskey="2" title="">文档记录</a></li>
-                <li><a href="userinfo.html" accesskey="3" title="">信息管理</a></li>
-                
-				
-				<li><a href="#" accesskey="4" title="">关于云印</a></li>
-				<li><a href="stu_contact.html" accesskey="5" title="">联系我们</a></li>
-			</ul>
-		</nav>
-	</div>
 	<div id="main">
 	  	  <div class="title">
 				<h2>请设置您的打印信息</h2>
@@ -114,7 +46,33 @@ function display(obj)
 			<span>.-欢迎您的使用-</span>
 		</div>
 	</div>
-</div>
+	
+<script language="javascript">
+ 
+function getFileName(obj)
+{
+	var pos = obj.value.lastIndexOf("/");
+	return obj.value.substring(pos+1);
+}
+function display(obj)
+{
+	var file = getFileName(this);
+	document.getElementById('myfile').value="当前欲打印的文件为"+file;
+}
+</script>
+<style type="text/css">
+.press {
+	font-size: 36px;
+}
+#page #main form #featured .style1 {
+
+}
+.file {
+	font-weight: bolder;
+}
+#page #main form #save {
+}
+</style>
 <script type="text/javascript">
 $(function(){
   $('#loginform').submit(function(e){
@@ -124,13 +82,4 @@ $(function(){
   $('#modaltrigger').leanModal({ top: 200, overlay: 0.8, closeButton: ".hidemodal" });
 });
 </script>
-<div id="loginmodal" style="display:none;">
-    <form id="loginform" name="conf_form" method="post" action="test.html">
-     <p>您的打印请求已成功提交！</p>
-      <div class="center">
-      <center><input type="submit" name="confirm" id="confirmbtn" class="flatbtn-blu hidemodal" value="确定" tabindex="3" onClick="ToHomepage()"></center>
-      </div>
-    </form>
-  </div>
-</body>
-</html>
+

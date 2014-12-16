@@ -27,7 +27,8 @@ class FileController extends Controller
 	    {
             $File = M('File');
             $this->data = $File->where("use_id=".session('use_id'))->order('time')->select();
-            echo("<a href='".U('Home/File/add')."'>Upload file</a><br>");
+            layout('layout');
+//            echo("<a href='".U('Home/File/add')."'>Upload file</a><br>");
             $this->display();
     //        var_dump($data);
         }
@@ -41,6 +42,7 @@ class FileController extends Controller
     {
 	    if(session('?use_id'))
 	    {
+	        layout('layout');
             $this->display();
     //        var_dump($data);
         }
