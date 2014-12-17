@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2014/12/16 17:40:20                          */
+/* Created on:     2014/12/17 19:44:27                          */
 /*==============================================================*/
 
 
@@ -22,14 +22,14 @@ drop table if exists user;
 create table code
 (
    id                   int not null auto_increment comment 'id',
-   use_id               int not null comment 'ç”¨æˆ·_id',
-   code                 char(32) comment 'ç ',
-   time            timestamp not null default CURRENT_TIMESTAMP comment 'äº§ç”Ÿçš„æ—¶é—´',
-   type                 char(8) comment 'ç±»å‹',
+   use_id               int not null comment 'ÓÃ»§_id',
+   code                 char(32) comment 'Âë',
+   time                 timestamp not null default CURRENT_TIMESTAMP comment '²úÉúµÄÊ±¼ä',
+   type                 char(8) comment 'ÀàĞÍ',
    primary key (id)
 );
 
-alter table code comment 'éªŒè¯ç ';
+alter table code comment 'ÑéÖ¤Âë';
 
 /*==============================================================*/
 /* Table: file                                                  */
@@ -37,19 +37,19 @@ alter table code comment 'éªŒè¯ç ';
 create table file
 (
    id                   int not null auto_increment comment 'id',
-   use_id               int not null comment 'ç”¨æˆ·_id',
-   pri_id               int not null comment 'æ‰“å°åº—_id',
-   name                 char(32) comment 'æ–‡ä»¶å',
-   url                  char(64) comment 'æ–‡ä»¶å­˜æ”¾ä½ç½®',
-   time                 timestamp not null default CURRENT_TIMESTAMP comment 'æ–‡ä»¶ä¸Šä¼ çš„æ—¶é—´',
-   requirements         char(100) comment 'æ‰“å°è¦æ±‚ï¼ˆå¤‡æ³¨ï¼‰',
-   copies               int comment 'æ‰“å°æ•°é‡',
-   double_side          bool comment 'å•åŒé¢ä¿¡æ¯',
-   status               tinyint comment 'æ–‡ä»¶çŠ¶æ€',
+   use_id               int not null comment 'ÓÃ»§_id',
+   pri_id               int not null comment '´òÓ¡µê_id',
+   name                 char(32) comment 'ÎÄ¼şÃû',
+   url                  char(64) comment 'ÎÄ¼ş´æ·ÅÎ»ÖÃ',
+   time                 timestamp not null default CURRENT_TIMESTAMP comment 'ÎÄ¼şÉÏ´«µÄÊ±¼ä',
+   requirements         char(100) comment '´òÓ¡ÒªÇó£¨±¸×¢£©',
+   copies               int comment '´òÓ¡ÊıÁ¿',
+   double_side          bool comment 'µ¥Ë«ÃæĞÅÏ¢',
+   status               tinyint comment 'ÎÄ¼ş×´Ì¬',
    primary key (id)
 );
 
-alter table file comment 'æ–‡ä»¶';
+alter table file comment 'ÎÄ¼ş';
 
 /*==============================================================*/
 /* Table: notification                                          */
@@ -57,14 +57,14 @@ alter table file comment 'æ–‡ä»¶';
 create table notification
 (
    id                   int not null auto_increment comment 'id',
-   fil_id               int not null comment 'æ–‡ä»¶_id',
-   content              text comment 'å†…å®¹',
-   to_id                int comment 'é€šçŸ¥å¯¹è±¡id',
-   type                 tinyint comment 'é€šçŸ¥å¯¹è±¡ç±»å‹',
+   fil_id               int not null comment 'ÎÄ¼ş_id',
+   content              text comment 'ÄÚÈİ',
+   to_id                int comment 'Í¨Öª¶ÔÏóid',
+   type                 tinyint comment 'Í¨Öª¶ÔÏóÀàĞÍ',
    primary key (id)
 );
 
-alter table notification comment 'é€šçŸ¥æ¶ˆæ¯';
+alter table notification comment 'Í¨ÖªÏûÏ¢';
 
 /*==============================================================*/
 /* Table: printer                                               */
@@ -72,16 +72,16 @@ alter table notification comment 'é€šçŸ¥æ¶ˆæ¯';
 create table printer
 (
    id                   int not null auto_increment comment 'id',
-   name                 char(20) comment 'æ‰“å°åº—çš„åå­—',
-   account              char(30) comment 'è´¦å·',
-   password             char(32) comment 'å¯†ç ',
-   address              char(30) comment 'åœ°å€',
-   phone                char(20) comment 'ç”µè¯',
+   name                 char(20) comment '´òÓ¡µêµÄÃû×Ö',
+   account              char(30) comment 'ÕËºÅ',
+   password             char(32) comment 'ÃÜÂë',
+   address              char(30) comment 'µØÖ·',
+   phone                char(20) comment 'µç»°',
    qq                   char(15) comment 'QQ',
    primary key (id)
 );
 
-alter table printer comment 'æ‰“å°åº—';
+alter table printer comment '´òÓ¡µê';
 
 /*==============================================================*/
 /* Table: token                                                 */
@@ -90,13 +90,13 @@ create table token
 (
    token                char(64) comment 'token',
    type                 tinyint not null comment 'type',
-   to_id                int not null comment 'tokenå¯¹è±¡id',
-   time                 timestamp not null default CURRENT_TIMESTAMP comment 'æ—¶é—´æˆ³',
+   to_id                int not null comment 'token¶ÔÏóid',
+   time                 timestamp not null default CURRENT_TIMESTAMP comment 'Ê±¼ä´Á',
    primary key (type, to_id),
    unique key AK_token_unique (token)
 );
 
-alter table token comment 'ä»¤ç‰Œ';
+alter table token comment 'ÁîÅÆ';
 
 /*==============================================================*/
 /* Table: user                                                  */
@@ -104,16 +104,16 @@ alter table token comment 'ä»¤ç‰Œ';
 create table user
 (
    id                   int not null auto_increment comment 'id',
-   student_number       char(10) comment 'å­¦å·',
-   password             char(32) comment 'å¯†ç ',
-   name                 char(6) comment 'å§“å',
-   gender               char(3) comment 'æ€§åˆ«',
-   phone                char(20) comment 'ç”µè¯',
+   student_number       char(10) comment 'Ñ§ºÅ',
+   password             char(32) comment 'ÃÜÂë',
+   name                 char(6) comment 'ĞÕÃû',
+   gender               char(3) comment 'ĞÔ±ğ',
+   phone                char(20) comment 'µç»°',
    email                char(32) comment 'email',
    primary key (id)
 );
 
-alter table user comment 'ç”¨æˆ·';
+alter table user comment 'ÓÃ»§';
 
 alter table code add constraint FK_code_of_user foreign key (use_id)
       references user (id) on delete restrict on update restrict;
