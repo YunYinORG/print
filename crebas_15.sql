@@ -24,7 +24,7 @@ create table code
    id                   int not null auto_increment comment 'id',
    use_id               int not null comment '用户_id',
    code                 char(32) comment '码',
-   start_time           datetime comment '产生的时间',
+   time            timestamp not null default CURRENT_TIMESTAMP comment '产生的时间',
    type                 char(8) comment '类型',
    primary key (id)
 );
@@ -41,7 +41,7 @@ create table file
    pri_id               int not null comment '打印店_id',
    name                 char(32) comment '文件名',
    url                  char(64) comment '文件存放位置',
-   time                 datetime comment '文件上传的时间',
+   time                 timestamp not null default CURRENT_TIMESTAMP comment '文件上传的时间',
    requirements         char(100) comment '打印要求（备注）',
    copies               int comment '打印数量',
    double_side          bool comment '单双面信息',
@@ -91,7 +91,7 @@ create table token
    token                char(64) comment 'token',
    type                 tinyint not null comment 'type',
    to_id                int not null comment 'token对象id',
-   time                 datetime not null default CURRENT_TIMESTAMP comment '时间戳',
+   time                 timestamp not null default CURRENT_TIMESTAMP comment '时间戳',
    primary key (type, to_id),
    unique key AK_token_unique (token)
 );
