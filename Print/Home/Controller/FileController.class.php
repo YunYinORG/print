@@ -28,13 +28,11 @@ class FileController extends Controller
             $File = M('File');
             $this->data = $File->where("use_id=".session('use_id'))->order('time')->select();
             layout('layout');
-//            echo("<a href='".U('Home/File/add')."'>Upload file</a><br>");
             $this->display();
-    //        var_dump($data);
         }
         else
         {
-            echo("Unauth");
+            $this->redirect('Home/User/signinorup');
         }
     }
     
@@ -44,11 +42,10 @@ class FileController extends Controller
 	    {
 	        layout('layout');
             $this->display();
-    //        var_dump($data);
         }
         else
         {
-            echo("Unauth");
+            $this->redirect('Home/User/signinorup');
         }
     }
     
@@ -62,10 +59,10 @@ class FileController extends Controller
             $upload->rootPath = './Uploads/';
             $upload->savePath = '';
             $info = $upload->upload();
-    //        var_dump($info);
+
             if(!$info)
             {
-                $this->error($upload->getError());
+                $this->error('Error when upload to /Uploads');
             }
             else
             {
@@ -85,26 +82,21 @@ class FileController extends Controller
                     if($File->create($data)) {
                         $result =   $File->add();
                         if($result) {
-    //                        $this->success('Successed');
-   //                         var_dump($file);
                             $Notification = M();
                             $Notification->query("INSERT INTO notification VALUES(NULL,{$result},0,{$data['use_id']},1)");
-     //                       var_dump($Notification);
-	                        echo("<a href='".U('Home/File/index')."'>File list</a><br>");
+                            $this->success();
                         }else{
-    //                        $this->error('Error');
-                            var_dump($File);
-                            var_dump($Notification);
+                            $this->error("SQL: Can not insert info into File table");
                         }
                     }else{
-                        $this->error($File->getError());
+                        $this->error('Can not create File Model');
                     }
                 }
             }
         }
         else
         {
-            echo("Unauth");
+            $this->redirect('Home/User/signinorup');
         }
     }
 }

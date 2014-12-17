@@ -25,89 +25,11 @@ import('Common.Urp',COMMON_PATH);
 
 class UserController extends Controller
 {
-//Abandon function
-/*
-	public function signup(){
-        if(session('?student_number'))
-        {
-            print_r($_COOKIE);
-        }
-        else
-        {
-            if(cookie('?student_number')&&cookie('?password'))
-            {
-                $User = D('User');
-                    $student_number = cookie('student_number');
-                    $password = cookie('password');
-                    $result = $User->where("student_number={$student_number} and password={$password}")->find();
-                    if($result) 
-                    {
-                        session('student_number',$User->student_number);
-                        session('use_id',$User->id);//FK to file upload
-                        cookie('student_number',$User->student_number,3600);
-                        cookie('password',$User->password,3600);
-
-                        print_r($_COOKIE);
-                    }
-                    else
-                    {
-                        $this->display();//Fake cookie?
-                    }
-            }
-            else
-            {
-                $this->display();//First time to sign up or in?
-            }
-        }
-    }
-    
-    public function signin(){
-        if(session('?student_number'))
-        {
-            print_r($_COOKIE);
-        //    $this->success('Should not be here');
-        }
-        else
-        {
-            if(cookie('?student_number')&&cookie('?password'))
-            {
-                $User = D('User');
-                    $student_number = cookie('student_number');
-                    $password = cookie('password');
-                    $result = $User->where("student_number={$student_number} and password={$password}")->find();
-                    if($result) 
-                    {
-                        session('student_number',$User->student_number);
-                        session('use_id',$User->id);//FK to file upload
-                        cookie('student_number',$User->student_number,3600);
-                        cookie('password',$User->password,3600);
-    //                $this->success('Successfully sign in');
-                        print_r($_COOKIE);
-                    }
-                    else
-                    {
-                        $this->display();//Fake cookie?
-                    }
-            }
-            else
-            {
-                $this->display();//First time to sign up or in?
-            }
-        }
-    }
-*/
-
-
 
         public function signinorup(){
         if(session('?use_id'))
         {
-            print_r($_COOKIE);
-            
-                    echo("<a href='".U('Home/User/index')."'>Change password without recomfirmation</a><br>");
-	                echo("<a href='".U('Home/User/logout')."'>Logout</a><br>");
-	                echo("<a href='".U('Home/File/add')."'>Upload file</a><br>");
-	                echo("<a href='".U('Home/File/index')."'>File list</a><br>");
+            $this->redirect('Home/File/add');
         }
         else
         {
@@ -118,12 +40,7 @@ class UserController extends Controller
                 if($info)
                 {      
                     session('use_id',$info['id']);//Needed when file upload
-                    print_r($_COOKIE);
-                    
-                    echo("<a href='".U('Home/User/index')."'>Change password without recomfirmation</a><br>");
-	                echo("<a href='".U('Home/User/logout')."'>Logout</a><br>");
-	                echo("<a href='".U('Home/File/add')."'>Upload file</a><br>");
-	                echo("<a href='".U('Home/File/index')."'>File list</a><br>");
+                    $this->redirect('Home/File/add');
                 }
                 else
                 {
@@ -137,95 +54,30 @@ class UserController extends Controller
         }
     }
     
-//Abandon function   
-    /*
-    public function add(){
-        $User = D('User');
-        
-        $student_number = I('post.student_number');
-        $password = I('post.password');
-        if($User->create()) 
-        {
-            if($name = get_urp_name($student_number,$password))
-            {
-                $result = $User->add();
-                if($result) 
-                {                
-                    session('student_number',$student_number);
-                    session('use_id', $result);
-                    cookie('student_number',$student_number,3600);
-                    cookie('password',$password,3600);
-    //                $this->success('Successfully sign in');
-                    print_r($_COOKIE);
-                }
-                else
-                {
-                    $this->error('Can not insert to database');
-                }
-            }
-            else
-            {
-                $this->error('Student ID not match with password in urp');
-            }
-        }
-        else
-        {
-            $this->error('Can not create model');
-        }
-    }
-    
-    public function auth(){
-        $User = D('User');
-            $student_number = I('post.student_number');
-            $password = I('post.password');
-            $result = $User->where("password='{$password}' and student_number='{$student_number}'")->find();
-            if($result) //auth passed
-            {
-                session('student_number',$User->student_number);
-                session('use_id',$User->id);
-                cookie('student_number',$User->student_number,3600);
-                cookie('password',$User->password,3600);
-//                $this->success('Successfully sign in');
-                print_r($_COOKIE);
-            }
-            else
-            {
-//                $this->error('Not sign up yet');
-//                Wrong password or not sign up yet
-                var_dump($User);
-            }
-    }
-    */
-    
-    
     
     public function addorauth(){
         $User = D('User');
             $student_number = I('post.student_number');
-            $password = encode(I('post.password'),I('post.student_number'));
+            $password = encode(I('post.password'),$student_number);
             $result = $User->where("student_number={$student_number}")->find();
             if($result) 
             {
-                if($result['password'] == $password)//auth passed
+                if($result['password'] == $password)//authed
                 {
                     session('use_id',$User->id);
                     $token = update_token($User->id,1);
                     cookie('token',$token,3600);
-                    print_r($_COOKIE);
-                    echo("<a href='".U('Home/User/index')."'>Change password without recomfirmation</a><br>");
-	                echo("<a href='".U('Home/User/logout')."'>Logout</a><br>");
-	                echo("<a href='".U('Home/File/add')."'>Upload file</a><br>");
-	                echo("<a href='".U('Home/File/index')."'>File list</a><br>");
+                    $this->redirect('Home/File/add');
                 }
                 else
                 {
-                    var_dump($result);//Wrong password
+                    $this->error('Wrong password');
+                    //Wrong password
                 }
             }
             else
             {
 //                not sign up yet
-//                var_dump($User);
                 if($User->create()) 
                 {
                     if($name = get_urp_name($student_number,I('post.password')))
@@ -238,24 +90,22 @@ class UserController extends Controller
                         {                
                             session('use_id', $result);
                             $token = update_token($result,1);
-                            cookie('token',$token,3600);
-                            print_r($_COOKIE);
-                            echo("<a href='".U('Home/User/index')."'>Change password without recomfirmation</a><br>");
-	                        echo("<a href='".U('Home/User/logout')."'>Logout</a><br>");
+                            cookie('token',$token,360000);
+                            $this->redirect('Home/User/index');
                         }
                         else
                         {
-                            $this->error('Can not insert to database');
+                            $this->error('SQL: Can not insert into User table');
                         }
                     }
                     else
                     {
-                        $this->error('Student ID not match with password in urp');
+                        $this->error('Urp verification failed');
                     }
                 }
                 else
                 {
-                    $this->error('Can not create model');
+                    $this->error('Can not create User model');
                 }
             }
     }
@@ -268,45 +118,58 @@ class UserController extends Controller
         {
             $User = M('User');
             $data = $User->where("id=".session('use_id'))->find();
+            session('password',$data['password']);
+            session('student_number',$data['student_number']);
             $this->data = $data;
+            layout('layout');
             $this->display();
         }
         else
         {
-            echo("Unauth");
+            $this->redirect('Home/User/signinorup');
         }
     }
     
-    public function change(){
+    public function change()
+    {
         if(session('?use_id'))
         {
-            $User = M('User');
-            if($User->create()) 
+            if(session('password')==encode(I('post.deprecated_password'),session('student_number')))
             {
-                $result = $User->save();
-                if($result)
+                $User = M('User');
+                if($User->create()) 
                 {
-                    echo("Success");
+                    $result = $User->save();
+                    if($result)
+                    {
+                        $this->success();
+                    }
+                    else
+                    {
+                        $this->redirect('Home/User/index');
+                    }
                 }
                 else
                 {
-                    $this->error('Unable to write');
+                    $this->error('Can not create User model');
                 }
             }
             else
             {
-                $this->error($User->getError());
+                $this->error('Wrong password');
             }
         }
         else
         {
-            echo("Unauth");
+            $this->redirect('Home/User/signinorup');
         }
     }
+    
     public function logout()
     {
         delete_token(cookie('token'));
         session(null);
         cookie(null);
+        $this->redirect('Home/User/signinorup');
     }
 }
