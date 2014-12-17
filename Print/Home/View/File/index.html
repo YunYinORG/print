@@ -5,7 +5,8 @@
     </head>
     <body>
         <volist name="data" id="vo">
-            {$vo.pri_id}--{$vo.name}--{$vo.url}--{$vo.time}--{$vo.status}<br>
+       <div> <a href="__UPLOAD__/{$vo.url}"> {$vo.pri_id}:{$vo.name}</a>
+           上传时间{$vo.time} 状态{$vo.status}</div>
         </volist>
     <body>
 </html>

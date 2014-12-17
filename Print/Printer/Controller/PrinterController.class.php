@@ -65,8 +65,8 @@ class PrinterController extends Controller {
     }*/
     
     
-    public function get(){
-        if(session('?pri_id'))
+    public function file(){
+        if(session('pri_id'))
         {
         
             //list of file,unproceeded and proceeded
@@ -76,6 +76,8 @@ class PrinterController extends Controller {
             foreach($files as $file)
             {
                 var_dump($file);
+                // $this->assign('data',M('file')->getById($file['fil_id']));
+                echo $this->fetch(T('Home@File/index'));
                 echo("<br><a href='".U('Printer/Printer/download?id='.$file['fil_id'])."'>Downloaded</a><br>");
                 echo("<a href='".U('Printer/Printer/printed?id='.$file['fil_id'])."'>Printed</a><br>");
                 echo("<a href='".U('Printer/Printer/paid?id='.$file['fil_id'])."'>Paid</a><br><br><br>");
