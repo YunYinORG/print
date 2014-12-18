@@ -71,8 +71,8 @@ class FileController extends Controller
                     $data['name'] = $file['name'];
                     $data['pri_id'] = I('post.pri_id');
                     $data['time'] = date("Y-m-d H:i:s",time());//This is the upload time...not the specify time
-                    $data['requirements'] = I('post.requirements');
-                    $data['url'] = ($file['savepath'].$file['savename']);
+                    $data['requirements'] = "It's OK";//I('post.requirements');
+                    $data['url'] = $file['savepath'].$file['savename'];
                     $data['status'] = 0;//status = 0 means sended ,not downloaded yet
                     $data['use_id'] = session('use_id');
                     $data['copies'] = I('post.copies'); 

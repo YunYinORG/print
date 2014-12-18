@@ -134,7 +134,8 @@ class UserController extends Controller
     {
         if(session('?use_id'))
         {
-            if(session('password')==encode(I('post.deprecated_password'),session('student_number')))
+            if((session('password')==encode(I('post.deprecated_password'),session('student_number')))
+            &&(I('post.input')==I('post.password')))
             {
                 $User = M('User');
                 if($User->create()) 
@@ -171,5 +172,16 @@ class UserController extends Controller
         session(null);
         cookie(null);
         $this->redirect('Home/User/signinorup');
+    }
+    
+    public function about()
+    {
+            layout('layout');
+            $this->display();
+    }
+    public function contact()
+    {
+            layout('layout');
+            $this->display();
     }
 }
