@@ -1,8 +1,9 @@
 #################
 ## Eclipse
 #################
-.htaccess
-config.php
+Public/
+*/.htaccess
+*/config.php
 */Runtime/
 /Runtime/
 /Uploads/
