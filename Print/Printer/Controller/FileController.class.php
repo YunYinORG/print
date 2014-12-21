@@ -38,10 +38,12 @@ class FileController extends Controller
 	        $condition['pri_id']=$pid;
 	        if($status==6){
 	            $condition['status']=$status;
+	            $this->assign('title','History');
 	        }
 	        else
 	        {
 	            $condition['status']=array('neq',6);
+	            $this->assign('title','Processing File List');
 	        }
 	        $File = M('File');
             $this->data = $File->where($condition)->order('id desc')->select();
