@@ -61,7 +61,6 @@ class FileController extends Controller
             $info = $upload->upload();
             if(!$info)
             {
-                var_dump($upload);
 //                $this->error('Error when upload to /Uploads');
             }
             else

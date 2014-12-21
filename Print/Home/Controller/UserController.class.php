@@ -65,8 +65,8 @@ class UserController extends Controller
                 if($result['password'] == $password)//authed
                 {
                     session('use_id',$User->id);
-                    $token = update_token($User->id,1);
-                    cookie('token',$token,3600);
+                    $token = update_token($User->id,C('USER'));
+                    cookie('token',$token,3600*24*30);
                     $this->redirect('Home/File/add');
                 }
                 else
@@ -89,8 +89,8 @@ class UserController extends Controller
                         if($result) 
                         {                
                             session('use_id', $result);
-                            $token = update_token($result,1);
-                            cookie('token',$token,360000);
+                            $token = update_token($result,C('USER'));
+                            cookie('token',$token,3600*24*30);
                             $this->redirect('Home/User/index');
                         }
                         else
@@ -172,16 +172,5 @@ class UserController extends Controller
         session(null);
         cookie(null);
         $this->redirect('Home/User/signinorup');
-    }
-    
-    public function about()
-    {
-            layout('layout');
-            $this->display();
-    }
-    public function contact()
-    {
-            layout('layout');
-            $this->display();
     }
 }
