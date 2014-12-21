@@ -40,8 +40,9 @@ class PrinterController extends Controller
         if ($id) 
         {
             // $Printer    = M('Printer');
-            $data       = M('Printer')->getById($id);
+            $data = M('Printer')->getById($id);
             $this->data = $data;
+            layout('layout');
             $this->display();
         } else
         {
@@ -93,6 +94,7 @@ class PrinterController extends Controller
         delete_token(cookie('token'));
         session(null);
         cookie(null);
+        $this->redirect('Printer/Printer/signin');
     }
     
     //Still in plan
@@ -144,10 +146,7 @@ class PrinterController extends Controller
     {
         if (session('?pri_id')) 
         {
-            var_dump($_COOKIE);
-            echo ("<a href='" . U('Printer/Printer/index') . "'>Change password without recomfirmation</a><br>");
-            echo ("<a href='" . U('Printer/Printer/logout') . "'>Logout</a><br>");
-            echo ("<a href='" . U('Printer/Printer/get') . "'>Processing file list</a><br>");
+            $this->redirect('Printer/File/index');
         } else
         {
             if (cookie('?token')) 
@@ -157,83 +156,83 @@ class PrinterController extends Controller
                 if ($info) 
                 {
                     session('pri_id', $info['id']);
-                     //Needed when file upload
-                    var_dump($_COOKIE);
-                    echo ("<a href='" . U('Printer/Printer/index') . "'>Change password without recomfirmation</a><br>");
-                    echo ("<a href='" . U('Printer/Printer/logout') . "'>Logout</a><br>");
-                    echo ("<a href='" . U('Printer/Printer/get') . "'>Processing file list</a><br>");
+                    $this->redirect('Printer/File/index');
                 } else
                 {
-                    var_dump($info);
-                    
-                    //                    $this->display();//Fake token
-                    
+                    $this->display();
+                    //Fake token
                 }
             } else
             {
                 $this->display();
                  //First time to sign up or in?
-                
             }
         }
     }
     
     //Not available now
     
-    //     public function add(){
-    //         $Printer = D('Printer');
+         public function add(){
+             $Printer = D('Printer');
     
-    //         $data['account'] = I('post.account');
-    //         $data['password'] = encode(I('post.password'),I('post.account'));
-    //         $data['name'] = I('post.name');
-    //         $data['address'] = I('post.address');
-    //         $data['phone'] = I('post.phone');
-    //         $data['qq'] = I('post.qq');
+             $data['account'] = I('post.account');
+             $data['password'] = encode(I('post.password'),I('post.account'));
+             $data['name'] = I('post.name');
+             $data['address'] = I('post.address');
+             $data['phone'] = I('post.phone');
+             $data['qq'] = I('post.qq');
     
-    //         if($Printer->create())
-    //         {
-    //             $result = $Printer->add($data);
-    //             if($result)
-    //             {
-    //                 session('pri_id',$result);
-    //                 $token = update_token($result,2);
-    //                 cookie('token',$token,3600);
-    //                 var_dump($_COOKIE);
-    //             }
-    //             else
-    //             {
-    //                 $this->error('Can not insert to database');
-    //             }
-    //         }
-    //         else
-    //         {
-    //             $this->error('Can not create model');
-    //         }
-    //     }
+             if($Printer->create())
+             {
+                 $result = $Printer->add($data);
+                 if($result)
+                 {
+                     session('pri_id',$result);
+                     $token = update_token($result,2);
+                     cookie('token',$token,3600);
+                     var_dump($_COOKIE);
+                 }
+                 else
+                 {
+                     $this->error('Can not insert to database');
+                 }
+             }
+             else
+             {
+                 $this->error('Can not create model');
+             }
+         }
     
-    //     public function auth(){
-    //         $Printer = D('Printer');
-    //             $account = I('post.account');
-    //             $password = encode(I('post.password'),$account);
-    // //            var_dump($password);
-    //             $result = $Printer->where("account={$account}")->find();
-    //             if($result["password"]==$password)
-    //             {
-    //                 session('pri_id',$Printer->id);
-    //                 $token = update_token($Printer->id,2);
-    // //                var_dump($token);
-    //                 cookie('token',$token,3600);
-    //                 var_dump($_COOKIE);
-    //                      echo("<a href='".U('Printer/Printer/index')."'>Change password without recomfirmation</a><br>");
-    //      echo("<a href='".U('Printer/Printer/logout')."'>Logout</a><br>");
-    //      echo("<a href='".U('Printer/Printer/get')."'>Processing file list</a><br>");
-    
-    //             }
-    //             else
-    //             {
-    //                 var_dump($result);
-    //             }
-    //     }
+         public function auth(){
+             $Printer = D('Printer');
+                 $account = I('post.account');
+                 $password = encode(I('post.password'),$account);
+                 $result = $Printer->where("account={$account}")->find();
+                 if($result["password"]==$password)
+                 {
+                     session('pri_id',$Printer->id);
+                     $token = update_token($Printer->id,2);
+                     cookie('token',$token,3600);
+                     $this->redirect('Printer/File/index');
+                 }
+                 else
+                 {
+                     $this->error('Wrong password');
+                 }
+         }
+         
+         
+         
+    public function about()
+    {
+            layout('layout');
+            $this->display();
+    }
+    public function contact()
+    {
+            layout('layout');
+            $this->display();
+    }
     
     
 }

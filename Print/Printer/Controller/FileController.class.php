@@ -31,9 +31,19 @@ class FileController extends Controller
 	 */
 	public function index() 
 	{
-		
-		// code...
-		
+		if (session('?pri_id'))
+	    {
+	        $File = M('File');
+	        $condition['pri_id']=session('pri_id');
+	        $condition['status']=array('neq',3);
+            $this->data = $File->where($condition)->order('time')->select();
+		    layout('layout');
+		    $this->display();
+	    }
+	    else
+	    {
+	        $this->redirect('Printer/Printer/signin');
+	    }
 	}
 	
 	/**
@@ -44,5 +54,30 @@ class FileController extends Controller
 	 */
 	public function set() 
 	{
+	    if (session('?pri_id'))
+	    {
+	        
+	    }
+	    else
+	    {
+	        $this->redirect('Printer/Printer/signin');
+	    }
+	}
+    
+    public function history() 
+	{
+		if (session('?pri_id'))
+	    {
+	        $File = M('File');
+	        $condition['pri_id']=session('pri_id');
+	        $condition['status']=array('eq',3);
+            $this->data = $File->where($condition)->order('time')->select();
+		    layout('layout');
+		    $this->display();
+	    }
+	    else
+	    {
+	        $this->redirect('Printer/Printer/signin');
+	    }
 	}
 }
