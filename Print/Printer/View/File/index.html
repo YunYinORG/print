@@ -9,10 +9,11 @@
 	      <td width="310" align="center">待打印文件列表</td>
 	      <td width="297" align="center">文件打印状态</td>
         </tr>
-	    <tr>
-	      <td>{$printing_files}</td>
-	      <td>{$file_status}</td>
-        </tr>
+						    <volist name="data" id="vo">
+						        <tr>
+                                <td>{$vo.pri_id}</td><td>{$vo.name}</td><td>{$vo.url}</td><td>{$vo.time}</td><td>{$vo.status}</td><td><a href="__URL__/set/fid/{$vo.id}/status/6">set status</a></td>
+                                <tr/>
+                            </volist>
 	    </table>
 	  </div>
 		

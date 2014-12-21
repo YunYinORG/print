@@ -31,7 +31,7 @@ class IndexController extends Controller
 		if(pri_id())
 		{
 			//已经登陆直接跳转
-			$this->redirect('User/index');
+			$this->redirect('Printer/Printer');
 		}else{
 			$this->redirect('Printer/Printer/signin');
 		}

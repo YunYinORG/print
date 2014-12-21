@@ -31,12 +31,20 @@ class FileController extends Controller
 	 */
 	public function index() 
 	{
-		if (session('?pri_id'))
+	    $pid=pri_id(U('Index/index'));
+	    $status=I('status',null,'intval');
+		if ($pid)
 	    {
+	        $condition['pri_id']=$pid;
+	        if($status==6){
+	            $condition['status']=$status;
+	        }
+	        else
+	        {
+	            $condition['status']=array('neq',6);
+	        }
 	        $File = M('File');
-	        $condition['pri_id']=session('pri_id');
-	        $condition['status']=array('neq',3);
-            $this->data = $File->where($condition)->order('time')->select();
+            $this->data = $File->where($condition)->order('id desc')->select();
 		    layout('layout');
 		    $this->display();
 	    }
@@ -54,26 +62,14 @@ class FileController extends Controller
 	 */
 	public function set() 
 	{
-	    if (session('?pri_id'))
+    	$pid=pri_id(U('Index/index'));
+        $fid=I('fid',null,'intval');
+	    $status=I('status',null,'intval');
+	    if ($pid&&$fid&&$status>=2&&$status<=6)
 	    {
-	        
-	    }
-	    else
-	    {
-	        $this->redirect('Printer/Printer/signin');
-	    }
-	}
-    
-    public function history() 
-	{
-		if (session('?pri_id'))
-	    {
-	        $File = M('File');
-	        $condition['pri_id']=session('pri_id');
-	        $condition['status']=array('eq',3);
-            $this->data = $File->where($condition)->order('time')->select();
-		    layout('layout');
-		    $this->display();
+	        $map['pri_id']=$pid;
+	        $map['id']=$fid;
+	        M('File')->where($map)->setField('status',$status);
 	    }
 	    else
 	    {

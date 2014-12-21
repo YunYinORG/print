@@ -188,8 +188,8 @@ class PrinterController extends Controller
                  if($result)
                  {
                      session('pri_id',$result);
-                     $token = update_token($result,2);
-                     cookie('token',$token,3600);
+                     $token = update_token($result,C('PRINTER'));
+                     cookie('token',$token,3600*24*30);
                      var_dump($_COOKIE);
                  }
                  else
@@ -211,8 +211,8 @@ class PrinterController extends Controller
                  if($result["password"]==$password)
                  {
                      session('pri_id',$Printer->id);
-                     $token = update_token($Printer->id,2);
-                     cookie('token',$token,3600);
+                     $token = update_token($Printer->id,C('PRINTER'));
+                     cookie('token',$token,3600*24*30);
                      $this->redirect('Printer/File/index');
                  }
                  else
@@ -220,20 +220,7 @@ class PrinterController extends Controller
                      $this->error('Wrong password');
                  }
          }
-         
-         
-         
-    public function about()
-    {
-            layout('layout');
-            $this->display();
-    }
-    public function contact()
-    {
-            layout('layout');
-            $this->display();
-    }
-    
+           
     
 }
 ?>
