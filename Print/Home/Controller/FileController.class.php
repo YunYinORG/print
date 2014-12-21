@@ -23,7 +23,8 @@ class FileController extends Controller
 {
 
 	public function index(){
-	    if(session('?use_id'))
+		$uid=use_id(U('Index/index'));
+	    if($uid)
 	    {
             $File = M('File');
             $this->data = $File->where("use_id=".session('use_id'))->order('time')->select();
@@ -39,7 +40,8 @@ class FileController extends Controller
     
     public function add()
     {
-	    if(session('?use_id'))
+        $uid=use_id(U('Index/index'));
+	    if($uid)
 	    {
 	        $this->assign('title','Upload page');
 	        layout('layout');
@@ -53,7 +55,8 @@ class FileController extends Controller
     
     public function upload()
     {
-        if(session('?use_id'))
+        $uid=use_id(U('Index/index'));
+        if($uid)
 	    {
             $upload = new \Think\Upload();
             $upload->maxSize = 3145728;//3Mb
