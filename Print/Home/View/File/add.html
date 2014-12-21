@@ -4,7 +4,7 @@
 		  </div>
 			
 		    <div id="featured">
-            <form action="userinfo.html" method="post" id="print">
+            <form action="__URL__/upload" method="post" id="print">
                 <p>上传欲打印的文件
                   <input name="file" type="file" id="file" size="20" onchange="display(this)" />
                 </p>
@@ -38,7 +38,7 @@
                   <input name="copies" type="text" id="count" value="1" size="10" maxlength="10" />
                 </p>
                 <label for="myfile"></label>
-                <a href="#loginmodal" class="flatbtn" id="modaltrigger">开始打印</a>
+                <input type="submit" name="loginbtn" id="modaltrigger" class="flatbtn" value="开始打印">
       </form> 
       </div>
 		<div id="copyright">
@@ -75,11 +75,13 @@ function display(obj)
 </style>
 <script type="text/javascript">
 $(function(){
+/*
   $('#loginform').submit(function(e){
     return false;
   });
   
   $('#modaltrigger').leanModal({ top: 200, overlay: 0.8, closeButton: ".hidemodal" });
+  */
 });
 </script>
 

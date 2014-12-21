@@ -59,10 +59,10 @@ class FileController extends Controller
             $upload->rootPath = './Uploads/';
             $upload->savePath = '';
             $info = $upload->upload();
-
             if(!$info)
             {
-                $this->error('Error when upload to /Uploads');
+                var_dump($upload);
+//                $this->error('Error when upload to /Uploads');
             }
             else
             {
