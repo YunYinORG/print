@@ -4,24 +4,25 @@
 				<h2> 打印管理界面</h2>
 		 </div>
          <div class="files_record">
-	  <table width="617" border="0" align="left">
+	        <table width="617" border="0" align="left">
 	    <tr>
-	      <td width="310" align="center">待打印文件列表</td>
+	      <td width="310" align="center">待打印文件</td>
+	      <td width="297" align="center">File URL</td>
+	      <td width="297" align="center">Upload Time</td>
 	      <td width="297" align="center">文件打印状态</td>
         </tr>
 						    <volist name="data" id="vo">
 						        <tr>
-                                <td>{$vo.pri_id}</td><td>{$vo.name}</td><td>{$vo.url}</td><td>{$vo.time}</td><td>{$vo.status}</td><td><a href="__URL__/set/fid/{$vo.id}/status/6">set status</a></td>
-                                <tr/>
+                                <td>{$vo.name}</td><td>{$vo.url}</td><td>{$vo.time}</td><td>{$vo.status}</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="__URL__/set/fid/{$vo.id}/status/4">Downloaded</a></td><td><a href="__URL__/set/fid/{$vo.id}/status/5">Printed</a></td><td><a href="__URL__/set/fid/{$vo.id}/status/6">Paid</a></td>
+                                </tr>
                             </volist>
 	    </table>
 	  </div>
-		
-        <p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<div id="copyright">
-			<span>&copy;2014 云印服务. ABOUT 云印. | 关于云印服务平台<a href="http://fotogrph.com/"></a></span>
+     <div id="copyright">
+			<span>&copy;2014 云印服务. ABOUT 云印. | 关于云印服务平台<a href=“#”></a></span>
 			<span>.-欢迎您的使用-</span>
-		</div>
-	</div>
+	  </div>
 </div>

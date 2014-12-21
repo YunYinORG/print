@@ -27,6 +27,7 @@ class FileController extends Controller
 	    {
             $File = M('File');
             $this->data = $File->where("use_id=".session('use_id'))->order('time')->select();
+            $this->assign('title','File list');
             layout('layout');
             $this->display();
         }
@@ -40,6 +41,7 @@ class FileController extends Controller
     {
 	    if(session('?use_id'))
 	    {
+	        $this->assign('title','Upload page');
 	        layout('layout');
             $this->display();
         }

@@ -11,12 +11,15 @@
 				    <div align="left">
 					    <table width="682" border="0" align="center">
 						    <tr>
+							    <td width="329" align="center">Printer ID</td>
 							    <td width="329" align="center">当前打印文件</td>
+							    <td width="329" align="center">File URL</td>
+							    <td width="329" align="center">Upload Time</td>
 							    <td width="343" align="center">文件打印状态</td>
 						    </tr>
 						    <volist name="data" id="vo">
 						        <tr>
-                                <td>{$vo.pri_id}</td><td>{$vo.name}</td><td>{$vo.url}</td><td>{$vo.time}</td><td>{$vo.status}</td><td>
+                                <td>{$vo.pri_id}</td><td>{$vo.name}</td><td>{$vo.url}</td><td>{$vo.time}</td><td>{$vo.status}</td>
                                 <tr/>
                             </volist>
 					    </table>									  				
@@ -24,4 +27,8 @@
 			    </div>							
 		    </div>
         </form>
+        	      <div id="copyright">
+			<span>&copy;2014 云印服务. ABOUT 云印. | 关于云印服务平台<a href=“#”></a></span>
+			<span>.-欢迎您的使用-</span>
+	  </div>
 		</div>

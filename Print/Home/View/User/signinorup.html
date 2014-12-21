@@ -3,9 +3,10 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
   <title>云印服务平台</title>
- <load href="/Public/css/style.css" />
- <load href="/Public/js/jquery-1.9.1.min.js" /> 
- <load href="/Public/js/jquery.leanModal.min.js" />
+    <load href="/Public/css/style.css" />
+    <load href="/Public/css/bootstrap.min.css" />
+    <load href="/Public/js/jquery-1.9.1.min.js" /> 
+    <load href="/Public/js/jquery.leanModal.min.js" />
   <script language="javascript">
   function ToHomepage()
   { 
@@ -25,10 +26,10 @@
 <body>
 
     <div id="content">
-      <h1><img src="__PUBLIC__/images/logo.png" width="651" height="343"></h1>
-      <center>
-        <a href="#loginmodal" class="flatbtn" id="modaltrigger">打印入口</a>
-      </center>
+      <center><img class="img-responsive" align="middle" src="__PUBLIC__/images/logo.png" width="651" height="343"></center>
+      <div class="img img-responsive" align="center">
+        <a  class="btn btn-info" href="#loginmodal"id="modaltrigger">打印入口</a>
+      </div>
     </div>
  
   <div id="loginmodal" style="display:none;">
@@ -46,6 +47,11 @@
       </div>
     </form>
   </div>
+  <div class="info" id="info" align="center" >
+  <p>@2014 云印服务  
+    - About云印
+    - 使用须知 </p>
+</div>
 <script type="text/javascript">
 $(function(){
 /*

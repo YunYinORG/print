@@ -32,7 +32,7 @@ class UserController extends Controller
             $this->redirect('Home/File/add');
         }
         else
-        {
+        {   
             if(cookie('?token'))
             {
 
@@ -120,6 +120,7 @@ class UserController extends Controller
             $data = $User->where("id=".session('use_id'))->find();
             session('password',$data['password']);
             session('student_number',$data['student_number']);
+            $this->assign('title','Index');
             $this->data = $data;
             layout('layout');
             $this->display();
