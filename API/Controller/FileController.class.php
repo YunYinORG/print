@@ -67,7 +67,7 @@ class FileController extends RestController
 			if (!isset($data)) 
 			{
 				$page = I('page', 1, 'intval');
-				$data = M('File')->where($where)->page($page)->select();
+				$data['files'] = M('File')->where($where)->page($page)->select();
 			}
 		} else
 		{
