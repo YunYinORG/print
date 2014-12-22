@@ -1,7 +1,6 @@
 #################
 ## Eclipse
 #################
-Public/
 */.htaccess
 */config.php
 */Runtime/
