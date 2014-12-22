@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>云印服务平台</title>
+ <load href="/Public/css/style.css" />
+    <load href="/Public/css/bootstrap.min.css" />
+ <load href="/Public/js/jquery-1.9.1.min.js" /> 
+ <load href="/Public/js/jquery.leanModal.min.js" />
+  <script language="javascript">
+  function ToHomepage()
+  { 
+     //根据用户类型决定跳转页面 
+	 //if(用户为打印店店员)
+	//window.location.replace('manage.html');
+	  window.location.replace('settlement.html');
+  }
+  function ToAlter()
+  {
+	  window.location.replace('AlterPwd.html');
+  }
+  </script>
+  <!-- jQuery plugin leanModal under MIT License http://leanmodal.finelysliced.com.au/ -->
+</head>
+
+<body>
+
+    <div id="content">
+      <center><img class="img-responsive" align="middle" src="__PUBLIC__/images/logo.png" width="651" height="343"></center>
+      <div class="img img-responsive" align="center">
+        <a  class="btn btn-info" href="#loginmodal"id="modaltrigger">打印入口</a>
+      </div>
+    </div>
+    
+  <div id="loginmodal" style="display:none;">
+    <h1>用户登录</h1>
+    <form id="loginform" name="loginform" method="post" action="{:U('Printer/auth')}">
+      <label for="username">用户名:</label>
+      <input type="text" name="account" id="username" class="txtfield" tabindex="1">
+      
+      <label for="password">密码:</label>
+      <input type="password" name="password" id="password" class="txtfield" tabindex="2">
+      
+      <div class="center">
+      <input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="登陆" tabindex="3">
+    
+      </div>
+    </form>
+  </div>
+<script type="text/javascript">
+$(function(){
+/*
+  $('#loginform').submit(function(e){
+    return false;
+  });
+  */
+  $('#modaltrigger').leanModal({ top: 200, overlay: 0.8, closeButton: ".hidemodal" });
+});
+</script>
+</body>
+</html>

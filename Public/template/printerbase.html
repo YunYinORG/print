@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{//用户基础模板}
+{//打印店基础模板}
 <html lang="zh-CN">
     <head>
         <meta charset="UTF-8">
@@ -15,39 +15,16 @@
     </head>
     <body>
         <block name="header">{//顶部栏}
-        <div id="header">
-            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target="#navbar-collapse">
-                    <!--<span class="sr-only">切换导航</span>-->
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#"><img src="__PUBLIC__/images/logo.png" class="img-circle img-rounded" id="mylogo"></a>
-                </div>
-                <div class="collapse navbar-collapse" id="navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="current_page_item"><a href="__ROOT__/Home/File/add.html" accesskey="1" title="">开始打印</a></li>
-                        <li><a href="__ROOT__/Home/File/" accesskey="2" title="">文档记录</a></li>
-                        <li><a href="__ROOT__/Home/User/" accesskey="3" title="">信息管理</a></li>
-                        <li><a href="__ROOT__/Home/Index/about.html" accesskey="4" title="">关于云印</a></li>
-                        <li><a href="__ROOT__/Home/Index/contact.html" accesskey="5" title="">联系我们</a></li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
+        <include file="./Public/template/nav.html"/>
         </block>
+        <block name='main'>
         <main id='main'>
-        <block name="content">{//主要区域}</block>
-        <block name="footer">{//页脚内容}
-        <div id="copyright">
-            <span>&copy;2014 云印服务. | ABOUT 云印南开. | Follow us<a href="#"></a></span>
-            <span>.-欢迎您的使用-</span>
-        </div>
+            <block name="content">{//主要区域}</block>
+            <block name="footer">{//页脚内容}
+            <include file="./Public/template/footer.html"/>
+            </block>
+        </main>
         </block>
-    </main>
     </body>
     <block name="end">{//尾部js等}</block>
 </html>

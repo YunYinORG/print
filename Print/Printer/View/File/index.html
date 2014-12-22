@@ -1,31 +1,31 @@
-	<div id="main">
-		<div class="title" >
-				<h2> 打印管理界面</h2>
-		 </div>
-         <div class="files_record">
-	        <table width="617" border="0" align="center">
-	    <tr>
-	      <td width="310" align="center">待打印文件</td>
-	      <td width="297" align="center">File URL</td>
-	      <td width="297" align="center">Upload Time</td>
-	      <td width="297" align="center">文件打印状态</td>
-        </tr>
-						    <volist name="data" id="vo">
-						        <tr>
-                                <td>{$vo.name}</td><td>{$vo.url}</td><td>{$vo.time}</td><td>{$vo.status}</td>
-                                </tr>
-                                <if condition="$title eq 'History'">
-                                <else />
-                                <tr>
-                                    <td><a href="__URL__/set/fid/{$vo.id}/status/4">Downloaded</a></td><td><a href="__URL__/set/fid/{$vo.id}/status/5">Printed</a></td><td><a href="__URL__/set/fid/{$vo.id}/status/6">Paid</a></td>
-                                </tr>
-                                </if>
-                            </volist>
-	    </table>
-	  </div>
-     <div id="copyright">
-			<span>&copy;2014 云印服务. ABOUT 云印. | 关于云印服务平台<a href="#"></a></span>
-			<span>.-欢迎您的使用-</span>
-	  </div>
+{//打印管理界面}
+<extend name="Public/template/printerbase.html"/>
+<block name='header'>
+<include file="./Public/template/printernav.html" manage="current_page_item"/>
+</block>
+<block name='content'>
+<div class="title" >
+    <h2> 打印管理界面</h2>
 </div>
-
+<div class="files_record">
+    <table width="617" border="0" align="center">
+        <tr>
+            <td width="310" align="center">待打印文件</td>
+            <td width="297" align="center">File URL</td>
+            <td width="297" align="center">Upload Time</td>
+            <td width="297" align="center">文件打印状态</td>
+        </tr>
+        <volist name="data" id="vo">
+        <tr>
+            <td>{$vo.name}</td><td>{$vo.url}</td><td>{$vo.time}</td><td>{$vo.status}</td>
+        </tr>
+        <if condition="$title eq 'History'">
+        <else />
+        <tr>
+            <td><a href="__URL__/set/fid/{$vo.id}/status/4">Downloaded</a></td><td><a href="__URL__/set/fid/{$vo.id}/status/5">Printed</a></td><td><a href="__URL__/set/fid/{$vo.id}/status/6">Paid</a></td>
+        </tr>
+        </if>
+        </volist>
+    </table>
+</div>
+</block>

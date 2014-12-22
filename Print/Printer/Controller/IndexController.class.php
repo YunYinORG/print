@@ -33,7 +33,8 @@ class IndexController extends Controller
 			//已经登陆直接跳转
 			$this->redirect('Printer/Printer/index');
 		}else{
-			$this->redirect('Printer/Printer/signin');
+			// $this->redirect('Printer/Printer/signin');
+			$this->display();
 		}
 	}
 }
