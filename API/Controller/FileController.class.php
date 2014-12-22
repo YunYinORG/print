@@ -53,11 +53,11 @@ class FileController extends RestController
 			switch ($info['type']) 
 			{
 			case C('PRINTER'):
-				$where['pri_id']             = $info['oid'];
+				$where['pri_id']             = $info['id'];
 				break;
 
 			case C('STUDENT'):
-				$where['use_id'] = $info['oid'];
+				$where['use_id'] = $info['id'];
 				break;
 
 			default:
@@ -98,7 +98,7 @@ class FileController extends RestController
 		{
 			if ($info['type'] == C('PRINTER')) 
 			{
-				$where['pri_id']       = $info['oid'];
+				$where['pri_id']       = $info['id'];
 				$where['id']       = I('id',null,'intval');
 				$File  = M('File')->where($where)->cache(true, 120);
 				switch ($this->_method) 
@@ -167,7 +167,7 @@ class FileController extends RestController
 			} else
 			{
 				
-				// $where['use_id']             = $info['oid'];
+				// $where['use_id']             = $info['id'];
 				$data['err']      = '此接口暂只支持打印店！';
 			}
 		}
