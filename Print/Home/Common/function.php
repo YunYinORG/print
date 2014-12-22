@@ -37,6 +37,7 @@ function use_id($redirect_url = null)
 		$info  = auth_token($token);
 		if ($info['type'] == C('USER')) 
 		{
+			session('use_id',$info['id']);
 			return $info['id'];
 		}
 	}

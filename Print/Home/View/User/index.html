@@ -1,70 +1,74 @@
+{//信息管理页}
+<extend name="Public/template/base.html"/>
+<block name='header'>
+<include file="./Public/template/nav.html" info="current_page_item"/>
+</block>
 
+<block name='head'>
 <style type="text/css">
 #subtitle {
-	font-family: "Comic Sans MS", cursive;
-	font-size: 24px;
-	color: #666;
-	text-align: left;
+font-family: "Comic Sans MS", cursive;
+font-size: 24px;
+color: #666;
+text-align: left;
 }
 .subtitle {
-	font-family: "Comic Sans MS", cursive;
-	font-size: 24px;
-	color: #333;
+font-family: "Comic Sans MS", cursive;
+font-size: 24px;
+color: #333;
 }
 .userinfo {
-	font-family: "Lucida Console", Monaco, monospace;
-	font-size: 16px;
+font-family: "Lucida Console", Monaco, monospace;
+font-size: 16px;
 }
 </style>
-  <div id="main">
-		  <div class="title" >
-				<h2>用户信息管理</h2>
-		  </div>
-	  
-<div class="info">
-   <div class="user">
-        <div class="subtitle">
-        <p>用户登录情况</p>
-        </div>
-        <div class="userinfo">
-          <p> user: {$data.name}         </p>
-            <a href="__URL__/logout"><p>Logout</p></a> 
-        </div>
+
+</block>
+<block name='content'>
+    <div class="title" >
+        <h2>用户信息管理</h2>
     </div>
 
-   <div class="ChangePwd">
-        <div class="subtitle">
-        <p>修改密码</p>
+    <div class="info">
+        <div class="user">
+            <div class="subtitle">
+                <p>用户登录情况</p>
+            </div>
+            <div class="userinfo">
+                <p> user: {$data.name}         </p>
+                <a href="__URL__/logout"><p>Logout</p></a>
+            </div>
         </div>
-        <form id="loginform" name="loginform" method="post" action="__URL__/change">
-        <table width="332" height="172" border="0" align="center">
-          <tr>
-            <td ><table width="332" height="146" border="0" >
-              <tr>
-                <td>初始密码：</td>
-                <td width="166"><label for="origin3"></label>
-                  <input name="deprecated_password" type="text" id="origin3" tabindex="1" size="20" /></td>
-              </tr>
-              <tr>
-                <td>新密码：</td>
-                <td><label for="new"></label>
-                  <input name="password" type="password" id="new" size="20" /></td>
-              </tr>
-              <tr>
-                <td height="34">确认新密码：</td>
-                <td><label for="input"></label>
-                  <input name="input" type="text" id="input" size="20" /></td>
-              </tr>
-              <tr>
-                <td height="34" colspan="2"><input type="submit" name="submit" id="submit" value="确认修改" /></td>
-              </tr>
-            </table></td>
-          </tr>
-        </table>
-        </form>
-     </div>
-     	      <div id="copyright">
-			<span>&copy;2014 云印服务. ABOUT 云印. | 关于云印服务平台<a href=“#”></a></span>
-			<span>.-欢迎您的使用-</span>
-	  </div>
-  </div>
+        <div class="ChangePwd">
+            <div class="subtitle">
+                <p>修改密码</p>
+            </div>
+            <form id="loginform" name="loginform" method="post" action="__URL__/change">
+                <table width="332" height="172" border="0" align="center">
+                    <tr>
+                        <td ><table width="332" height="146" border="0" >
+                            <tr>
+                                <td>初始密码：</td>
+                                <td width="166"><label for="origin3"></label>
+                                <input name="deprecated_password" type="text" id="origin3" tabindex="1" size="20" /></td>
+                            </tr>
+                            <tr>
+                                <td>新密码：</td>
+                                <td><label for="new"></label>
+                                <input name="password" type="password" id="new" size="20" /></td>
+                            </tr>
+                            <tr>
+                                <td height="34">确认新密码：</td>
+                                <td><label for="input"></label>
+                                <input name="input" type="text" id="input" size="20" /></td>
+                            </tr>
+                            <tr>
+                                <td height="34" colspan="2"><input type="submit" name="submit" id="submit" value="确认修改" /></td>
+                            </tr>
+                        </table></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</block>

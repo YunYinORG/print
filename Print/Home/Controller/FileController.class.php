@@ -27,14 +27,13 @@ class FileController extends Controller
 	    if($uid)
 	    {
             $File = M('File');
-            $this->data = $File->where("use_id=".session('use_id'))->order('time')->select();
-            $this->assign('title','File list');
-            layout('layout');
+            $this->data = $File->where("use_id=".session('use_id'))->order('id desc')->select();
+            // $this->assign('title','File list');
             $this->display();
         }
         else
         {
-            $this->redirect('Home/User/signinorup');
+            $this->redirect('Home/Index/index');
         }
     }
     
@@ -44,12 +43,11 @@ class FileController extends Controller
 	    if($uid)
 	    {
 	        $this->assign('title','Upload page');
-	        layout('layout');
             $this->display();
         }
         else
         {
-            $this->redirect('Home/User/signinorup');
+            $this->redirect('Home/Index/index');
         }
     }
     
@@ -100,7 +98,7 @@ class FileController extends Controller
         }
         else
         {
-            $this->redirect('Home/User/signinorup');
+            $this->redirect('Home/Index/index');
         }
     }
 }

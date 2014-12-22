@@ -1,86 +1,73 @@
-	<div id="main">
-	  	  <div class="title">
-				<h2>请设置您的打印信息</h2>
-		  </div>
-			
-		    <div id="featured">
-            <form action="__URL__/upload" method="post" id="print" enctype="multipart/form-data">
-                <p>上传欲打印的文件
-                  <input name="file" type="file" id="file" size="20" onchange="display(this)" />
-                </p>
-                <p>选择您喜爱的打印店：
-                <br> 
-                  <label>
-                    <input name="pri_id" type="radio" id="choice_0" value="1" checked="checked" />
-                  光辉岁月(浴园附近)</label>
-                  <br />
-                  <label>
-                    <input type="radio" name="pri_id" value="2" id="choice_1" />
-                    伟钰印务(数码小院职工食堂附近)</label>
-                  <br />
-                  <label>
-                    <input type="radio" name="pri_id" value="3" id="choice_2" />
-                    天达印务社(西门22宿附近)</label>
-                  <br />
-                  <label>
-                    <input type="radio" name="pri_id" value="4" id="choice_3" />
-                    快捷复印社(南开出版社附近)</label>
-                </p>
-                <p>选择打印形式
-                  <label>
-                    <input name="double_side" type="radio" id="type_0" value="0" checked="checked" />
-                    单面打印</label>
-                  <label>
-                    <input type="radio" name="double_side" value="1" id="type_1" />
-                    双面打印</label>
-                </p>
-                <p>设置打印份数
-                  <input name="copies" type="text" id="count" value="1" size="10" maxlength="10" />
-                </p>
-                <input type="submit" name="loginbtn" id="modaltrigger" class="flatbtn" value="开始打印">
-      </form> 
-      </div>
-		<div id="copyright">
-			<span>&copy;2014 云印服务. | ABOUT 云印. | Follow us<a href="#"></a></span>
-			<span>.-欢迎您的使用-</span>
-		</div>
-	</div>
-	
+{//文件上传页}
+<extend name="Public/template/base.html"/>
+<block name='header'>
+<include file="./Public/template/nav.html" add="current_page_item"/>
+</block>
+<block name='content'>
+<div class="title">
+    <h2>请设置您的打印信息</h2>
+</div>
+<div id="featured">
+    <form action="__URL__/upload" method="post" id="print" enctype="multipart/form-data">
+        <p>上传欲打印的文件
+        <input name="file" type="file" id="file" size="20" onchange="display(this)" />
+        </p>
+        <p>选择您喜爱的打印店：
+        <br>
+        <label>
+            <input name="pri_id" type="radio" id="choice_0" value="1" checked="checked" />
+        光辉岁月(浴园附近)</label>
+        <br />
+        <label>
+            <input type="radio" name="pri_id" value="2" id="choice_1" />
+        伟钰印务(数码小院职工食堂附近)</label>
+        <br />
+        <label>
+            <input type="radio" name="pri_id" value="3" id="choice_2" />
+        天达印务社(西门22宿附近)</label>
+        <br />
+        <label>
+            <input type="radio" name="pri_id" value="4" id="choice_3" />
+        快捷复印社(南开出版社附近)</label>
+        </p>
+        <p>选择打印形式
+        <label>
+            <input name="double_side" type="radio" id="type_0" value="0" checked="checked" />
+        单面打印</label>
+        <label>
+            <input type="radio" name="double_side" value="1" id="type_1" />
+        双面打印</label>
+        </p>
+        <p>设置打印份数
+        <input name="copies" type="text" id="count" value="1" size="10" maxlength="10" />
+        </p>
+        <input type="submit" name="loginbtn" id="modaltrigger" class="flatbtn" value="开始打印">
+    </form>
+</div>
+</block>
+<block name='end'>
 <script language="javascript">
- 
 function getFileName(obj)
 {
-	var pos = obj.value.lastIndexOf("/");
-	return obj.value.substring(pos+1);
+var pos = obj.value.lastIndexOf("/");
+return obj.value.substring(pos+1);
 }
 function display(obj)
 {
-	var file = getFileName(this);
-	document.getElementById('myfile').value="当前欲打印的文件为"+file;
+var file = getFileName(this);
+document.getElementById('myfile').value="当前欲打印的文件为"+file;
 }
 </script>
 <style type="text/css">
 .press {
-	font-size: 36px;
+font-size: 36px;
 }
 #page #main form #featured .style1 {
-
 }
 .file {
-	font-weight: bolder;
+font-weight: bolder;
 }
 #page #main form #save {
 }
 </style>
-<script type="text/javascript">
-$(function(){
-/*
-  $('#loginform').submit(function(e){
-    return false;
-  });
-  
-  $('#modaltrigger').leanModal({ top: 200, overlay: 0.8, closeButton: ".hidemodal" });
-  */
-});
-</script>
-
+</block>
