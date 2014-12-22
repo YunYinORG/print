@@ -52,8 +52,9 @@ class IndexController extends RestController
 		switch ($type) 
 		{
 		case C('STUDENT'):
-			$num         = I('post.number', 0, 'intval');
-			$Model       = M('user')->where("student_number='$num'");
+			$account    = I('post.number', 0, 'intval');
+			$Model       = M('user')->where("student_number='$account'");
+			
 			break;
 
 		case C('PRINTER'):
@@ -68,9 +69,9 @@ class IndexController extends RestController
 		if (!isset($data)) 
 		{
 			$info     = $Model->field('id,password')->find();
-			$id       = $info['id'];
+			// $id       = $info['id'];
 			$password = $info['password'];
-			if ($password == encode($id, $pwd)) 
+			if ($password == encode($pwd,$account)) 
 			{
 				$token    = update_token($id, $type);
 				if ($token) 
