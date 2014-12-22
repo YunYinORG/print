@@ -21,13 +21,15 @@ namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller
 {
+	//首页
 	public function index() 
 	{
-	    echo('<h1>Index Page</h1><br><br>');
-        echo('<h3>For User</h3>');
-	    echo("<a href='".U('Home/User/signinorup')."'>Sign in & Sign up</a><br><br>");
-	    
-	    echo('<h3>For Printer</h3>');
-	    echo("<a href='".U('Printer/Index/index')."'>Printer's Index Page</a><br>");
+		if(use_id())
+		{
+			$this->redirect('File/add');
+		}else{
+			  $this->display();
+		}
+	 
 	}
 }

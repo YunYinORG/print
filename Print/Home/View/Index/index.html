@@ -1,0 +1,36 @@
+<extend name="Public/template/base.html"/>
+<block name='head'>
+<load href="/Public/js/jquery-1.9.1.min.js" />
+<load href="/Public/js/jquery.leanModal.min.js" />
+</block>
+<block name='header'> </block>
+<block name='main'>
+
+<div id="content">
+    <center><img class="img-responsive" align="middle" src="__PUBLIC__/images/logo.png" width="651" height="343"></center>
+    <div class="img img-responsive" align="center">
+        <a  class="btn btn-info" href="#loginmodal"id="modaltrigger">打印入口</a>
+    </div>
+</div>
+
+<div id="loginmodal" style="display:none;">
+    <h1>用户登录</h1>
+    <form id="loginform" name="loginform" method="post" action="{:U('User/auth')}">
+        <label for="username">用户名:</label>
+        <input type="text" name="student_number" id="username" class="txtfield" tabindex="1">
+        <label for="password">密码:</label>
+        <input type="password" name="password" id="password" class="txtfield" tabindex="2">
+        <div class="center">
+            <input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="注册/登陆" tabindex="3">
+        </div>
+    </form>
+</div>
+</block>
+
+<block name='end'>
+<script type="text/javascript">
+$(function(){
+$('#modaltrigger').leanModal({ top: 200, overlay: 0.8, closeButton: ".hidemodal" });
+});
+</script>
+</block>

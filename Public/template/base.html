@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{//用户基础模板}
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><block name="title">云印南开</block></title>
+        <meta name="keywords" content="云印南开" />
+        <meta name="description" content="" />
+        <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen and (max-width: 1280px)" />
+        <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="__PUBLIC__/css/modal.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="__PUBLIC__/css/form.css" rel="stylesheet" type="text/css" media="all" />
+        <block name="head">{//头部添加}</block>
+    </head>
+    <body>
+        <block name="header">{//顶部栏}
+        <include file="./Public/template/nav.html"/>
+        </block>
+
+        <block name='main'>
+        <main id='main'>
+            <block name="content">{//主要区域}</block>
+            <block name="footer">{//页脚内容}
+            <include file="./Public/template/footer.html"/>
+            </block>
+        </main>
+        </block>
+    </body>
+    <block name="end">{//尾部js等}</block>
+</html>

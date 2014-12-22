@@ -26,36 +26,60 @@ import('Common.Urp',COMMON_PATH);
 class UserController extends Controller
 {
 
-        public function signinorup(){
+    public function index(){
         if(session('?use_id'))
         {
-            $this->redirect('Home/File/add');
+            $User = M('User');
+            $data = $User->where("id=".session('use_id'))->find();
+            session('password',$data['password']);
+            session('student_number',$data['student_number']);
+            $this->assign('title','Index');
+            $this->data = $data;
+            $this->display();
         }
         else
-        {   
-            if(cookie('?token'))
-            {
-
-                $info = auth_token(cookie('token'));
-                if($info)
-                {      
-                    session('use_id',$info['id']);//Needed when file upload
-                    $this->redirect('Home/File/add');
-                }
-                else
-                {
-                    $this->display();//Fake token
-                }
-            }
-            else
-            {
-                $this->display();//First time to sign up or in?
-            }
+        {
+            $this->redirect('Home/Index/index');
         }
     }
+
+
+    //     public function signinorup(){
+    //     if(session('?use_id'))
+    //     {
+    //         $this->redirect('Home/File/add');
+    //     }
+    //     else
+    //     {   
+    //         if(cookie('?token'))
+    //         {
+
+    //             $info = auth_token(cookie('token'));
+    //             if($info)
+    //             {      
+    //                 session('use_id',$info['id']);//Needed when file upload
+    //                 $this->redirect('Home/File/add');
+    //             }
+    //             else
+    //             {
+    //                 $this->display();//Fake token
+    //             }
+    //         }
+    //         else
+    //         {
+    //             $this->display();//First time to sign up or in?
+    //         }
+    //     }
+    // }
     
     
-    public function addorauth(){
+    /**
+    * auth()
+    *登录和注册验证处理
+    *@param student_number 学号
+    *@param password 密码
+    */
+    public function auth(){
         $User = D('User');
             $student_number = I('post.student_number');
             $password = encode(I('post.password'),$student_number);
@@ -113,24 +137,6 @@ class UserController extends Controller
     
     
     
-    public function index(){
-        if(session('?use_id'))
-        {
-            $User = M('User');
-            $data = $User->where("id=".session('use_id'))->find();
-            session('password',$data['password']);
-            session('student_number',$data['student_number']);
-            $this->assign('title','Index');
-            $this->data = $data;
-            layout('layout');
-            $this->display();
-        }
-        else
-        {
-            $this->redirect('Home/User/signinorup');
-        }
-    }
-    
     public function change()
     {
         if(session('?use_id'))
@@ -153,7 +159,7 @@ class UserController extends Controller
                 }
                 else
                 {
-                    $this->error('Can not create User model');
+                    $this->error('Can not create User model:'.$User->getError());
                 }
             }
             else
@@ -163,7 +169,7 @@ class UserController extends Controller
         }
         else
         {
-            $this->redirect('Home/User/signinorup');
+           $this->redirect('Home/User/index');
         }
     }
     
@@ -172,6 +178,6 @@ class UserController extends Controller
         delete_token(cookie('token'));
         session(null);
         cookie(null);
-        $this->redirect('Home/User/signinorup');
+        $this->redirect('Home/Index/index');
     }
 }
