@@ -1,11 +1,16 @@
 {//打印管理界面}
 <extend name="Public/template/printerbase.html"/>
+<block name='title'>{$title}</block>
 <block name='header'>
+<IF condition='$history'>
+<include file="./Public/template/printernav.html" list="current_page_item"/>
+<ELSE/>
 <include file="./Public/template/printernav.html" manage="current_page_item"/>
+</IF>
 </block>
 <block name='content'>
 <div class="title" >
-    <h2> 打印管理界面</h2>
+    <h2>{$title}</h2>
 </div>
 <div class="files_record">
     <table width="617" border="0" align="center">
@@ -19,7 +24,7 @@
         <tr>
             <td>{$vo.name}</td><td>{$vo.url}</td><td>{$vo.time}</td><td>{$vo.status}</td>
         </tr>
-        <if condition="$title eq 'History'">
+        <if condition="$history">
         <else />
         <tr>
             <td><a href="__URL__/set/fid/{$vo.id}/status/4">Downloaded</a></td><td><a href="__URL__/set/fid/{$vo.id}/status/5">Printed</a></td><td><a href="__URL__/set/fid/{$vo.id}/status/6">Paid</a></td>

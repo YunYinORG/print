@@ -1,4 +1,5 @@
 <?php
+
 // ===================================================================
 // | FileName:      /Print/Printer/FileController.class.php
 // ===================================================================
@@ -12,13 +13,13 @@
 // +------------------------------------------------------------------
 
 /**
-* Class and Function List:
-* Function list:
-* - index()
-* - set()
-* Classes list:
-* - PrinterController extends Controller
-*/
+ * Class and Function List:
+ * Function list:
+ * - index()
+ * - set()
+ * Classes list:
+ * - FileController extends Controller
+ */
 namespace Printer\Controller;
 use Think\Controller;
 class FileController extends Controller
@@ -31,29 +32,29 @@ class FileController extends Controller
 	 */
 	public function index() 
 	{
-	    $pid=pri_id(U('Index/index'));
-	    $status=I('status',null,'intval');
-		if ($pid)
-	    {
-	        $condition['pri_id']=$pid;
-	        if($status==6){
-	            $condition['status']=$status;
-	            $this->assign('title','History');
-	        }
-	        else
-	        {
-	            $condition['status']=array('neq',6);
-	            $this->assign('title','Processing File List');
-	        }
-	        $File = M('File');
-            $this->data = $File->where($condition)->order('id desc')->select();
-		    layout('layout');
-		    $this->display();
-	    }
-	    else
-	    {
-	        $this->redirect('Printer/Printer/signin');
-	    }
+		$pid    = pri_id(U('Index/index'));
+		$status = I('status', null, 'intval');
+		if ($pid) 
+		{
+			$condition['pri_id']        = $pid;
+			if ($status == 6) 
+			{
+				$condition['status']        = $status;
+				$this->assign('history', true);
+				$this->title = '已打印文件历史记录';
+			} else
+			{
+				$condition['status']             = array('neq', 6);
+				$this->assign('history', 0);
+				$this->title = '打印任务列表';
+			}
+			$File        = M('File');
+			$this->data  = $File->where($condition)->order('id desc')->select();
+			$this->display();
+		} else
+		{
+			$this->redirect('Printer/Printer/signin');
+		}
 	}
 	
 	/**
@@ -64,18 +65,17 @@ class FileController extends Controller
 	 */
 	public function set() 
 	{
-    	$pid=pri_id(U('Index/index'));
-        $fid=I('fid',null,'intval');
-	    $status=I('status',null,'intval');
-	    if ($pid&&$fid&&$status>=2&&$status<=6)
-	    {
-	        $map['pri_id']=$pid;
-	        $map['id']=$fid;
-	        M('File')->where($map)->setField('status',$status);
-	    }
-	    else
-	    {
-	        $this->redirect('Printer/Printer/signin');
-	    }
+		$pid    = pri_id(U('Index/index'));
+		$fid    = I('fid', null, 'intval');
+		$status = I('status', null, 'intval');
+		if ($pid && $fid && $status >= 2 && $status <= 6) 
+		{
+			$map['pri_id']        = $pid;
+			$map['id']        = $fid;
+			M('File')->where($map)->setField('status', $status);
+		} else
+		{
+			$this->redirect('Printer/Printer/signin');
+		}
 	}
 }
