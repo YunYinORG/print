@@ -1,4 +1,4 @@
-{//信息管理页}
+﻿{//信息管理页}
 <extend name="Public/template/base.html"/>
 <block name='header'>
 <include file="./Public/template/nav.html" info="current_page_item"/>
@@ -32,11 +32,8 @@ font-size: 16px;
     <div class="info">
         <div class="user">
             <div class="subtitle">
-                <p>用户登录情况</p>
-            </div>
-            <div class="userinfo">
-                <p> user: {$data.name}         </p>
-                <a href="__URL__/logout"><p>Logout</p></a>
+                <p>{$data.name}的用户信息</p>
+			<a href="__URL__/logout"><p>Logout</p></a>
             </div>
         </div>
         <div class="ChangePwd">
