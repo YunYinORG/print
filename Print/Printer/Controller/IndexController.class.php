@@ -37,4 +37,26 @@ class IndexController extends Controller
 			$this->display();
 		}
 	}
+
+	public function feedback()
+	{
+		$Form = D('Home/Feedback');
+		$_POST['message'] = $_POST['message'].'##From:'.pri_id();
+		if($Form->create())
+		{
+            $result = $Form->add();
+            if($result)
+            {
+                $this->success('操作成功！');
+            }
+            else
+            {
+                $this->error('写入错误！');
+            }
+        }
+        else
+        {
+            $this->error($Form->getError());
+        }
+	}
 }
