@@ -14,15 +14,14 @@
                     <div align="left">
                         <table width="682" border="0" align="center">
                             <tr>
-                                <td width="329" align="center">Printer ID</td>
-                                <td width="329" align="center">当前打印文件</td>
-                                <td width="329" align="center">File URL</td>
-                                <td width="329" align="center">Upload Time</td>
-                                <td width="343" align="center">文件打印状态</td>
+                                <td width="400" align="center">所选打印店</td>
+                                <td width="800" align="center">当前打印文件</td>
+                                <td width="400" align="center">上传时间</td>
+                                <td width="200" align="center">文件打印状态</td>
                             </tr>
                             <volist name="data" id="vo">
                             <tr>
-                                <td>{$vo.pri_id}</td><td>{$vo.name}</td><td>{$vo.url}</td><td>{$vo.time}</td><td>{$vo.status}</td>
+                                <td>{$vo.pri_name}({$vo.pri_id})</td><td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td><td>{$vo.time}</td><td>{$vo.status}</td>
                             </tr>
                             </volist>
                         </table>
