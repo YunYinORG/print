@@ -594,7 +594,6 @@ center {
 	#main{
 	position: absolute;
 	top: 0px;
-	left: 50px;
 	}
 }
 @media screen and (min-width: 1280px) { 
