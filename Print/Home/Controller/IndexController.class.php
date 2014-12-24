@@ -32,4 +32,24 @@ class IndexController extends Controller
 		}
 	 
 	}
+	public function feedback()
+	{
+		$Form = D('Feedback');
+		if($Form->create()) 
+		{
+            $result = $Form->add();
+            if($result)
+            {
+                $this->success('操作成功！');
+            }
+            else
+            {
+                $this->error('写入错误！');
+            }
+        }
+        else
+        {
+            $this->error($Form->getError());
+        }
+	}
 }
