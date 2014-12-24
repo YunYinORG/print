@@ -35,7 +35,7 @@ function pri_id($redirect_url = null)
 	{
 		$token = cookie('token');
 		$info  = auth_token($token);
-		if ($info['type'] == C('PRINTER')) 
+		if ($info['type'] == C('PRINTER_WEB')) 
 		{
 			return $info['id'];
 		}
