@@ -46,8 +46,17 @@ function token($id)
  */
 function update_token($id, $type) 
 {
-	if ($type != C('STUDENT') && $type != C('PRINTER')) 
+	
+	switch ($type) 
 	{
+	case C('STUDENT'):
+	case C('PRINTER'):
+	case C('PRINTER_WEB'):
+		// code...
+		break;
+
+	default:
+		
 		return false;
 	}
 	
@@ -105,10 +114,7 @@ function delete_token($info, $type = null)
  */
 function auth_token($token) 
 {
-	return M('token')->cache(true, 60)->field(array(
-		'type',
-		'to_id' => 'id'
-	))->getByToken($token);
+	return M('token')->cache(true, 60)->field(array('type', 'to_id' => 'id'))->getByToken($token);
 }
 
 /**

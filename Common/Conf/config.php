@@ -46,6 +46,8 @@ return array(
 */
     'URL_PARAMS_BIND'       =>  TRUE,
 	'URL_MODEL'=>2,
+
 	'STUDENT' => 1,
 	'PRINTER' => 2,
+    'PRINTER_WEB' => 3,
 );

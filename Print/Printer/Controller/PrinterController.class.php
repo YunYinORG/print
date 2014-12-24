@@ -1,4 +1,5 @@
 <?php
+
 // ===================================================================
 // | FileName:      /Print/Printer/PrinterController.class.php
 // ===================================================================
@@ -12,16 +13,17 @@
 // +------------------------------------------------------------------
 
 /**
-* Class and Function List:
-* Function list:
-* - index()
-* - change()
-* - logout()
-* - signup()
-* - signin()
-* Classes list:
-* - PrinterController extends Controller
-*/
+ * Class and Function List:
+ * Function list:
+ * - index()
+ * - change()
+ * - logout()
+ * - signup()
+ * - add()
+ * - auth()
+ * Classes list:
+ * - PrinterController extends Controller
+ */
 namespace Printer\Controller;
 use Think\Controller;
 class PrinterController extends Controller
@@ -36,13 +38,13 @@ class PrinterController extends Controller
     {
         
         //Display profile and table to make a change
-        $id=pri_id(U('Index/index'));
+        $id         = pri_id(U('Index/index'));
         if ($id) 
         {
+            
             // $Printer    = M('Printer');
-            $data = M('Printer')->getById($id);
+            $data       = M('Printer')->getById($id);
             $this->data = $data;
-            layout('layout');
             $this->display();
         } else
         {
@@ -50,177 +52,122 @@ class PrinterController extends Controller
         }
     }
     
-/**
-*change()
-*修改资料
-*@param $key 修改的字段
-*@param $value 修改值
-*注意字段过滤
-*/
-    public function change() 
+    /**
+     *change()
+     *修改资料
+     *@param $key 修改的字段
+     *@param $value 修改值
+     *注意字段过滤
+     */
+    public function changePwd() 
     {
         
-       $id=pri_id(U('Index/index'));
-
-        if ($id) 
+        $id           = pri_id(U('Index/index'));
+        $old_password = I('deprecated_password');
+        $password     = I('password');
+        $re_password  = I('re_password');
+        if ($id && $old_password && $password && $password == $re_password) 
         {
-            $Printer = M('Printer');
-            if ($Printer->create()) 
+            $Printer      = M('Printer');
+            $pri          = $Printer->field('account,password')->getById($id);
+            if ($pri['password'] == encode($old_password, $pri['account'])) 
             {
-                $result  = $Printer->save();
-                if ($result) 
+                if ($Printer->where('id=' . $id)->setField('password', encode($password, $pri['account'])) )
                 {
-                    echo ("Success");
+                    $this->success('修改成功');
                 } else
                 {
-                    $this->error('Unable to write');
+                    $this->error($Printer->getError());
                 }
             } else
             {
-                $this->error($Printer->getError());
+                $this->error('原密码错误');
             }
         } else
         {
-            echo ("Unauth");
+            $this->error("信息不完整");
         }
-
     }
     
     /**
-    * 注销
-    */
+     * 注销
+     */
     public function logout() 
     {
         delete_token(cookie('token'));
-        session(null);
+        session('[destroy]');
         cookie(null);
-        $this->redirect('Printer/Printer/signin');
+        $this->redirect('Index/index');
     }
     
     //Still in plan
     /*
-       public function detail(){
-           //ditail of file?
-           $this->display();
-       }*/
+                public function detail(){
+                    //ditail of file?
+                    $this->display();
+                }*/
     
     //Not available now
+    
+    
+    
     /**
-    *注册
-    */
+     *注册
+     */
     public function signup() 
     {
-        if (session('?pri_id')) 
+        if (pri_id()) 
         {
-            var_dump($_COOKIE);
+            $this->redirect('Index');
         } else
         {
-            if (cookie('?token')) 
-            {
-                
-                $info = auth_token(cookie('token'));
-                if ($info) 
-                {
-                    session('pri_id', $info['id']);
-                     //Needed when file upload
-                    var_dump($_COOKIE);
-                } else
-                {
-                    $this->display();
-                     //Fake token
-                    
-                }
-            } else
-            {
-                $this->display();
-                 //First time to sign up or in?
-                
-            }
+            $this->display();
         }
     }
     
-    /**
-    *登录
-    */
-    public function signin() 
+    public function add() 
     {
-        if (session('?pri_id')) 
+        $Printer = D('Printer');
+        
+        $data['account']         = I('post.account');
+        $data['password']         = encode(I('post.password'), I('post.account'));
+        $data['name']         = I('post.name');
+        $data['address']         = I('post.address');
+        $data['phone']         = I('post.phone');
+        $data['qq']         = I('post.qq');
+        
+        if ($Printer->create($data)) 
         {
+            $result  = $Printer->add();
+            if ($result) 
+            {
+                $this->redirect('logout', '', 1, '注册完成请登录');
+            } else
+            {
+                $this->error('数据插入失败' . $Printer->getError());
+            }
+        } else
+        {
+            $this->error('数据创建失败:' . $Printer->getError());
+        }
+    }
+    
+    public function auth() 
+    {
+        $Printer  = M('Printer');
+        $account  = I('post.account');
+        $password = encode(I('post.password'), $account);
+        $result   = $Printer->where('account="%s"', $account)->find();
+        if ($result["password"] == $password) 
+        {
+            session('pri_id', $Printer->id);
+            $token = update_token($Printer->id, C('PRINTER_WEB'));
+            cookie('token', $token, 3600 * 24 * 30);
             $this->redirect('Printer/File/index');
         } else
         {
-            if (cookie('?token')) 
-            {
-                
-                $info = auth_token(cookie('token'));
-                if ($info) 
-                {
-                    session('pri_id', $info['id']);
-                    $this->redirect('Printer/File/index');
-                } else
-                {
-                    $this->display();
-                    //Fake token
-                }
-            } else
-            {
-                $this->display();
-                 //First time to sign up or in?
-            }
+            $this->error('验证失败');
         }
     }
-    
-    //Not available now
-    
-         public function add(){
-             $Printer = D('Printer');
-    
-             $data['account'] = I('post.account');
-             $data['password'] = encode(I('post.password'),I('post.account'));
-             $data['name'] = I('post.name');
-             $data['address'] = I('post.address');
-             $data['phone'] = I('post.phone');
-             $data['qq'] = I('post.qq');
-    
-             if($Printer->create())
-             {
-                 $result = $Printer->add($data);
-                 if($result)
-                 {
-                     session('pri_id',$result);
-                     $token = update_token($result,C('PRINTER'));
-                     cookie('token',$token,3600*24*30);
-                     var_dump($_COOKIE);
-                 }
-                 else
-                 {
-                     $this->error('Can not insert to database');
-                 }
-             }
-             else
-             {
-                 $this->error('Can not create model');
-             }
-         }
-    
-         public function auth(){
-             $Printer = D('Printer');
-                 $account = I('post.account');
-                 $password = encode(I('post.password'),$account);
-                 $result = $Printer->where("account={$account}")->find();
-                 if($result["password"]==$password)
-                 {
-                     session('pri_id',$Printer->id);
-                     $token = update_token($Printer->id,C('PRINTER'));
-                     cookie('token',$token,3600*24*30);
-                     $this->redirect('Printer/File/index');
-                 }
-                 else
-                 {
-                     $this->error('Wrong password');
-                 }
-         }
-           
-    
 }
 ?>
