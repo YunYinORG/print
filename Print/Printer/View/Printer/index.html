@@ -42,12 +42,12 @@ font-size: 16px;
     <div class="subtitle">
         <p>修改密码</p>
     </div>
-    <form id="loginform" name="loginform" method="post" action="__URL__/change">
+    <form id="loginform" name="loginform" method="post" action="__URL__/changePwd">
         <table width="332" height="172" border="0" align="center">
             <tr>
                 <td ><table width="332" height="146" border="0" >
                     <tr>
-                        <td>初始密码：</td>
+                        <td>原密码：</td>
                         <td width="166"><label for="origin3"></label>
                         <input name="deprecated_password" type="text" id="origin3" tabindex="1" size="20" /></td>
                     </tr>
@@ -57,9 +57,9 @@ font-size: 16px;
                         <input name="password" type="password" id="new" size="20" /></td>
                     </tr>
                     <tr>
-                        <td height="34">确认新密码：</td>
-                        <td><label for="input"></label>
-                        <input name="input" type="text" id="input" size="20" /></td>
+                        <td height="34">确认密码：</td>
+                        <td><label for="re_password"></label>
+                        <input name="re_password" type="text" id="re_password" size="20" /></td>
                     </tr>
                     <tr>
                         <td height="34" colspan="2"><input type="submit" name="submit" id="submit" value="确认修改" /></td>

@@ -64,7 +64,7 @@ class FileController extends Controller
             $info = $upload->upload();
             if(!$info)
             {
-//                $this->error('Error when upload to /Uploads');
+               $this->error('Error when upload to /Uploads');
             }
             else
             {
@@ -81,17 +81,13 @@ class FileController extends Controller
                     $data['double_side'] = I('post.double_side'); 
                     
                     $File   =   M('File');
-                    if($File->create($data)) {
-                        $result =   $File->add();
-                        if($result) {
+                    if($File->add($data)) {
+                     
                             $Notification = M();
                             $Notification->query("INSERT INTO notification VALUES(NULL,{$result},0,{$data['use_id']},1)");
                             $this->success();
                         }else{
                             $this->error("SQL: Can not insert info into File table");
-                        }
-                    }else{
-                        $this->error('Can not create File Model');
                     }
                 }
             }
