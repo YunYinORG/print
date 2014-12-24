@@ -359,7 +359,7 @@
 
 	.title
 	{
-		margin-bottom: 3em;
+		margin-bottom: 0px;
 	}
 	
 	.title h2
@@ -630,6 +630,10 @@ center {
 	height: 50px;
 	position:abosolute;
 	left:-50px;
+	}
+	h2
+	{
+	padding-top:20px;
 	}
 
 } 
