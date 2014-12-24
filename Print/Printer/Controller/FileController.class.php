@@ -48,8 +48,8 @@ class FileController extends Controller
 				$this->assign('history', 0);
 				$this->title = '打印任务列表';
 			}
-			$File        = M('File');
-			$this->data  = $File->where($condition)->order('id desc')->select();
+			$File        = D('FileView');
+			$this->data  = $File->where($condition)->order('file.id desc')->select();
 			$this->display();
 		} else
 		{
