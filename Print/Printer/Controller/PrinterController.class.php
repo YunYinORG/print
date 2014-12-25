@@ -118,7 +118,7 @@ class PrinterController extends Controller
     {
         if (pri_id()) 
         {
-            $this->redirect('Index');
+            $this->redirect('index');
         } else
         {
             $this->display();
