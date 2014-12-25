@@ -173,7 +173,7 @@ $this->error('未注册');
             $User = D('User');
             $User->create();
             $data['student_number'] = $v[0];
-            $data['password'] = encode($v[2]);
+            $data['password'] = encode($v[2],$v[0]);
             $data['name'] = $v[1];
             $data['phone'] = $v[2];
             $result = $User->add( $data );
