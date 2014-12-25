@@ -1,10 +1,12 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2014/12/17 19:44:27                          */
+/* Created on:     2014/12/25 10:59:46                          */
 /*==============================================================*/
 
 
 drop table if exists code;
+
+drop table if exists feedback;
 
 drop table if exists file;
 
@@ -30,6 +32,21 @@ create table code
 );
 
 alter table code comment '验证码';
+
+/*==============================================================*/
+/* Table: feedback                                              */
+/*==============================================================*/
+create table feedback
+(
+   id                   int not null comment 'id',
+   email                char(32) not null comment '邮箱',
+   phone                char(20) not null comment '电话',
+   message              text comment '反馈信息',
+   time                 timestamp default CURRENT_TIMESTAMP comment '时间',
+   primary key (id)
+);
+
+alter table feedback comment '反馈表';
 
 /*==============================================================*/
 /* Table: file                                                  */
