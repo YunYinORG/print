@@ -21,7 +21,33 @@
                             </tr>
                             <volist name="data" id="vo">
                             <tr>
-                                <td>{$vo.pri_name}({$vo.pri_id})</td><td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td><td>{$vo.time}</td><td>{$vo.status}</td>
+                                <td>{$vo.pri_name}({$vo.pri_id})</td>
+                                <td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
+                                <td>{$vo.time}</td>
+                                <td>{$vo.status}</td>
+                                <td>
+                <button type="button" id="{$vo.id}" data-toggle="popover" data-trigger="focus" title="Failed" data-content="Try again" data-complete-text="Deleted"class="btn btn-primary" autocomplete="off">New File</button>
+            </td>
+            <script>
+                $(document).ready(function(){
+                    $("#{$vo.id}").popover();
+                });
+                $("#{$vo.id}").on('click',function(){
+                    var request = $.ajax({
+                        url: "__URL__/delete/fid/{$vo.id}"
+                    })
+                    request.done(function(jqXHR){
+                        if(jqXHR.response)
+                        {
+                            $(this).button('complete');
+                        }
+                        else
+                        {
+                            $(this).popover('toggle');
+                        }
+                    });
+                });
+            </script>
                             </tr>
                             </volist>
                         </table>

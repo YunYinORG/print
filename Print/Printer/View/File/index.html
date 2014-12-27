@@ -22,11 +22,34 @@
         </tr>
         <volist name="data" id="vo">
         <tr>
-            <td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a> </td><td>{$vo.use_name}</td><td>{$vo.time}</td><td>{$vo.status}</td>
-        </tr>
+            <td><a id="{$vo.id}_1" href="__UPLOAD__/{$vo.url}">{$vo.name}</a> </td><td>{$vo.use_name}</td><td>{$vo.time}</td><td>{$vo.status}</td>
         <if condition="$history">
         <else />
+            <td>
+                <button type="button" id="{$vo.id}" data-toggle="popover" data-trigger="focus" title="Failed" data-content="Try again" data-complete-text="Downloaded"class="btn btn-primary" autocomplete="off">New File</button>
+            </td>
+            <script>
+                $(document).ready(function(){
+                    $("#{$vo.id}").popover();
+                });
+                $("#{$vo.id}").on('click',function(){
+                    var request = $.ajax({
+                        url: "__URL__/set/fid/{$vo.id}/status/{$vo.status}"
+                    })
+                    request.done(function(jqXHR){
+                        if(jqXHR.response)
+                        {
+                            $(this).button('complete');
+                        }
+                        else
+                        {
+                            $(this).popover('toggle');
+                        }
+                    });
+                });
+            </script>
         </if>
+        </tr>
         </volist>
     </table>
 </div>
