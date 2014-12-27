@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // ===================================================================
 // | FileName: 		UserController.class.php
 // ===================================================================
@@ -102,35 +102,35 @@ class UserController extends Controller
             else
             {
 $this->error('未注册');
-                // if($User->create()) 
-                // {
-                //     if($name = get_urp_name($student_number,I('post.password')))
-                //     {
-                //         $data['name']=$name;
-                //         $data['student_number']=$student_number;
-                //         $data['password']=$password;
-                //         $result = $User->add($data);
-                //         if($result) 
-                //         {                
-                //             session('use_id', $result);
-                //             $token = update_token($result,C('USER'));
-                //             cookie('token',$token,3600*24*30);
-                //             $this->redirect('Home/User/index');
-                //         }
-                //         else
-                //         {
-                //             $this->error('SQL: Can not insert into User table');
-                //         }
-                //     }
-                //     else
-                //     {
-                //         $this->error('Urp verification failed');
-                //     }
-                // }
-                // else
-                // {
-                //     $this->error('Can not create User model');
-                // }
+                 /*if($User->create()) 
+                 {
+                     if($name = get_urp_name($student_number,I('post.password')))
+                     {
+                        $data['name']=$name;
+                         $data['student_number']=$student_number;
+                         $data['password']=$password;
+                         $result = $User->add($data);
+                         if($result) 
+                         {                
+                             session('use_id', $result);
+                             $token = update_token($result,C('USER'));
+                             cookie('token',$token,3600*24*30);
+                             $this->redirect('Home/User/index');
+                         }
+                         else
+                         {
+                             $this->error('SQL: Can not insert into User table');
+                         }
+                     }
+                     else
+                     {
+                         $this->error('Urp verification failed');
+                     }
+                 }
+                 else
+                 {
+                     $this->error('Can not create User model');
+                  }*/
             }
     }
     

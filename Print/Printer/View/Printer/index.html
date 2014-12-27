@@ -1,4 +1,4 @@
-{//信息界面}
+﻿{//信息界面}
 <extend name="Public/template/printerbase.html"/>
 <block name='header'>
 <include file="./Public/template/printernav.html" info="current_page_item"/>
@@ -43,9 +43,9 @@ font-size: 16px;
         <p>修改密码</p>
     </div>
     <form id="loginform" name="loginform" method="post" action="__URL__/changePwd">
-        <table  border="0" align="center">
-            <tr>
-                <td ><table border="0" >
+       
+              <table border="0" class="table-responsive">
+              <tbody>
                     <tr>
                         <td>原密码：</td>
                         <td width="166"><label for="origin3"></label>
@@ -64,9 +64,9 @@ font-size: 16px;
                     <tr>
                         <td height="34" colspan="2"><input type="submit" name="submit" id="submit" value="确认修改" /></td>
                     </tr>
-                </table></td>
-            </tr>
-        </table>
+                    </tbody>
+                </table>
+         
     </form>
 </div>
 </block>
