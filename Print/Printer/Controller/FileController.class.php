@@ -36,15 +36,15 @@ class FileController extends Controller
 		$status = I('status', null, 'intval');
 		if ($pid) 
 		{
-			$condition['pri_id']        = $pid;
-			if ($status == 6) 
+			$condition['pri_id'] = $pid;
+			if ($status == 5) 
 			{
-				$condition['status']        = $status;
+				$condition['status'] = $status;
 				$this->assign('history', true);
 				$this->title = '已打印文件历史记录';
 			} else
-			{
-				$condition['status']             = array('neq', 6);
+ 			{
+				$condition['status'] = array('between','1,4' );
 				$this->assign('history', 0);
 				$this->title = '打印任务列表';
 			}
@@ -64,18 +64,34 @@ class FileController extends Controller
 	 *@param $status 文件状态
 	 */
 	public function set() 
-	{
+	{   
+	    $error = array('response'=> true);
+        $error = json_encode($error);
+        $success = array('response'=> false);
+        $success = json_encode($success);
 		$pid    = pri_id(U('Index/index'));
 		$fid    = I('fid', null, 'intval');
 		$status = I('status', null, 'intval');
-		if ($pid && $fid && $status >= 2 && $status <= 6) 
+	    $map['pri_id']        = $pid;
+		$map['id']        = $fid;
+		if ($pid && $fid && $status == 1 ) 
 		{
-			$map['pri_id']        = $pid;
-			$map['id']        = $fid;
-			M('File')->where($map)->setField('status', $status);
-		} else
+			M('File')->where($map)->setField('status', 2);
+			echo $success;
+		} 
+		else if($pid && $fid && $status >= 2 && $status <= 3)
 		{
-			$this->redirect('Printer/Printer/signin');
+		 	M('File')->where($map)->setField('status', 4);
+			echo $success;
+		}
+		else if($pid && $fid && $status == 4)
+		{
+		 	M('File')->where($map)->setField('status', 5);
+			echo $success;
+		}
+		else
+		{
+            echo $error;
 		}
 	}
 }

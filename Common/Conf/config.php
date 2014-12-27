@@ -16,7 +16,7 @@ return array(
 	 
 	'DB_TYPE'               =>  'mysql',     // 数据库类型
     'DB_HOST'               =>  'localhost', // 服务器地址
-    'DB_NAME'               =>  'cloudprint',          // 数据库名
+    'DB_NAME'               =>  'print',          // 数据库名
     'DB_USER'               =>  'jharvard',      // 用户名
     'DB_PWD'                =>  'crimson',          // 密码
     'DB_PORT'               =>  '3306',        // 端口
@@ -26,7 +26,7 @@ return array(
         '__JS__' => '/Public/js',
         '__CSS__' => '/Public/css',
         '__IMG__' => '/Public/img',
-        '__UPLOAD__' => '/uploads',
+        '__UPLOAD__' => '/Uploads',
     ) ,
 /*
     'DB_PREFIX'             =>  '',    // 数据库表前缀

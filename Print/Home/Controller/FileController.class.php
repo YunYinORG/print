@@ -51,6 +51,36 @@ class FileController extends Controller
         }
     }
     
+    public function delete()
+    {
+    
+	    $error = array('response'=> true);
+        $error = json_encode($error);
+        $success = array('response'=> false);
+        $success = json_encode($success);
+        
+        $uid = use_id(U('Index/index'));
+        $fid    = I('fid', null, 'intval');
+		if ($uid && $fid ) 
+		{
+			$map['id'] = $fid;
+			$map['status'] = array('not between','2,4' );
+			$result = M('File')->where($map)->setField('status', 0);
+			if($result)
+			{   
+			    echo $success;
+            }
+            else
+            {
+                echo $error;
+		    }
+        } 
+        else
+        {
+            echo $error;
+        }
+    }
+    
     public function upload() 
     {
         $uid              = use_id(U('Index/index'));
@@ -77,8 +107,12 @@ class FileController extends Controller
                     $data['requirements']                      = "It's OK";
                      //I('post.requirements');
                     $data['url']                      = $file['savepath'] . $file['savename'];
-                    $data['status']                      = 0;
-                     //status = 0 means sended ,not downloaded yet
+                    $data['status']                      = 1;
+                     //status = 1 means sended ,not downloaded yet
+                     //status = 2 means downloaded ,not printed yet
+                     //status = 3 means printing ,not printed yet
+                     //status = 4 means printed ,not paid yet
+                     //status = 5 means paid                                          
                     $data['use_id']                      = $uid;
                     $data['copies']                      = I('post.copies');
                     $data['double_side']                      = I('post.double_side');
