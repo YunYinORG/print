@@ -54,9 +54,9 @@ class FileController extends Controller
     public function delete()
     {
     
-	    $error = array('response'=> true);
+	    $error = array('response'=> false);
         $error = json_encode($error);
-        $success = array('response'=> false);
+        $success = array('response'=> true);
         $success = json_encode($success);
         
         $uid = use_id(U('Index/index'));

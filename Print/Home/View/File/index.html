@@ -26,24 +26,22 @@
                                 <td>{$vo.time}</td>
                                 <td>{$vo.status}</td>
                                 <td>
-                <button type="button" id="{$vo.id}" data-toggle="popover" data-trigger="focus" title="Failed" data-content="Try again" data-complete-text="Deleted"class="btn btn-primary" autocomplete="off">New File</button>
+                <button type="button" id="{$vo.id}" data-complete-text="Deleted" class="btn btn-danger" autocomplete="off">Delete</button>
             </td>
             <script>
-                $(document).ready(function(){
-                    $("#{$vo.id}").popover();
-                });
+//                $(document).ready(function(){
+//                });
                 $("#{$vo.id}").on('click',function(){
                     var request = $.ajax({
                         url: "__URL__/delete/fid/{$vo.id}"
                     })
                     request.done(function(jqXHR){
-                        if(jqXHR.response)
+                        if(jqXHR.response==true)
                         {
                             $(this).button('complete');
                         }
                         else
                         {
-                            $(this).popover('toggle');
                         }
                     });
                 });

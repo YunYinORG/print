@@ -26,24 +26,20 @@
         <if condition="$history">
         <else />
             <td>
-                <button type="button" id="{$vo.id}" data-toggle="popover" data-trigger="focus" title="Failed" data-content="Try again" data-complete-text="Downloaded"class="btn btn-primary" autocomplete="off">New File</button>
+                <button type="button" id="{$vo.id}" data-complete-text="Downloaded" class="btn btn-primary" autocomplete="off">Printed</button>
             </td>
             <script>
-                $(document).ready(function(){
-                    $("#{$vo.id}").popover();
-                });
                 $("#{$vo.id}").on('click',function(){
                     var request = $.ajax({
                         url: "__URL__/set/fid/{$vo.id}/status/{$vo.status}"
                     })
                     request.done(function(jqXHR){
-                        if(jqXHR.response)
+                        if(jqXHR.response==true)
                         {
                             $(this).button('complete');
                         }
                         else
                         {
-                            $(this).popover('toggle');
                         }
                     });
                 });
