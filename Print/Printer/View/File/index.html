@@ -1,4 +1,4 @@
-{//打印管理界面}
+﻿{//打印管理界面}
 <extend name="Public/template/printerbase.html"/>
 <block name='title'>{$title}</block>
 <block name='header'>
@@ -13,14 +13,17 @@
     <h2>{$title}</h2>
 </div>
 <div class="files_record">
-    <table border="0">
-        <tr>
-            <td align="center">待打印文件</td>
-            <td align="center">上传者</td>
-            <td align="center">上传时间</td>
-            <td align="center">文件打印状态</td>
+    <table width="746" height="53" border="0" class="table-responsive">
+       <thead> 
+	<tr>
+            <th width="153" align="center">待打印文件</th>
+            <th width="175" align="center">上传者</th>
+            <th width="124" align="center">上传时间</th>
+            <th width="276" align="center">文件打印状态</td>
         </tr>
-        <volist name="data" id="vo">
+	</thead>
+        <tbody>
+	<volist name="data" id="vo">
         <tr>
             <td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a> </td><td>{$vo.use_name}</td><td>{$vo.time}</td><td>{$vo.status}</td>
         </tr>
@@ -28,6 +31,7 @@
         <else />
         </if>
         </volist>
+        </tbody>
     </table>
 </div>
 </block>

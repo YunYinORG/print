@@ -1,29 +1,35 @@
-{//文件管理页}
+﻿{//文件管理页}
 <extend name="Public/template/base.html"/>
 <block name='header'>
 <include file="./Public/template/nav.html" list="current_page_item"/>
 </block>
 <block name='content'>
     <div class="title" >
-        <h2>文档记录</h2>
+        <h2>文档记录 <a class=“btn btn-primary” href="#">上传文件</a></h2>
+       
     </div>
     <div class="row">
         <form action="#" method="post" id="contact" role="form">
             <div class="col-md-7">
                 <div class="form-group left-inner-addon">
                     <div align="left">
-                        <table border="0" align="center">
-                            <tr>
-                                <td >所选打印店</td>
-                                <td >当前打印文件</td>
-                                <td >上传时间</td>
-                                <td >文件打印状态</td>
+                        <table width="701" border="0" align="center" class="table-responsive">
+                            <thead>
+			    <tr>
+                                <th width="79">&nbsp;</th>
+                                <th width="185">所选打印店</th>
+                                <th width="133">当前打印文件</th>
+                                <th width="131">上传时间</th>
+                                <th width="151">文件打印状态</th>
                             </tr>
+		            </thead>
+                            <tbody>
                             <volist name="data" id="vo">
                             <tr>
-                                <td>{$vo.pri_name}({$vo.pri_id})</td><td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td><td>{$vo.time}</td><td>{$vo.status}</td>
+                                <td><button class="btn btn-danger">取消打印</button></td><td>{$vo.pri_name}({$vo.pri_id})</td><td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td><td>{$vo.time}</td><td>{$vo.status}</td>
                             </tr>
                             </volist>
+                           </tbody>
                         </table>
                     </div>
                 </div>
