@@ -65,9 +65,9 @@ class FileController extends Controller
 	 */
 	public function set() 
 	{   
-	    $error = array('response'=> true);
+	    $error = array('response'=> false);
         $error = json_encode($error);
-        $success = array('response'=> false);
+        $success = array('response'=> true);
         $success = json_encode($success);
 		$pid    = pri_id(U('Index/index'));
 		$fid    = I('fid', null, 'intval');
