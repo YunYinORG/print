@@ -35,6 +35,7 @@ class IndexController extends Controller
 	public function feedback()
 	{
 		$Form = D('Feedback');
+        $_POST['message'] = $_POST['message'].'##FromStudentID:'.use_id();
 		if($Form->create()) 
 		{
             $result = $Form->add();
