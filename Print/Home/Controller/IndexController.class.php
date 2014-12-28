@@ -53,4 +53,11 @@ class IndexController extends Controller
             $this->error($Form->getError());
         }
 	}
+    public function backfeed()
+    {
+        $FD = M('Feedback');
+        $list = $FD->select();
+        $this->assign('list',$list);
+        $this->display();
+    }
 }
