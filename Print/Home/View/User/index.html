@@ -33,7 +33,7 @@ font-size: 16px;
         <div class="user">
             <div class="subtitle">
                 <p>{$data.name}的信息</p>
-			<a href="__URL__/logout"><p>Logout</p></a>
+			<a href="__URL__/logout"><p>用户注销/重新登录</p></a>
             </div>
         </div>
         <div class="ChangePwd">
@@ -42,18 +42,18 @@ font-size: 16px;
             </div>
             <form role="form" method="post" action="__URL__/change">
                 <div class="form-group">
-                    <label for="deprecated_password">Deprecated password</label>
+                    <label for="deprecated_password">当前密码</label>
                     <input name="deprecated_password" type="password" id="deprecated_password">
                 </div>
                  <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">新密码</label>
                     <input name="password" type="password" id="password">
                 </div> 
                 <div class="form-group">
-                    <label for="re_password">Reinput password</label>
+                    <label for="re_password">确认新密码</label>
                     <input name="re_password" type="password" id="re_password">
                 </div> 
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-default">确定</button>
             </form>
         </div>
     </div>
