@@ -93,7 +93,7 @@ class FileController extends Controller
                     $data['pri_id']                      = I('post.pri_id');
                     $data['time']                      = date("Y-m-d H:i:s", time());
                      //This is the upload time...not the specify time
-                    $data['requirements']                      = "It's OK";
+                    $data['requirements']                      = "";
                      //I('post.requirements');
                     $data['url']                      = $file['savepath'] . $file['savename'];
                     $data['status']                      = 1;

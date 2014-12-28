@@ -29,9 +29,18 @@
                                 <td>{$vo.pri_name}({$vo.pri_id})</td>
                                 <td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
                                 <td>{$vo.time}</td>
-                                <td id="{$vo.id}_status"> {$vo.status}</td>
+                                <td id="{$vo.id}_status"> 
+                                    <switch name="vo['status']">
+                                    <case value="1">已上传文件</case>
+                                    <case value="2">打印店处已将文件下载</case>
+                                    <case value="3">已开始打印</case>
+                                    <case value="4">打印已完成，等待您取货付款</case>
+                                    <case value="5">已完成支付</case>
+                                    <default />出错了
+                                    </switch>
+                                </td>
                                 <td>
-                <button type="button" fid="{$vo.id}" id="{$vo.id}_button" class="delete btn btn-danger" autocomplete="off">Delete</button>
+                <button type="button" fid="{$vo.id}" id="{$vo.id}_button" class="delete btn btn-danger" autocomplete="off">删除</button>
             </td>
            
                             </tr>
@@ -46,20 +55,20 @@
 </block>
 <block name='end'>
      <script>
-                $(".delete").on('click',function(){
-                      var URL = "/Home/File/delete";
-                    var btn=$(this);
-                    var fid=btn.attr('fid');
-                    $.post(URL,{
-    fid:fid,
-  },function(data){
-    if(data.status)
-    {
-            btn.parent().parent().hide(2000);
-    }else{
-        alert('操作失败：'+data.info);
-    }
-  });
-                });
-            </script>
+        $(".delete").on('click',function(){
+            var URL = "/Home/File/delete";
+            var btn=$(this);
+            var fid=btn.attr('fid');
+            $.post(URL,{
+                fid:fid,
+            },function(data){
+                if(data.status)
+                {
+                    btn.parent().parent().hide(2000);
+                }else{
+                    alert('操作失败：'+data.info);
+                }
+            });
+        });
+    </script>
 </block>
