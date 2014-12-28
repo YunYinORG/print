@@ -20,7 +20,8 @@
             <th width="153" align="center">待打印文件</th>
             <th width="175" align="center">上传者</th>
             <th width="124" align="center">上传时间</th>
-            <th width="276" align="center">文件打印状态</td>
+            <th width="176" align="center">文件打印状态</th>
+            <th width="176" align="center">操作</td>
         </tr>
 	</thead>
         <tbody>
@@ -29,11 +30,28 @@
             <td><a id="{$vo.id}" target='_blank' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
             <td>{$vo.use_name}[{$vo.student_number}]</td>
             <td>{$vo.time}</td>
-            <td id="{$vo.id}_status" data='{$vo.status}'>{$vo.status}</td>
+            <td id="{$vo.id}_status" data='{$vo.status}'>
+                <switch name="vo['status']">
+                <case value="1">尚未下载</case>
+                <case value="2">已下载</case>
+                <case value="3">正在打印</case>
+                <case value="4">打印已完成，尚未付款</case>
+                <case value="5">用户已付款完成交易</case>
+                <default />出错了
+                </switch>
+            </td>
         <if condition="$history">
         <else />
             <td>
-                <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">已打印</button>
+                <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">
+                    <switch name="vo['status']">
+                    <case value="1">完成下载请点我</case>
+                    <case value="2">开始打印请点我</case>
+                    <case value="3">打印完成请点我</case>
+                    <case value="4">用户付款后请点我</case>
+                    <default />出错了
+                    </switch>
+                </button>
             </td>
         </if>
         </tr>
@@ -44,35 +62,32 @@
 </block>
 <block name='end'>
     <script>
-                $(".set").on('click',function(){
-                    var URL = "/Printer/File/set";
-                    var btn=$(this);
-                    var fid=btn.attr('fid');
-                    var status=$('#'+fid+'_status');
-                    var sid=status.attr('data');
-                    var set_s=0;
-                    if(sid<=3&&sid>=1){
-                        set_s=4;
-                    }else if(sid==4)
-                    {
-                        set_s=5;
+        $(".set").on('click',function(){
+            var URL = "/Printer/File/set";
+            var btn=$(this);
+            var fid=btn.attr('fid');
+            var status=$('#'+fid+'_status');
+            var sid=status.attr('data');
+            var set_s=0;
+            if(sid<=3&&sid>=1){
+                set_s=4;
+            }else if(sid==4){
+                set_s=5;
+            }
+            $.post(URL,{
+                fid:fid,
+                status:set_s
+            },function(data){
+                if(data.status){
+                    status.attr('data',set_s);
+                    status.html('已打印');
+                    if(set_s==4){
+                        btn.html('确认已付款').removeClass("btn btn-primary").addClass("btn btn-warning");
+                    }else{
+                        btn.parent().parent().hide(2000);
                     }
-                    $.post(URL,{
-    fid:fid,
-    status:set_s
-  },function(data){
-    if(data.status)
-    {
-        status.attr('data',set_s);
-        status.html('已打印');
-        if(set_s==4){
-            btn.html('确认已付款').removeClass("btn btn-primary").addClass("btn btn-warning");
-        }else{
-            btn.parent().parent().hide(2000);
-        }
-    }
-  });
-                });
-               
-            </script>
+                }
+            });
+        });           
+    </script>
 </block>
