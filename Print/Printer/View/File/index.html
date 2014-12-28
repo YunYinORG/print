@@ -2,6 +2,7 @@
 <extend name="Public/template/printerbase.html"/>
 <block name='title'>{$title}</block>
 <block name='header'>
+    <meta http-equiv="refresh" content="120">
 <IF condition='$history'>
 <include file="./Public/template/printernav.html" list="current_page_item"/>
 <ELSE/>
@@ -25,46 +26,53 @@
         <tbody>
 	    <volist name="data" id="vo">
         <tr>
-            <td><a id="{$vo.id}_1" href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
-            <td>{$vo.use_name}</td>
+            <td><a id="{$vo.id}" target='_blank' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
+            <td>{$vo.use_name}[{$vo.student_number}]</td>
             <td>{$vo.time}</td>
-            <td id="{$vo.id}_status">{$vo.status}</td>
+            <td id="{$vo.id}_status" data='{$vo.status}'>{$vo.status}</td>
         <if condition="$history">
         <else />
             <td>
-                <button type="button" id="{$vo.id}_button" class="btn btn-success" autocomplete="off">Download</button>
+                <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">已打印</button>
             </td>
-            <script>
-                var file_{$vo.id}_status = {$vo.status};
-                $("#{$vo.id}_button").on('click',function(){
-                    var request = "__URL__/set/fid/{$vo.id}/status/"+ file_{$vo.id}_status.toString();
-                    $.ajax({
-                        url: request
-                    }).done(function(msg){
-                        $("#{$vo.id}_status").html(msg.response);
-                        if(msg.response==4)
-                        {
-                            $("#{$vo.id}_button").html('Paid').removeClass("btn btn-primary").addClass("btn btn-warning");
-                        }
-                        else if(msg.response==5)
-                        {
-                            $("#{$vo.id}_button").attr("disabled","disabled");
-                        }
-                        else if(msg.response==2)
-                        {
-                            $("#{$vo.id}_button").html('Printed').removeClass("btn btn-success").addClass("btn btn-primary");
-                            window.open("__UPLOAD__/{$vo.url}");
-                        }
-                        file_{$vo.id}_status = msg.response;
-                    }).fail(function(){
-                        alert("Request failed");
-                    });
-                });
-            </script>
         </if>
         </tr>
         </volist>
         </tbody>
     </table>
 </div>
+</block>
+<block name='end'>
+    <script>
+                $(".set").on('click',function(){
+                    var URL = "/Printer/File/set";
+                    var btn=$(this);
+                    var fid=btn.attr('fid');
+                    var status=$('#'+fid+'_status');
+                    var sid=status.attr('data');
+                    var set_s=0;
+                    if(sid<=3&&sid>=1){
+                        set_s=4;
+                    }else if(sid==4)
+                    {
+                        set_s=5;
+                    }
+                    $.post(URL,{
+    fid:fid,
+    status:set_s
+  },function(data){
+    if(data.status)
+    {
+        status.attr('data',set_s);
+        status.html('已打印');
+        if(set_s==4){
+            btn.html('确认已付款').removeClass("btn btn-primary").addClass("btn btn-warning");
+        }else{
+            btn.parent().parent().hide(2000);
+        }
+    }
+  });
+                });
+               
+            </script>
 </block>

@@ -30,7 +30,7 @@ class FileController extends Controller
         $uid        = use_id(U('Index/index'));
         if ($uid) 
         {
-            $condition['id'] = $uid;
+            $condition['use_id'] = $uid;
             $condition['status'] = array('between','1,5' );
             $File       = D('FileView');
             $this->data = $File->where($condition)->order('file.id desc')->select();
@@ -55,9 +55,6 @@ class FileController extends Controller
     
     public function delete()
     {
-        $success = array('response'=> 0);
-        $success = json_encode($success);
-        
         $uid = use_id(U('Index/index'));
         $fid    = I('fid', null, 'intval');
 		if ($uid && $fid ) 
@@ -67,16 +64,11 @@ class FileController extends Controller
 			$result = M('File')->where($map)->setField('status', 0);
 			if($result)
 			{   
-			    header("Content-type: application/json");
-			    echo $success;
+			    $this->success($result);
+                return;
             }
-            else
-            {
-		    }
         } 
-        else
-        {
-        }
+        $this->error('当前状态不允许删除！');
     }
     
     public function upload() 

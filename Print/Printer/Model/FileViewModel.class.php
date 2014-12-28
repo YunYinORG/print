@@ -19,7 +19,7 @@ class FileViewModel extends ViewModel
 		) ,
 		'user'            => array(
 			'name'=>'use_name',
-			'id',
+			'student_number',
 			'_on'            => 'user.id=file.use_id',
 		) ,
 	);
