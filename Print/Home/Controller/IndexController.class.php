@@ -45,7 +45,7 @@ class IndexController extends Controller
             }
             else
             {
-                $this->error('写入错误！');
+                $this->error('操作错误！');
             }
         }
         else
