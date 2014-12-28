@@ -24,25 +24,22 @@
                                 <td>{$vo.pri_name}({$vo.pri_id})</td>
                                 <td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
                                 <td>{$vo.time}</td>
-                                <td>{$vo.status}</td>
+                                <td id="{$vo.id}_status"> {$vo.status}</td>
                                 <td>
-                <button type="button" id="{$vo.id}" data-complete-text="Deleted" class="btn btn-danger" autocomplete="off">Delete</button>
+                <button type="button" id="{$vo.id}_button" class="btn btn-danger" autocomplete="off">Delete</button>
             </td>
             <script>
 //                $(document).ready(function(){
 //                });
-                $("#{$vo.id}").on('click',function(){
-                    var request = $.ajax({
+                $("#{$vo.id}_button").on('click',function(){
+                    $.ajax({
                         url: "__URL__/delete/fid/{$vo.id}"
-                    })
-                    request.done(function(jqXHR){
-                        if(jqXHR.response==true)
-                        {
-                            $(this).button('complete');
-                        }
-                        else
-                        {
-                        }
+                    }).done(function(msg){
+                        console.log(msg);
+                        $("#{$vo.id}_status").html(msg.response);
+                        $("#{$vo.id}_button").attr("disabled","disabled");
+                    }).fail(function(){
+                        alert("Request failed");
                     });
                 });
             </script>
