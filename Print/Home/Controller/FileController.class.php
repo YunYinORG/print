@@ -30,8 +30,10 @@ class FileController extends Controller
         $uid        = use_id(U('Index/index'));
         if ($uid) 
         {
+            $condition['id'] = $uid;
+            $condition['status'] = array('between','1,5' );
             $File       = D('FileView');
-            $this->data = $File->where("use_id=" . $uid)->order('file.id desc')->select();
+            $this->data = $File->where($condition)->order('file.id desc')->select();
             $this->display();
         } else
         {
@@ -53,10 +55,7 @@ class FileController extends Controller
     
     public function delete()
     {
-    
-	    $error = array('response'=> false);
-        $error = json_encode($error);
-        $success = array('response'=> true);
+        $success = array('response'=> 0);
         $success = json_encode($success);
         
         $uid = use_id(U('Index/index'));
@@ -68,16 +67,15 @@ class FileController extends Controller
 			$result = M('File')->where($map)->setField('status', 0);
 			if($result)
 			{   
+			    header("Content-type: application/json");
 			    echo $success;
             }
             else
             {
-                echo $error;
 		    }
         } 
         else
         {
-            echo $error;
         }
     }
     
@@ -87,8 +85,7 @@ class FileController extends Controller
         if ($uid) 
         {
             $upload           = new \Think\Upload();
-            $upload->maxSize  = 3145728;
-             //3Mb
+            $upload->maxSize  = 3145728;        //3Mb
             $upload->exts     = array('doc', 'docx', 'pdf');
             $upload->rootPath = './Uploads/';
             $upload->savePath = '';

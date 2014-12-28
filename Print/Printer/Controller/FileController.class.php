@@ -65,10 +65,7 @@ class FileController extends Controller
 	 */
 	public function set() 
 	{   
-	    $error = array('response'=> false);
-        $error = json_encode($error);
-        $success = array('response'=> true);
-        $success = json_encode($success);
+
 		$pid    = pri_id(U('Index/index'));
 		$fid    = I('fid', null, 'intval');
 		$status = I('status', null, 'intval');
@@ -77,21 +74,26 @@ class FileController extends Controller
 		if ($pid && $fid && $status == 1 ) 
 		{
 			M('File')->where($map)->setField('status', 2);
+			$success = array('response'=> 2);
+            $success = json_encode($success);
+            header("Content-type: application/json");
 			echo $success;
 		} 
 		else if($pid && $fid && $status >= 2 && $status <= 3)
 		{
 		 	M('File')->where($map)->setField('status', 4);
+			$success = array('response'=> 4);
+            $success = json_encode($success);
+            header("Content-type: application/json");
 			echo $success;
 		}
 		else if($pid && $fid && $status == 4)
 		{
 		 	M('File')->where($map)->setField('status', 5);
+		 	$success = array('response'=> 5);
+            $success = json_encode($success);
+            header("Content-type: application/json");
 			echo $success;
-		}
-		else
-		{
-            echo $error;
 		}
 	}
 }

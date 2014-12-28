@@ -40,31 +40,20 @@ font-size: 16px;
             <div class="subtitle">
                 <p>修改密码</p>
             </div>
-            <form id="loginform" name="loginform" method="post" action="__URL__/change">
-                <table  border="0" class="table-responsive">
-                    <tr>
-                        <td ><table  border="0" >
-                            <tr>
-                                <td>初始密码：</td>
-                                <td width="166"><label for="origin3"></label>
-                                <input name="deprecated_password" type="text" id="origin3" tabindex="1" size="20" /></td>
-                            </tr>
-                            <tr>
-                                <td>新密码：</td>
-                                <td><label for="new"></label>
-                                <input name="password" type="password" id="new" size="20" /></td>
-                            </tr>
-                            <tr>
-                                <td height="34">确认新密码：</td>
-                                <td><label for="re_password"></label>
-                                <input name="re_password" type="password" size="20" /></td>
-                            </tr>
-                            <tr>
-                                <td height="34" colspan="2"><input type="submit" name="submit" id="submit" value="确认修改" /></td>
-                            </tr>
-                        </table></td>
-                    </tr>
-                </table>
+            <form role="form" method="post" action="__URL__/change">
+                <div class="form-group">
+                    <label for="deprecated_password">Deprecated password</label>
+                    <input name="deprecated_password" type="password" id="deprecated_password">
+                </div>
+                 <div class="form-group">
+                    <label for="password">Password</label>
+                    <input name="password" type="password" id="password">
+                </div> 
+                <div class="form-group">
+                    <label for="re_password">Reinput password</label>
+                    <input name="re_password" type="password" id="re_password">
+                </div> 
+                <button type="submit" class="btn btn-default">Submit</button>
             </form>
         </div>
     </div>
