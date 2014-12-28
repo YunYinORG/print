@@ -31,7 +31,6 @@ class UserController extends Controller
         {
             $User = M('User');
             $data = $User->where("id=".session('use_id'))->find();
-            session('password',$data['password']);
             session('student_number',$data['student_number']);
             $this->assign('title','Index');
             $this->data = $data;
@@ -158,38 +157,37 @@ $this->error('未注册');
     
     public function change()
     {
-        if(session('?use_id'))
-        {
-            if((session('password')==encode(I('post.deprecated_password'),session('student_number')))
-            &&(I('post.input')==I('post.password')))
-            {
-                $User = M('User');
-                if($User->create()) 
-                {
-                    $result = $User->save();
-                    if($result)
-                    {
-                        $this->success();
-                    }
-                    else
-                    {
-                        $this->redirect('Home/User/index');
-                    }
-                }
-                else
-                {
-                    $this->error('Can not create User model:'.$User->getError());
-                }
-            }
-            else
-            {
-                $this->error('Wrong password');
-            }
-        }
-        else
-        {
-           $this->redirect('Home/User/index');
-        }
+        $uid    = use_id(U('Index/index'));
+		$deprecated_password = I('post.deprecated_password');
+	    $password = I('post.password');
+		$re_password = I('post.re_password');
+		if ($uid) 
+		{
+			$condition['id'] = $uid;
+		    $condition['password'] = encode($deprecated_password,session('student_number'));
+		    $condition['student_number']=session('student_number');
+		    $User   = D('User');
+			$result = $User->where($condition)->select();
+			if($result)
+			{
+			    if($password==$re_password)
+			    {
+                    $map['id'] = $uid;
+			        M('User')->where($map)->setField('password', encode($password,session('student_number')));
+			        $this->success("Success");
+			    }
+			    else
+			    {
+			        $this->error("Password dosen't match the reinput one");
+			    }
+			}
+			else
+			{
+//		        $this->error("Wrong Password");
+                var_dump($result);
+                                var_dump($User);
+			}
+		}
     }
     
     public function logout()
