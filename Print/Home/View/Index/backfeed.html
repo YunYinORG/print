@@ -1,7 +1,7 @@
 Feedback REVIEW PAGE<br/><br/>
 <volist name="list" id="vo">
-email:{$vo.email}<br/>
-phone:{$vo.phone}<br/>
-time:{$vo.time}<br/>
-feedback:{$vo.message}<br/><br/>
+email:<a href="mailto:{$vo.email}">{$vo.email}</a><br/>
+phone:<a href="tel:{$vo.phone}">{$vo.phone}</a><br/>
+time:<font color="#FF0000">{$vo.time}</font><br/>
+feedback:<font color="#00EC00">{$vo.message}</font><br/><br/>
 </volist>
