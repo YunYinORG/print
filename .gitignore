@@ -3,6 +3,8 @@
 #################
 /Runtime/*
 */Rumtime/
+/Uploads/*
+*/Uploads/
 *.pydevproject
 .project
 .metadata
