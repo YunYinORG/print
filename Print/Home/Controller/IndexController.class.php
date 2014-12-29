@@ -32,6 +32,10 @@ class IndexController extends Controller
 		}
 	 
 	}
+
+    /**
+    *反馈处理
+    */
 	public function feedback()
 	{
 		$Form = D('Feedback');

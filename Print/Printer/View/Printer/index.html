@@ -24,17 +24,13 @@ font-size: 16px;
 </block>
 <block name='content'>
 <div class="title" >
-    <h2>用户信息管理</h2>
+    <h2>{$data.name}打印店信息管理</h2>
 </div>
 
 <div class="info">
     <div class="user">
         <div class="subtitle">
-            <p>用户登录情况</p>
-        </div>
-        <div class="userinfo">
-            <p> printer: {$data.name}         </p>
-            <a href="__URL__/logout"><p>Logout</p></a>
+            <a href="__URL__/logout">退出登陆</a>
         </div>
     </div>
 </div>
@@ -42,31 +38,20 @@ font-size: 16px;
     <div class="subtitle">
         <p>修改密码</p>
     </div>
-    <form id="loginform" name="loginform" method="post" action="__URL__/changePwd">
-       
-              <table border="0" class="table-responsive">
-              <tbody>
-                    <tr>
-                        <td>原密码：</td>
-                        <td width="166"><label for="origin3"></label>
-                        <input name="deprecated_password" type="text" id="origin3" tabindex="1" size="20" /></td>
-                    </tr>
-                    <tr>
-                        <td>新密码：</td>
-                        <td><label for="new"></label>
-                        <input name="password" type="password" id="new" size="20" /></td>
-                    </tr>
-                    <tr>
-                        <td height="34">确认密码：</td>
-                        <td><label for="re_password"></label>
-                        <input name="re_password" type="password" id="re_password" size="20" /></td>
-                    </tr>
-                    <tr>
-                        <td height="34" colspan="2"><input type="submit" name="submit" id="submit" value="确认修改" /></td>
-                    </tr>
-                    </tbody>
-                </table>
-         
-    </form>
+    <form  class="form-group" role="form" method="post" action="__URL__/changePwd">
+                <div class="input-group">
+                    <label class="input-group-addon" for="deprecated_password">当前密码</label>
+                    <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password">
+                </div>
+                 <div class="input-group">
+                    <label class="input-group-addon"  for="password">新的密码</label>
+                    <input class="form-control" placeholder='要设置的密码' name="password" type="password" id="password">
+                </div> 
+                <div class="input-group">
+                    <label for="re_password">确认密码</label>
+                    <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
+                </div> 
+                <button type="submit" class="btn btn-success">确定</button>
+            </form>
 </div>
 </block>

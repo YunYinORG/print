@@ -2,7 +2,7 @@
 <extend name="Public/template/printerbase.html"/>
 <block name='title'>{$title}</block>
 <block name='header'>
-    <meta http-equiv="refresh" content="120">
+<meta http-equiv="refresh" content="120">
 <IF condition='$history'>
 <include file="./Public/template/printernav.html" list="current_page_item"/>
 <ELSE/>
@@ -13,55 +13,58 @@
 <div class="title" >
     <h2>{$title}</h2>
 </div>
-<div class="files_record">
-    <table width="746" height="53" border="0" class="table-responsive">
-       <thead> 
-	<tr>
-            <th width="153" align="center">待打印文件</th>
-            <th width="175" align="center">上传者</th>
-            <th width="124" align="center">上传时间</th>
-            <th width="176" align="center">文件打印状态</th>
-            <th width="176" align="center">操作</td>
-        </tr>
-	</thead>
+<div class="container">
+    <table class=" table table-responsive">
+        <thead>
+            <tr>
+                <th>待打印文件</th>
+                <th>上传者</th>
+                <th>上传时间</th>
+                <th>文件打印状态</th>
+                <if condition="$history">
+                <else />
+                <th>操作</th>>
+                </if>
+            </tr>
+        </thead>
         <tbody>
-	    <volist name="data" id="vo">
-        <tr>
-            <td><a id="{$vo.id}" target='_blank' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
-            <td>{$vo.use_name}[{$vo.student_number}]</td>
-            <td>{$vo.time}</td>
-            <td id="{$vo.id}_status" data='{$vo.status}'>
-                <switch name="vo['status']">
-                <case value="1">尚未下载</case>
-                <case value="2">已下载</case>
-                <case value="3">正在打印</case>
-                <case value="4">打印已完成，尚未付款</case>
-                <case value="5">用户已付款完成交易</case>
-                <default />出错了
-                </switch>
-            </td>
-        <if condition="$history">
-        <else />
-            <td>
-                <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">
+            <volist name="data" id="vo">
+            <tr>
+                <td><a target='_blank' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
+                <td>{$vo.use_name}[{$vo.student_number}]</td>
+                <td>{$vo.time}</td>
+                <td id="{$vo.id}_status" data='{$vo.status}'>
                     <switch name="vo['status']">
-                    <case value="1">完成下载请点我</case>
-                    <case value="2">开始打印请点我</case>
-                    <case value="3">打印完成请点我</case>
-                    <case value="4">用户付款后请点我</case>
-                    <default />出错了
+                    <case value="1">尚未下载</case>
+                    <case value="2">已下载</case>
+                    <case value="3">正在打印</case>
+                    <case value="4">已打印待付款</case>
+                    <case value="5">已付款</case>
+                    <default />未知状态
                     </switch>
-                </button>
-            </td>
-        </if>
-        </tr>
-        </volist>
+                </td>
+                <if condition="$history">
+                <else />
+                <td>
+                    <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">
+                    <switch name="vo['status']">
+                    <case value="1">通知已打印</case>
+                    <case value="2">通知已打印</case>
+                    <case value="3">通知已打印</case>
+                    <case value="4">确认已付款</case>
+                    <default />不可操作
+                    </switch>
+                    </button>
+                </td>
+                </if>
+            </tr>
+            </volist>
         </tbody>
     </table>
 </div>
 </block>
 <block name='end'>
-    <script>
+<script>
         $(".set").on('click',function(){
             var URL = "/Printer/File/set";
             var btn=$(this);
@@ -88,6 +91,6 @@
                     }
                 }
             });
-        });           
-    </script>
+        });
+</script>
 </block>
