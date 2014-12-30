@@ -1,0 +1,37 @@
+            <volist name="data" id="vo">
+            <tr file_id="{$vo.id}">
+                <if condition="$vo.status eq 1">
+                    <td><a target='_blank' class="set" fid='{$vo.id}' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
+                <else />
+                    <td><a target='_blank' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
+                </if>
+                <td>{$vo.use_name}[{$vo.student_number}]</td>
+                <td>{$vo.time}</td>
+                <th>{$vo.copies}</th>
+                <th>{$vo.double_side}</th>
+                <td id="{$vo.id}_status" data='{$vo.status}'>
+                    <switch name="vo['status']">
+                    <case value="1">尚未下载</case>
+                    <case value="2">已下载</case>
+                    <case value="3">正在打印</case>
+                    <case value="4">已打印待付款</case>
+                    <case value="5">已付款</case>
+                    <default />未知状态
+                    </switch>
+                </td>
+                <if condition="$history">
+                <else />
+                <td>
+                    <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">
+                    <switch name="vo['status']">
+                    <case value="1">通知已打印</case>
+                    <case value="2">通知已打印</case>
+                    <case value="3">通知已打印</case>
+                    <case value="4">确认已付款</case>
+                    <default />不可操作
+                    </switch>
+                    </button>
+                </td>
+                </if>
+            </tr>
+            </volist>
