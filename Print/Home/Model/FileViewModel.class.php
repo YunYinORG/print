@@ -18,7 +18,7 @@ class FileViewModel extends ViewModel
 		) ,
 		'printer'            => array(
 			'name'=>'pri_name',
-			'id',
+			//'id',
 			'_on'            => 'printer.id=file.pri_id',
 		) ,
 	);

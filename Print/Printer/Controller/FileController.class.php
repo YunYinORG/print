@@ -53,7 +53,7 @@ class FileController extends Controller
 			$this->display();
 		} else
 		{
-			$this->redirect('Printer/Printer/signin');
+			$this->redirect('Printer/Index/index');
 		}
 	}
 	
@@ -64,19 +64,22 @@ class FileController extends Controller
         if($pid)
         {
             $map['pri_id'] = $pid;
-//            $map['time'] = array('gt',date("Y-m-d H:i:s", time()-10));
-            $result = M('FileView')->where($map)->find();
+		    $map['id']  = I('fid', null, 'intval');
+            $result = D('FileView')->where($map)->find();
             if($result)
             {
+           //     $this->success($r);
+                /*
             header("Content-type: text/html");
-            echo("<tr>
-            <td><a id='{$result["id"]}_1' href='__UPLOAD__/{$result["url"]}'>{$result["name"]}</a></td>
-            <td>{$result["use_name"]}</td>
-            <td>{$result["time"]}</td>
-            <td>{$result["copies"]}</td>
-            <td>{$result["double_side"]}</td>
-            <td id='{$result["id"]}_status'>{$result["status"]}</td>
+            echo("<tr fid='{$result["id"]}'>
+            <th><a target='_blank' href='__UPLOAD__/{$result["url"]}'>{$result["name"]}</a></th>
+            <th>{$result["use_name"]}[{$result["student_number"]}]</th>
+            <th>{$result["time"]}</th>
+            <th>{$result["copies"]}</th>
+            <th>{$result["double_side"]}</th>
+            <th id='{$result["id"]}_status' data='{$result["status"]}'>尚未下载</th>
             </tr>");
+            */
             }
         }
     }
@@ -92,32 +95,15 @@ class FileController extends Controller
 
 		$pid    = pri_id(U('Index/index'));
 		$fid    = I('fid', null, 'intval');
-		$status = I('status', null, 'intval');
-	    $map['pri_id']        = $pid;
-		$map['id']        = $fid;
-		if ($pid && $fid && $status == 1 ) 
+		$status=I('status');
+		if($status==C('FILE_PRINTED')||$status==C('FILE_PAID'))
 		{
-			M('File')->where($map)->setField('status', 2);
-			$success = array('response'=> 2);
-            $success = json_encode($success);
-            header("Content-type: application/json");
-			echo $success;
-		} 
-		else if($pid && $fid && $status >= 2 && $status <= 3)
-		{
-		 	M('File')->where($map)->setField('status', 4);
-			$success = array('response'=> 4);
-            $success = json_encode($success);
-            header("Content-type: application/json");
-			echo $success;
-		}
-		else if($pid && $fid && $status == 4)
-		{
-		 	M('File')->where($map)->setField('status', 5);
-		 	$success = array('response'=> 5);
-            $success = json_encode($success);
-            header("Content-type: application/json");
-			echo $success;
+					$map['pri_id']        = $pid;
+					$map['id']        = $fid;
+			$r= M('File')->where($map)->setField('status',$status);
+			$this->success($r);
+		}else{
+			$this->error('状态不可设置');
 		}
 	}
 }

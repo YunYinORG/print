@@ -50,4 +50,11 @@ return array(
 	'STUDENT' => 1,
 	'PRINTER' => 2,
     'PRINTER_WEB' => 3,
+
+    'FILE_DELETED'=>0,
+    'FILE_UPLOAD'=>1,
+    'FILE_DOWNLOAD'=>2,
+    'FILE_PRINT'=>3,
+    'FILE_PRINTED'=>4,
+    'FILE_PAID'=>5,
 );

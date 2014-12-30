@@ -1,7 +1,8 @@
-{//打印管理界面}
+﻿{//打印管理界面}
 <extend name="Public/template/printerbase.html"/>
 <block name='title'>{$title}</block>
 <block name='header'>
+<meta http-equiv="refresh" content="120">
 <IF condition='$history'>
 <include file="./Public/template/printernav.html" list="current_page_item"/>
 <ELSE/>
@@ -12,28 +13,44 @@
 <div class="title" >
     <h2>{$title}</h2>
 </div>
-<div class="files_record">
-    <table border="0">
-        <tr id="tablehead">
-            <td align="center">待打印文件</td>
-            <td align="center">上传者</td>
-            <td align="center">上传时间</td>
-            <td align="center">Copies</td>
-            <td align="center">Duplex</td>
-            <td align="center">文件打印状态</td>
-        </tr>
-        
-        <volist name="data" id="vo">
-        <tr>
-            <td><a id="{$vo.id}_1" href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
-            <td>{$vo.use_name}</td>
-            <td>{$vo.time}</td>
-            <td>{$vo.copies}</td>
-            <td>{$vo.double_side}</td>
-            <td id="{$vo.id}_status">{$vo.status}</td>
-        <if condition="$history">
-        <else />
-            <td>
+<div class="container">
+    <table class=" table table-responsive">
+        <thead>
+            <tr>
+                <th>待打印文件</th>
+                <th>上传者</th>
+                <th>上传时间</th>
+                <th>Copies</td>
+                <th>Duplex</td>
+                <th>文件打印状态</th>
+                <if condition="$history">
+                <else />
+                <th>操作</th>
+                </if>
+            </tr>
+        </thead>
+        <tbody id="tablehead">
+            <volist name="data" id="vo">
+            <tr fid="{$vo.id}">
+                <th><a target='_blank' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></th>
+                <th>{$vo.use_name}[{$vo.student_number}]</th>
+                <th>{$vo.time}</th>
+                <th>{$vo.copies}</th>
+                <th>{$vo.double_side}</th>
+                
+                <th id="{$vo.id}_status" data='{$vo.status}'>
+                    <switch name="vo['status']">
+                    <case value="1">尚未下载</case>
+                    <case value="2">已下载</case>
+                    <case value="3">正在打印</case>
+                    <case value="4">已打印待付款</case>
+                    <case value="5">已付款</case>
+                    <default />未知状态
+                    </switch>
+                </th>
+                <if condition="$history">
+                <else />
+            <th>
                 <if condition="$vo.status eq 1">
                     <button type="button" id="{$vo.id}_button" class="btn btn-success" autocomplete="off">Download</button>
                 <elseif condition="($vo.status gt 1)AND($vo.status lt 4)"/>
@@ -41,50 +58,56 @@
                 <elseif condition="$vo.status eq 4"/>
                     <button type="button" id="{$vo.id}_button" class="btn btn-warning" autocomplete="off">Paid</button>                
                 </if>
-            </td>
-            <script>
-                var file_{$vo.id}_status = {$vo.status};
-                $("#{$vo.id}_button").on('click',function(){
-                    var request = "__URL__/set/fid/{$vo.id}/status/"+ file_{$vo.id}_status.toString();
-                    $.ajax({
-                        url: request
-                    }).done(function(msg){
-                        $("#{$vo.id}_status").html(msg.response);
-                        if(msg.response==4)
-                        {
-                            $("#{$vo.id}_button").html('Paid').removeClass("btn btn-primary").addClass("btn btn-warning");
-                        }
-                        else if(msg.response==5)
-                        {
-                            $("#{$vo.id}_button").attr("disabled","disabled");
-                        }
-                        else if(msg.response==2)
-                        {
-                            $("#{$vo.id}_button").html('Printed').removeClass("btn btn-success").addClass("btn btn-primary");
-                            window.open("__UPLOAD__/{$vo.url}");
-                        }
-                        file_{$vo.id}_status = msg.response;
-                    }).fail(function(){
-                        alert("Request failed");
-                    });
-                });
-            </script>
-        </if>
-        </tr>
-        </volist>
+            </th>
+                </if>
+            </tr>
+            </volist>
+        </tbody>
     </table>
     <script>
                     $(document).ready(function(){
+                        var fid = $('[fid]').attr('fid');
+                        var url = "__URL__/refresh"
                     setInterval(function(){
-                        $.ajax({
-                            url: "__URL__/refresh"
-                        }).done(function(html){
-                            $("#tablehead").append(html);
-                        }).fail(function(){
-                            alert("Request failed");
+                        fid = $('[fid]').attr('fid');
+                        $.post(url,{
+                            fid:fid
+                        },function(data){
+                            $("[fid="+fid+"]").before(data);
                         });
-                    },10000);
+                    },2000);
                 });
                 </script>
 </div>
+</block>
+<block name='end'>
+<script>
+        $(".set").on('click',function(){
+            var URL = "/Printer/File/set";
+            var btn=$(this);
+            var fid=btn.attr('fid');
+            var status=$('#'+fid+'_status');
+            var sid=status.attr('data');
+            var set_s=0;
+            if(sid<=3&&sid>=1){
+                set_s=4;
+            }else if(sid==4){
+                set_s=5;
+            }
+            $.post(URL,{
+                fid:fid,
+                status:set_s
+            },function(data){
+                if(data.status){
+                    status.attr('data',set_s);
+                    status.html('已打印');
+                    if(set_s==4){
+                        btn.html('确认已付款').removeClass("btn btn-primary").addClass("btn btn-warning");
+                    }else{
+                        btn.parent().parent().hide(2000);
+                    }
+                }
+            });
+        });
+</script>
 </block>

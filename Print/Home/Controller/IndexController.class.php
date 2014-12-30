@@ -32,9 +32,14 @@ class IndexController extends Controller
 		}
 	 
 	}
+
+    /**
+    *反馈处理
+    */
 	public function feedback()
 	{
 		$Form = D('Feedback');
+        $_POST['message'] = $_POST['message'].'##FromStudentID:'.use_id();
 		if($Form->create()) 
 		{
             $result = $Form->add();
@@ -44,7 +49,7 @@ class IndexController extends Controller
             }
             else
             {
-                $this->error('写入错误！');
+                $this->error('操作错误！');
             }
         }
         else
@@ -52,4 +57,11 @@ class IndexController extends Controller
             $this->error($Form->getError());
         }
 	}
+    public function backfeed()
+    {
+        $FD = M('Feedback');
+        $list = $FD->select();
+        $this->assign('list',$list);
+        $this->display();
+    }
 }

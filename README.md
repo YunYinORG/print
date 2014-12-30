@@ -3,6 +3,38 @@
 更方便的校园打印 [print.nkumstc.cn](http://print.nkumstc.cn)
 ----------------------------
 
+## Bugs
+* 不要用英文
+* 现在下载是通过文件名处的连接，并不能将文件状态从1set到2
+* 低版本浏览器适配
+* 导航栏目
+
+## Features
+* 打印店方面需要显示份数和单双面
+* 异步通知（无刷新）
+
+
+
+## 团队主要人员及分工
+#### 1.项目发起人
+[李旭昇](https://github.com/jeffli678)
+#### 2.指导和系统设计
+[NewFuture](https://github.com/New-Future)
+#### 3.数据库设计
+[牛亮](https://github.com/wangxiaodiu) [梁崇军]()
+#### 4.后端实现
+[孙卓豪]() [牛亮](https://github.com/wangxiaodiu) [梁崇军]() [NewFuture](https://github.com/New-Future)
+#### 5.前端实现
+[杜晓唐]() [孙卓豪]() [王博]()
+#### 6.打印店客户端
+[宋剑超]() [陈路宽]()
+#### 7.测试维护
+[刘安]() [王雨晴]()
+#### 8.服务器部署
+[赵泽坤]()
+#### 9.图形设计
+[陈超]()
+
 ##框架目录
 >
 ```
@@ -52,25 +84,6 @@
 ```
 >>
 
-## 团队人员及分工
-#### 1.项目发起人
-[李旭昇](https://github.com/jeffli678)
-#### 2.指导和系统设计
-[NewFuture](https://github.com/New-Future)
-#### 3.数据库设计
-[牛亮](https://github.com/wangxiaodiu) [梁崇军]()
-#### 4.后端实现
-[孙卓豪]() [牛亮](https://github.com/wangxiaodiu) [梁崇军]() [NewFuture](https://github.com/New-Future)
-#### 5.前端实现
-[杜晓唐]() [孙卓豪]() [王博]()
-#### 6.打印店客户端
-[宋剑超]() [陈路宽]()
-#### 7.测试维护
-[刘安]() [王雨晴]()
-#### 8.服务器部署
-[赵泽坤]()
-#### 9.运营公关
-[待定]()
 
 
 ## 仓库分支说明

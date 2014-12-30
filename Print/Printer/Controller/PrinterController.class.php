@@ -95,7 +95,7 @@ class PrinterController extends Controller
     public function logout() 
     {
         delete_token(cookie('token'));
-        session('[destroy]');
+        session(null);
         cookie(null);
         $this->redirect('Index/index');
     }
