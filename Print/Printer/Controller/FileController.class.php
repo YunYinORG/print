@@ -57,6 +57,30 @@ class FileController extends Controller
 		}
 	}
 	
+	
+    public function refresh() 
+    {
+        $pid = pri_id(U('Index/index'));
+        if($pid)
+        {
+            $map['pri_id'] = $pid;
+//            $map['time'] = array('gt',date("Y-m-d H:i:s", time()-10));
+            $result = M('FileView')->where($map)->find();
+            if($result)
+            {
+            header("Content-type: text/html");
+            echo("<tr>
+            <td><a id='{$result["id"]}_1' href='__UPLOAD__/{$result["url"]}'>{$result["name"]}</a></td>
+            <td>{$result["use_name"]}</td>
+            <td>{$result["time"]}</td>
+            <td>{$result["copies"]}</td>
+            <td>{$result["double_side"]}</td>
+            <td id='{$result["id"]}_status'>{$result["status"]}</td>
+            </tr>");
+            }
+        }
+    }
+    
 	/**
 	 *set()
 	 *更新文件状态（需要验证文件是否在此点打印）
