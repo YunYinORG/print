@@ -14,10 +14,12 @@
 </div>
 <div class="files_record">
     <table border="0">
-        <tr>
+        <tr id="tablehead">
             <td align="center">待打印文件</td>
             <td align="center">上传者</td>
             <td align="center">上传时间</td>
+            <td align="center">Copies</td>
+            <td align="center">Duplex</td>
             <td align="center">文件打印状态</td>
         </tr>
         
@@ -26,11 +28,19 @@
             <td><a id="{$vo.id}_1" href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
             <td>{$vo.use_name}</td>
             <td>{$vo.time}</td>
+            <td>{$vo.copies}</td>
+            <td>{$vo.double_side}</td>
             <td id="{$vo.id}_status">{$vo.status}</td>
         <if condition="$history">
         <else />
             <td>
-                <button type="button" id="{$vo.id}_button" class="btn btn-success" autocomplete="off">Download</button>
+                <if condition="$vo.status eq 1">
+                    <button type="button" id="{$vo.id}_button" class="btn btn-success" autocomplete="off">Download</button>
+                <elseif condition="($vo.status gt 1)AND($vo.status lt 4)"/>
+                    <button type="button" id="{$vo.id}_button" class="btn btn-primary" autocomplete="off">Printed</button>
+                <elseif condition="$vo.status eq 4"/>
+                    <button type="button" id="{$vo.id}_button" class="btn btn-warning" autocomplete="off">Paid</button>                
+                </if>
             </td>
             <script>
                 var file_{$vo.id}_status = {$vo.status};
@@ -63,5 +73,18 @@
         </tr>
         </volist>
     </table>
+    <script>
+                    $(document).ready(function(){
+                    setInterval(function(){
+                        $.ajax({
+                            url: "__URL__/refresh"
+                        }).done(function(html){
+                            $("#tablehead").append(html);
+                        }).fail(function(){
+                            alert("Request failed");
+                        });
+                    },10000);
+                });
+                </script>
 </div>
 </block>
