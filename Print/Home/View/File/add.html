@@ -8,10 +8,10 @@
     <h2>请设置您的打印信息</h2>
 </div>
 <div id="featured">
-    <p class="text-danger">注：内测期间部分打印店和设置暂未开放</p>
+    <p class="text-danger">注：内测期间部分设置暂未开放<br/>文件只支持word（.doc和.docx）和pdf（推荐pdf，打印常识：pdf文件的格式一致性比word要好）</p>
     <form action="__URL__/upload" method="post" id="print" enctype="multipart/form-data">
-        <p>上传欲打印的文件
-        <input name="file" type="file" id="file" size="20" onchange="display(this)" />
+        <p>上传欲打印的文件<small class='text-warning'>文件最大限制10Mb</small>
+        <input name="file" type="file" id="file" class="btn btn-success" onchange="display(this)" />
         </p>
         <p>选择想去的打印店：
         <br>
@@ -25,24 +25,26 @@
         <br />
         <label>
             <input type="radio" name="pri_id" value="3" id="choice_1" />
-        伟钰印务(数码小院堂附近)</label>
+        精诚快印(数码小院伯苓楼附近)</label>
         <br />
         <label>
             <input type="radio" name="pri_id" value="4" id="choice_3" />
         快捷复印社(南开出版社附近)</label>
         </p>
-        <p>选择打印形式
-        <label>
-            <input name="double_side" type="radio" id="type_0" value="0" checked="checked" />
-        单面打印</label>
-        <label>
-            <input type="radio" name="double_side"  value="1" id="type_1" />
-        双面打印</label>
-        </p>
-        <p>设置打印份数
-        <input name="copies" type="text" id="count" value="1" size="10" maxlength="10"/>
-        </p>
-        <input type="submit" name="loginbtn" id="modaltrigger" class="flatbtn" value="开始传送">
+        <div style = "display:none;">
+            <p>选择打印形式
+            <label>
+                <input name="double_side" type="radio" id="type_0" value="0" checked="checked" />
+            单面打印</label>
+            <label>
+                <input type="radio" name="double_side"  value="1" id="type_1" />
+            双面打印</label>
+            </p>
+            <p>设置打印份数
+            <input name="copies" type="text" id="count" value="1" size="10" maxlength="10" />
+            </p>
+        </div>
+<input type="submit" name="loginbtn" id="modaltrigger" class="flatbtn" value="开始传送">
     </form>
 </div>
 </block>

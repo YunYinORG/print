@@ -1,54 +1,73 @@
-{//文件管理页}
+﻿{//文件管理页}
 <extend name="Public/template/base.html"/>
 <block name='header'>
 <include file="./Public/template/nav.html" list="current_page_item"/>
 </block>
 <block name='content'>
-    <div class="title" >
-        <h2>文档记录</h2>
+<div class="title" >
+    <h2>文档记录 <a class="btn btn-lg btn-primary" href="__MODULE__/File/add">上传文件</a></h2>
+
+</div>
+<div class="container">
+	<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>文件名</th>
+                <th>文件打印状态</th>
+                <th>上传时间</th>
+                <th>所选打印店</th>                
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="data" id="vo">
+            <tr>
+
+                <td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
+                <td id="{$vo.id}_status">
+                    <switch name="vo['status']">
+                    <case value="1">已上传文件</case>
+                    <case value="2">打印店已下载</case>
+                    <case value="3">已开始打印</case>
+                    <case value="4">打印完成待取</case>
+                    <case value="5">已完成支付</case>
+                    <case value="0">已删除</case>
+                    <default />未知状态
+                    </switch>
+                </td>
+                <td>{$vo.time}</td>
+                <td>{$vo.pri_name}[{$vo.pri_id}]</td>
+                <td>
+                <if condition="($vo.status gt 1)AND($vo.status lt 5)">
+                    <button type="button" fid="{$vo.id}"class="delete btn btn-danger" disabled="disabled">删除</button>
+                <else />
+                    <button type="button" fid="{$vo.id}"class="delete btn btn-danger">删除</button>
+                </if>
+                </td>
+            </tr>
+            </volist>
+        </tbody>
+    </table>
     </div>
-    <div class="row">
-        <form action="#" method="post" id="contact" role="form">
-            <div class="col-md-7">
-                <div class="form-group left-inner-addon">
-                    <div align="left">
-                        <table border="0" align="center">
-                            <tr>
-                                <td >所选打印店</td>
-                                <td >当前打印文件</td>
-                                <td >上传时间</td>
-                                <td >文件打印状态</td>
-                            </tr>
-                            <volist name="data" id="vo">
-                            <tr>
-                                <td>{$vo.pri_name}({$vo.pri_id})</td>
-                                <td><a href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
-                                <td>{$vo.time}</td>
-                                <td id="{$vo.id}_status"> {$vo.status}</td>
-                                <td>
-                <button type="button" id="{$vo.id}_button" class="btn btn-danger" autocomplete="off">Delete</button>
-            </td>
-            <script>
-//                $(document).ready(function(){
-//                });
-                $("#{$vo.id}_button").on('click',function(){
-                    $.ajax({
-                        url: "__URL__/delete/fid/{$vo.id}"
-                    }).done(function(msg){
-                        console.log(msg);
-                        $("#{$vo.id}_status").html(msg.response);
-                        $("#{$vo.id}_button").attr("disabled","disabled");
-                    }).fail(function(){
-                        alert("Request failed");
-                    });
-                });
-            </script>
-                            </tr>
-                            </volist>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+</div>
+</block>
+<block name='end'>
+<script>
+        $(".delete").on('click',function(){
+            var URL = "/Home/File/delete";
+            var btn=$(this);
+            var fid=btn.attr('fid');
+            $.post(URL,{
+                fid:fid,
+            },function(data){
+                if(data.status)
+                {
+                    btn.parent().parent().hide(2000);
+                }else{
+                    alert('操作失败：'+data.info);
+                }
+            });
+        });
+</script>
 </block>

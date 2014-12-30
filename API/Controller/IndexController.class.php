@@ -46,7 +46,7 @@ class IndexController extends RestController
 	 */
 	public function index() 
 	{
-		$pwd         = I('post.password');
+		$pwd         = I('post.pwd');
 		$type        = I('post.type');
 		$Model       = null;
 		switch ($type) 
@@ -69,7 +69,7 @@ class IndexController extends RestController
 		if (!isset($data)) 
 		{
 			$info     = $Model->field('id,password')->find();
-			// $id       = $info['id'];
+			$id       = $info['id'];
 			$password = $info['password'];
 			if ($password == encode($pwd,$account)) 
 			{

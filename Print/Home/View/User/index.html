@@ -26,34 +26,33 @@ font-size: 16px;
 </block>
 <block name='content'>
     <div class="title" >
-        <h2>用户信息管理</h2>
+        <h3>{$data.name}信息管理</h3>
     </div>
 
     <div class="info">
         <div class="user">
             <div class="subtitle">
-                <p>{$data.name}的信息</p>
-			<a href="__URL__/logout"><p>Logout</p></a>
+			<a href="__URL__/logout"><p>用户注销/重新登录</p></a>
             </div>
         </div>
         <div class="ChangePwd">
             <div class="subtitle">
                 <p>修改密码</p>
             </div>
-            <form role="form" method="post" action="__URL__/change">
-                <div class="form-group">
-                    <label for="deprecated_password">Deprecated password</label>
-                    <input name="deprecated_password" type="password" id="deprecated_password">
+            <form  class="form-group" role="form" method="post" action="__URL__/change">
+                <div class="input-group">
+                    <label class="input-group-addon" for="deprecated_password">当前密码</label>
+                    <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password">
                 </div>
-                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input name="password" type="password" id="password">
+                 <div class="input-group">
+                    <label class="input-group-addon"  for="password">新的密码</label>
+                    <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password">
                 </div> 
-                <div class="form-group">
-                    <label for="re_password">Reinput password</label>
-                    <input name="re_password" type="password" id="re_password">
+                <div class="input-group">
+                    <label for="re_password">确认密码</label>
+                    <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
                 </div> 
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-success">确定</button>
             </form>
         </div>
     </div>
