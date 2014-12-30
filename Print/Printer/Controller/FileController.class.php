@@ -64,23 +64,10 @@ class FileController extends Controller
         if($pid)
         {
             $map['pri_id'] = $pid;
-		    $map['id']  = I('fid', null, 'intval');
-            $result = D('FileView')->where($map)->find();
-            if($result)
-            {
-           //     $this->success($r);
-                /*
-            header("Content-type: text/html");
-            echo("<tr fid='{$result["id"]}'>
-            <th><a target='_blank' href='__UPLOAD__/{$result["url"]}'>{$result["name"]}</a></th>
-            <th>{$result["use_name"]}[{$result["student_number"]}]</th>
-            <th>{$result["time"]}</th>
-            <th>{$result["copies"]}</th>
-            <th>{$result["double_side"]}</th>
-            <th id='{$result["id"]}_status' data='{$result["status"]}'>尚未下载</th>
-            </tr>");
-            */
-            }
+		    $map['id']  = array('gt',I('file_id', null, 'intval'));
+		    $File = D('FileView');
+		    $this->data  = $File->where($map)->order('file.id desc')->select();
+		    $this->display();
         }
     }
     
@@ -96,7 +83,7 @@ class FileController extends Controller
 		$pid    = pri_id(U('Index/index'));
 		$fid    = I('fid', null, 'intval');
 		$status=I('status');
-		if($status==C('FILE_PRINTED')||$status==C('FILE_PAID'))
+		if($status==C('FILE_DOWNLOAD')||$status==C('FILE_PRINTED')||$status==C('FILE_PAID'))
 		{
 					$map['pri_id']        = $pid;
 					$map['id']        = $fid;
