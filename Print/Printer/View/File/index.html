@@ -31,14 +31,17 @@
         </thead>
         <tbody id="tablehead">
             <volist name="data" id="vo">
-            <tr fid="{$vo.id}">
-                <th><a target='_blank' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></th>
-                <th>{$vo.use_name}[{$vo.student_number}]</th>
-                <th>{$vo.time}</th>
+            <tr file_id="{$vo.id}">
+                <if condition="$vo.status eq 1">
+                    <td><a target='_blank' class="set" fid='{$vo.id}' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
+                <else />
+                    <td><a target='_blank' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
+                </if>
+                <td>{$vo.use_name}[{$vo.student_number}]</td>
+                <td>{$vo.time}</td>
                 <th>{$vo.copies}</th>
                 <th>{$vo.double_side}</th>
-                
-                <th id="{$vo.id}_status" data='{$vo.status}'>
+                <td id="{$vo.id}_status" data='{$vo.status}'>
                     <switch name="vo['status']">
                     <case value="1">尚未下载</case>
                     <case value="2">已下载</case>
@@ -47,37 +50,25 @@
                     <case value="5">已付款</case>
                     <default />未知状态
                     </switch>
-                </th>
+                </td>
                 <if condition="$history">
                 <else />
-            <th>
-                <if condition="$vo.status eq 1">
-                    <button type="button" id="{$vo.id}_button" class="btn btn-success" autocomplete="off">Download</button>
-                <elseif condition="($vo.status gt 1)AND($vo.status lt 4)"/>
-                    <button type="button" id="{$vo.id}_button" class="btn btn-primary" autocomplete="off">Printed</button>
-                <elseif condition="$vo.status eq 4"/>
-                    <button type="button" id="{$vo.id}_button" class="btn btn-warning" autocomplete="off">Paid</button>                
-                </if>
-            </th>
+                <td>
+                    <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">
+                    <switch name="vo['status']">
+                    <case value="1">下载</case>
+                    <case value="2">通知已打印</case>
+                    <case value="3">通知已打印</case>
+                    <case value="4">确认已付款</case>
+                    <default />不可操作
+                    </switch>
+                    </button>
+                </td>
                 </if>
             </tr>
             </volist>
         </tbody>
     </table>
-    <script>
-                    $(document).ready(function(){
-                        var fid = $('[fid]').attr('fid');
-                        var url = "__URL__/refresh"
-                    setInterval(function(){
-                        fid = $('[fid]').attr('fid');
-                        $.post(url,{
-                            fid:fid
-                        },function(data){
-                            $("[fid="+fid+"]").before(data);
-                        });
-                    },2000);
-                });
-                </script>
 </div>
 </block>
 <block name='end'>
@@ -89,7 +80,11 @@
             var status=$('#'+fid+'_status');
             var sid=status.attr('data');
             var set_s=0;
-            if(sid<=3&&sid>=1){
+            if(sid==1)
+            {
+                set_s=2;
+            }
+            else if(sid<=3&&sid>=2){
                 set_s=4;
             }else if(sid==4){
                 set_s=5;
@@ -100,14 +95,31 @@
             },function(data){
                 if(data.status){
                     status.attr('data',set_s);
-                    status.html('已打印');
                     if(set_s==4){
-                        btn.html('确认已付款').removeClass("btn btn-primary").addClass("btn btn-warning");
-                    }else{
+                        btn.html('确认已付款').removeClass("btn btn-success").addClass("btn btn-warning");
+                        status.html('已打印');
+                    }else if(set_s==2){
+                        $('#'+fid+'_button').html('通知已打印').removeClass("btn btn-primary").addClass("btn btn-success");
+                        status.html('已下载');
+                        btn.removeClass('set').removeAttr('fid');
+                    }
+                    else{
                         btn.parent().parent().hide(2000);
                     }
                 }
             });
         });
+        $(document).ready(function(){
+                        var file_id = $('[file_id]').attr('file_id');
+                        var url = "__URL__/refresh"
+                    setInterval(function(){
+                        file_id = $('[fid]').attr('fid');
+                        $.post(url,{
+                            file_id:file_id
+                        },function(data){
+                            $("[file_id="+file_id+"]").before(data);
+                        });
+                    },2000);
+                });
 </script>
 </block>

@@ -31,7 +31,6 @@
             <input type="radio" name="pri_id" value="4" id="choice_3" />
         快捷复印社(南开出版社附近)</label>
         </p>
-        <div style = "display:none;">
             <p>选择打印形式
             <label>
                 <input name="double_side" type="radio" id="type_0" value="0" checked="checked" />
@@ -43,7 +42,6 @@
             <p>设置打印份数
             <input name="copies" type="text" id="count" value="1" size="10" maxlength="10" />
             </p>
-        </div>
 <input type="submit" name="loginbtn" id="modaltrigger" class="flatbtn" value="开始传送">
     </form>
 </div>
@@ -60,6 +58,14 @@ function display(obj)
 var file = getFileName(this);
 document.getElementById('myfile').value="当前欲打印的文件为"+file;
 }
+$("#modaltrigger").on('click',function(event){
+    event.preventDefault();
+    $("#modaltrigger").attr('disabled','disabled');
+    if(!$("#print").submit())
+    {
+        $("#modaltrigger").RemoveAttr('disabled');
+    }
+});
 </script>
 <style type="text/css">
 .press {
