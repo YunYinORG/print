@@ -57,6 +57,20 @@ class FileController extends Controller
 		}
 	}
 	
+	
+    public function refresh() 
+    {
+        $pid = pri_id(U('Index/index'));
+        if($pid)
+        {
+            $map['pri_id'] = $pid;
+		    $map['id']  = array('gt',I('file_id', null, 'intval'));
+		    $File = D('FileView');
+		    $this->data  = $File->where($map)->order('file.id desc')->select();
+		    $this->display();
+        }
+    }
+    
 	/**
 	 *set()
 	 *更新文件状态（需要验证文件是否在此点打印）
@@ -69,7 +83,7 @@ class FileController extends Controller
 		$pid    = pri_id(U('Index/index'));
 		$fid    = I('fid', null, 'intval');
 		$status=I('status');
-		if($status==C('FILE_PRINTED')||$status==C('FILE_PAID'))
+		if($status==C('FILE_DOWNLOAD')||$status==C('FILE_PRINTED')||$status==C('FILE_PAID'))
 		{
 					$map['pri_id']        = $pid;
 					$map['id']        = $fid;
@@ -78,34 +92,5 @@ class FileController extends Controller
 		}else{
 			$this->error('状态不可设置');
 		}
-		
-
-		// $status = I('status', null, 'intval');
-	 //    $map['pri_id']        = $pid;
-		// $map['id']        = $fid;
-		// if ($pid && $fid && $status == 1 ) 
-		// {
-		// 	M('File')->where($map)->setField('status', 2);
-		// 	$success = array('response'=> 2);
-  //           $success = json_encode($success);
-  //           header("Content-type: application/json");
-		// 	echo $success;
-		// } 
-		// else if($pid && $fid && $status >= 2 && $status <= 3)
-		// {
-		//  	M('File')->where($map)->setField('status', 4);
-		// 	$success = array('response'=> 4);
-  //           $success = json_encode($success);
-  //           header("Content-type: application/json");
-		// 	echo $success;
-		// }
-		// else if($pid && $fid && $status == 4)
-		// {
-		//  	M('File')->where($map)->setField('status', 5);
-		//  	$success = array('response'=> 5);
-  //           $success = json_encode($success);
-  //           header("Content-type: application/json");
-		// 	echo $success;
-		// }
 	}
 }

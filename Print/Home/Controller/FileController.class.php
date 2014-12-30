@@ -89,17 +89,10 @@ class FileController extends Controller
                     
                     //I('post.requirements');
                     $data['url']                      = $file['savepath'] . $file['savename'];
-                    $data['status']                      = 1;
-                    
-                    //status = 1 means sended ,not downloaded yet
-                    //status = 2 means downloaded ,not printed yet
-                    //status = 3 means printing ,not printed yet
-                    //status = 4 means printed ,not paid yet
-                    //status = 5 means paid
+                    $data['status']                      = 1;                                       
                     $data['use_id']                      = $uid;
                     $data['copies']                      = I('post.copies');
-                    $data['double_side']                      = I('post.double_side');
-                    
+                    $data['double_side']                 = I('post.double_side');
                     $File                 = M('File');
                     $result               = $File->add($data);
                     if ($result) 
