@@ -125,14 +125,36 @@ class FileController extends Controller
         if ($uid && $fid) 
         {
             $map['id']        = $fid;
-            $map['status']        = array('not between', '2,4');
-            $result = M('File')->where($map)->setField('status', 0);
+            $map['_string'] = 'status=1 OR status=5';
+            $File = M('File');
+            $result = $File->where($map)->getField('url');
             if ($result) 
             {
-                $this->success($result);
-                return;
+                if(@unlink("./Uploads/".$result))
+                {
+                    $File = M('File');
+                    $File->status = 0;
+                    $File->url = NULL;
+                    $result_1 = $File->where($map)->save();
+                    if($result_1)
+                    {
+                        $this->success($result_1);
+                        return;
+                    }
+                    $this->error('Can not update SQL');
+                }
+                $this->error('Can not delete URL'.$result);
             }
+            $this->error('Can not query SQL');
         }
         $this->error('当前状态不允许删除！');
+    }
+    
+    public function test()
+    {
+        $File = M('File');
+        $result = $File->where('id=1')->find();
+        $result_1 = @unlink("./Uploads/".$result['url']);
+        echo $result_1;
     }
 }

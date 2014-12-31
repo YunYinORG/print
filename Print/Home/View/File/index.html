@@ -55,6 +55,9 @@
 <block name='end'>
 <script>
         $(".delete").on('click',function(){
+            var con=confirm("Delete or Not?");
+            if(con)
+            {
             var URL = "/Home/File/delete";
             var btn=$(this);
             var fid=btn.attr('fid');
@@ -68,6 +71,7 @@
                     alert('操作失败：'+data.info);
                 }
             });
+            }
         });
 </script>
 </block>
