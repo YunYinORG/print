@@ -25,7 +25,7 @@
  */
 namespace Home\Controller;
 use Think\Controller;
-import('Common.Urp', COMMON_PATH);
+
 
 class UserController extends Controller
 {
@@ -84,6 +84,7 @@ class UserController extends Controller
         } else
         {
 //            $this->error('未注册');
+import('Common.Urp', COMMON_PATH);
             if($User->create())
                                    {
                                        if($name = get_urp_name($student_number,I('post.password')))
@@ -131,7 +132,7 @@ class UserController extends Controller
                 $result = M('User')->where('id='.$uid)->setField('password',encode($password,session('student_number')));
                 if($result)
                 {
-                    $this->success("Successfully change password");
+                    $this->success("Successfully change password",U("Home/File/index"));
                 }
             }
             else
@@ -141,7 +142,48 @@ class UserController extends Controller
         }
         else
         {
+            if(session('name'))
+            {
             $this->data = session('name');
+            $this->display();
+            }
+            else
+            {
+                $this->redirect('Home/Index/index');
+            }
+        }
+    }
+    public function forget()
+    {
+        $student_number = I('post.student_number');
+        $urp_password = I('post.urp_password');
+        $password = I('post.password');
+        $re_password = I('post.re_password');
+        if($password &&$re_password&&$student_number&&$urp_password)
+        {
+        import('Common.Urp', COMMON_PATH);
+            if(get_urp_name($student_number,$urp_password))
+            {
+                if($password==$re_password)
+                {
+                    $result = M('User')->where('student_number='.$student_number)->setField('password',encode($password,$student_number));
+                    if($result)
+                    {
+                        $this->success("Successfully change password","Index/index");
+                    }
+                }
+                else
+                {
+                    $this->error("Password doesn't match with another one");
+                }
+            }
+            else
+            {
+                $this->error('Urp verification failed');
+            }
+        }
+        else
+        {
             $this->display();
         }
     }
