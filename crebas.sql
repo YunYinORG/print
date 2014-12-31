@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2014/12/29 16:36:34                          */
+/* Created on:     2014/12/31 22:21:30                          */
 /*==============================================================*/
 
 
@@ -52,7 +52,7 @@ create table file
    id                   int not null auto_increment,
    pri_id               int not null,
    use_id               int not null,
-   name                 char(32),
+   name                 char(64),
    url                  char(64),
    time                 timestamp not null default CURRENT_TIMESTAMP,
    requirements         char(100),
@@ -116,6 +116,7 @@ create table user
    gender               char(3),
    phone                char(20),
    email                char(32),
+   status               char(32) default '1',
    primary key (id),
    unique key AK_student_number_unique (student_number)
 );
