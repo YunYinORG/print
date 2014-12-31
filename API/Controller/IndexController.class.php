@@ -78,7 +78,7 @@ class IndexController extends RestController
 				{
 					$data['token']          = $token;
 					$data['name']=$info['name'];
-					$data['id']=$info[id];
+					$data['id']=$info['id'];
 				} else
 				{
 					$data['err']          = '创建令牌失败';
