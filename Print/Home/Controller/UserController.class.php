@@ -83,22 +83,23 @@ class UserController extends Controller
             }
         } else
         {
-            $this->error('未注册');
-            
-            /*if($User->create())
+//            $this->error('未注册');
+            if($User->create())
                                    {
                                        if($name = get_urp_name($student_number,I('post.password')))
                                        {
-                                          $data['name']=$name;
+                                           $data['name']=$name;
                                            $data['student_number']=$student_number;
                                            $data['password']=$password;
                                            $result = $User->add($data);
                                            if($result) 
                                            {                
                                                session('use_id', $result);
-                                               $token = update_token($result,C('USER'));
-                                               cookie('token',$token,3600*24*30);
-                                               $this->redirect('Home/User/index');
+                                               session('student_number', $student_number);
+                                               session('name', $name);
+//                                               $token = update_token($result,C('USER'));
+//                                               cookie('token',$token,3600*24*30);
+                                               $this->redirect('Home/User/notice');
                                            }
                                            else
                                            {
@@ -113,7 +114,35 @@ class UserController extends Controller
                                    else
                                    {
                                        $this->error('Can not create User model');
-                                    }*/
+                                    }
+        }
+    }
+    
+
+    public function notice()
+    {
+        $uid = use_id(U('Index/index'));
+        $password = I('post.password');
+        $re_password = I('post.re_password');
+        if($password &&$re_password)
+        {
+            if($password==$re_password)
+            {
+                $result = M('User')->where('id='.$uid)->setField('password',encode($password,session('student_number')));
+                if($result)
+                {
+                    $this->success("Successfully change password");
+                }
+            }
+            else
+            {
+                $this->error("Password doesn't match with another one");
+            }
+        }
+        else
+        {
+            $this->data = session('name');
+            $this->display();
         }
     }
     
