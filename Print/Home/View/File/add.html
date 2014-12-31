@@ -1,5 +1,8 @@
 ﻿{//文件上传页}
 <extend name="Public/template/base.html"/>
+<block name='head'>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/modal.css">
+</block>
 <block name='header'>
 <include file="./Public/template/nav.html" add="current_page_item"/>
 </block>
@@ -8,75 +11,88 @@
     <h2>设置打印信息</h2>
 </div>
 <div id="featured">
-    <p class="text-danger">注：内测期间部分设置暂未开放<br/>文件只支持word（.doc和.docx）和pdf（推荐pdf，打印常识：pdf文件的格式一致性比word要好）</p>
-    <form action="__URL__/upload" method="post" id="print" enctype="multipart/form-data">
-        <p>上传欲打印的文件<small class='text-warning'>文件最大限制10Mb</small>
-        <input name="file" type="file" id="file" class="btn btn-success" onchange="display(this)" />
-        </p>
-        <p>选择想去的打印店：
-        <br>
-        <label>
-            <input type="radio" name="pri_id" value="1" id="choice_2" checked="checked" />
-        天达印务社(西门22宿附近)</label>
-        <br />
-        <label>
-            <input name="pri_id" type="radio" id="choice_0" value="2" />
-        光辉岁月(浴园附近)</label>
-        <br />
-        <label>
-            <input type="radio" name="pri_id" value="3" id="choice_1" />
-        精诚快印(数码小院伯苓楼附近)</label>
-        <br />
-        <label>
-            <input type="radio" name="pri_id" value="4" id="choice_3" />
-        快捷复印社(南开出版社附近)</label>
-        </p>
-            <p>选择打印形式
-            <label>
-                <input name="double_side" type="radio" id="type_0" value="0" checked="checked" />
-            单面打印</label>
-            <label>
-                <input type="radio" name="double_side"  value="1" id="type_1" />
-            双面打印</label>
-            </p>
-            <p>设置打印份数
-            <input name="copies" type="text" id="count" value="1" size="10" maxlength="10" />
-            </p>
-<input type="submit" name="loginbtn" id="modaltrigger" class="flatbtn" value="开始传送">
+    <p class="text-warning alert alert-warning">
+    打印店可在空闲时提前打印收到的文件,你可以在文件记录中查看文件状态（网页已做手机端适配）;<br/>无论打印队列多长，到店可以直接打印，如果打印店没有提前打印，你可直接到店打印；<br/>
+    对于提前打印的文件请于打印完成后24小时内取走；对于所有情况请于2天内完成打印；<br/>
+    价格上保证不比带U盘的价格贵（有时候甚至会更便宜），所有打印店均在量大时可减价。</p>
+    <form role="form" action="__URL__/upload" method="post" id="print" enctype="multipart/form-data">
+        <fieldset>
+            <div class="form-group">
+                <label id="myfile" for="file">上传要打印的文件<span class='text-warning small'>(文件最大限制10Mb)</span></label>
+                <input type="file" name="file" id="file" onchange="CheckSuffix(this)">
+                <p class="help-block"><span>文档<small>（.pdf .doc .docx和.wps）</small>可设置提前打印;讲义<small>（.ppt和.pptx）</small>需要到店打印;其他格式暂不允许打印</span></p>
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <label for='pri_id'>选择想去的打印店：</label>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="pri_id" value="1" />
+                天达印务<span class='text-primary'>[9：00——22：00]</span><small class='text-info'>(西门附近，22宿下)</small></label>
+                <br />
+                <label>
+                    <input type="radio" name="pri_id" value="2" checked="checked"/>
+                光辉岁月<span class='text-primary'>[8：00——23：00]</span><small class='text-info'>(二食堂浴园旁)</small></label>
+                <br />
+                <label>
+                    <input type="radio" name="pri_id" value="3"/>
+                精诚快印<span class='text-primary'>[8：30——20：30]</span><small class='text-info'>(新图和数码小院之间)</small></label>
+                <br />
+                <label>
+                    <input type="radio" name="pri_id" value="4"/>
+                快捷复印<span class='text-primary'>[8：00——22：00]</span><small class='text-info'>(南开出版社后)</small></label>
+            </div>
+        </div>
+        <fieldset id='setting'>
+            <div class="form-group">
+                <label for="copies">设置打印份数</label><small class='text-info'>(0表示到店后现场打印)</small>
+                <input name="copies" type="number" id="copies" value="1">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input name="double_side" id='double_side' value="1" type="checkbox">双面打印<span id='price' class='price text-info'>[单面:<span id='single'>0.07~0.1</span>￥/张;双面:<span id='double'>0.1~0.15</span>￥/张]</span><span id='check-price' class='text-info'>（价格量大从优）</span>
+                </label>
+            </div>
+        </fieldset>
+        <input type="submit" id="modaltrigger" class="flatbtn" value="开始传送">
     </form>
 </div>
 </block>
 <block name='end'>
 <script language="javascript">
-function getFileName(obj)
-{
-var pos = obj.value.lastIndexOf("/");
-return obj.value.substring(pos+1);
-}
-function display(obj)
-{
-var file = getFileName(this);
-document.getElementById('myfile').value="当前欲打印的文件为"+file;
-}
-$("#modaltrigger").on('click',function(event){
-    event.preventDefault();
-    $("#modaltrigger").attr('disabled','disabled');
-    if(!$("#print").submit())
-    {
-        $("#modaltrigger").RemoveAttr('disabled');
+    function CheckSuffix(n) {
+    var pos = n.value.lastIndexOf(".");
+    var suffix = n.value.substring(pos + 1);
+    var doc_suffix = ['pdf', 'doc', 'docx', 'wps'];
+    var other_suffix = ['ppt', 'pptx'];
+    if (doc_suffix.indexOf(suffix)>=0) {
+        $('#copies').attr('disabled', false);
+        $('#double_side').attr('disabled', false);
+        $("#modaltrigger").attr('disabled', false).attr('class', 'flatbtn-blu');
+        $('#setting').show(200);
+    } else if (other_suffix.indexOf(suffix)>=0) {
+        $('#copies').val(0).attr('disabled', true);
+        $('#double_side').attr('disabled', true);
+        $('#setting').hide(100);
+        $("#modaltrigger").attr('disabled', false).attr('class', 'flatbtn-blu');
+    } else {
+        alert('目前支持上传文档和ppt')
+        $("#modaltrigger").attr('disabled', true).attr('class', 'flatbtn');
     }
+    // document.getElementById('myfile').value="当前欲打印的文件为"+file;
+}
+$("#modaltrigger").on('click', function() {
+    $("#modaltrigger").attr('disabled', true);
+    if (!$("#print").submit()) {
+        $("#modaltrigger").attr('disabled',false);
+    }
+}).attr('disabled', true);
+var price=[[],[0.1,0.14],[0.07,0.1],[0.08,0.1],[0.08,0.1]];
+$("[name='pri_id']").change(
+function() {
+var i= this.value;
+$('#single').html(price[i][0]);
+$('#double').html(price[i][1]);
 });
 </script>
-<style type="text/css">
-.press {
-font-size: 36px;
-}
-#page #main form #featured .style1 {
-}
-.file {
-font-weight: bolder;
-}
-#page #main form #save {
-}
-</style>
 </block>

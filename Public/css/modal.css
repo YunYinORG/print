@@ -28,7 +28,7 @@
 	-moz-box-shadow: 0 1px 0 rgba(15, 15, 15, 0.3);
 	box-shadow: 0 1px 0 rgba(15, 15, 15, 0.3);
 }
-.flatbtn:hover {
+.flatbtn-blu:hover {
 	color: #fff;
 	background-color: #66CC33;
 }
@@ -66,10 +66,10 @@
 	-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
-.flatbtn-blu:hover {
+/*.flatbtn-blu:hover {
   color: #fff;
   background-color: #519dde;
-}
+}*/
 .flatbtn-blu:active {
   -webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
   -moz-box-shadow:inset 0 1px 5px rgba(0, 0, 0, 0.1);
