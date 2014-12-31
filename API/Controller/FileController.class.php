@@ -28,7 +28,9 @@ class FileController extends RestController
 	// REST允许的请求类型列表
 	protected $allowMethod = array(
 		'get',
-		'delete'
+		'delete',
+		'put',
+		'post',
 	);
 	protected $defaultType = 'json';
 	
@@ -67,7 +69,8 @@ class FileController extends RestController
 			if (!isset($data)) 
 			{
 				$page = I('page', 1, 'intval');
-				$data['files'] = M('File')->where($where)->page($page)->select();
+				$where['status']=array('gt',0);
+				$data['files'] = D('Home/FileView')->where($where)->page($page)->select();
 			}
 		} else
 		{
@@ -99,7 +102,7 @@ class FileController extends RestController
 			if ($info['type'] == C('PRINTER')) 
 			{
 				$where['pri_id']       = $info['id'];
-				$where['id']       = I('id',null,'intval');
+				$where['id']       = I('get.id',null,'intval');
 				$File  = M('File')->where($where)->cache(true, 120);
 				switch ($this->_method) 
 				{
@@ -114,8 +117,8 @@ class FileController extends RestController
 					
 					//修改文件状态
 					//对于不支持put的操作暂用post代替
-					$status      = I('status', null, 'intval');
-					switch ('status') 
+					$status      = I('status');
+					switch ($status) 
 					{
 					case 'upload':
 					case 1:

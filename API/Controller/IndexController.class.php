@@ -68,7 +68,7 @@ class IndexController extends RestController
 		
 		if (!isset($data)) 
 		{
-			$info     = $Model->field('id,password')->find();
+			$info     = $Model->field('id,password,name')->find();
 			$id       = $info['id'];
 			$password = $info['password'];
 			if ($password == encode($pwd,$account)) 
@@ -77,6 +77,8 @@ class IndexController extends RestController
 				if ($token) 
 				{
 					$data['token']          = $token;
+					$data['name']=$info['name'];
+					$data['id']=$info['id'];
 				} else
 				{
 					$data['err']          = '创建令牌失败';
