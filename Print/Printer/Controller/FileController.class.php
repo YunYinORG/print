@@ -65,6 +65,7 @@ class FileController extends Controller
         {
             $map['pri_id'] = $pid;
 		    $map['id']  = array('gt',I('file_id', null, 'intval'));
+		    $map['status'] = array('between','1,4' );
 		    $File = D('FileView');
 		    $this->data  = $File->where($map)->order('file.id desc')->select();
 		    $this->display();
