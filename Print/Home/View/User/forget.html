@@ -26,7 +26,7 @@ font-size: 16px;
 </block>
 <block name='content'>
     <div class="title" >
-        <h3>Welcome! {$data}</h3>
+        <h3>Forget password?</h3>
     </div>
 
     <div class="info">
@@ -34,7 +34,17 @@ font-size: 16px;
             <div class="subtitle">
                 <p>修改密码</p>
             </div>
-            <form  class="form-group" role="form" method="post" action="__URL__/notice">
+            <form  class="form-group" role="form" method="post" action="__URL__/forget">
+            
+                <div class="input-group">
+                    <label class="input-group-addon"  for="student_number">学号</label>
+                    <input  class="form-control" placeholder='student_number' name="student_number" type="text" id="student_number">
+                </div> 
+                
+                <div class="input-group">
+                    <label class="input-group-addon"  for="urp_password">Urp密码</label>
+                    <input  class="form-control" placeholder='urp的密码' name="urp_password" type="password" id="urp_password">
+                </div> 
                  <div class="input-group">
                     <label class="input-group-addon"  for="password">新的密码</label>
                     <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password">
@@ -45,7 +55,6 @@ font-size: 16px;
                 </div> 
                 <div class="input-group text-center">
                 <button type="submit" class="btn btn-success">确定</button>
-                <a href="Home/File/index" class="btn btn-warning">I don't want to change my password</a>
                 </div>
             </form>
         </div>
