@@ -1,4 +1,5 @@
 <?php
+
 // ===================================================================
 // | FileName:      FileController.class.php
 // ===================================================================
@@ -17,6 +18,7 @@
  * - add()
  * - upload()
  * - delete()
+ * - test()
  * Classes list:
  * - FileController extends Controller
  */
@@ -70,9 +72,7 @@ class FileController extends Controller
         {
             $upload           = new \Think\Upload();
             $upload->maxSize  = 10485760;
-            
-            //10Mb
-            $upload->exts     = array('doc', 'docx', 'pdf');
+            $upload->exts     = array('doc', 'docx', 'pdf', 'wps', 'ppt', 'pptx');
             $upload->rootPath = './Uploads/';
             $upload->savePath = '';
             $info             = $upload->upload();
@@ -84,15 +84,13 @@ class FileController extends Controller
                 foreach ($info as $file) 
                 {
                     $data['name']                      = $file['name'];
-                    $data['pri_id']                      = I('post.pri_id');
-                    $data['requirements']                      = "";
-                    
-                    //I('post.requirements');
+                    $data['pri_id']                    = I('post.pri_id');
+                    $data['requirements']              = I('post.requirements');
                     $data['url']                      = $file['savepath'] . $file['savename'];
-                    $data['status']                      = 1;                                       
+                    $data['status']                      = 1;
                     $data['use_id']                      = $uid;
                     $data['copies']                      = I('post.copies');
-                    $data['double_side']                 = I('post.double_side');
+                    $data['double_side']                      = I('post.double_side');
                     $File                 = M('File');
                     $result               = $File->add($data);
                     if ($result) 
@@ -102,7 +100,7 @@ class FileController extends Controller
                         $Notification->to_id  = $data['pri_id'];
                         $Notification->type   = 1;
                         $Notification->add();
-                        $this->success('上传完成');
+                        $this->success('上传完成',U('File/index'),1);
                     } else
                     {
                         $this->error($File->getError());
@@ -120,41 +118,41 @@ class FileController extends Controller
      */
     public function delete() 
     {
-        $uid    = use_id(U('Index/index'));
-        $fid    = I('fid', null, 'intval');
+        $uid          = use_id(U('Index/index'));
+        $fid          = I('fid', null, 'intval');
         if ($uid && $fid) 
         {
-            $map['id']        = $fid;
-            $map['_string'] = 'status=1 OR status=5';
-            $File = M('File');
-            $result = $File->where($map)->getField('url');
+            $map['id']              = $fid;
+            $map['_string']              = 'status=1 OR status=5';
+            $File         = M('File');
+            $result       = $File->where($map)->getField('url');
             if ($result) 
             {
-                if(@unlink("./Uploads/".$result))
+                if (@unlink("./Uploads/" . $result)) 
                 {
-                    $File = M('File');
+                    $File         = M('File');
                     $File->status = 0;
-                    $File->url = NULL;
-                    $result_1 = $File->where($map)->save();
-                    if($result_1)
+                    $File->url    = null;
+                    $result_1     = $File->where($map)->save();
+                    if ($result_1) 
                     {
                         $this->success($result_1);
                         return;
                     }
                     $this->error('Can not update SQL');
                 }
-                $this->error('Can not delete URL'.$result);
+                $this->error('Can not delete URL' . $result);
             }
             $this->error('Can not query SQL');
         }
         $this->error('当前状态不允许删除！');
     }
     
-    public function test()
+    public function test() 
     {
-        $File = M('File');
-        $result = $File->where('id=1')->find();
-        $result_1 = @unlink("./Uploads/".$result['url']);
+        $File     = M('File');
+        $result   = $File->where('id=1')->find();
+        $result_1 = @unlink("./Uploads/" . $result['url']);
         echo $result_1;
     }
 }
