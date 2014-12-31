@@ -70,7 +70,7 @@ class FileController extends RestController
 			{
 				$page = I('page', 1, 'intval');
 				$where['status']=array('gt',0);
-				$data['files'] = M('File')->where($where)->page($page)->select();
+				$data['files'] = D('Home/FileView')->where($where)->page($page)->select();
 			}
 		} else
 		{
