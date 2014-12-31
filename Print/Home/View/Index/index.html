@@ -1,36 +1,45 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="UTF-8">
-        <title>云印南开</title>
-        <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css">
-    </head>
-    <body>
-        <div id="carbonForm" style="margin-top: 107.5px; font-size: 20px;">
-            <h1>用户登录</h1>
-            <form action="__ROOT__/Home/User/auth" method="post" id="signupForm">
-                <div class="fieldContainer">
-                    <div class="formRow">
-                        <div class="label">
-                            <label for="name">学号:</label>
-                        </div>
-                        <div class="field">
-                            <input type="text" name="student_number" id="name">
-                        </div>
-                    </div>
-                    <div class="formRow">
-                        <div class="label">
-                            <label for="password">密码:</label>
-                        </div>
-                        <div class="field">
-                            <input type="password" name="password" id="password">
-                        </div>
-                    </div>
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>云印服务平台/title>
+<link  href="__PUBLIC__/css/new.css"rel="stylesheet" type="text/css" />
+</head>
+<body>
+<!--div class="jumbotron"-->
+	 <div class="container">
+		<div class="col-lg-12">
+        		<div class='thumbnail'>
+			<img src="__PUBLIC__/images/map.jpg" class="img-responsive">
+			</div>
+       		</div>
+  		<form id="form1" name="form1" method="post" action="">
+   		  	<div class="myrow">
+                <div class="alert alert-info">
+            		<p align="center">目前仅对本科生开放，初始密码为当前教育在线密码，敬请期待研究生版</p>
+           		</div>
                 </div>
-                <div class="signupButton">
-                    <input type="submit" name="submit" id="submit" value="登陆">
-                </div>
-            </form>
-        </div>
-    </body>
+       			<div class="row text-center">
+  	   				<div class="col-lg-4 col-md-5 col-sm-8 col-lg-offset-1 ">
+                    			<div class="input-group">
+  						<span class="input-group-addon">学号</span>
+  						<input type="text"  id="name" name="student_number" class="form-control" placeholder="请输入学号">
+					</div> 
+           		  </div>
+      				<div class="col-lg-4 col-md-5 col-sm-8">									           			
+					<div class="input-group">
+  						<span class="input-group-addon">密码</span>
+  						<input type="password" class="form-control" id="pwd" name="password" placeholder="请输入密码">
+					</div>
+           		  </div>
+            			<div class="col-lg-2 col-md-1 col-sm-8">
+  		 			<div class="input-group" id="login">
+                    			<input type="submit"tabindex="3" class="btn btn-success" value="登陆/注册" title="目前仅对本科生开放，初次密码为当前教育在线密码">
+        				</div>
+                		</div> 
+      			</div><!------Row结束------->
+  		</form>
+  	</div><!------Container结束------->
+<!--/div-->
+</body>
 </html>
