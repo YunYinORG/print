@@ -1,45 +1,48 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>云印服务平台/title>
-<link  href="__PUBLIC__/css/new.css"rel="stylesheet" type="text/css" />
-</head>
-<body>
-<!--div class="jumbotron"-->
-	 <div class="container">
-		<div class="col-lg-12">
-        		<div class='thumbnail'>
-			<img src="__PUBLIC__/images/map.jpg" class="img-responsive">
-			</div>
-       		</div>
-  		<form id="form1" name="form1" method="post" action="">
-   		  	<div class="myrow">
-                <div class="alert alert-info">
-            		<p align="center">目前仅对本科生开放，初始密码为当前教育在线密码，敬请期待研究生版</p>
-           		</div>
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>云印南开</title>
+        <meta name="keywords" content="云印南开" />
+        <meta name="description" content="云印南开，南开大学云打印平台" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link  href="__PUBLIC__/css/new.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <!--div class="jumbotron"-->
+        <div class="container">
+            <div class="col-lg-12">
+                <div class='thumbnail'>
+                    <img src="__PUBLIC__/images/map.jpg" class="img-responsive">
                 </div>
-       			<div class="row text-center">
-  	   				<div class="col-lg-4 col-md-5 col-sm-8 col-lg-offset-1 ">
-                    			<div class="input-group">
-  						<span class="input-group-addon">学号</span>
-  						<input type="text"  id="name" name="student_number" class="form-control" placeholder="请输入学号">
-					</div> 
-           		  </div>
-      				<div class="col-lg-4 col-md-5 col-sm-8">									           			
-					<div class="input-group">
-  						<span class="input-group-addon">密码</span>
-  						<input type="password" class="form-control" id="pwd" name="password" placeholder="请输入密码">
-					</div>
-           		  </div>
-            			<div class="col-lg-2 col-md-1 col-sm-8">
-  		 			<div class="input-group" id="login">
-                    			<input type="submit"tabindex="3" class="btn btn-success" value="登陆/注册" title="目前仅对本科生开放，初次密码为当前教育在线密码">
-        				</div>
-                		</div> 
-      			</div><!------Row结束------->
-  		</form>
-  	</div><!------Container结束------->
-<!--/div-->
-</body>
+            </div>
+            <form id="form1" name="form1" method="post" action="__MODULE__/User/auth">
+                <div class="myrow">
+                    <div class="alert alert-info">
+                        <p align="center">目前仅对本科生开放，初始密码为当前教育在线密码，敬请期待研究生版</p>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-lg-4 col-md-5 col-sm-8 col-lg-offset-1 ">
+                        <div class="input-group">
+                            <span class="input-group-addon">学号</span>
+                            <input type="text"  id="name" name="student_number" class="form-control" placeholder="请输入学号">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-5 col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">密码</span>
+                            <input type="password" class="form-control" id="pwd" name="password" placeholder="请输入密码">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-1 col-sm-8">
+                        <div class="input-group" id="login">
+                            <input type="submit"tabindex="3" class="btn btn-success" value="登陆/注册" title="初次密码为当前教育在线密码"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
 </html>
