@@ -5,10 +5,22 @@
                 <else />
                     <td><a target='_blank' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
                 </if>
+                <td>
+<if condition="$vo.copies gt 0">
+ {$vo.copies}
+                <else/>
+                现打
+                </if>
+                </td>
+                <td>
+                <if condition="$vo.double_side gt 0">
+                双面
+                <else/>
+                单面
+                </if>
+                </td>
                 <td>{$vo.use_name}[{$vo.student_number}]</td>
                 <td>{$vo.time}</td>
-                <th>{$vo.copies}</th>
-                <th>{$vo.double_side}</th>
                 <td id="{$vo.id}_status" data='{$vo.status}'>
                     <switch name="vo['status']">
                     <case value="1">尚未下载</case>
@@ -19,19 +31,14 @@
                     <default />未知状态
                     </switch>
                 </td>
-                <if condition="$history">
-                <else />
                 <td>
-                    <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">
                     <switch name="vo['status']">
-                    <case value="1">通知已打印</case>
-                    <case value="2">通知已打印</case>
-                    <case value="3">通知已打印</case>
-                    <case value="4">确认已付款</case>
+                    <case value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></case>
+                    <case value="2" break="0"></case>
+                    <case value="3"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button></case>
+                    <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button></case>
                     <default />不可操作
-                    </switch>
-                    </button>
+                    </switch> 
                 </td>
-                </if>
             </tr>
             </volist>
