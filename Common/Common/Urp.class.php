@@ -14,7 +14,7 @@
 *			bool false /null 验证失败返回false或空值
 *@author 梁崇军
 */
-function get_urp_name($stu_number,$pwd) 
+function getName($stu_number,$pwd) 
 {
 	
 	//验证地址--urp密码验证页
@@ -48,7 +48,7 @@ function get_urp_name($stu_number,$pwd)
 		$snoopy->setcookies();
 		$snoopy->fetchtext("http://urp.nankai.edu.cn/index.portal");
 		$text     = $snoopy->results;
-		$substr   = substr($input, strlen($start) + strpos($input, $start) , (strlen($input) - strpos($input, $end)) * (-1));
+		// $substr   = substr($input, strlen($start) + strpos($input, $start) , (strlen($input) - strpos($input, $end)) * (-1));
 		$get_name = function ($input, $start, $end) 
 		{
 			return substr($input, strlen($start) + strpos($input, $start) , (strlen($input) - strpos($input, $end)) * (-1));

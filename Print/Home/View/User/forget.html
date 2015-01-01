@@ -1,62 +1,46 @@
-﻿{//信息管理页}
-<extend name="Public/template/base.html"/>
-<block name='header'>
-<include file="./Public/template/nav.html" info="current_page_item"/>
-</block>
-
-<block name='head'>
-<style type="text/css">
-#subtitle {
-font-family: "Comic Sans MS", cursive;
-font-size: 24px;
-color: #666;
-text-align: left;
-}
-.subtitle {
-font-family: "Comic Sans MS", cursive;
-font-size: 24px;
-color: #333;
-}
-.userinfo {
-font-family: "Lucida Console", Monaco, monospace;
-font-size: 16px;
-}
-</style>
-
-</block>
-<block name='content'>
-    <div class="title" >
-        <h3>Forget password?</h3>
-    </div>
-
-    <div class="info">
-        <div class="ChangePwd">
-            <div class="subtitle">
-                <p>修改密码</p>
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>云印南开——找回密码</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div class="container">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h1 class="text-danger text-center">找回密码</h1>
+                <div class='alert alert-warning'>
+                    为了防止你的账号信息滥用，你可以通过，在此校验你校园账号信息，找回你的密码。
+                    <br/>目前使用教育在线验证信息，并找回你密码。
+                </div>
             </div>
-            <form  class="form-group" role="form" method="post" action="__URL__/forget">
-            
-                <div class="input-group">
-                    <label class="input-group-addon"  for="student_number">学号</label>
-                    <input  class="form-control" placeholder='student_number' name="student_number" type="text" id="student_number">
-                </div> 
-                
-                <div class="input-group">
-                    <label class="input-group-addon"  for="urp_password">Urp密码</label>
-                    <input  class="form-control" placeholder='urp的密码' name="urp_password" type="password" id="urp_password">
-                </div> 
-                 <div class="input-group">
-                    <label class="input-group-addon"  for="password">新的密码</label>
-                    <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password">
-                </div> 
-                <div class="input-group">
-                    <label class="input-group-addon"  for="re_password">确认密码</label>
-                    <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
-                </div> 
-                <div class="input-group text-center">
-                <button type="submit" class="btn btn-success">确定</button>
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="text-center text-info">
+                    <h2>验证并重设密码</h2>
+                </div>
+                <form  role="form" method="post">
+                    <div class="input-group">
+                        <label class="input-group-addon"  for="student_number">学号</label>
+                        <input  class="form-control" placeholder='你的学号' name="student_number" type="text" id="学号">
+                    </div>
+                    <div class="form-group input-group">
+                        <label class="input-group-addon"  for="urp_password">密码</label>
+                        <input  class="form-control" placeholder='教育在线的密码' name="urp_password" type="password" id="urp_password">
+                    </div>
+                    <div class="form-group input-group">
+                        <label class="input-group-addon"  for="password">新的密码</label>
+                        <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password">
+                    </div>
+                    <div class="form-group input-group">
+                        <label class="input-group-addon"  for="re_password">确认密码</label>
+                        <input  class="form-control" placeholder='重复刚才的密码' name="re_password" type="password" id="re_password">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-lg btn-success">提交</button>
+                    </div>
                 </div>
             </form>
         </div>
-    </div>
-</block>
+    </body>
+</html>

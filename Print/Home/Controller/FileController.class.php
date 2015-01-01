@@ -42,7 +42,7 @@ class FileController extends Controller
             $this->display();
         } else
         {
-            $this->redirect('Home/Index/index');
+            $this->redirect('Index/index');
         }
     }
     
@@ -57,7 +57,7 @@ class FileController extends Controller
             $this->display();
         } else
         {
-            $this->redirect('Home/Index/index');
+            $this->redirect('Index/index');
         }
     }
     
@@ -109,7 +109,7 @@ class FileController extends Controller
             }
         } else
         {
-            $this->error('登录信息已失效', 'Home/Index/index');
+            $this->error('登录信息已失效', 'Index/index');
         }
     }
     

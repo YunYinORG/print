@@ -18,6 +18,8 @@
  * Function list:
  * - index()
  * - auth()
+ * - notice()
+ * - forget()
  * - change()
  * - logout()
  * Classes list:
@@ -25,7 +27,6 @@
  */
 namespace Home\Controller;
 use Think\Controller;
-
 
 class UserController extends Controller
 {
@@ -45,7 +46,7 @@ class UserController extends Controller
             $this->display();
         } else
         {
-            $this->redirect('Home/Index/index');
+            $this->redirect('Index/index','未登录！');
         }
     }
     
@@ -63,126 +64,122 @@ class UserController extends Controller
         $result         = $User->where("student_number='$student_number'")->find();
         if ($result) 
         {
-            if ($result['password'] == $password)
-            
-            //authed
-            
-            
+            if ($result['password'] == $password) 
             {
                 session('use_id', $User->id);
                 $token = update_token($User->id, C('STUDENT'));
                 cookie('token', $token, 3600 * 24 * 30);
-                $this->redirect('Home/File/index');
+                $this->redirect('File/index');
             } else
             {
                 $this->error('密码验证错误！');
-                
-                //Wrong password
-                
-                
             }
         } else
         {
-//            $this->error('未注册');
-import('Common.Urp', COMMON_PATH);
-            if($User->create())
-                                   {
-                                       if($name = get_urp_name($student_number,I('post.password')))
-                                       {
-                                           $data['name']=$name;
-                                           $data['student_number']=$student_number;
-                                           $data['password']=$password;
-                                           $result = $User->add($data);
-                                           if($result) 
-                                           {                
-                                               session('use_id', $result);
-                                               session('student_number', $student_number);
-                                               session('name', $name);
-//                                               $token = update_token($result,C('USER'));
-//                                               cookie('token',$token,3600*24*30);
-                                               $this->redirect('Home/User/notice');
-                                           }
-                                           else
-                                           {
-                                               $this->error('SQL: Can not insert into User table');
-                                           }
-                                       }
-                                       else
-                                       {
-                                           $this->error('Urp verification failed');
-                                       }
-                                   }
-                                   else
-                                   {
-                                       $this->error('Can not create User model');
-                                    }
+            
+            if ($User->create()) 
+            {
+                import(C('VERIFY_WAY'), COMMON_PATH);
+                if ($name   = getName($student_number, I('post.password'))) 
+                {
+                    $data['name']        = $name;
+                    $data['student_number']        = $student_number;
+                    $data['password']        = $password;
+                    $result = $User->add($data);
+                    if ($result) 
+                    {
+                        session('use_id', $result);
+                        session('student_number', $student_number);
+                        session('first_name', $name);
+                        
+                        $this->redirect('User/notice');
+                    } else
+                    {
+                        $this->error('注册失败：' . $User->getError());
+                    }
+                } else
+                {
+                    $this->error('学校账号实名认证失败！');
+                }
+            } else
+            {
+                $this->error('信息不合法：' . $User->getError());
+            }
         }
     }
     
-
-    public function notice()
+    //首次注册
+    public function notice() 
     {
-        $uid = use_id(U('Index/index'));
-        $password = I('post.password');
-        $re_password = I('post.re_password');
-        if($password &&$re_password)
+        $uid         = session('use_id');
+        $stu_number  = session('student_number');
+        
+        if (session('first_name') && $stu_number) 
         {
-            if($password==$re_password)
+            
+            $password    = I('post.password');
+            $re_password = I('post.re_password');
+            if (!$password) 
             {
-                $result = M('User')->where('id='.$uid)->setField('password',encode($password,session('student_number')));
-                if($result)
+                $this->data  = session('first_name');
+                $this->display();
+            } elseif ($password != $re_password) 
+            {
+                $this->data = session('first_name') . '[密码不一致重新输入]';
+                $this->display();
+            } else
+            {
+                $result = M('User')->where('id=' . $uid)->setField('password', encode($password, $stu_number));
+                if ($result) 
                 {
-                    $this->success("Successfully change password",U("Home/File/index"));
+                    session('first_name', null);
+                    $this->success("密码修改成功！", U("File/add"));
+                } else
+                {
+                    $this->error('密码修改失败！');
                 }
             }
-            else
-            {
-                $this->error("Password doesn't match with another one");
-            }
-        }
-        else
+        } else
         {
-            if(session('name'))
-            {
-            $this->data = session('name');
-            $this->display();
-            }
-            else
-            {
-                $this->redirect('Home/Index/index');
-            }
+            $this->redirect('Index/index');
         }
     }
-    public function forget()
+    
+    //密码找回
+    public function forget() 
     {
-        $student_number = I('post.student_number');
-        $urp_password = I('post.urp_password');
-        $password = I('post.password');
-        $re_password = I('post.re_password');
-        if($password &&$re_password&&$student_number&&$urp_password)
+        if(use_id())
         {
-        import('Common.Urp', COMMON_PATH);
-            if(get_urp_name($student_number,$urp_password))
-            {
-                if($password==$re_password)
-                {
-                    $result = M('User')->where('student_number='.$student_number)->setField('password',encode($password,$student_number));
-                    if($result)
-                    {
-                        $this->success("Successfully change password","Index/index");
-                    }
-                }
-                else
-                {
-                    $this->error("Password doesn't match with another one");
-                }
-            }
-            else
-            {
-                $this->error('Urp verification failed');
-            }
+            $this->redirect('index');
         }
-        else
+
+        $student_number = I('post.student_number');
+        $urp_password   = I('post.urp_password');
+        $password       = I('post.password');
+        $re_password    = I('post.re_password');
+        if ($password && $re_password && $student_number && $urp_password) 
+        {
+            import(C('VERIFY_WAY'), COMMON_PATH);
+            if (getName($student_number, $urp_password)) 
+            {
+                if ($password == $re_password) 
+                {
+
+                    if (false!==M('User')->where('student_number=' . $student_number)->setField('password', encode($password, $student_number))) 
+                    {
+                        $this->success("密码重置成功！", U("Index/index"));
+                    }else{
+                        $this->error('重置失败！');
+                    }
+                } else
+                {
+                    $this->error("密码不一致");
+                }
+            } else
+            {
+                $this->error('校园账号验证失败！');
+            }
+        } else
         {
             $this->display();
         }
@@ -210,14 +207,14 @@ import('Common.Urp', COMMON_PATH);
                 {
                     $map['id']                     = $uid;
                     M('User')->where($map)->setField('password', encode($password, session('student_number')));
-                    $this->success("Success");
+                    $this->success("密码修改成功！");
                 } else
                 {
-                    $this->error("Password dosen't match the reinput one");
+                    $this->error("两次密码输入不一致！");
                 }
             } else
             {
-                $this->error("Wrong Password");
+                $this->error("原密码错误");
             }
         }
     }
@@ -230,6 +227,6 @@ import('Common.Urp', COMMON_PATH);
         delete_token(cookie('token'));
         session(null);
         cookie(null);
-        $this->redirect('Home/Index/index');
+        $this->redirect('Index/index');
     }
 }

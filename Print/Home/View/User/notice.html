@@ -1,53 +1,50 @@
-﻿{//信息管理页}
-<extend name="Public/template/base.html"/>
-<block name='header'>
-<include file="./Public/template/nav.html" info="current_page_item"/>
-</block>
-
-<block name='head'>
-<style type="text/css">
-#subtitle {
-font-family: "Comic Sans MS", cursive;
-font-size: 24px;
-color: #666;
-text-align: left;
-}
-.subtitle {
-font-family: "Comic Sans MS", cursive;
-font-size: 24px;
-color: #333;
-}
-.userinfo {
-font-family: "Lucida Console", Monaco, monospace;
-font-size: 16px;
-}
-</style>
-
-</block>
-<block name='content'>
-    <div class="title" >
-        <h3>Welcome! {$data}</h3>
-    </div>
-
-    <div class="info">
-        <div class="ChangePwd">
-            <div class="subtitle">
-                <p>修改密码</p>
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>欢迎使用云印南开</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div class="container">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h1 class="text-center text-danger">首次使用须知</h1>
+                <div class='alert alert-warning'>
+                    亲爱的{$data}
+                    <ul>
+                        <li>童鞋，你已经通过校园实名认证（我们将使用你的<code>学号</code>和<code>姓名</code>，仅仅这些，如果拒绝授权，请在24小时内联系我们）;</li>
+                        <li>现在你已经可以使用<strong>云印南开</strong>平台啦！</li>
+                        <li>在使用之前我们强烈建议你设置新密码,如果你不想设置,将使用认证账号的密码作为登录密码</li>
+                        <li>当然不论使用什么密码,我们会对密码进行二次不可逆加密（即使数据库泄露也不可能反向获取你的真实密码）;</li>
+                        <li>对于恶意使用者，我们有权封号，对于严重不诚信用户进行公布。</li>
+                        <li>任何问题和意见均可随时联系我们！</li>
+                    </ul>
+                </div>
             </div>
-            <form  class="form-group" role="form" method="post" action="__URL__/notice">
-                 <div class="input-group">
-                    <label class="input-group-addon"  for="password">新的密码</label>
-                    <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password">
-                </div> 
-                <div class="input-group">
-                    <label class="input-group-addon"  for="re_password">确认密码</label>
-                    <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
-                </div> 
-                <div class="input-group text-center">
-                <button type="submit" class="btn btn-success">确定</button>
-                <a href="Home/File/index" class="btn btn-warning">I don't want to change my password</a>
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="text-center text-info">
+                    <h2>设定新的密码</h2>
+                </div>
+                <form  role="form" method="post">
+                    <div class="form-group input-group">
+                        <label class="input-group-addon"  for="password">新的密码</label>
+                        <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password">
+                    </div>
+                    <div class="form-group input-group">
+                        <label class="input-group-addon"  for="re_password">确认密码</label>
+                        <input  class="form-control" placeholder='重复刚才的密码' name="re_password" type="password" id="re_password">
+                    </div>
+                    <div class="form-group input-group btn-group-justified">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-success">设定新密码</button>
+                        </div>
+                        <div class="btn-group">
+                            <a href="/File/add" title='使用认证密码' class="btn btn-warning">跳过设置</a>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
-    </div>
-</block>
+    </body>
+</html>
