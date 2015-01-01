@@ -1,9 +1,10 @@
 <?php
+
 // ===================================================================
-// | FileName: 		IndexController.class.php
+// | FileName:      IndexController.class.php
 // ===================================================================
-// | Discription：	IndexController 默认控制器
-//		<命名规范：>
+// | Discription：   IndexController 默认控制器
+//      <命名规范：>
 // ===================================================================
 // +------------------------------------------------------------------
 // | 云印南开
@@ -11,57 +12,53 @@
 // | Copyright (c) 2014 云印南开团队 All rights reserved.
 // +------------------------------------------------------------------
 /**
-* Class and Function List:
-* Function list:
-* - index()
-* Classes list:
-* - IndexController extends Controller
-*/
+ * Class and Function List:
+ * Function list:
+ * - index()
+ * - feedback()
+ * - backfeed()
+ * Classes list:
+ * - IndexController extends Controller
+ */
 namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller
 {
-	//首页
-	public function index() 
-	{
-		if(use_id())
-		{
-			$this->redirect('File/add');
-		}else{
-			  $this->display();
-		}
-	 
-	}
-
+    
+    //首页
+    public function index() 
+    {
+        $this->islogin = use_id() != false;
+        $this->display();
+    }
+    
     /**
-    *反馈处理
-    */
-	public function feedback()
-	{
-		$Form = D('Feedback');
-        $_POST['message'] = $_POST['message'].'##FromStudentID:'.use_id();
-		if($Form->create()) 
-		{
+     *反馈处理
+     */
+    public function feedback() 
+    {
+        $Form   = D('Feedback');
+        $_POST['message']        = $_POST['message'] . '##FromStudentID:' . use_id();
+        if ($Form->create()) 
+        {
             $result = $Form->add();
-            if($result)
+            if ($result) 
             {
                 $this->success('操作成功！');
-            }
-            else
+            } else
             {
                 $this->error('操作错误！');
             }
-        }
-        else
+        } else
         {
             $this->error($Form->getError());
         }
-	}
-    public function backfeed()
+    }
+    public function backfeed() 
     {
-        $FD = M('Feedback');
+        $FD   = M('Feedback');
         $list = $FD->select();
-        $this->assign('list',$list);
+        $this->assign('list', $list);
         $this->display();
     }
 }
