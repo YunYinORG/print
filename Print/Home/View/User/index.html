@@ -41,15 +41,15 @@ font-size: 16px;
             <form  class="form-group" role="form" method="post" action="__URL__/change">
                 <div class="input-group">
                     <label class="input-group-addon" for="deprecated_password">当前密码</label>
-                    <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password">
+                    <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password" required>
                 </div>
                  <div class="input-group">
                     <label class="input-group-addon"  for="password">新的密码</label>
-                    <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password">
+                    <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password" required>
                 </div> 
                 <div class="input-group">
                     <label class="input-group-addon"  for="re_password">确认密码</label>
-                    <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
+                    <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password" required>
                 </div> 
                 <div class="input-group text-center">
                 <button type="submit" class="btn btn-success">确定</button>
