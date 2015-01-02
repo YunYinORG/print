@@ -128,7 +128,7 @@ class FileController extends Controller
             $result       = $File->where($map)->getField('url');
             if ($result) 
             {
-                if (@unlink("./Uploads/" . $result)) 
+                if (delete_file("./Uploads/" . $result)) 
                 {
                     $File         = M('File');
                     $File->status = 0;
@@ -139,11 +139,11 @@ class FileController extends Controller
                         $this->success($result_1);
                         return;
                     }
-                    $this->error('Can not update SQL');
+                    $this->error('记录更新异常');
                 }
-                $this->error('Can not delete URL' . $result);
+                $this->error('文件不可删除' . $result);
             }
-            $this->error('Can not query SQL');
+            $this->error('记录已不存在');
         }
         $this->error('当前状态不允许删除！');
     }
