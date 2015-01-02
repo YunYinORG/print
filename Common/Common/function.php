@@ -17,6 +17,7 @@
  * - delete_token()
  * - auth_token()
  * - encode()
+ * - delete_file()
  * Classes list:
  */
 
@@ -52,6 +53,7 @@ function update_token($id, $type)
 	case C('STUDENT'):
 	case C('PRINTER'):
 	case C('PRINTER_WEB'):
+		
 		// code...
 		break;
 
@@ -121,11 +123,36 @@ function auth_token($token)
  *encode($pwd, $id)
  *密码加密
  *@param $pwd 原始密码
- *@param $id验证对象id
+ *@param $id验证对象账号
  *@return 字符串
  *@author NewFuture
  */
 function encode($pwd, $id) 
 {
 	return crypt($pwd, $id);
+}
+
+/**
+ *delete_file($path)
+ *删除上传文件
+ *@param $path 文件路径
+ *@author NewFuture
+ */
+function delete_file($path) 
+{
+	
+	switch (C('FILE_UPLOAD_TYPE')) 
+	{
+	case 'Sae':
+		$arr      = explode('/', ltrim($path, './'));
+		$domain   = array_shift($arr);
+		$filePath = implode('/', $arr);
+		$s        = Think\Think::instance('SaeStorage');
+		return $s->delete($domain, $filePath);
+		break;
+
+	default:
+		return @unlink($path);
+		break;
+	}
 }

@@ -33,7 +33,6 @@ return array(
         '__PUBLIC__' => '/Public',
         '__JS__' => '/Public/js',
         '__CSS__' => '/Public/css',
-        '__IMG__' => '/Public/img',
         '__UPLOAD__' => '/Uploads',
     ) ,
 
