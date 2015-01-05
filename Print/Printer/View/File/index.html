@@ -81,54 +81,68 @@
 </div>
 </block>
 <block name='end'>
+  <IF condition="$history">
+  <ELSE/>
 <script>
-        $(".set").on('click',function(){
-            var URL = "/Printer/File/set";
-            var btn=$(this);
-            var fid=btn.attr('fid');
-            var status=$('#'+fid+'_status');
-            var sid=status.attr('data');
-            var set_s=0;
-            if(sid==1)
-            {
-                set_s=2;
+$("table").on('click', '.set', function() {
+    var URL = "/Printer/File/set";
+    var btn = $(this);
+    var fid = btn.attr('fid');
+    var status = $('#' + fid + '_status');
+    var sid = status.attr('data');
+    var set_s = 0;
+    if (sid == 1) {
+        set_s = 2;
+    } else if (sid <= 3 && sid >= 2) {
+        set_s = 4;
+    } else if (sid == 4) {
+        set_s = 5;
+    }
+    $.post(URL, {
+        fid: fid,
+        status: set_s
+    }, function(data) {
+        if (data.status) {
+            status.attr('data', set_s);
+            if (set_s == 4) {
+                btn.html('确认已付款').removeClass("btn btn-success").addClass("btn btn-warning");
+                status.html('已打印');
+            } else if (set_s == 2) {
+                $('#' + fid + '_button').html('通知已打印').removeClass("btn btn-primary").addClass("btn btn-success");
+                status.html('已下载');
+                btn.removeClass('set').removeAttr('fid');
+            } else {
+                btn.parent().parent().hide(1600);
             }
-            else if(sid<=3&&sid>=2){
-                set_s=4;
-            }else if(sid==4){
-                set_s=5;
-            }
-            $.post(URL,{
-                fid:fid,
-                status:set_s
-            },function(data){
-                if(data.status){
-                    status.attr('data',set_s);
-                    if(set_s==4){
-                        btn.html('确认已付款').removeClass("btn btn-success").addClass("btn btn-warning");
-                        status.html('已打印');
-                    }else if(set_s==2){
-                        $('#'+fid+'_button').html('通知已打印').removeClass("btn btn-primary").addClass("btn btn-success");
-                        status.html('已下载');
-                        btn.removeClass('set').removeAttr('fid');
-                    }
-                    else{
-                        btn.parent().parent().hide(1600);
-                    }
-                }
-            });
-        });
-        $(document).ready(function(){
-                        var file_id = $('[file_id]').attr('file_id');
-                        var url = "__URL__/refresh"
-                    setInterval(function(){
-                        file_id = $('[fid]').attr('fid');
-                        $.post(url,{
-                            file_id:file_id
-                        },function(data){
-                            $("[file_id="+file_id+"]").before(data);
-                        });
-                    },1600);
-                });
+        } else {
+            alert(data.info);
+        }
+    });
+});
+isRefreshing = false;
+
+function refresh() {
+    if (isRefreshing) {
+        return;
+    } else {
+        isRefreshing = true;
+    }
+    var file_id = $('tbody').children().attr('file_id');
+    var url = "__URL__/refresh";
+    $.post(url, {
+        file_id: file_id
+    }, function(data) {
+        if (data) {
+            $('tbody').prepend(data);
+           var html='<div class="alert alert-warning" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button><span class="text-danger">新文件到达</span></div>';
+           $('main').prepend(html);
+        }
+        isRefreshing = false;
+    });
+}
+$(document).ready(function() {
+    setInterval(refresh, 15000);
+});
 </script>
+</IF>
 </block>

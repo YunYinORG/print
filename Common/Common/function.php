@@ -156,3 +156,23 @@ function delete_file($path)
 		break;
 	}
 }
+
+/**
+ *cache_name($type,$id)
+ *缓存key生成，用于对打印店和用户的
+ *@param $path 文件路径
+ *@author NewFuture
+ */
+function cache_name($type,$id)
+{
+	switch ($type) {
+		case 'printer':
+			return 'PFV_'.$id;
+			break;
+		case 'user':
+			return 'UFV_'.$id;
+		default:
+			return $type.'_'.$id;
+			break;
+	}
+}

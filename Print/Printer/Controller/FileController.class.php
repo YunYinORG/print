@@ -16,7 +16,9 @@
  * Class and Function List:
  * Function list:
  * - index()
+ * - refresh()
  * - set()
+ * - _empty()
  * Classes list:
  * - FileController extends Controller
  */
@@ -36,20 +38,22 @@ class FileController extends Controller
 		$status = I('status', null, 'intval');
 		if ($pid) 
 		{
-			$condition['pri_id'] = $pid;
+			$condition['pri_id']        = $pid;
 			if ($status == 5) 
 			{
-				$condition['status'] = $status;
+				$cache_key   = fasle;
+				$condition['status']        = $status;
 				$this->assign('history', true);
 				$this->title = '已打印文件历史记录';
 			} else
- 			{
-				$condition['status'] = array('between','1,4' );
-				$this->assign('history', 0);
+			{
+				$cache_key   = cache_name('printer', $pid);
+				$condition['status']             = array('between', '1,4');
+				$this->assign('history', false);
 				$this->title = '打印任务列表';
 			}
 			$File        = D('FileView');
-			$this->data  = $File->where($condition)->order('file.id desc')->select();
+			$this->data  = $File->where($condition)->order('file.id desc')->cache($cache_key, 10)->select();
 			$this->display();
 		} else
 		{
@@ -57,21 +61,21 @@ class FileController extends Controller
 		}
 	}
 	
+	public function refresh() 
+	{
+		$pid        = pri_id(U('Index/index'));
+		if ($pid) 
+		{
+			$map['pri_id']            = $pid;
+			$map['id']            = array('gt', I('file_id', null, 'intval'));
+			$map['status']            = array('between', '1,4');
+			$File       = D('FileView');
+			$cache_key  = cache_name('printer', $pid);
+			$this->data = $File->where($map)->order('file.id desc')->limit(10)->cache($cache_key, 10)->select();
+			$this->display();
+		}
+	}
 	
-    public function refresh() 
-    {
-        $pid = pri_id(U('Index/index'));
-        if($pid)
-        {
-            $map['pri_id'] = $pid;
-		    $map['id']  = array('gt',I('file_id', null, 'intval'));
-		    $map['status'] = array('between','1,4' );
-		    $File = D('FileView');
-		    $this->data  = $File->where($map)->order('file.id desc')->select();
-		    $this->display();
-        }
-    }
-    
 	/**
 	 *set()
 	 *更新文件状态（需要验证文件是否在此点打印）
@@ -79,19 +83,42 @@ class FileController extends Controller
 	 *@param $status 文件状态
 	 */
 	public function set() 
-	{   
-
+	{
+		
 		$pid    = pri_id(U('Index/index'));
 		$fid    = I('fid', null, 'intval');
-		$status=I('status');
-		if($status==C('FILE_DOWNLOAD')||$status==C('FILE_PRINTED')||$status==C('FILE_PAID'))
+		$status = I('status');
+		if ($status == C('FILE_DOWNLOAD') || $status == C('FILE_PRINTED') || $status == C('FILE_PAID')) 
 		{
-					$map['pri_id']        = $pid;
-					$map['id']        = $fid;
-			$r= M('File')->where($map)->setField('status',$status);
-			$this->success($r);
-		}else{
+			$map['pri_id']        = $pid;
+			$map['id']        = $fid;
+			$map['status']        = array('gt', 0);
+			$File   = M('File');
+			$uid    = $File->where($map)->cache(true)->getField('use_id');
+			if ($uid) 
+			{
+				
+				$File->where('id="%d"', $fid)->cache(true)->setField('status', $status);
+				
+				//删除缓存
+				S(cache_name('printer', $pid), null);
+				S(cache_name('user', $uid), null);
+				$this->success('更新成功');
+			} else
+			{
+				$this->error('文件不存在(可能已删除)！');
+			}
+		} else
+		{
 			$this->error('状态不可设置');
 		}
+	}
+	
+	/**
+	 *404页
+	 */
+	public function _empty() 
+	{
+		$this->redirect('index');
 	}
 }

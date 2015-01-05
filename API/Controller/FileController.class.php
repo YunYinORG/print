@@ -1,4 +1,5 @@
 <?php
+
 // ===================================================================
 // | FileName: 		FileController.class.php
 // ===================================================================
@@ -26,19 +27,11 @@ class FileController extends RestController
 {
 	
 	// REST允许的请求类型列表
-	protected $allowMethod = array(
-		'get',
-		'delete',
-		'put',
-		'post',
-	);
+	protected $allowMethod = array('get', 'delete', 'put', 'post',);
 	protected $defaultType = 'json';
 	
 	// REST允许请求的资源类型列表
-	protected $allowType   = array(
-		'xml',
-		'json',
-	);
+	protected $allowType   = array('xml', 'json',);
 	
 	/**
 	 *index
@@ -68,16 +61,21 @@ class FileController extends RestController
 			}
 			if (!isset($data)) 
 			{
-				$page = I('page', 1, 'intval');
-				$where['status']=array('gt',0);
-				$data['files'] = D('FileView')->where($where)->page($page)->select();
+				$where['status']           = array('gt', 0);
+				$start_id  = I('start', null, 'intval');
+				$page      = I('page', 1, 'intval');
+				if ($start_id) 
+				{
+					$where['id']           = array('gt', $start_id);
+				}
+				$cache_key = cache_name('printer', $info['id']);
+				$data['files']           = D('FileView')->where($where)->page($page, 10)->cache($cache_key, 10)->select();
 			}
 		} else
 		{
-			$data['err']      = '认证失败';
+			$data['err']           = '认证失败';
 		}
-
-		$type = ($this->_type == 'xml') ? 'xml' : 'json';
+		$type      = ($this->_type == 'xml') ? 'xml' : 'json';
 		$this->response($data, $type);
 	}
 	
@@ -94,84 +92,101 @@ class FileController extends RestController
 	public function id($value = '') 
 	{
 		$info  = auth();
-		if (!$info) 
+		if ($info) 
 		{
 			$data['err']       = '认证失败';
 		} else
 		{
 			if ($info['type'] == C('PRINTER')) 
 			{
+				
+				//打印店客户端操作
 				$where['pri_id']       = $info['id'];
-				$where['id']       = I('get.id',null,'intval');
-				$File  = M('File')->where($where)->cache(true, 120);
-				switch ($this->_method) 
+				$where['id']       = I('get.id', null, 'intval');
+				$where['status']       = array('between', '1,4');
+				$File  = M('File');
+				$file  = $File->where($where)->cache(true)->find();
+				if ($file) 
 				{
-				case 'get':
-					
-					//获取文件信息
-					$data  = $File->find();
-					break;
-
-				case 'put':
-				case 'post':
-					
-					//修改文件状态
-					//对于不支持put的操作暂用post代替
-					$status      = I('status');
-					switch ($status) 
+					$data['err']       = '文件已删除或者已付款！';
+				} else
+				{
+					switch ($this->_method) 
 					{
-					case 'upload':
-					case 1:
-						$status_code = 1;
+					case 'get':
+						
+						//获取文件信息
+						$data  = $File;
 						break;
 
-					case 'download':
-					case 2:
-						$status_code = 2;
-						break;
+					case 'put':
+					case 'post':
+						
+						//修改文件状态
+						//对于不支持put的操作暂用post代替
+						$status      = I('status');
+						switch ($status) 
+						{
+						case 'upload':
+						case 1:
+							$status_code = 1;
+							break;
 
-					case 'printing':
-					case 3:
-						$status_code = 3;
-						break;
+						case 'download':
+						case 2:
+							$status_code = 2;
+							break;
 
-					case 'printed':
-					case 4:
-						$status_code = 4;
-						break;
+						case 'printing':
+						case 3:
+							$status_code = 3;
+							break;
 
-					case 'payed':
-					case 5:
-						$status_code = 5;
+						case 'printed':
+						case 4:
+							$status_code = 4;
+							break;
+
+						case 'payed':
+						case 5:
+							$status_code = 5;
+							break;
+
+						default:
+							
+							$data['err'] = '非法状态！';
+							break;
+						}
+						if (!isset($data)) 
+						{
+							if ($status_code <= $file['status']) 
+							{
+								$data['err'] = '不允许逆向设置！';
+							} elseif ($File->where('id="%d"', $file['id'])->cache(true)->setField('status', $status_code)) 
+							{
+								$data['msg'] = '修改完成！';
+								
+								//删除缓存
+								S(cache_name('printer', $info['id']), null);
+								S(cache_name('user', $file['use_id']), null);
+							} else
+							{
+								$data['err'] = '修改失败';
+							}
+						}
 						break;
 
 					default:
 						
-						$data['err'] = '非法状态！';
+						$data['err'] = '不支持操作！';
 						break;
 					}
-					if (!isset($data)) 
-					{
-						if ($File->setField('status', $status_code) !== false) 
-						{
-							$data['msg'] = '修改完成！';
-						} else
-						{
-							$data['err'] = '修改失败';
-						}
-					}
-					break;
-
-				default:
-					
-					$data['err'] = '不支持操作！';
-					break;
 				}
 			} else
 			{
 				
 				// $where['use_id']             = $info['id'];
-				$data['err']      = '此接口暂只支持打印店！';
+				$data['err']      = '此接口暂只支持打印店客户端！';
 			}
 		}
 		$type = ($this->_type == 'xml') ? 'xml' : 'json';

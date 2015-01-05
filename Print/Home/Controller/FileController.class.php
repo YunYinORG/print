@@ -29,6 +29,7 @@ class FileController extends Controller
     
     /**
      *文件列表页
+     *@TODO：分页 
      */
     public function index() 
     {
@@ -38,7 +39,8 @@ class FileController extends Controller
             $condition['use_id']            = $uid;
             $condition['status']            = array('between', '1,5');
             $File       = D('FileView');
-            $this->data = $File->where($condition)->order('file.id desc')->select();
+            $cache_key=cache_name('user',$uid);
+            $this->data = $File->where($condition)->order('file.id desc')->cache($cache_key)->select();
             $this->display();
         } else
         {
@@ -57,7 +59,7 @@ class FileController extends Controller
             $this->display();
         } else
         {
-            $this->redirect('Index/index');
+            $this->redirect('/Index/index');
         }
     }
     
@@ -68,13 +70,20 @@ class FileController extends Controller
     public function upload() 
     {
         $uid              = use_id(U('Index/index'));
+
         if ($uid) 
         {
+            $sid=M('User')->cache(true)->getFieldById($uid,'student_number');
+            $copies=I('post.copies');
+            $double=I('post.double_side');
+            $filename=($double+1).'X'.$copies.'_['.$sid.']_'.date('Y-m-d_H-i_U');
+           
             $upload           = new \Think\Upload();
             $upload->maxSize  = 10485760;
             $upload->exts     = array('doc', 'docx', 'pdf', 'wps', 'ppt', 'pptx');
             $upload->rootPath = './Uploads/';
-            $upload->savePath = '';
+            $upload->savePath ='';
+            $upload->saveName = $filename;
             $info             = $upload->upload();
             if (!$info) 
             {
@@ -89,10 +98,10 @@ class FileController extends Controller
                     $data['url']                      = $file['savepath'] . $file['savename'];
                     $data['status']                      = 1;
                     $data['use_id']                      = $uid;
-                    $data['copies']                      = I('post.copies');
-                    $data['double_side']                      = I('post.double_side');
+                    $data['copies']                      = $copies;
+                    $data['double_side']                      = $double;
                     $File                 = M('File');
-                    $result               = $File->add($data);
+                    $result               = $File->cache(true)->add($data);
                     if ($result) 
                     {
                         $Notification         = M('Notification');
@@ -100,16 +109,19 @@ class FileController extends Controller
                         $Notification->to_id  = $data['pri_id'];
                         $Notification->type   = 1;
                         $Notification->add();
-                        $this->success('上传完成',U('File/index'),1);
+                        //删除缓存
+                        S(cache_name('user',$uid),null);
+                        S(cache_name('printer',$pid),null);
+                        $this->redirect('File/index',null,0,'上传成功');
                     } else
                     {
-                        $this->error($File->getError());
+                        $this->error($File->getError(),'/File/add',1);
                     }
                 }
             }
         } else
         {
-            $this->error('登录信息已失效', 'Index/index');
+            $this->error('登录信息已失效', '/Index/index');
         }
     }
     
@@ -125,34 +137,35 @@ class FileController extends Controller
             $map['id']              = $fid;
             $map['_string']              = 'status=1 OR status=5';
             $File         = M('File');
-            $result       = $File->where($map)->getField('url');
-            if ($result) 
+            $file      = $File->where($map)->cache(true)->Field('url,pri_id')->find();
+            if ($file) 
             {
-                if (delete_file("./Uploads/" . $result)) 
+                $url=$file['url'];
+                if (delete_file("./Uploads/" . $url)) 
                 {
-                    $File         = M('File');
-                    $File->status = 0;
-                    $File->url    = null;
-                    $result_1     = $File->where($map)->save();
-                    if ($result_1) 
+                    $data['status'] = 0;
+                    $data['url']    = null;
+                    $result    = $File->where($map)->cache(true)->save($data);
+                    if ($result) 
                     {
-                        $this->success($result_1);
+                        //删除缓存
+                        S(cache_name('user',$uid),null);
+                        S(cache_name('printer',$file['pri_id']),null);
+                        $this->success($result);
                         return;
                     }
                     $this->error('记录更新异常');
                 }
-                $this->error('文件不可删除' . $result);
+                $this->error('文件不可删除');
             }
             $this->error('记录已不存在');
         }
         $this->error('当前状态不允许删除！');
     }
     
-    public function test() 
+    public function _empty() 
     {
-        $File     = M('File');
-        $result   = $File->where('id=1')->find();
-        $result_1 = @unlink("./Uploads/" . $result['url']);
-        echo $result_1;
+        // $this->redirect('index');
+        dump(date('U'));
     }
 }

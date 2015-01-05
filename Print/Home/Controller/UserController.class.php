@@ -22,6 +22,7 @@
  * - forget()
  * - change()
  * - logout()
+ * - _empty()
  * Classes list:
  * - UserController extends Controller
  */
@@ -46,7 +47,7 @@ class UserController extends Controller
             $this->display();
         } else
         {
-            $this->redirect('Index/index','未登录！');
+            $this->redirect('Index/index', null,0,'未登录！');
         }
     }
     
@@ -133,7 +134,7 @@ class UserController extends Controller
                 if ($result) 
                 {
                     session('first_name', null);
-                    $this->success("密码修改成功！", U("File/add"));
+                    $this->redirect('File/add', null,0, '密码修改成功！');
                 } else
                 {
                     $this->error('密码修改失败！');
@@ -148,11 +149,11 @@ class UserController extends Controller
     //密码找回
     public function forget() 
     {
-        if(use_id())
+        if (use_id()) 
         {
             $this->redirect('index');
         }
-
+        
         $student_number = I('post.student_number');
         $urp_password   = I('post.urp_password');
         $password       = I('post.password');
@@ -164,11 +165,12 @@ class UserController extends Controller
             {
                 if ($password == $re_password) 
                 {
-
-                    if (false!==M('User')->where('student_number=' . $student_number)->setField('password', encode($password, $student_number))) 
+                    
+                    if (false !== M('User')->where('student_number=' . $student_number)->setField('password', encode($password, $student_number))) 
                     {
-                        $this->success("密码重置成功！", U("Index/index"));
-                    }else{
+                        $this->redirect('Index/index',0,0,"密码重置成功！");
+                    } else
+                    {
                         $this->error('重置失败！');
                     }
                 } else
@@ -207,14 +209,14 @@ class UserController extends Controller
                 {
                     $map['id']                     = $uid;
                     M('User')->where($map)->setField('password', encode($password, session('student_number')));
-                    $this->success("密码修改成功！");
+                    $this->redirect('logout'，null,0,'密码修改成功重新登陆！');
                 } else
                 {
-                    $this->error("两次密码输入不一致！");
+                    $this->error('两次密码输入不一致！');
                 }
             } else
             {
-                $this->error("原密码错误");
+                $this->error('原密码错误');
             }
         }
     }
@@ -228,5 +230,13 @@ class UserController extends Controller
         session(null);
         cookie(null);
         $this->redirect('Index/index');
+    }
+    
+    /**
+     *404页
+     */
+    public function _empty() 
+    {
+        $this->redirect('index');
     }
 }

@@ -16,11 +16,12 @@
  * Class and Function List:
  * Function list:
  * - index()
- * - change()
+ * - changePwd()
  * - logout()
  * - signup()
  * - add()
  * - auth()
+ * - _empty()
  * Classes list:
  * - PrinterController extends Controller
  */
@@ -42,8 +43,7 @@ class PrinterController extends Controller
         if ($id) 
         {
             
-            // $Printer    = M('Printer');
-            $data       = M('Printer')->getById($id);
+            $data       = M('Printer')->cache(true)->getById($id);
             $this->data = $data;
             $this->display();
         } else
@@ -69,12 +69,12 @@ class PrinterController extends Controller
         if ($id && $old_password && $password && $password == $re_password) 
         {
             $Printer      = M('Printer');
-            $pri          = $Printer->field('account,password')->getById($id);
+            $pri          = $Printer->field('account,password')->cache(true)->getById($id);
             if ($pri['password'] == encode($old_password, $pri['account'])) 
             {
-                if ($Printer->where('id=' . $id)->setField('password', encode($password, $pri['account'])) )
+                if ($Printer->where('id=' . $id)->cache(true)->setField('password', encode($password, $pri['account'])) !== fasle) 
                 {
-                    $this->success('修改成功');
+                    $this->success('修改成功', 1);
                 } else
                 {
                     $this->error($Printer->getError());
@@ -102,10 +102,10 @@ class PrinterController extends Controller
     
     //Still in plan
     /*
-                public function detail(){
-                    //ditail of file?
-                    $this->display();
-                }*/
+                   public function detail(){
+                       //ditail of file?
+                       $this->display();
+                   }*/
     
     //Not available now
     
@@ -138,7 +138,7 @@ class PrinterController extends Controller
         
         if ($Printer->create($data)) 
         {
-            $result  = $Printer->add();
+            $result  = $Printer->cache(true)->add();
             if ($result) 
             {
                 $this->redirect('logout', '', 1, '注册完成请登录');
@@ -157,7 +157,7 @@ class PrinterController extends Controller
         $Printer  = M('Printer');
         $account  = I('post.account');
         $password = encode(I('post.password'), $account);
-        $result   = $Printer->where('account="%s"', $account)->find();
+        $result   = $Printer->where('account="%s"', $account)->cache(true)->find();
         if ($result["password"] == $password) 
         {
             session('pri_id', $Printer->id);
@@ -168,6 +168,14 @@ class PrinterController extends Controller
         {
             $this->error('验证失败');
         }
+    }
+    
+    /**
+     *404页
+     */
+    public function _empty() 
+    {
+        $this->redirect('index');
     }
 }
 ?>

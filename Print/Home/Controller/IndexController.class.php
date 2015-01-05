@@ -38,13 +38,18 @@ class IndexController extends Controller
     public function feedback() 
     {
         $Form   = D('Feedback');
-        $_POST['message']        = $_POST['message'] . '##FromStudentID:' . use_id();
+        $msg=I('post.message');
+        if(!$msg)
+        {
+             $this->error('内容不能为空！');
+        }
+        $_POST['message']        = $msg . '##FromStudentID:' . use_id();
         if ($Form->create()) 
         {
             $result = $Form->add();
             if ($result) 
             {
-                $this->success('操作成功！');
+                $this->success('提交成功！');
             } else
             {
                 $this->error('操作错误！');
@@ -60,5 +65,12 @@ class IndexController extends Controller
         $list = $FD->select();
         $this->assign('list', $list);
         $this->display();
+    }
+     /**
+     *404页
+     */
+    public function _empty() 
+    {
+        $this->redirect('index');
     }
 }
