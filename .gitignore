@@ -43,12 +43,12 @@ local.properties
 
 # Build results
 
-[Dd]ebug/
-[Rr]elease/
-x64/
-build/
-[Bb]in/
-[Oo]bj/
+NKprint/[Dd]ebug/
+NKprint/[Rr]elease/
+NKprint/x64/
+NKprint/build/
+NKprint/[Bb]in/
+NKprint/[Oo]bj/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
