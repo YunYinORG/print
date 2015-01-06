@@ -13,8 +13,8 @@ body {
     background-color: transparent;
 }
 img {
-    opacity: 0.88;
-    filter: alpha(opacity=88);
+    opacity: 0.95;
+    filter: alpha(opacity=95);
     border-radius: 20px;
 }
 footer {
@@ -51,6 +51,9 @@ footer a {
      margin-left: 5%;
 }
 .alert-info {
+    color: #FF0000;
+    font-size: 18px;
+    font-weight:bold;
     background-color: transparent;
     border-color: transparent;
 }
