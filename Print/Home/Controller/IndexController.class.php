@@ -66,6 +66,15 @@ class IndexController extends Controller
         $this->assign('list', $list);
         $this->display();
     }
+
+    public function contact()
+    {
+        $this->display();
+    }
+    public function about()
+    {
+        $this->display();
+    }
      /**
      *404页
      */

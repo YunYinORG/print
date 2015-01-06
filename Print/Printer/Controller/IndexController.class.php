@@ -64,6 +64,14 @@ class IndexController extends Controller
 		}
 	}
 	
+	public function contact()
+    {
+        $this->display();
+    }
+    public function about()
+    {
+        $this->display();
+    }
 	/**
 	 *404页
 	 */
