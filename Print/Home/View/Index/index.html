@@ -25,10 +25,10 @@
                 </div>
                 </div>
             <ELSE/>
-            <form id="form1" name="form1" method="post" action="/User/auth">
+            <form id="form1" name="form1" method="post" action="/User/auth" onsubmit="return checkForm();">
                 <div class="myrow">
                     <div class="alert alert-info">
-                        <p align="center">目前仅对本科生开放，初始密码为当前教育在线密码，敬请期待研究生版</p>
+                        <p id="info" align="center">目前仅对南开大学学生开放，登录账号密码为南开大学URP系统账号密码</p>
                     </div>
                 </div>
                 <div class="row text-center">
@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-lg-2 col-md-1 col-sm-8">
                         <div class="input-group" id="login">
-                            <input type="submit" tabindex="3" class="form-control btn btn-success" value="登陆(注册)" title="初次密码为当前教育在线密码"/>
+                            <input id="submit-btn" type="submit" tabindex="3" class="form-control btn btn-success" value="登陆(注册)" title="初次密码为当前URP系统密码"/>
                         </div>
                     </div>
                 </div>
@@ -62,4 +62,22 @@
             </ul>
         </footer>
     </body>
+    <script language="javascript" type="text/javascript">
+    function checkForm()
+    {
+        var name = document.getElementById("name");
+        var btn = document.getElementById("submit-btn");
+        var re1 = /^[1][0-4]\d{5}$/;                 // undergraduate stu_num
+        var re2 = /^\d{2}[1-2][0|9][0|1|8|9]\d{5}$/; // graduate and P.H.D. stu_num
+        if(!re1.test(name.value) || !re2.test(name.value))
+        {
+            document.getElementById("info").innerHTML = "请输入格式正确的学号！";
+            name.focus();
+            return false;
+        }
+        btn.value = '正在验证中...';
+        btn.disabled = true;
+        return true;
+    }
+    </script>
 </html>
