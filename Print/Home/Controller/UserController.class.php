@@ -209,7 +209,7 @@ class UserController extends Controller
                 {
                     $map['id']                     = $uid;
                     M('User')->where($map)->setField('password', encode($password, session('student_number')));
-                    $this->redirect('logout'，null,0,'密码修改成功重新登陆！');
+                    $this->redirect('logout',null,0,'密码修改成功重新登陆！');
                 } else
                 {
                     $this->error('两次密码输入不一致！');
