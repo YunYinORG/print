@@ -1,0 +1,20 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+<loc>http://print.nkumstc.cn</loc>
+<priority>1.00</priority>
+<lastmod>2015-01-03</lastmod>
+<changefreq>weekly</changefreq>
+</url>
+<url>
+<loc>http://print.nkumstc.cn/Index/contact</loc>
+<priority>0.5</priority>
+<lastmod>2015-01-03</lastmod>
+<changefreq>monthly</changefreq>
+</url>
+<url>
+<loc>http://print.nkumstc.cn/Index/about</loc>
+<priority>0.5</priority>
+<lastmod>2015-01-03</lastmod>
+<changefreq>weekly</changefreq>
+</url>
+</urlset>

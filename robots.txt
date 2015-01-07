@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+Disallow: /Ptinter/
+Disallow: /api.php/
