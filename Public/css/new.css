@@ -1,13 +1,17 @@
 @charset"utf-8";
-body {
+html {
     background-image: url(../images/background.jpg);
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
     /*background-repeat: no-repeat;*/
-    /*background-attachment:fixed;*/
+    background-attachment: fixed;
 }
+body{
+      background-color: transparent;
+}
+
 .thumbnail {
     border: 1px hidden !important;
     background-color: transparent;
@@ -53,9 +57,9 @@ footer a {
 .alert-info {
     color: #FF0000;
     font-size: 18px;
-    font-weight:bold;
-    background-color: transparent;
-    border-color: transparent;
+    font-weight: bold;
+    /*background-color: transparent;*/
+    /*border-color: transparent;*/
 }
 #login>.btn {
     margin-top: 3.3px;
