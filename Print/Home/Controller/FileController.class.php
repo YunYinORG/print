@@ -144,7 +144,7 @@ class FileController extends Controller
                 if (delete_file("./Uploads/" . $url)) 
                 {
                     $data['status'] = 0;
-                    $data['url']    = null;
+                    $data['url']    = '';
                     $result    = $File->where($map)->cache(true)->save($data);
                     if ($result) 
                     {
@@ -165,7 +165,6 @@ class FileController extends Controller
     
     public function _empty() 
     {
-        // $this->redirect('index');
-        dump(date('U'));
+        $this->redirect('index');
     }
 }

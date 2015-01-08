@@ -27,10 +27,6 @@
             <label for='pri_id'>选择想去的打印店：</label>
             <div class="radio">
                 <label>
-                    <input type="radio" name="pri_id" value="1" />
-                天达印务<span class='text-primary'>[9：00——22：00]</span><small class='text-info'>(西门附近，22宿下)</small></label>
-                <br />
-                <label>
                     <input type="radio" name="pri_id" value="2" checked="checked"/>
                 光辉岁月<span class='text-primary'>[8：00——23：00]</span><small class='text-info'>(二食堂浴园旁)</small></label>
                 <br />
@@ -41,6 +37,10 @@
                 <label>
                     <input type="radio" name="pri_id" value="4"/>
                 快捷复印<span class='text-primary'>[8：00——22：00]</span><small class='text-info'>(南开出版社后)</small></label>
+                <br />
+                <label>
+                    <input type="radio" name="pri_id" value="1" />
+                天达印务<span class='text-primary'>[9：00——22：00]</span><small class='text-info'>(西门附近，22宿下)</small></label>
             </div>
         </div>
         <fieldset id='setting'>
@@ -51,12 +51,12 @@
             <div class="checkbox">
                 <label>
                     <input name="double_side" id='double_side' value="1" type="checkbox">双面打印<div id='price' class='price text-info'>单面:<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面:<span id='double'  class='text-danger'>1角每张</span>
-                    </div>
-                </label>
-            </div>
-        </fieldset>
-        <input type="submit" id="modaltrigger" class="flatbtn" value="开始传送">
-    </form>
+                </div>
+            </label>
+        </div>
+    </fieldset>
+    <input type="submit" id="modaltrigger" class="flatbtn" value="开始传送">
+</form>
 </div>
 </block>
 <block name='end'>
