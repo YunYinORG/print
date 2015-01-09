@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NKprint_login));
             this.panelLogin = new System.Windows.Forms.Panel();
+            this.labelWait = new System.Windows.Forms.Label();
+            this.checkRemember = new System.Windows.Forms.CheckBox();
             this.labelError = new System.Windows.Forms.Label();
             this.labelLogin = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -46,6 +48,8 @@
             // panelLogin
             // 
             this.panelLogin.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.panelLogin.Controls.Add(this.labelWait);
+            this.panelLogin.Controls.Add(this.checkRemember);
             this.panelLogin.Controls.Add(this.labelError);
             this.panelLogin.Controls.Add(this.labelLogin);
             this.panelLogin.Controls.Add(this.pictureBox1);
@@ -59,6 +63,31 @@
             this.panelLogin.Name = "panelLogin";
             this.panelLogin.Size = new System.Drawing.Size(541, 292);
             this.panelLogin.TabIndex = 1;
+            // 
+            // labelWait
+            // 
+            this.labelWait.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labelWait.ForeColor = System.Drawing.Color.Red;
+            this.labelWait.Location = new System.Drawing.Point(303, 250);
+            this.labelWait.Name = "labelWait";
+            this.labelWait.Size = new System.Drawing.Size(187, 23);
+            this.labelWait.TabIndex = 11;
+            this.labelWait.Text = "正在登陆请等待";
+            this.labelWait.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelWait.Visible = false;
+            // 
+            // checkRemember
+            // 
+            this.checkRemember.AutoSize = true;
+            this.checkRemember.Checked = true;
+            this.checkRemember.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkRemember.Font = new System.Drawing.Font("宋体", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.checkRemember.Location = new System.Drawing.Point(477, 163);
+            this.checkRemember.Name = "checkRemember";
+            this.checkRemember.Size = new System.Drawing.Size(64, 14);
+            this.checkRemember.TabIndex = 10;
+            this.checkRemember.Text = "记住密码";
+            this.checkRemember.UseVisualStyleBackColor = true;
             // 
             // labelError
             // 
@@ -108,7 +137,7 @@
             // 
             // printerPassword
             // 
-            this.printerPassword.Location = new System.Drawing.Point(372, 156);
+            this.printerPassword.Location = new System.Drawing.Point(358, 156);
             this.printerPassword.Name = "printerPassword";
             this.printerPassword.PasswordChar = '*';
             this.printerPassword.Size = new System.Drawing.Size(120, 21);
@@ -116,7 +145,7 @@
             // 
             // printerAccount
             // 
-            this.printerAccount.Location = new System.Drawing.Point(372, 107);
+            this.printerAccount.Location = new System.Drawing.Point(358, 107);
             this.printerAccount.Name = "printerAccount";
             this.printerAccount.Size = new System.Drawing.Size(120, 21);
             this.printerAccount.TabIndex = 4;
@@ -149,6 +178,7 @@
             this.buttonLogin.Name = "buttonLogin";
             this.buttonLogin.Size = new System.Drawing.Size(75, 23);
             this.buttonLogin.TabIndex = 0;
+            this.buttonLogin.Tag = "登陆";
             this.buttonLogin.Text = "登录";
             this.buttonLogin.UseVisualStyleBackColor = false;
             this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
@@ -159,6 +189,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(540, 289);
             this.Controls.Add(this.panelLogin);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "NKprint_login";
             this.Text = "云印南开登录窗";
@@ -182,6 +213,8 @@
         private System.Windows.Forms.Label labelLogin;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label labelError;
+        private System.Windows.Forms.CheckBox checkRemember;
+        private System.Windows.Forms.Label labelWait;
     }
 }
 

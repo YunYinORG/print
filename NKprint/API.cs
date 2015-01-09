@@ -14,12 +14,15 @@ namespace NKprint
 {
     class API
     {
-        private static string server_url = @"http://newfuture.sinaapp.com/api.php";
+        public static int myPage=1;
+        private static string server_url = @"http://nkuprint.sinaapp.com/api.php";
        
         // REST @GET 方法，根据泛型自动转换成实体，支持List<T>
         public static string doGetMethodToObj(string metodUrl)
         {
-            string down = server_url + @"/File/?token=" + metodUrl;
+            //get获取。/api.php/File/?page=2&token=....
+            string down = server_url + @"/File/?page="+myPage.ToString()+"&token=" + metodUrl;
+            //string down = server_url + @"/File/?token=" + metodUrl;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(down);
             request.Method = "get";
             request.ContentType = "application/json;charset=UTF-8";
@@ -34,6 +37,7 @@ namespace NKprint
                 MessageBox.Show(e.Message + " - " + getRestErrorMessage(response));
                 return default(string);
             }
+            myPage = myPage + 1;
             string json = getResponseString(response);
             return json;
         }
