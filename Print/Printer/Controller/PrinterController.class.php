@@ -155,10 +155,9 @@ class PrinterController extends Controller
     public function auth() 
     {
         $Printer  = M('Printer');
-        $account  = I('post.account', null, '/^(\w{3,28})$/');
+        $account  = I('post.account', null, '/^\w{3,28}$/');
         if(!$account)
         {
-            dump($account);
             $this->error('无效账号：'.I('post.account'));
         }
         $password = encode(I('post.password'), $account);
@@ -192,9 +191,7 @@ class PrinterController extends Controller
      */
     public function _empty() 
     {
-        dump(preg_match('/^(\w{3,28})$/',(string)'test'));
-        // dump($r);
- //       $this->redirect('index');
+       $this->redirect('index');
     }
 }
 ?>

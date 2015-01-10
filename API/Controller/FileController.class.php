@@ -62,8 +62,8 @@ class FileController extends RestController
 			if (!isset($data)) 
 			{
 				$where['status']           = array('gt', 0);
-				$start_id  = I('start', null, 'intval');
-				$page      = I('page', 1, 'intval');
+				$start_id  = I('start', null, 'int');
+				$page      = I('page', 1, 'int');
 				if ($start_id) 
 				{
 					$where['id']           = array('gt', $start_id);

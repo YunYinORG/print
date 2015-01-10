@@ -14,7 +14,7 @@
 /**
  * Class and Function List:
  * Function list:
- * - pri_id()
+ * - use_id()
  * Classes list:
  */
 
@@ -33,12 +33,15 @@ function use_id($redirect_url = null)
 		return $id;
 	} else
 	{
-		$token = cookie('token');
-		$info  = auth_token($token);
-		if ($info['type'] == C('USER')) 
+		$token = I('cookie.token', null, '/^\w{32,63}$/');
+		if ($token) 
 		{
-			session('use_id',$info['id']);
-			return $info['id'];
+			$info  = auth_token($token);
+			if ($info['type'] == C('STUDENT')) 
+			{
+				session('use_id', $info['id']);
+				return $info['id'];
+			}
 		}
 	}
 	

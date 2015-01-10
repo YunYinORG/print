@@ -77,7 +77,7 @@ class NotificationController extends RestController
 		{
 			
 			$where['oid']              = $info['oid'];
-			$where['id']              = I('id',0,'intval');
+			$where['id']              = I('id',0,'int');
 			
 			$Nofification = M('Nofification')->cache(true, 60)->where($where);
 			switch ($this->_method) 

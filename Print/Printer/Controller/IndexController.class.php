@@ -39,7 +39,6 @@ class IndexController extends Controller
 		} else
 		{
 			
-			// $this->redirect('Printer/Printer/signin');
 			$this->display();
 		}
 	}

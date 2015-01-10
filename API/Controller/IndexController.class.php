@@ -24,18 +24,11 @@ use Think\Controller\RestController;
 class IndexController extends RestController
 {
 	
-	protected $allowMethod = array(
-		
-		'post',
-		'delete',
-	);
+	protected $allowMethod = array('post', 'delete',);
 	protected $defaultType = 'json';
 	
 	// REST允许请求的资源类型列表
-	protected $allowType   = array(
-		'xml',
-		'json'
-	);
+	protected $allowType   = array('xml', 'json');
 	
 	/**
 	 *index
@@ -47,45 +40,61 @@ class IndexController extends RestController
 	public function index() 
 	{
 		$pwd         = I('post.pwd');
-		$type        = I('post.type');
+		$type        = I('post.type', null, 'int');
 		$Model       = null;
 		switch ($type) 
 		{
 		case C('STUDENT'):
-			$account    = I('post.number', 0, 'intval');
-			$Model       = M('user')->where("student_number='$account'");
-			
+			$account     = I('post.number', 0, '/^(\d{7}|\d{11})$/');
+			$Model       = M('user')->where("student_number='%d'", $account);			
 			break;
 
 		case C('PRINTER'):
-			$account = I('post.account', null);
-			$Model   = M('printer')->where("account='$account'");
+			$account = I('post.account', null, '/^\w{3,28}$/');
+			$Model   = M('printer')->where("account='%s'", $account);
 			break;
 
 		default:
-			$data['err']          = '未知类型';
+			$data['err']       = '未知类型';
 		}
 		
 		if (!isset($data)) 
 		{
-			$info     = $Model->field('id,password,name')->find();
-			$id       = $info['id'];
-			$password = $info['password'];
-			if ($password == encode($pwd,$account)) 
+			if ($account) 
 			{
-				$token    = update_token($id, $type);
-				if ($token) 
+				$key   = 'api_' . $account;
+				$times = S($key);
+				if ($times > C('MAX_TRIES')) 
 				{
-					$data['token']          = $token;
-					$data['name']=$info['name'];
-					$data['id']=$info['id'];
+					\Think\Log::record('api爆破警告：ip:' . get_client_ip() . ',account:' . $account, 'NOTIC', true);
+					$data['err'] = '此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（ps:你的行为已被系统记录）';
 				} else
 				{
-					$data['err']          = '创建令牌失败';
+					S($key, $times + 1, 3600);
+					$info     = $Model->field('id,password,name')->find();
+					$id       = $info['id'];
+					$password = $info['password'];
+					if ($password == encode($pwd, $account)) 
+					{
+						$token    = update_token($id, $type);
+						if ($token) 
+						{
+							S($key, null);
+							$data['token'] = $token;
+							$data['name'] = $info['name'];
+							$data['id'] = $info['id'];
+						} else
+						{
+							$data['err'] = '创建令牌失败';
+						}
+					} else
+					{
+						$data['err'] = '验证失败';
+					}
 				}
 			} else
 			{
-				$data['err']          = '验证失败';
+				$data['err'] == '账号格式错误!';
 			}
 		}
 		$this->response($data, (($this->_type == 'xml') ? 'xml' : 'json'));
@@ -100,7 +109,7 @@ class IndexController extends RestController
 	 */
 	public function token() 
 	{
-		$token = I('token');
+		$token = I('token', null, '/^\w{32,63}$/');
 		switch ($this->_method) 
 		{
 		case 'delete':
@@ -118,10 +127,5 @@ class IndexController extends RestController
 			break;
 		}
 		$this->response($data, (($this->_type == 'xml') ? 'xml' : 'json'));
-	}
-
-	public function t()
-	{
-		echo $this->_type;
 	}
 }

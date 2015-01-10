@@ -71,7 +71,7 @@ class FileController extends Controller
 			$map['status']            = array('between', '1,4');
 			$File       = D('FileView');
 			$cache_key  = cache_name('printer', $pid);
-			$this->data = $File->where($map)->order('file.id desc')->limit(10)->cache($cache_key, 10)->select();
+			$this->data = $File->where($map)->order('file.id desc')->limit(10)->select();
 			$this->display();
 		}
 	}

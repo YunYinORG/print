@@ -33,11 +33,15 @@ function pri_id($redirect_url = null)
 		return $id;
 	} else
 	{
-		$token = cookie('token');
-		$info  = auth_token($token);
-		if ($info['type'] == C('PRINTER_WEB')) 
+		$token = I('cookie.token', null, '/^\w{32,63}$/');
+		if ($token) 
 		{
-			return $info['id'];
+			$info  = auth_token($token);
+			if ($info['type'] == C('PRINTER_WEB')) 
+			{
+				 session('pri_id',$info['id']);
+				return $info['id'];
+			}
 		}
 	}
 	
