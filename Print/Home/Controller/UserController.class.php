@@ -37,17 +37,18 @@ class UserController extends Controller
      */
     public function index() 
     {
-        $id   = Use_id(U('Index/index'));
+        $id         = Use_id(U('Index/index'));
         if ($id) 
         {
-            $User = M('User');
-            $data = $User->where("id=" . $id)->find();
-            session('student_number', $data['student_number']);
+            $User       = M('User');
+            $data       = $User->where("id=" . $id)->find();
+            
+            // session('student_number', $data['student_number']);
             $this->data = $data;
             $this->display();
         } else
         {
-            $this->redirect('Index/index', null,0,'未登录！');
+            $this->redirect('Index/index', null, 0, '未登录！');
         }
     }
     
@@ -60,9 +61,25 @@ class UserController extends Controller
     public function auth() 
     {
         $User           = D('User');
-        $student_number = I('post.student_number');
-        $password       = encode(I('post.password'), $student_number);
-        $result         = $User->where("student_number='$student_number'")->find();
+        $student_number = I('post.student_number', null, '/^(\d{7}|\d{11})$/');
+        if ($student_number) 
+        {
+            $key            = 'auth_' . $student_number;
+            $times          = S($key);
+            if ($times > C('MAX_TRIES')) 
+            {
+                \Think\Log::record('auth爆破警告：ip:' . get_client_ip() . ',number:' . $student_number, 'NOTIC', true);
+                $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（ps:你的行为已被系统记录）','/Index/index',5);
+            } else
+            {
+                S($key, $times + 1, 3600);
+            }
+        } else
+        {
+            $this->error('学号格式错误！');
+        }
+        $password = encode(I('post.password'), $student_number);
+        $result   = $User->where("student_number='$student_number'")->find();
         if ($result) 
         {
             if ($result['password'] == $password) 
@@ -70,7 +87,8 @@ class UserController extends Controller
                 session('use_id', $User->id);
                 $token = update_token($User->id, C('STUDENT'));
                 cookie('token', $token, 3600 * 24 * 30);
-                $this->redirect('File/index');
+                S($key, null);
+                $this->redirect('/File/index');
             } else
             {
                 $this->error('密码验证错误！');
@@ -92,7 +110,7 @@ class UserController extends Controller
                         session('use_id', $result);
                         session('student_number', $student_number);
                         session('first_name', $name);
-                        
+                        S($key, null);
                         $this->redirect('User/notice');
                     } else
                     {
@@ -134,7 +152,7 @@ class UserController extends Controller
                 if ($result) 
                 {
                     session('first_name', null);
-                    $this->redirect('File/add', null,0, '密码修改成功！');
+                    $this->redirect('File/add', null, 0, '密码修改成功！');
                 } else
                 {
                     $this->error('密码修改失败！');
@@ -154,10 +172,27 @@ class UserController extends Controller
             $this->redirect('index');
         }
         
-        $student_number = I('post.student_number');
-        $urp_password   = I('post.urp_password');
-        $password       = I('post.password');
-        $re_password    = I('post.re_password');
+        $student_number = I('post.student_number', '/^(\d{7}|\d{11})$/');
+        if ($student_number) 
+        {
+            $key            = 'auth_' . $student_number;
+            $times          = S($key);
+            if ($times > C('MAX_TRIES')) 
+            {
+                \Think\Log::record('forget爆破警告：ip:' . get_client_ip() . ',number:' . $student_number, 'NOTIC', true);
+                $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（提示：你的行为已被系统记录）');
+            } else
+            {
+                S($key, $times + 1, 3600);
+            }
+        } else
+        {
+            $this->error('学号格式错误！');
+        }
+        
+        $urp_password = I('post.urp_password');
+        $password     = I('post.password');
+        $re_password  = I('post.re_password');
         if ($password && $re_password && $student_number && $urp_password) 
         {
             import(C('VERIFY_WAY'), COMMON_PATH);
@@ -168,7 +203,8 @@ class UserController extends Controller
                     
                     if (false !== M('User')->where('student_number=' . $student_number)->setField('password', encode($password, $student_number))) 
                     {
-                        $this->redirect('Index/index',0,0,"密码重置成功！");
+                        S($key, null);
+                        $this->redirect('Index/index', null, 0, "密码重置成功！");
                     } else
                     {
                         $this->error('重置失败！');
@@ -209,7 +245,7 @@ class UserController extends Controller
                 {
                     $map['id']                     = $uid;
                     M('User')->where($map)->setField('password', encode($password, session('student_number')));
-                    $this->redirect('logout',null,0,'密码修改成功重新登陆！');
+                    $this->redirect('logout', null, 0, '密码修改成功重新登陆！');
                 } else
                 {
                     $this->error('两次密码输入不一致！');

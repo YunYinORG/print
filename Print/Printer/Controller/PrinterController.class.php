@@ -97,15 +97,15 @@ class PrinterController extends Controller
         delete_token(cookie('token'));
         session(null);
         cookie(null);
-        $this->redirect('Index/index');
+        $this->redirect('Printer/Index/index');
     }
     
     //Still in plan
     /*
-                   public function detail(){
-                       //ditail of file?
-                       $this->display();
-                   }*/
+                                        public function detail(){
+                                            //ditail of file?
+                                            $this->display();
+                                        }*/
     
     //Not available now
     
@@ -155,19 +155,36 @@ class PrinterController extends Controller
     public function auth() 
     {
         $Printer  = M('Printer');
-        $account  = I('post.account');
-        $password = encode(I('post.password'), $account);
-        $result   = $Printer->where('account="%s"', $account)->cache(true)->find();
-        if ($result["password"] == $password) 
+        $account  = I('post.account', null, '/^(\w{3,28})$/');
+        if(!$account)
         {
-            session('pri_id', $Printer->id);
-            $token = update_token($Printer->id, C('PRINTER_WEB'));
-            cookie('token', $token, 3600 * 24 * 30);
-            $this->redirect('Printer/File/index');
-        } else
-        {
-            $this->error('验证失败');
+            dump($account);
+            $this->error('无效账号：'.I('post.account'));
         }
+        $password = encode(I('post.password'), $account);
+        $result   = $Printer->where('account="%s"', $account)->find();
+        if ($result) 
+        {
+            $key      = 'auth_p_' . $account;
+            $times    = S($key);
+            if ($times > C('MAX_TRIES')) 
+            {
+                \Think\Log::record('打印店爆破警告：ip:' . get_client_ip() . ',account:' . $account, 'NOTIC', true);
+                $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（ps:你的行为已被系统记录）');
+            } elseif ($result["password"] == $password) 
+            {
+                session('pri_id', $Printer->id);
+                $token = update_token($Printer->id, C('PRINTER_WEB'));
+                cookie('token', $token, 3600 * 24 * 30);
+                S($key, null);
+                $this->redirect('Printer/File/index');
+                return;
+            } else
+            {
+                S($key, $times + 1, 3600);
+            }
+        }
+        $this->error('验证失败');
     }
     
     /**
@@ -175,7 +192,9 @@ class PrinterController extends Controller
      */
     public function _empty() 
     {
-        $this->redirect('index');
+        dump(preg_match('/^(\w{3,28})$/',(string)'test'));
+        // dump($r);
+ //       $this->redirect('index');
     }
 }
 ?>

@@ -69,13 +69,14 @@ class FileController extends Controller
     
     public function upload() 
     {
-        $uid              = use_id(U('Index/index'));
-
+    	/* 设置内部字符编码为 UTF-8 */
+    	mb_internal_encoding("UTF-8");
+        $uid              = use_id(U('/Index/index'));
         if ($uid) 
         {
             $sid=M('User')->cache(true)->getFieldById($uid,'student_number');
-            $copies=I('post.copies');
-            $double=I('post.double_side');
+            $copies=I('post.copies',0,'int');
+            $double=I('post.double_side',0,'int');
             $filename=($double+1).'X'.$copies.'_['.$sid.']_'.date('Y-m-d_H-i_U');
            
             $upload           = new \Think\Upload();
@@ -92,9 +93,14 @@ class FileController extends Controller
             {
                 foreach ($info as $file) 
                 {
-                    $data['name']                      = $file['name'];
-                    $data['pri_id']                    = I('post.pri_id');
-                    $data['requirements']              = I('post.requirements');
+                	$name=$file['name'];
+                	if(mb_strlen($name)>62)
+                	{
+                		$name=mb_substr($name,0,58).'.'.$file['ext'];
+                	}
+                    $data['name']                      = $name;
+                    $data['pri_id']                    = I('post.pri_id',0,'int');
+                    // $data['requirements']              = I('post.requirements');
                     $data['url']                      = $file['savepath'] . $file['savename'];
                     $data['status']                      = 1;
                     $data['use_id']                      = $uid;
@@ -131,7 +137,7 @@ class FileController extends Controller
     public function delete() 
     {
         $uid          = use_id(U('Index/index'));
-        $fid          = I('fid', null, 'intval');
+        $fid          = I('fid', null, 'int');
         if ($uid && $fid) 
         {
             $map['id']              = $fid;
