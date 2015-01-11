@@ -185,7 +185,7 @@ namespace NKprint
             Console.WriteLine(myJsFile);
 #endif
             
-            JObject jo = JObject.Parse(myJsFile); 
+            JObject jo = JObject.Parse(myJsFile);
             JArray ja = jo["files"] as JArray;
             //将JArray类型的ja转化为ToMyJohn对象数组 
             if (ja == null)
@@ -195,7 +195,7 @@ namespace NKprint
             else
             {
                 addJson(ja);
-                bool myAdd = (ja.Count == 20);
+                bool myAdd = (ja.Count == 10);
                 while (myAdd)
                 {
                     myJsFile = API.doGetMethodToObj(downloadToken);
@@ -205,7 +205,7 @@ namespace NKprint
                     {
                         addJson(ja);
                     }
-                    if (ja.Count < 20)
+                    if (ja.Count < 10)
                         myAdd = false;
                     else
                         myAdd = true;
@@ -568,7 +568,7 @@ namespace NKprint
             myRefresh();
             //运行下载线程
             threadDownload();
-            //remember.WriteJsonToTextFile(jsonList,"json.sjc");
+            remember.WriteJsonToTextFile(jsonList,"json.sjc");
             //把jsonList写入到txt中
         }
 
