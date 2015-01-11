@@ -3,7 +3,7 @@
     <if condition="$vo.status eq 1">
     <td><a target='_blank' class="set" fid='{$vo.id}' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
     <else />
-    <td><a target='_blank' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
+    <td><a target='_blank' href="__UPLOAD__/{$vo.url}">[{$vo.id}]{$vo.name}</a></td>
     </if>
     <td>
         <if condition="$vo.copies gt 0">

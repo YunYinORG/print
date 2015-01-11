@@ -68,7 +68,9 @@ class FileController extends RestController
 				{
 					$where['id']           = array('gt', $start_id);
 				}
-				$cache_key = cache_name('printer', $info['id']);
+				$cache_key = false;
+				
+				// cache_name('printer', $info['id']);
 				$data['files']           = D('FileView')->where($where)->page($page, 10)->cache($cache_key, 10)->select();
 			}
 		} else
@@ -92,7 +94,7 @@ class FileController extends RestController
 	public function id($value = '') 
 	{
 		$info  = auth();
-		if ($info) 
+		if (!$info) 
 		{
 			$data['err']       = '认证失败';
 		} else
@@ -103,27 +105,28 @@ class FileController extends RestController
 				//打印店客户端操作
 				$where['pri_id']       = $info['id'];
 				$where['id']       = I('get.id', null, 'intval');
-				$where['status']       = array('between', '1,4');
 				$File  = M('File');
-				$file  = $File->where($where)->cache(true)->find();
-				if ($file) 
+				
+				switch ($this->_method) 
 				{
-					$data['err']       = '文件已删除或者已付款！';
-				} else
-				{
-					switch ($this->_method) 
-					{
-					case 'get':
-						
-						//获取文件信息
-						$data  = $File;
-						break;
+				case 'get':
+					
+					//获取文件信息
+					$data  = $File->where($where)->cache(false)->find();
+					break;
 
-					case 'put':
-					case 'post':
-						
-						//修改文件状态
-						//对于不支持put的操作暂用post代替
+				case 'put':
+				case 'post':
+					
+					//修改文件状态
+					//对于不支持put的操作暂用post代替
+					$where['status']             = array('between', '1,4');
+					$file        = $File->where($where)->field('status,id')->cache(false)->find();
+					if (!$file) 
+					{
+						$data['err']             = '文件已删除或者已付款！';
+					} else
+					{
 						$status      = I('status');
 						switch ($status) 
 						{
@@ -162,7 +165,7 @@ class FileController extends RestController
 							if ($status_code <= $file['status']) 
 							{
 								$data['err'] = '不允许逆向设置！';
-							} elseif ($File->where('id="%d"', $file['id'])->cache(true)->setField('status', $status_code)) 
+							} elseif ($File->where('id="%d"', $file['id'])->cache(false)->setField('status', $status_code)) 
 							{
 								$data['msg'] = '修改完成！';
 								
@@ -174,13 +177,13 @@ class FileController extends RestController
 								$data['err'] = '修改失败';
 							}
 						}
-						break;
-
-					default:
-						
-						$data['err'] = '不支持操作！';
-						break;
 					}
+					break;
+
+				default:
+					
+					$data['err'] = '不支持操作！';
+					break;
 				}
 			} else
 			{
