@@ -75,6 +75,11 @@ class IndexController extends Controller
     {
         $this->display();
     }
+
+    public function privacy()
+    {
+        $this->display();
+    }
      /**
      *404页
      */

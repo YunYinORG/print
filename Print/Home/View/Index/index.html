@@ -12,7 +12,11 @@
         <link  href="__PUBLIC__/css/new.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <main class="container">
+    <div class="text-center">
+          <h1 class="text-primary">云印南开<small>—南开云打印平台</small></h1>
+        <p><span class="label label-primary">无需“忧”盘</span> <span class="label label-info">提前打印</span> <span class="label label-success">状态可查</span> <span class="label label-warning">地点自选</span> <span class="label label-danger">明码标价</span></p>
+        </div>
+        <main class="container">          
             <div class="col-lg-12">
                 <div class='thumbnail'>
                     <img src="__PUBLIC__/images/map.jpg" class="img-responsive">
@@ -30,7 +34,7 @@
             <form class="col-lg-12" id="form1" name="form1" method="post" action="/User/auth" onsubmit="return checkForm();">
                 <div class="myrow">
                     <div class="alert alert-info">
-                        <p id="info" align="center">目前仅对南开大学学生开放，初次使用南开大学URP系统账号密码登录即完成注册</p>
+                        <p id="info" align="center">目前仅对南开大学<strong>学生</strong>开放，初次使用南开大学URP系统账号密码登录即完成注册</p>
                     </div>
                 </div>
                 <div class="row text-center">
@@ -57,7 +61,7 @@
         </main>
         <footer class='copyright text-center'>
             <ul class="list-inline">
-                <li> <a href="/">&copy;云印南开</a></li>
+                <li> <a href="/Index/privacy">隐私声明</a></li>
                 <li> <a href="/User/forget">找回密码</a></li>
                 <li><a href="/Printer/">打印店</a></li>
                 <li><a href="https://github.com/nkumstc/print">开源项目</a></li>
