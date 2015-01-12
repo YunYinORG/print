@@ -41,7 +41,7 @@ class UserController extends Controller
         if ($id) 
         {
             $User       = M('User');
-            $data       = $User->where("id=" . $id)->find();
+            $data       = $User->where("id=%d" , $id)->find();
             
             // session('student_number', $data['student_number']);
             $this->data = $data;
@@ -229,22 +229,17 @@ class UserController extends Controller
     public function change() 
     {
         $uid                 = use_id(U('Index/index'));
+        $user=M('User')->field('student_number,password')->getById($uid);
         $deprecated_password = I('post.deprecated_password');
         $password            = I('post.password');
         $re_password         = I('post.re_password');
-        if ($uid) 
+        if ($user&&$deprecated_password&&$password) 
         {
-            $condition['id']                     = $uid;
-            $condition['password']                     = encode($deprecated_password, session('student_number'));
-            $condition['student_number']                     = session('student_number');
-            $User                = D('User');
-            $result              = $User->where($condition)->select();
-            if ($result) 
+            if ($user['password']==encode($deprecated_password,$user['student_number'])) 
             {
                 if ($password == $re_password) 
                 {
-                    $map['id']                     = $uid;
-                    M('User')->where($map)->setField('password', encode($password, session('student_number')));
+                    M('User')->where('id=%d',$uid)->setField('password', encode($password,$user['student_number']));
                     $this->redirect('logout', null, 0, '密码修改成功重新登陆！');
                 } else
                 {
@@ -255,6 +250,7 @@ class UserController extends Controller
                 $this->error('原密码错误');
             }
         }
+        $this->error('验证失败！');
     }
     
     /**
