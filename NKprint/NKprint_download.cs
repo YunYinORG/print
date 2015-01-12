@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using System.Threading;
@@ -16,7 +17,7 @@ namespace NKprint
         List<ToJsonMy> jsonList = new List<ToJsonMy>();  //json文件列表
         List<ToJsonMy> tempList = new List<ToJsonMy>();  //json文件列表
         //下载文件的url
-        private static string download_url = @"http://nkuprint-uploads.stor.sinaapp.com/";
+        private static string download_url =Program.downloadUrl;
         public static string studentNum;
         //定义用来存储已操作的文件 
         //static ArrayList myDown = new ArrayList();
@@ -104,7 +105,7 @@ namespace NKprint
                         else
                         {
                             filename = jsonList[i].id + "_" + jsonList[i].copies + "份" + "_" + (jsonList[i].double_side == "0" ? "单面" : "双面") + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
-                            fileDownload(jsonList[i].url, filename, i);
+                            fileDownload(jsonList[i].url, filename, jsonList[i].id);
                             MessageBox.Show("正在下载输入id对应的文件！\n等待会儿再打开");
                         }
                         break;
@@ -118,65 +119,43 @@ namespace NKprint
         //jsonList中添加数据
         public void addJson(JArray ja)
         {
+            bool flag = true;
             int i = 0;//用于遍历的
             //int a=jsonList.Count;
             for (i = 0; i < ja.Count; i++)//遍历ja数组
             {
-                
-                if(int.Parse(maxId)>0)
+                foreach (var item in jsonList)
                 {
-                    if (int.Parse(maxId) < int.Parse(ja[i]["id"].ToString()))
+                    if (item.id==ja[i]["id"].ToString())
                     {
-                            
-                            ToJsonMy myJs = new ToJsonMy();
-                            myJs.id = ja[i]["id"].ToString();
-                            myJs.name = ja[i]["name"].ToString();
-                            myJs.use_id = ja[i]["use_id"].ToString();
-                            myJs.pri_id = ja[i]["pri_id"].ToString();
-                            myJs.url = ja[i]["url"].ToString();
-                            myJs.time = ja[i]["time"].ToString();
-                            myJs.name = ja[i]["name"].ToString();
-                            myJs.status = ja[i]["status"].ToString();
-                            myJs.copies = ja[i]["copies"].ToString();
-                            myJs.use_name = ja[i]["use_name"].ToString();
-                            myJs.double_side = ja[i]["double_side"].ToString();
-                            myJs.student_number = ja[i]["student_number"].ToString();
-                            //如果已经付款则没有意义，不添加到jsonList 中
-                            if (myJs.status != "5")
-                            {
-                                jsonList.Add(myJs);
-                            }
+                        flag = false;
+                        break;
                     }
-               }
-                else
-                {
-                           ToJsonMy myJs = new ToJsonMy();
-                            myJs.id = ja[i]["id"].ToString();
-                            myJs.name = ja[i]["name"].ToString();
-                            myJs.use_id = ja[i]["use_id"].ToString();
-                            myJs.pri_id = ja[i]["pri_id"].ToString();
-                            myJs.url = ja[i]["url"].ToString();
-                            myJs.time = ja[i]["time"].ToString();
-                            myJs.name = ja[i]["name"].ToString();
-                            myJs.status = ja[i]["status"].ToString();
-                            myJs.copies = ja[i]["copies"].ToString();
-                            myJs.use_name = ja[i]["use_name"].ToString();
-                            myJs.double_side = ja[i]["double_side"].ToString();
-                            myJs.student_number = ja[i]["student_number"].ToString();
-                            //如果已经付款则没有意义，不添加到jsonList 中
-                            if (myJs.status != "5")
-                            {
-                                jsonList.Add(myJs);
-                            }
-                
                 }
-                
-            }
+                if (flag == true)
+                {
+                    ToJsonMy myJs = new ToJsonMy();
+                    myJs.id = ja[i]["id"].ToString();
+                    myJs.name = ja[i]["name"].ToString();
+                    myJs.use_id = ja[i]["use_id"].ToString();
+                    myJs.pri_id = ja[i]["pri_id"].ToString();
+                    myJs.url = ja[i]["url"].ToString();
+                    myJs.time = ja[i]["time"].ToString();
+                    myJs.name = ja[i]["name"].ToString();
+                    myJs.status = ja[i]["status"].ToString();
+                    myJs.copies = ja[i]["copies"].ToString();
+                    myJs.use_name = ja[i]["use_name"].ToString();
+                    myJs.double_side = ja[i]["double_side"].ToString();
+                    myJs.student_number = ja[i]["student_number"].ToString();
+                    jsonList.Add(myJs);
+                }
+                            
+             }
         }
         //刷新下载列表函数
         public void  myRefresh()
         {
-            jsonList = remember.ReadJsonFileToList("json.sjc");
+            //jsonList = remember.ReadJsonFileToList("json.sjc");
             //将API中的static赋值1；myPage是在json下载时的页码，每次重新访问的时候要置为1；
             API.myPage = 1;
             //得到json格式的文件列表
@@ -185,7 +164,7 @@ namespace NKprint
             Console.WriteLine(myJsFile);
 #endif
             
-            JObject jo = JObject.Parse(myJsFile);
+            JObject jo = JObject.Parse(myJsFile); 
             JArray ja = jo["files"] as JArray;
             //将JArray类型的ja转化为ToMyJohn对象数组 
             if (ja == null)
@@ -211,11 +190,11 @@ namespace NKprint
                         myAdd = true;
                 }
             }
-            if (jsonList.Count > 0)
-                maxId = jsonList[jsonList.Count - 1].id;
-            else
-                maxId = "0";
-            remember.WriteStringToTextFile(maxId,"maxId.sjc");
+            //if (jsonList.Count > 0)
+            //    maxId = jsonList[jsonList.Count - 1].id;
+            //else
+            //    maxId = "0";
+            //remember.WriteStringToTextFile(maxId,"maxId.sjc");
             //每次json获取完成，  
             //已经将得到的文件列表保存到类型（list<yoJsonMy>）jsonList中
             //显示所得到的的文件列表，而且要显示的是状态
@@ -226,10 +205,6 @@ namespace NKprint
             {
                 if (jsonList[i].status != "5")
                 {
-                    //{
-                    //    this.myData.Rows.Clear();
-                    //}
-                    //判断列表中的值来显示文件信息
                     id1 = jsonList[i].id;
                     userName1 = jsonList[i].student_number + jsonList[i].use_name;
                     fileName1 = jsonList[i].name;
@@ -292,7 +267,7 @@ namespace NKprint
                         else
                             sides = "双面";
                         filename = jsonList[i].id + "_" + jsonList[i].copies + "份" + "_" + sides + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
-                        fileDownload(downurl, filename, i);
+                        fileDownload(downurl, filename, jsonList[i].id);
                     }
                 }
             });
@@ -301,6 +276,7 @@ namespace NKprint
         //窗体关闭事件退出当前登陆，退出应用程序
         private void NKprint_download_FormClosed(object sender, FormClosedEventArgs e)
         {
+            remember.WriteJsonToTextFile(jsonList, "json.sjc");
             this.Close();
             this.DialogResult = DialogResult.OK;
             Application.Exit();
@@ -308,26 +284,27 @@ namespace NKprint
         //点击状态列，修改当前的文件状态,并post 到服务器
         private void myData_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if ((e.ColumnIndex + 1)==6)
+            if (((e.ColumnIndex + 1)==6)&&(e.RowIndex>-1))
             {
+                string id = myData.Rows[e.RowIndex].Cells[0].Value.ToString();
                 //用switch
                 switch (myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString())
                 {
                     case "已下载":
-                        changeStatusById(e.RowIndex, "printing");
+                        changeStatusById(id, "printing");
                         myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "正打印";
                         //myPrinting.Add(myData.Rows[e.RowIndex].Cells[0].Value);
                         
                         break;
                     case "正打印":
-                        changeStatusById(e.RowIndex, "printed");
+                        changeStatusById(id, "printed");
                         myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "已打印";
                         //myPrinted.Add(myData.Rows[e.RowIndex].Cells[0].Value);
                         
                         break;
                     case "已打印":
                         //要不要加判断用来确认是否post成功
-                        changeStatusById(e.RowIndex, "payed");
+                        changeStatusById(id, "payed");
                         myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "已支付";
                         //myData.Rows[e.RowIndex].Visible = false;
                         //myPay.Add(myData.Rows[e.RowIndex].Cells[0].Value);
@@ -342,7 +319,7 @@ namespace NKprint
             //MessageBox.Show("单元格的内容是：" + myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
         }
         //下载从服务器得到的json数据中的用户打印文件
-        public bool fileDownload(string url, string fileName, int i)
+        public bool fileDownload(string url, string fileName, string id)
         {
             //下载文件地址等于服务器地址加上文件地址
             url = download_url + url;
@@ -359,7 +336,7 @@ namespace NKprint
             webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(webClient_DownloadFileCompleted);
             try
             {
-                webClient.DownloadFileAsync(new Uri(url), pathDoc, i);
+                webClient.DownloadFileAsync(new Uri(url), pathDoc, id);
             }
             catch
             {
@@ -371,92 +348,64 @@ namespace NKprint
         //webClient下载完成后相应的事件，下载完成后，调用改变状态函数
         void webClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            int i = int.Parse(e.UserState.ToString());
+            string id = (e.UserState.ToString());
+            int i=0;
+            for (int j = 0; j < myData.RowCount; j++)
+            {
+                if (myData.Rows[j].Cells[0].Value == id)
+                {
+                    i = j;
+                    break;
+                }
+            }
             if (e.Error != null)//下载失败怎么办
             {
                 myData.Rows[i].Cells[5].Value = "下载失败";
-                MessageBox.Show("id="+myData.Rows[i].Cells[0].Value + "  " + e.Error.Message);   //正常捕获
+                MessageBox.Show("id="+id + "  " + e.Error.Message);   //正常捕获
                 myData.Rows[i].ErrorText = "文件不存在！";
             }
             else
             {
-                changeStatusByi(i, "download");
+                changeStatusById(id, "download");
             }
         }
-        public void changeStatusByi(int i, string currentStatus)
-        {
-            bool down, printing, printed, pay;
-            down = myData.Rows[i].Cells[5].Value.Equals( "已下载");
-            printing = myData.Rows[i].Cells[5].Value.Equals( "正打印");
-            printed = myData.Rows[i].Cells[5].Value.Equals( "已打印");
-            pay = myData.Rows[i].Cells[5].Value.Equals("已支付");
-            //bool flag=!down&&!printed!printing&&!pay;
-            if (!down&&!printing&&!printed&&!pay)
-            {
-                if (currentStatus == "download")
-                    myData.Rows[i].Cells[5].Value = "已下载";
-                //put到服务器状态;/api.php/File/1234?token=xxxxxxxxxxxx 
-                //将下载完成的文件id添加到下载完成myDown （ArrayList）中      
-                //参数： status=>文件状态'uploud','download','printing','printed','payed', 返回操作结果
-                string putUrl = @"/File/" + myData.Rows[i].Cells[0].Value + "?token=" + downloadToken;
-                string putPara = "status=" + currentStatus;
-                string resualt = API.PostWebRequest(putUrl, putPara, new UTF8Encoding());
-                Console.WriteLine(resualt);
-                if (resualt.Contains("msg"))
-                {
-                    for (int j = 0; j < jsonList.Count; j++)
-                    {
-                        if (jsonList[j].id == myData.Rows[i].Cells[0].Value.ToString())
-                        {
-                            //Status = currentStatus;
-                            //string a = Status;
-                            jsonList[j].status = getStatus(currentStatus);
-                            //remember.WriteJsonToTextFile(jsonList, "json.sjc");
-                            break;
-                        }
-                    }
-
-                }
-                //remember.WriteJsonToTextFile(jsonList,"json.sjc");
-            }
-        }
-        //
-        public void changeStatusById(int i, string currentStatus)
+    
+        public void changeStatusById(string id, string currentStatus)
         {
             //put到服务器状态;/api.php/File/1234?token=xxxxxxxxxxxx 
             //将下载完成的文件id添加到下载完成myDown （ArrayList）中
-
+            int i = 0;
+            for (int j = 0; j < myData.RowCount; j++)
+            {
+                if (myData.Rows[j].Cells[0].Value == id)
+                {
+                    i = j;
+                    break;
+                }
+            }
+            if (myData.Rows[i].Cells[5].Value=="未下载")
+            {
+                myData.Rows[i].Cells[5].Value = "已下载";
+            }
             //参数： status=>文件状态'uploud','download','printing','printed','payed', 返回操作结果
-            string putUrl = @"/File/" + myData.Rows[i].Cells[0].Value + "?token=" + downloadToken;
+            string putUrl = @"/File/" + id + "?token=" + downloadToken;
             string putPara = "status=" + currentStatus;
             string resualt = API.PostWebRequest(putUrl, putPara, new UTF8Encoding());
             //Console.WriteLine(out1);
             //添加事件
-            if (resualt.Contains("msg"))
+           if (resualt.Contains("msg"))
             {
-                //foreach (var item in jsonList)
-                //{
-                    
-                //    if (item.id == myData.Rows[i].Cells[0].Value)
-                //    {
-                //        item.status = Status;
-                //    }
-                //}
                 for (int j = 0; j < jsonList.Count; j++)
                 {
                     if(jsonList[j].id==myData.Rows[i].Cells[0].Value.ToString())
                     {
-                        //Status = currentStatus;
-                        //string a = Status;
                         jsonList[j].status = getStatus(currentStatus);
                         //remember.WriteJsonToTextFile(jsonList, "json.sjc");
                         break;
                     }
                 }
-                
             }
         }
-
         public string getStatus(string stat)
         {
             switch (stat)
@@ -559,22 +508,54 @@ namespace NKprint
                 File.Create("json.sjc");
             }
             ////把最新的jsonList写入到txt中
-            remember.WriteJsonToTextFile(jsonList, "json.sjc");
+            //remember.WriteJsonToTextFile(jsonList, "json.sjc");
             //每次运行的时候清空datagridview中的数据
             emputyData();
             //将之前的jsonList数组清空
-            jsonList.Clear();
+            //jsonList.Clear();
             //刷新一次数据
             myRefresh();
             //运行下载线程
             threadDownload();
-            remember.WriteJsonToTextFile(jsonList,"json.sjc");
+            
             //把jsonList写入到txt中
         }
 
         private void toolTip1_Popup(object sender, PopupEventArgs e)
         {
+            
+        }
 
+        private void 测试jsonLINQToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            /*var jsonMy1 = from json in jsonList
+                          where json.id == "17"
+                          select json;
+            foreach (var my1 in jsonMy1)
+            {
+                MessageBox.Show(my1.id + my1.name+my1.time);
+            }
+            IEnumerable<ToJsonMy> jsonMy2 = from json in jsonList
+                                            where json.status == "4"
+                                            select json;
+            
+            foreach (var item in jsonMy2)
+            {
+                MessageBox.Show(item.status);
+            }*/
+            var jsonQuery1 = from json in jsonList
+                             group json by json.status into jsonGroup
+                             orderby jsonGroup.Key
+                             select jsonGroup;
+            
+            foreach (var jsonGroup1 in jsonQuery1)
+            {
+                MessageBox.Show(jsonGroup1.Key);
+                foreach (ToJsonMy item in jsonGroup1)
+                {
+                    MessageBox.Show(item.status+ item.id);
+                }
+            }
         }
         ////本代码用于测试json写入.sjc，和重新读出
         //private void 写入jsonToolStripMenuItem_Click(object sender, EventArgs e)

@@ -12,8 +12,12 @@ namespace NKprint
         //将List转换为TXT文件
         public static void WriteListToTextFile(List<string> list, string txtFile)
         {
+            /*if (!File.Exists(txtFile))
+            {
+                File.Create(txtFile);
+            }*/
             //创建一个文件流，用以写入或者创建一个StreamWriter 
-            FileStream fs = new FileStream(txtFile, FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream fs = new FileStream(txtFile, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
             StreamWriter sw = new StreamWriter(fs);
             sw.Flush();
             // 使用StreamWriter来往文件中写入内容 
@@ -26,8 +30,12 @@ namespace NKprint
         }
         public static void WriteStringToTextFile(string list, string txtFile)
         {
+            /*if (!File.Exists(txtFile))
+            {
+                File.Create(txtFile);
+            }*/
             //创建一个文件流，用以写入或者创建一个StreamWriter 
-            FileStream fs = new FileStream(txtFile, FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream fs = new FileStream(txtFile, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
             StreamWriter sw = new StreamWriter(fs);
             sw.Flush();
             // 使用StreamWriter来往文件中写入内容 
@@ -40,8 +48,12 @@ namespace NKprint
         }
         public static void WriteJsonToTextFile(List<ToJsonMy> list, string txtFile)
         {
+            /*if (!File.Exists(txtFile))
+            {
+                File.Create(txtFile);
+            }*/
             //创建一个文件流，用以写入或者创建一个StreamWriter 
-            FileStream fs = new FileStream(txtFile, FileMode.OpenOrCreate, FileAccess.Write);
+            FileStream fs = new FileStream(txtFile, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
             StreamWriter sw = new StreamWriter(fs);
             sw.Flush();
             //string output = JsonConvert.SerializeObject(product);//类转换成Json字符串
@@ -61,6 +73,10 @@ namespace NKprint
         //读取文本文件转换为List 
         public static List<string> ReadTextFileToList(string fileName)
         {
+            if (!File.Exists(fileName))
+            {
+                File.Create(fileName);
+            }
             FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             List<string> list = new List<string>();
             StreamReader sr = new StreamReader(fs);
@@ -81,6 +97,10 @@ namespace NKprint
         //读取文本文件转换为List 
         public static List<ToJsonMy> ReadJsonFileToList(string fileName)
         {
+            if (!File.Exists(fileName))
+            {
+                File.Create(fileName);
+            }
             FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             List<ToJsonMy> list = new List<ToJsonMy>();
             ToJsonMy my = new ToJsonMy();

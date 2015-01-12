@@ -55,6 +55,7 @@
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.版本ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.测试jsonLINQToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelShow.SuspendLayout();
@@ -233,7 +234,8 @@
             this.文件ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.刷新下载ToolStripMenuItem,
             this.打开下载ToolStripMenuItem,
-            this.退出ToolStripMenuItem});
+            this.退出ToolStripMenuItem,
+            this.测试jsonLINQToolStripMenuItem});
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
             this.文件ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.文件ToolStripMenuItem.Text = "文件";
@@ -241,21 +243,21 @@
             // 刷新下载ToolStripMenuItem
             // 
             this.刷新下载ToolStripMenuItem.Name = "刷新下载ToolStripMenuItem";
-            this.刷新下载ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.刷新下载ToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.刷新下载ToolStripMenuItem.Text = "刷新下载";
             this.刷新下载ToolStripMenuItem.Click += new System.EventHandler(this.刷新下载ToolStripMenuItem_Click);
             // 
             // 打开下载ToolStripMenuItem
             // 
             this.打开下载ToolStripMenuItem.Name = "打开下载ToolStripMenuItem";
-            this.打开下载ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.打开下载ToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.打开下载ToolStripMenuItem.Text = "打开下载";
             this.打开下载ToolStripMenuItem.Click += new System.EventHandler(this.打开下载ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.退出ToolStripMenuItem.Text = "退出程序";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -277,6 +279,13 @@
             // toolTip1
             // 
             this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
+            // 
+            // 测试jsonLINQToolStripMenuItem
+            // 
+            this.测试jsonLINQToolStripMenuItem.Name = "测试jsonLINQToolStripMenuItem";
+            this.测试jsonLINQToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.测试jsonLINQToolStripMenuItem.Text = "测试jsonLINQ";
+            this.测试jsonLINQToolStripMenuItem.Click += new System.EventHandler(this.测试jsonLINQToolStripMenuItem_Click);
             // 
             // NKprint_download
             // 
@@ -332,5 +341,6 @@
         private System.Windows.Forms.TextBox textDownload;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolStripMenuItem 测试jsonLINQToolStripMenuItem;
     }
 }

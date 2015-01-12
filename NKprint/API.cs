@@ -15,8 +15,8 @@ namespace NKprint
     class API
     {
         public static int myPage=1;
-        private static string server_url = @"http://nkuprint.sinaapp.com/api.php";
-       
+        private static string server_url = Program.serverUrl;
+        
         // REST @GET 方法，根据泛型自动转换成实体，支持List<T>
         public static string doGetMethodToObj(string metodUrl)
         {

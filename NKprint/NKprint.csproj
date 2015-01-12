@@ -27,14 +27,14 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>C:\Users\NKsjc\Desktop\release\</OutputPath>
+    <OutputPath>C:\Users\NKsjc\Desktop\NKprint1.3\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json.Net35">
-      <HintPath>..\release\Newtonsoft.Json.Net35.dll</HintPath>
+      <HintPath>bin\Net35\Newtonsoft.Json.Net35.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
