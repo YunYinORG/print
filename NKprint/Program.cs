@@ -5,6 +5,7 @@ namespace NKprint
 {
     static class Program
     {
+        //将服务器地址改为外部可以配置
         public static string downloadUrl = @"http://newfuture-uploads.stor.sinaapp.com/";
         public static string serverUrl = @"http://newfuture.sinaapp.com/api.php";
         /// <summary>
@@ -13,7 +14,7 @@ namespace NKprint
         [STAThread]
         static void Main()
         {
-            string[] words = { "aPPLE", "BlUeBeRrY", "cHeRry" };
+            /*string[] words = { "aPPLE", "BlUeBeRrY", "cHeRry" };
 
             // If a query produces a sequence of anonymous types, 
             // then use var in the foreach statement to access the properties.
@@ -25,7 +26,7 @@ namespace NKprint
             foreach (var ul in upperLowerWords)
             {
                 Console.WriteLine("Uppercase: {0}, Lowercase: {1}", ul.Upper, ul.Lower);
-            }
+            }*/
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new NKprint_login());

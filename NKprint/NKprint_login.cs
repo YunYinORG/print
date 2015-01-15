@@ -17,7 +17,7 @@ namespace NKprint
 
         private void NKprint_login_Load(object sender, EventArgs e)
         {
-            System.Windows.Forms.Control.CheckForIllegalCrossThreadCalls = false;
+            //System.Windows.Forms.Control.CheckForIllegalCrossThreadCalls = false;
             myLogin = remember.ReadTextFileToList(@"pwd.sjc");
             if (myLogin.Count == 2)
             {
@@ -29,12 +29,13 @@ namespace NKprint
         private void buttonLogin_Click(object sender, EventArgs e)
         {
             //执行登陆函数
-            Thread loginThread = new Thread(loginFrom);
-            loginThread.Start();
+            
+            loginFrom();
         }
         //登陆到服务器，post方式验证，用到API类，和remember类
         public void loginFrom()
         {
+            buttonLogin.Enabled = false;
             string type = "2";//打印店默认的type是2;
             //定义List的myRem记录登陆的用户名和密码
             List<string> myRem = new List<string>();
@@ -46,6 +47,7 @@ namespace NKprint
             {
                 labelError.Text = "请输入！";
                 labelError.Visible = true;
+                buttonLogin.Enabled = true;
             }
             else
             {
@@ -85,11 +87,13 @@ namespace NKprint
                 {
                     /*foreach (Control c in this.Controls)
                         deleteText(c);*/
+                    
                     clearText();
                     //显示登陆失败的label
                     labelError.Text = "登陆失败，请重新登录！";
                     labelError.Visible = true;
                     labelWait.Visible = false;
+                    buttonLogin.Enabled = true;
                 }
             }
         }

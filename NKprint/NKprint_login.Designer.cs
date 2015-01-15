@@ -93,7 +93,7 @@
             // 
             this.labelError.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labelError.ForeColor = System.Drawing.Color.Red;
-            this.labelError.Location = new System.Drawing.Point(303, 188);
+            this.labelError.Location = new System.Drawing.Point(313, 189);
             this.labelError.Name = "labelError";
             this.labelError.Size = new System.Drawing.Size(187, 23);
             this.labelError.TabIndex = 9;

@@ -19,11 +19,7 @@ namespace NKprint
         //下载文件的url
         private static string download_url =Program.downloadUrl;
         public static string studentNum;
-        //定义用来存储已操作的文件 
-        //static ArrayList myDown = new ArrayList();
-        //static ArrayList myPrinting = new ArrayList();
-        //static ArrayList myPrinted = new ArrayList();
-        //static ArrayList myPay = new ArrayList();
+        
         //定义接收从NKprint_login窗体传值的参数
         public string downloadToken;
         public string printerName;
@@ -34,32 +30,13 @@ namespace NKprint
         //窗体类的构造函数
         public NKprint_download()
         {
-            /*this.Hide();
-            NKprint_login nForm = new NKprint_login();
-            if (nForm.ShowDialog() != DialogResult.OK)    //判断登录窗体返回值
-            {
-                Environment.Exit(Environment.ExitCode);    //退出程序
-                return;
-            }
-            nForm.Owner = this;
-            nForm.Show();
-            if (nForm.ShowDialog() != DialogResult.OK)    //判断登录窗体返回值
-            {
-                Environment.Exit(Environment.ExitCode);    //退出程序
-                this.Show();
-            }*/
             InitializeComponent();
             // 在现在线程和UI线程出问题的时候false一下。。。。。。
             //System.Windows.Forms.Control.CheckForIllegalCrossThreadCalls = false;
         }
         private void NKprint_download_Load(object sender, EventArgs e)
         {
-            List<string> l = new List<string>();
-            l = remember.ReadTextFileToList("maxId.sjc");
-           if (l.Count == 0)
-                maxId = "0"; 
-            else
-               maxId = l[0];
+           
             
             String  Date = (DateTime.Now.ToLongDateString());
             path = @"D:\云印南开\" + Date;
@@ -86,8 +63,6 @@ namespace NKprint
             }
             else
             {
-                //String Date = (DateTime.Now.ToShortDateString());
-               // String path = @"D:\" + Date;
                 bool flag=false ;
                 string filename ;
                 for (int i = 0; i < jsonList.Count;i++ )
@@ -110,7 +85,6 @@ namespace NKprint
                         }
                         break;
                     }
-                    
                 }
                 if (flag == false)
                     MessageBox.Show("未查询到" + textDownload.Text+"\n确认输入正确？");
@@ -121,7 +95,8 @@ namespace NKprint
         {
             bool flag = true;
             int i = 0;//用于遍历的
-            //int a=jsonList.Count;
+            //向jsonList中添加数据，如果json的id已经存在，则flag置为false
+            //即不添加，维护jsonList
             for (i = 0; i < ja.Count; i++)//遍历ja数组
             {
                 foreach (var item in jsonList)
@@ -155,15 +130,14 @@ namespace NKprint
         //刷新下载列表函数
         public void  myRefresh()
         {
-            //jsonList = remember.ReadJsonFileToList("json.sjc");
-            //将API中的static赋值1；myPage是在json下载时的页码，每次重新访问的时候要置为1；
+            //将API中的static赋值1；myPage是在json下载时的页码，
+            //每次重新访问的时候要置为1；
             API.myPage = 1;
             //得到json格式的文件列表
             string myJsFile = API.doGetMethodToObj(downloadToken);
 #if DEBUG
             Console.WriteLine(myJsFile);
 #endif
-            
             JObject jo = JObject.Parse(myJsFile); 
             JArray ja = jo["files"] as JArray;
             //将JArray类型的ja转化为ToMyJohn对象数组 
@@ -190,11 +164,7 @@ namespace NKprint
                         myAdd = true;
                 }
             }
-            //if (jsonList.Count > 0)
-            //    maxId = jsonList[jsonList.Count - 1].id;
-            //else
-            //    maxId = "0";
-            //remember.WriteStringToTextFile(maxId,"maxId.sjc");
+            
             //每次json获取完成，  
             //已经将得到的文件列表保存到类型（list<yoJsonMy>）jsonList中
             //显示所得到的的文件列表，而且要显示的是状态
