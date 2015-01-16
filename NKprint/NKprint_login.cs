@@ -8,15 +8,34 @@ namespace NKprint
 {
     public partial class NKprint_login : Form
     {
+        //定义委托，执行控件的线程操作
+        private delegate void boxDelegate(Control ctrl,string str,bool visuable,bool enable);
+        boxDelegate my1;
+        public delegate void formDelegate(Form form,bool hide);
+        formDelegate my2;
+        private void boxChange(Control ctrl, string str, bool visuable, bool enable)
+        {
+            ctrl.Text = str; ctrl.Visible = visuable; ctrl.Enabled = enable;
+        }
+        public void formChange(Form form, bool hide)
+        {
+            if (hide==true)
+            {
+                form.Hide();
+            }
+            
+        }
         //定义一些要用到的通用的字符串
         List<string> myLogin = new List<string>();
         public NKprint_login()
         {
+            
             InitializeComponent();
         }
 
         private void NKprint_login_Load(object sender, EventArgs e)
         {
+            
             //System.Windows.Forms.Control.CheckForIllegalCrossThreadCalls = false;
             myLogin = remember.ReadTextFileToList(@"pwd.sjc");
             if (myLogin.Count == 2)
@@ -29,13 +48,14 @@ namespace NKprint
         private void buttonLogin_Click(object sender, EventArgs e)
         {
             //执行登陆函数
-            
-            loginFrom();
+            buttonLogin.Enabled = false;//点击之后将登陆按钮置为不能点击
+            Thread loginThread=new Thread(new ThreadStart(loginFrom));
+            loginThread.Start();
         }
         //登陆到服务器，post方式验证，用到API类，和remember类
         public void loginFrom()
         {
-            buttonLogin.Enabled = false;
+            
             string type = "2";//打印店默认的type是2;
             //定义List的myRem记录登陆的用户名和密码
             List<string> myRem = new List<string>();
@@ -45,13 +65,31 @@ namespace NKprint
 
             if (account.Length == 0 || strPassword.Length == 0)
             {
-                labelError.Text = "请输入！";
-                labelError.Visible = true;
-                buttonLogin.Enabled = true;
+                try
+                {
+                    if (labelError.InvokeRequired)
+                    {
+                        my1 = new boxDelegate(boxChange);
+                        labelError.Invoke(my1, new object[]
+                        {labelError,"请输入",true,true
+                        });
+                        buttonLogin.Invoke(my1, new object[] { buttonLogin, "登陆", true, true });
+                        Thread.Sleep(100);
+                    }
+                    else
+                    {
+                        labelError.Text = "请输入！";
+                        labelError.Visible = true;
+                        buttonLogin.Enabled = true;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
             else
             {
-                labelWait.Visible = true;
                 string js = "type=" + type + "&account=" + account +
                 "&pwd=" + strPassword;
                 //POST得到要数据//登陆得到token
@@ -85,15 +123,33 @@ namespace NKprint
                 //如果登陆不成功
                 else
                 {
-                    /*foreach (Control c in this.Controls)
-                        deleteText(c);*/
-                    
                     clearText();
+                    my1 = new boxDelegate(boxChange);
                     //显示登陆失败的label
-                    labelError.Text = "登陆失败，请重新登录！";
-                    labelError.Visible = true;
-                    labelWait.Visible = false;
-                    buttonLogin.Enabled = true;
+                    try
+                    {
+                        if (labelError.InvokeRequired)
+                        {
+                            my1 = new boxDelegate(boxChange);
+                            labelError.Invoke(my1, new object[]
+                                {labelError,"登陆失败，请重新登录！",true,true});
+                            buttonLogin.Invoke(my1, new object[] { buttonLogin, "登陆", true, true });
+                            Thread.Sleep(100);
+                        }
+                        else
+                        {
+                            labelError.Text = "登陆失败，请重新登录！";
+                            labelError.Visible = true;
+                            buttonLogin.Enabled = true;
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    
+                    
+
                 }
             }
         }
@@ -101,7 +157,22 @@ namespace NKprint
         //并且在NKprint_download中退出后返回此窗体
         private void showDownloadForm(ToMyToken my)
         {
-            this.Hide();
+            try
+            {
+                if (this.InvokeRequired)
+                {
+                    my2 = new formDelegate(formChange);
+                    this.Invoke(my2, new object[] { this, true });
+                }
+                else
+                {
+                    this.Hide();
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             NKprint_download nForm = new NKprint_download();
             nForm.downloadToken = my.token;
             nForm.printerName = my.name;
@@ -140,8 +211,25 @@ namespace NKprint
         }
         private void clearText()
         {
-            printerAccount.Text = "";
-            printerPassword.Text = "";
+            my1 = new boxDelegate(boxChange);
+            try
+            {
+                if (printerAccount.InvokeRequired)
+                {
+                    printerAccount.Invoke(my1, new object[]{printerAccount,"",true,true});
+                    printerPassword.Invoke(my1, new object[]{printerPassword,"", true, true});
+                    Thread.Sleep(100);
+                }
+                else
+                {
+                    printerAccount.Text = "";
+                    printerPassword.Text = "";
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
