@@ -48,6 +48,7 @@ namespace NKprint
             }
             //登陆窗体后自动 刷新下载列表并且自动下载
             myRefresh();
+            refreshDataGrid();
             threadDownload();
         }
         private void labelWelcom_Click(object sender, EventArgs e)
@@ -99,6 +100,7 @@ namespace NKprint
             //即不添加，维护jsonList
             for (i = 0; i < ja.Count; i++)//遍历ja数组
             {
+                flag = true;
                 foreach (var item in jsonList)
                 {
                     if (item.id==ja[i]["id"].ToString())
@@ -169,6 +171,11 @@ namespace NKprint
             //已经将得到的文件列表保存到类型（list<yoJsonMy>）jsonList中
             //显示所得到的的文件列表，而且要显示的是状态
             //定义文件的初始状态
+            
+        }
+        //
+        public void refreshDataGrid()
+        {
             string id1, userName1, fileName1, copies1, doubleSides1, statues1 = null;
             int i = 0;//用于遍历的
             for (i = 0; i < jsonList.Count; i++)
@@ -211,7 +218,7 @@ namespace NKprint
                     }
                     this.myData.Rows.Add(id1, userName1, fileName1, copies1, doubleSides1, statues1);
                 }
-                    //
+                //
             }             
         }
         //开启下载线程，自动下载status=1的文件
@@ -322,7 +329,7 @@ namespace NKprint
             int i=0;
             for (int j = 0; j < myData.RowCount; j++)
             {
-                if (myData.Rows[j].Cells[0].Value == id)
+                if (myData.Rows[j].Cells[0].Value.ToString() == id)
                 {
                     i = j;
                     break;
@@ -347,13 +354,13 @@ namespace NKprint
             int i = 0;
             for (int j = 0; j < myData.RowCount; j++)
             {
-                if (myData.Rows[j].Cells[0].Value == id)
+                if (myData.Rows[j].Cells[0].Value.ToString() == id)
                 {
                     i = j;
                     break;
                 }
             }
-            if (myData.Rows[i].Cells[5].Value=="未下载")
+            if (myData.Rows[i].Cells[5].Value.ToString()=="未下载")
             {
                 myData.Rows[i].Cells[5].Value = "已下载";
             }
@@ -485,6 +492,7 @@ namespace NKprint
             //jsonList.Clear();
             //刷新一次数据
             myRefresh();
+            refreshDataGrid();
             //运行下载线程
             threadDownload();
             
