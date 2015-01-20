@@ -52,10 +52,10 @@
             this.刷新下载ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.打开下载ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.测试jsonLINQToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.版本ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.测试jsonLINQToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelShow.SuspendLayout();
@@ -182,40 +182,48 @@
             this.myData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.myData.Location = new System.Drawing.Point(0, 0);
             this.myData.Name = "myData";
+            this.myData.ReadOnly = true;
             this.myData.RowTemplate.Height = 23;
             this.myData.Size = new System.Drawing.Size(653, 300);
             this.myData.TabIndex = 0;
             this.myData.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.myData_CellContentClick);
+            this.myData.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.myData_CellContentDoubleClick);
             // 
             // id
             // 
             this.id.HeaderText = "id";
             this.id.Name = "id";
+            this.id.ReadOnly = true;
             // 
             // suserName
             // 
             this.suserName.HeaderText = "用户名";
             this.suserName.Name = "suserName";
+            this.suserName.ReadOnly = true;
             // 
             // fileName
             // 
             this.fileName.HeaderText = "文件名";
             this.fileName.Name = "fileName";
+            this.fileName.ReadOnly = true;
             // 
             // copies
             // 
             this.copies.HeaderText = "份数";
             this.copies.Name = "copies";
+            this.copies.ReadOnly = true;
             // 
             // doubleSides
             // 
             this.doubleSides.HeaderText = "单双面";
             this.doubleSides.Name = "doubleSides";
+            this.doubleSides.ReadOnly = true;
             // 
             // status
             // 
             this.status.HeaderText = "状态";
             this.status.Name = "status";
+            this.status.ReadOnly = true;
             // 
             // menuStrip1
             // 
@@ -261,6 +269,13 @@
             this.退出ToolStripMenuItem.Text = "退出程序";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
+            // 测试jsonLINQToolStripMenuItem
+            // 
+            this.测试jsonLINQToolStripMenuItem.Name = "测试jsonLINQToolStripMenuItem";
+            this.测试jsonLINQToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.测试jsonLINQToolStripMenuItem.Text = "测试jsonLINQ";
+            this.测试jsonLINQToolStripMenuItem.Click += new System.EventHandler(this.测试jsonLINQToolStripMenuItem_Click);
+            // 
             // 帮助ToolStripMenuItem
             // 
             this.帮助ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -279,13 +294,6 @@
             // toolTip1
             // 
             this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
-            // 
-            // 测试jsonLINQToolStripMenuItem
-            // 
-            this.测试jsonLINQToolStripMenuItem.Name = "测试jsonLINQToolStripMenuItem";
-            this.测试jsonLINQToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.测试jsonLINQToolStripMenuItem.Text = "测试jsonLINQ";
-            this.测试jsonLINQToolStripMenuItem.Click += new System.EventHandler(this.测试jsonLINQToolStripMenuItem_Click);
             // 
             // NKprint_download
             // 

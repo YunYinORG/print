@@ -535,6 +535,45 @@ namespace NKprint
                 }
             }
         }
+        //双击Id，自动打开文件
+        private void myData_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //if (((e.ColumnIndex + 1)==6)&&(e.RowIndex>-1))
+            string id = string.Empty;
+            if (e.RowIndex > -1)
+            {
+                id = myData.Rows[e.RowIndex].Cells[0].Value.ToString();
+                myData.Rows[e.RowIndex].Selected = true;
+                
+                string filename;
+                for (int i = 0; i < jsonList.Count; i++)
+                {
+                    if (jsonList[i].id == id)
+                    {
+                        
+                        filename = path + "\\" + jsonList[i].id + "_" + jsonList[i].copies + "份" + "_" + (jsonList[i].double_side == "0" ? "单面" : "双面") + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
+                        if (File.Exists(@filename))
+                        {
+                            //filename = path + filename;
+                            System.Diagnostics.Process.Start(filename);
+                            break;
+                        }
+                        else
+                        {
+                            filename = jsonList[i].id + "_" + jsonList[i].copies + "份" + "_" + (jsonList[i].double_side == "0" ? "单面" : "双面") + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
+                            fileDownload(jsonList[i].url, filename, jsonList[i].id);
+                            MessageBox.Show("正在下载输入id对应的文件！\n等待会儿再打开");
+                        }
+                        break;
+                    }
+                }
+            }
+            else
+            {
+            }
+            
+            
+        }
         ////本代码用于测试json写入.sjc，和重新读出
         //private void 写入jsonToolStripMenuItem_Click(object sender, EventArgs e)
         //{
