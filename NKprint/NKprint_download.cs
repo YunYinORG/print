@@ -574,6 +574,11 @@ namespace NKprint
             
             
         }
+
+        private void 刷新ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
         ////本代码用于测试json写入.sjc，和重新读出
         //private void 写入jsonToolStripMenuItem_Click(object sender, EventArgs e)
         //{

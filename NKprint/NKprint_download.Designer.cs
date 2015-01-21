@@ -56,6 +56,7 @@
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.版本ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.刷新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelShow.SuspendLayout();
@@ -130,7 +131,7 @@
             // buttonSearch
             // 
             this.buttonSearch.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonSearch.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.buttonSearch.ForeColor = System.Drawing.Color.Blue;
             this.buttonSearch.Location = new System.Drawing.Point(0, 132);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(190, 46);
@@ -153,7 +154,7 @@
             // 
             this.labelWelcom.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labelWelcom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.labelWelcom.Location = new System.Drawing.Point(91, 26);
+            this.labelWelcom.Location = new System.Drawing.Point(91, 22);
             this.labelWelcom.Name = "labelWelcom";
             this.labelWelcom.Size = new System.Drawing.Size(94, 67);
             this.labelWelcom.TabIndex = 0;
@@ -171,6 +172,8 @@
             // myData
             // 
             this.myData.AllowUserToAddRows = false;
+            this.myData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.myData.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.myData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.myData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
@@ -230,7 +233,8 @@
             this.menuStrip1.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.文件ToolStripMenuItem,
-            this.帮助ToolStripMenuItem});
+            this.帮助ToolStripMenuItem,
+            this.刷新ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(857, 25);
@@ -295,6 +299,13 @@
             // 
             this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
             // 
+            // 刷新ToolStripMenuItem
+            // 
+            this.刷新ToolStripMenuItem.Name = "刷新ToolStripMenuItem";
+            this.刷新ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.刷新ToolStripMenuItem.Text = "刷新";
+            this.刷新ToolStripMenuItem.Click += new System.EventHandler(this.刷新ToolStripMenuItem_Click);
+            // 
             // NKprint_download
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -329,13 +340,6 @@
         private System.Windows.Forms.Label labelWelcom;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button buttonSearch;
-        private System.Windows.Forms.DataGridView myData;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn suserName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fileName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn copies;
-        private System.Windows.Forms.DataGridViewTextBoxColumn doubleSides;
-        private System.Windows.Forms.DataGridViewLinkColumn status;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 文件ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 打开下载ToolStripMenuItem;
@@ -350,5 +354,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripMenuItem 测试jsonLINQToolStripMenuItem;
+        private System.Windows.Forms.DataGridView myData;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn suserName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fileName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn copies;
+        private System.Windows.Forms.DataGridViewTextBoxColumn doubleSides;
+        private System.Windows.Forms.DataGridViewLinkColumn status;
+        private System.Windows.Forms.ToolStripMenuItem 刷新ToolStripMenuItem;
     }
 }
