@@ -175,7 +175,7 @@ class UserController extends Controller
         $student_number = I('post.student_number',false, '/^(\d{7}|\d{10})$/');
         if (!$student_number) 
         {
-            $this->error('学号格式错误！');
+          $this->display();
         } else
         {
             $key   = 'auth_' . $student_number;
