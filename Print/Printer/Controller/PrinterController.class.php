@@ -53,7 +53,7 @@ class PrinterController extends Controller
     }
     
     /**
-     *change()
+     *changePwd()
      *修改资料
      *@param $key 修改的字段
      *@param $value 修改值
@@ -99,17 +99,6 @@ class PrinterController extends Controller
         cookie(null);
         $this->redirect('Printer/Index/index');
     }
-    
-    //Still in plan
-    /*
-                                        public function detail(){
-                                            //ditail of file?
-                                            $this->display();
-                                        }*/
-    
-    //Not available now
-    
-    
     
     /**
      *注册
