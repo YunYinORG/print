@@ -1,24 +1,20 @@
 <?php
 // ===================================================================
 // | FileName:  /Common/Common/Encrypt.php
-// |  加密函数库 使用前许对数据格式进行检查防止异常
+// |  加密函数库 使用前需对数据格式进行检查防止异常
+// |  必须开启mcrypt扩展（兼容任意版本）
 // ===================================================================
 // # 手机号格式保留加密
 // ## 核心思想是格式保留加密，核心加密算法AES可逆加密
 // ## 加密步骤：
 // #### 尾号四位全局统一加密（通过相同尾号查找手机号或者去重）
-// #### 中间六位单独混淆加密（每个人的密码表唯一）
-//
-// # 框架函数说明
-//  C()读取配，可以直接改成相应密钥;
-//  F()读取或者写入缓存，sae上对应KVDB;
-//  E()抛出异常信息并终止
+// #### 中间六位单独混淆加密前两位基本保留,后四位加密 （每个人的密码表唯一）
 //
 // # 邮箱加密邮箱
-//   只对邮箱用户名加密（@字符之前的）
+//   只对邮箱用户名加密（@字符之前的）并保留第一个字符
 //   邮箱长度限制：63位（保留一位）
-//   邮箱用户名（@之前的）长度限制：16位（加密后24位）
-//   邮箱域名（@之后）长度限制：38位
+//   邮箱用户名（@之前的）长度限制：17位（加密后25位）
+//   邮箱域名（@之后）长度限制：37位
 // ## 加密原理
 // #### 截取用户名——>AES加密——>base64转码 ——>特殊字符替换——>字符拼接
 // +------------------------------------------------------------------
@@ -96,23 +92,18 @@ function encrypt_mid($midNum, $snum, $id)
 {
     $key = C('ENCRYPT_PHONE_MID'); //获取配置密钥
     $key = substr($snum . $key, 0, 32); //混淆密钥,每个人的密钥均不同
-    $table = cipher_table($key, 'mid');
+    $table = cipher_table($key);
     //拆成两部分进行解密
-    $midNum -= $id;
-    list($mid1, $mid2) = str_split($midNum, 3);
-    $e1 = array_search(aes_encode($mid1, $key), $table);
-    $e2 = array_search(aes_encode($mid2, $key), $table);
-
-    if (false === $e1) {
+    $midNum += $id;
+    $mid2 = substr($midNum, 2, 4);
+    //后4位加密
+    $mid2 = array_search(aes_encode($mid2, $key), $table);
+    $mid2 = sprintf('%04s', $mid2);
+    if (false === $mid2) {
         //前密码表查找失败
-        E('中间前三位加密异常!');
-    } elseif (false === $e2) {
-        //密码表查找失败
-        E('中间前后三位加密异常!');
-        return false;
+        E('中间加密异常!');
     } else {
-        //调换位置转成6位字符串,不足三位前面置位0
-        return sprintf('%03s%03s', $e2, $e1);
+        return substr_replace($midNum, $mid2, 2);
     }
 }
 
@@ -143,46 +134,41 @@ function decrypt_end($encodeEnd)
  * @param $midEncode string 加密后的6位数字
  * @param $snum string 编号字符串,用于混淆密钥
  * @param $id int 用户id,在1~100000之间的整数,用于混淆原文
- * @return string(6) 加密后的6位数字
+ * @return string(6)/int 解密后的6位数字
  */
 function decrypt_mid($midEncode, $snum, $id)
 {
-    //获取配置密钥
+    //获取密码表
     $key = C('ENCRYPT_PHONE_MID');
     $key = substr($snum . $key, 0, 32);
-    //获取密码表
-    $table = cipher_table($key, 'mid');
-    list($mid1, $mid2) = str_split($midEncode, 3);
-    $c1 = $table[intval($mid1)];
-    $c2 = $table[intval($mid2)];
+    $table = cipher_table($key);
     //解密
-    $n1 = (int)aes_decode($c1, $key);
-    $n2 = (int)aes_decode($c2, $key);
+    $mid2 = (int)substr($midEncode, 2, 4);
+    $mid2 = $table[$mid2];
+    $mid2 = sprintf('%04s', aes_decode($mid2, $key));
     //还原
-    $num = $n2 * 1000 + $n1;
-    $num += $id;
-    return sprintf('%06s', $num);
+    $num = substr_replace($midEncode, $mid2, 2);
+    $num -= $id;
+    return $num;
 }
 
 /**
- * cipher_table($key,$type)
+ * cipher_table($key)
  *  获取密码表
  *  现在缓存中查询,如果存在,则直接读取,否则重新生成
  * @param $key 加密的密钥
- * @param $type 密码表类型
  * @return array 密码映射表
  */
-function cipher_table($key, $type = 'end')
+function cipher_table($key)
 {
-    $tableName = $key . $type; //缓存表名称
+    $tableName = $key; //缓存表名称
     $table = F($tableName); //读取缓存中的密码表
     if (!$table) {
         //密码表不存在则重新生成
-        $num = ('end' == $type) ? 10000 : 1000; //密码表大小
         //对所有数字,逐个进行AES加密生成密码表
         $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_ECB, '');
-        mcrypt_generic_init($td, $key, 0);
-        for ($i = 0; $i < $num; ++$i) {
+        mcrypt_generic_init($td, $key, '0000000000000000');
+        for ($i = 0; $i < 10000; ++$i) {
             $table[] = mcrypt_generic($td, $i);
         }
         mcrypt_generic_deinit($td);
@@ -203,7 +189,7 @@ function cipher_table($key, $type = 'end')
 function aes_encode(&$data, $key)
 {
     $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_ECB, '');
-    mcrypt_generic_init($td, $key, 0);
+    mcrypt_generic_init($td, $key, '0000000000000000');
     $data = mcrypt_generic($td, $data);
     mcrypt_generic_deinit($td);
     return $data;
@@ -219,7 +205,7 @@ function aes_encode(&$data, $key)
 function aes_decode(&$cipher, $key)
 {
     $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_ECB, '');
-    mcrypt_generic_init($td, $key, 0);
+    mcrypt_generic_init($td, $key, '0000000000000000');
     $cipher = mdecrypt_generic($td, $cipher);
     mcrypt_generic_deinit($td);
     return $cipher;
@@ -235,34 +221,47 @@ function encrypt_email($email)
 {
     list($name, $domain) = explode('@', $email);
     //aes加密
-    aes_encode($name, C('ENCRYPT_EMAIL'));
-    //base64转码
-    $name = base64_encode($name);
-    $encodeMap = array(//编码映射表
-         '+' => '-',
-        '=' => '_',
-        '/' => '.');
-    $name = strtr($name, $encodeMap);
-    return $name . '@' . $domain;
+    $name2 = substr($name, 1);
+    if ($name2) {
+        aes_encode($name2, C('ENCRYPT_EMAIL'));
+        $name2 = base64_encode($name2); //base64转码
+        //特殊字符编码
+        $encodeMap = array(
+            '+' => '-',
+            '=' => '_',
+            '/' => '.');
+        $name2 = strtr($name2, $encodeMap);
+    } else {
+        //对于用户名只有一个的邮箱生成随机数掩盖
+        $name2 = rand();
+    }
+    return $name[0] . $name2 . '@' . $domain;
 }
 
 /**
- *  decrypt_email($email)
+ *  decrypt_email(&$email)
  *  解密邮箱
  * @param $email 邮箱
  * @return string 解密后的邮箱
  */
-function decrypt_email($email)
+function decrypt_email(&$email)
 {
     list($name, $domain) = explode('@', $email);
-    $decodeMap = array(//编码映射表
-         '-' => '+',
-        '_' => '=',
-        '.' => '/');
-    $name = strtr($name, $decodeMap);
-    //base64还原
-    $name = base64_decode($name);
-    //aes解解码
-    aes_decode($name, C('ENCRYPT_EMAIL'));
-    return $name . '@' . $domain;
+    $name2 = substr($name, 1);
+    if (strlen($name2) < 24) {
+        //长度小于24为随机掩码直接去掉
+        $name2 = '';
+    } else {
+        //解密 并base64还原
+        $decodeMap = array(
+            '-' => '+',
+            '_' => '=',
+            '.' => '/');
+        $name2 = strtr($name2, $decodeMap);
+        $name2 = base64_decode($name2);
+        //aes解解码
+        aes_decode($name2, C('ENCRYPT_EMAIL'));
+    }
+    $email = $name[0] . $name2 . '@' . $domain;
+    return $email;
 }
