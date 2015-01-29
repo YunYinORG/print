@@ -10,159 +10,7 @@ body {
     font-weight: 300;
     color: #333333;
 }
-h1, h2, h3 {
-    margin: 0;
-    padding: 0;
-    font-weight: 600;
-    color: #333333;
-}
-p, ol, ul {
-    margin-top: 0;
-}
-ol, ul {
-    padding: 0;
-    list-style: none;
-}
-p {
-    line-height: 180%;
-}
-strong {} a {
-    color: #2980b9;
-}
-a:hover {
-    text-decoration: none;
-}
-.container {
-    overflow: hidden;
-    margin: 0em auto;
-    /*width: 1280px;*/
-}
-/*********************************************************************************/
 
-/* Image Style                                                                   */
-
-/*********************************************************************************/
-
-.image {
-    display: inline-block;
-}
-.image img {
-    display: block;
-    width: 100%;
-}
-.image-full {
-    display: block;
-    width: 100%;
-    margin: 0 0 2em 0;
-}
-.image-left {
-    float: left;
-    margin: 0 2em 2em 0;
-}
-.image-centered {
-    display: block;
-    margin: 0 0 2em 0;
-}
-.image-centered img {
-    margin: 0 auto;
-    width: auto;
-}
-
-/*********************************************************************************/
-
-/* Social Icon Styles                                                            */
-
-/*********************************************************************************/
-
-ul.contact {
-    margin: 0;
-    padding: 2em 0em 0em 0em;
-    list-style: none;
-}
-ul.contact li {
-    display: inline-block;
-    padding: 0em 0.30em;
-    font-size: 1em;
-}
-ul.contact li span {
-    display: none;
-    margin: 0;
-    padding: 0;
-}
-ul.contact li a {
-    color: #FFF;
-}
-ul.contact li a:before {
-    display: inline-block;
-    background: #3f3f3f;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 20px;
-    text-align: center;
-    color: #FFFFFF;
-}
-ul.contact li a.icon-twitter:before {
-    background: #2DAAE4;
-}
-ul.contact li a.icon-facebook:before {
-    background: #39599F;
-}
-ul.contact li a.icon-dribbble:before {
-    background: #C4376B;
-}
-ul.contact li a.icon-tumblr:before {
-    background: #31516A;
-}
-ul.contact li a.icon-rss:before {
-    background: #F2600B;
-}
-/*********************************************************************************/
-
-/* Button Style                                                                  */
-
-/*********************************************************************************/
-
-.button {
-    display: inline-block;
-    padding: 1em 3em 1em 2em;
-    letter-spacing: 0.20em;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: 400;
-    font-size: 0.90em;
-    color: #FFF;
-}
-.button:before {
-    display: inline-block;
-    background: #FFC31F;
-    margin-right: 1em;
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 20px;
-    text-align: center;
-    color: #272925;
-}
-
-/*********************************************************************************/
-
-/* Heading Titles                                                                */
-
-/*********************************************************************************/
-
-.title {
-    margin-bottom: 0px;
-}
-.title h2 {
-    text-transform: lowercase;
-    font-size: 2.8em;
-    color: #000;
-}
-.title .byline {
-    font-size: 1.3em;
-    color: #6F6F6F;
-}
 /*********************************************************************************/
 
 /* Header                                                                        */
@@ -174,39 +22,6 @@ ul.contact li a.icon-rss:before {
     float: left;
     width: 23%;
     padding: 2em 1% 0 1%;
-}
-/*********************************************************************************/
-
-/* Logo                                                                          */
-
-/*********************************************************************************/
-
-#logo {
-    text-align: center;
-    margin-bottom: 4em;
-}
-#logo h1 {
-    display: block;
-}
-#logo a {
-    text-decoration: none;
-    color: #FFF;
-}
-#logo span {
-    padding-right: 0.5em;
-    text-transform: uppercase;
-    font-size: 0.90em;
-    color: rgba(255, 255, 255, 0.3);
-}
-#logo span a {
-    color: rgba(255, 255, 255, 0.5);
-}
-#logo img {
-    display: inline-block;
-    margin-bottom: 1em;
-    border-radius: 50%;
-    width: 50%;
-    height: 25%
 }
 /*********************************************************************************/
 
@@ -257,48 +72,6 @@ nav li:hover a,#leftnav li:hover a, nav li.active a, #leftnav li.active a, nav l
     min-height: 100%; /*height: 1200px;*/
     text-align: left;
 }
-/*********************************************************************************/
-
-/* Featured                                                                      */
-
-/*********************************************************************************/
-
-#featured {
-    overflow: hidden;
-    margin-bottom: 1em;
-    padding-top: 2em;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-#copyright {
-    overflow: hidden;
-    padding: 5em 0em;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
-#copyright span {
-    display: block;
-    letter-spacing: 0.20em;
-    line-height: 2.5em;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 0.80em;
-    color: rgba(0, 0, 0, 0.7);
-}
-#copyright a {
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.9);
-}
-.fa {
-    display: block;
-    color: #000;
-    background: red;
-}
-center {
-    text-align: center;
-}
-center {
-    text-align: center;
-}
 /*brand高度*/
 
 .navbar-brand {
@@ -331,9 +104,6 @@ center {
        top: 1em;
        font-size: smaller;
   }
-  #leftnav{
-    display: none;
-  }
    #mylogo {
        width: 80px;
        height: 40px;
@@ -343,9 +113,15 @@ center {
     #main{
         width: 77%;
     }
-   #topnav{
-    display: none;
+nav {
+text-align: center;
+}
+   .navbar-fixed-top{
+    position: static;
    }
+  .navbar-nav>li {
+float: none;
+}
   .version {
        left: 43%;
        font-size: larger;
@@ -359,19 +135,4 @@ center {
  .navbar-toggle {
      display: none;
 }
-}
-@media screen and (max-width: 500px) {
-    #main {
-        width: 100%;
-        padding: 60px;
-   }
-   #mylogo {
-       width: 80px;
-       height: 40px;
-       position: abosolute;
-       left: -50px;
-  }
-  h2 {
-      padding-top: 20px;
- }
 }
