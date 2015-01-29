@@ -1,6 +1,7 @@
-﻿    html, body {
+﻿html, body {
         height: 100%;
 }
+
 body {
     margin: 0px;
     padding: 0px;
@@ -8,35 +9,33 @@ body {
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 12pt;
     font-weight: 300;
-    color: #333333;
+    background-color: #222;
+    border-color: #080808;
 }
 
-/*********************************************************************************/
-
-/* Header                                                                        */
-
-/*********************************************************************************/
-
-#header {
-    position: relative;
-    float: left;
-    width: 23%;
-    padding: 2em 1% 0 1%;
+p, ul {
+    margin-top: 0;
 }
-/*********************************************************************************/
 
-/* Nav                                                                          */
+p {
+    line-height: 180%;
+}
 
-/*********************************************************************************/
+ul {
+    padding: 0;
+    list-style: none;
+}
 
-nav , #leftnav {
+nav {
     text-align: center;
+    overflow: hidden;
 }
 
-nav ul {} #leftnav li, nav li {
+nav ul {} nav li {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
-nav li a,#leftnav li a, nav li span , #leftnav li span {
+
+nav li a , nav li span {
     display: block;
     padding: 2em 1.5em;
     text-align: center;
@@ -46,7 +45,7 @@ nav li a,#leftnav li a, nav li span , #leftnav li span {
     color: rgba(255, 255, 255, 0.5);
 }
 
-nav li:hover a,#leftnav li:hover a, nav li.active a, #leftnav li.active a, nav li.active span ,#leftnav li.active span {
+nav li:hover a, nav li.active a, nav li.active span {
     color: rgba(214, 214, 214, 1);
 }
 
@@ -56,22 +55,6 @@ nav li:hover a,#leftnav li:hover a, nav li.active a, #leftnav li.active a, nav l
     border-radius: 5px;
 }
 
-
-#banner {
-    margin-bottom: 4em;
-}
-
-
-#main {
-    overflow: hidden;
-    float: right;
-    width: 70%;
-    padding: 3em 2% 5em 3%;
-    background: #FFF;
-    border-top: 0px solid #2980b9;
-    min-height: 100%; /*height: 1200px;*/
-    text-align: left;
-}
 /*brand高度*/
 
 .navbar-brand {
@@ -83,56 +66,139 @@ nav li:hover a,#leftnav li:hover a, nav li.active a, #leftnav li.active a, nav l
     padding-top: 60px;
     margin-top: -55px;
 }
+
 .version {
     position: absolute;
     font-weight: 900;
     z-index: 2;
     color: #0AFC50;
 }
-#leftnav{
-    background: #202020;
+
+#banner {
+    margin-bottom: 4em;
 }
+
+#header {}
+
+#main {
+    overflow: hidden;
+    float: right;
+    width: 70%;
+    padding: 3em 2% 5em 3%;
+    background: #FFF;
+    border-top: 0px solid #2980b9;
+    min-height: 100%; /*height: 1200px;*/
+    text-align: left;
+}
+
+#copyright {
+    overflow: hidden;
+    padding: 5em 0em;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+#copyright span {
+    display: block;
+    letter-spacing: 0.20em;
+    line-height: 2.5em;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 0.80em;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+#copyright a {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.9);
+}
+
 @media screen and (max-width: 1280px) {
     #main {
-        position: absolute;
-        top: 0px;
-        width: 100%;
-        padding-top: 80px;
-   }
+      position: absolute;
+      top: 0px;
+      width: 100%;
+      padding-top: 80px;
+      text-align: center;
+    }
    .version {
        left: 1.5em;
        top: 1em;
        font-size: smaller;
-  }
-   #mylogo {
+    }
+    #mylogo {
        width: 80px;
        height: 40px;
-  }
-}
-@media screen and (min-width: 1280px) {
-    #main{
-        width: 77%;
     }
-nav {
-text-align: center;
+    .text-center {
+      display: block;
+      margin: auto;
+    }
 }
-   .navbar-fixed-top{
-    position: static;
-   }
-  .navbar-nav>li {
-float: none;
-}
+
+@media screen and (min-width: 1280px) {
+  #main {
+      width: 77%;
+  }
+  #header {
+    min-height: 100% !important;
+    position: relative;
+    float: left;
+    width: 23%;
+    padding: 2em 1% 0 1%;
+  }
+  nav {
+      text-align: center !important;
+      display: block !important;
+  }
+  .narbar {
+    min-height: 100% !important;
+  }
+  .navbar-collapse {
+    position: relative !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+  }
+  .navbar-fixed-top {
+      position: static;
+      z-index: 1 !important;
+      border-width: 0 0 0px;
+      top: 0px;
+  }
+  .navbar-nav{
+    float: none;
+  }
+  .navbar-nav > li {
+      float: none;
+      position: relative;
+      width: 100%;
+      text-align: center;
+  }
+  a.navbar-brand {
+    position: relative;
+    float: none;
+    height: 100%;
+    padding: 0px 0px;
+    font-size: 18px;
+    line-height: 0px;
+    text-align: center;
+    top: 0px;
+  }
+  .navbar-brand > img {
+    display: inline;
+    width: 100%;
+    position: relative;
+  }
   .version {
-       left: 43%;
-       font-size: larger;
-       top: 3em;
+      left: 43%;
+      font-size: larger;
+      top: 3em;
   }
   #mylogo {
       width: 55%;
       border-radius: 50%;
       margin-bottom: 2em;
- }
+  }
  .navbar-toggle {
-     display: none;
-}
+      display: none;
+  }
 }
