@@ -1,5 +1,5 @@
-﻿	html, body {
-	    height: 100%;
+﻿    html, body {
+        height: 100%;
 }
 body {
     margin: 0px;
@@ -67,87 +67,7 @@ a:hover {
     margin: 0 auto;
     width: auto;
 }
-/*********************************************************************************/
 
-/* List Styles                                                                   */
-
-/*********************************************************************************/
-
-ul.style1 {
-    margin: 0 auto;
-    padding: 0;
-    width: 80%;
-    overflow: hidden;
-    list-style: none;
-    text-align: left;
-    color: #6c6c6c
-}
-ul.style1 li {
-    padding: 1.6em 0em 0em 0em;
-    margin: 0 0 2.5em 0;
-    border-top: 1px solid rgba(0, 0, 0, .1);
-}
-ul.style1 li:first-child {
-    border-top: none;
-}
-ul.style1 p {
-    margin: 0;
-}
-ul.style1 a {
-    display: block;
-    text-decoration: none;
-    color: #2D2D2D;
-}
-ul.style1 a:hover {
-    text-decoration: underline;
-    font-size: 20px;
-}
-ul.style1 h3 {
-    padding: 1em 0em 5px 0em;
-    font-size: 1em;
-    font-weight: 400;
-}
-ul.style1 .first {
-    padding-top: 0;
-    background: none;
-}
-ul.style1 .date {
-    float: left;
-    position: relative;
-    width: 80px;
-    height: 70px;
-    margin: 0.5em 1.5em 0em 0.5em;
-    padding: 1.5em 0em 1.5em 0em;
-    box-shadow: 0px 0px 0px 5px rgba(255, 255, 255, 0.1);
-    line-height: normal;
-    text-align: center;
-    text-transform: uppercase;
-    text-shadow: 0px 1px 0px rgba(0, 0, 0, .2);
-    font-size: 1em;
-    font-weight: 400;
-    border-right: 1px solid rgba(0, 0, 0, .1);
-}
-ul.style1 .date:after {
-    content: '';
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 6px;
-}
-ul.style1 .date b {
-    margin: 0;
-    padding: 0;
-    display: block;
-    margin-top: -5px;
-    font-size: 1.8em;
-    font-weight: 700;
-}
-ul.style1 .date a {} ul.style1 .date a:hover {
-    text-decoration: none;
-}
 /*********************************************************************************/
 
 /* Social Icon Styles                                                            */
@@ -224,53 +144,7 @@ ul.contact li a.icon-rss:before {
     text-align: center;
     color: #272925;
 }
-/*********************************************************************************/
 
-/* 4-column                                                                      */
-
-/*********************************************************************************/
-
-.box1, .box2, .box3, .box4 {
-    width: 235px;
-}
-.box1, .box2, .box3, {
-    float: left;
-    margin-right: 20px;
-}
-.box4 {
-    float: right;
-}
-/*********************************************************************************/
-
-/* 3-column                                                                      */
-
-/*********************************************************************************/
-
-.boxA, .boxB, .boxC {
-    width: 320px;
-}
-.boxA, .boxB, {
-    float: left;
-    margin-right: 20px;
-}
-.boxC {
-    float: right;
-}
-/*********************************************************************************/
-
-/* 2-column                                                                      */
-
-/*********************************************************************************/
-
-.tbox1, .tbox2 {
-    width: 575px;
-}
-.tbox1 {
-    float: left;
-}
-.tbox2 {
-    float: right;
-}
 /*********************************************************************************/
 
 /* Heading Titles                                                                */
@@ -340,13 +214,14 @@ ul.contact li a.icon-rss:before {
 
 /*********************************************************************************/
 
-nav {
+nav , #leftnav {
     text-align: center;
 }
-nav ul {} nav li {
+
+nav ul {} #leftnav li, nav li {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
-nav li a, nav li span {
+nav li a,#leftnav li a, nav li span , #leftnav li span {
     display: block;
     padding: 2em 1.5em;
     text-align: center;
@@ -355,10 +230,12 @@ nav li a, nav li span {
     font-weight: 700;
     color: rgba(255, 255, 255, 0.5);
 }
-nav li:hover a, nav li.active a, nav li.active span {
+
+nav li:hover a,#leftnav li:hover a, nav li.active a, #leftnav li.active a, nav li.active span ,#leftnav li.active span {
     color: rgba(214, 214, 214, 1);
 }
-nav .current_page_item a {
+
+.current_page_item a {
     background: #2980b9;
     color: rgba(255, 255, 255, 1);
     border-radius: 5px;
@@ -377,7 +254,7 @@ nav .current_page_item a {
     padding: 3em 2% 5em 3%;
     background: #FFF;
     border-top: 0px solid #2980b9;
-    min-height: 600px; /*height: 1200px;*/
+    min-height: 100%; /*height: 1200px;*/
     text-align: left;
 }
 /*********************************************************************************/
@@ -439,22 +316,37 @@ center {
     z-index: 2;
     color: #0AFC50;
 }
+#leftnav{
+    background: #202020;
+}
 @media screen and (max-width: 1280px) {
     #main {
         position: absolute;
         top: 0px;
+        width: 100%;
+        padding-top: 80px;
    }
    .version {
        left: 1.5em;
        top: 1em;
        font-size: smaller;
   }
+  #leftnav{
+    display: none;
+  }
+   #mylogo {
+       width: 80px;
+       height: 40px;
+  }
 }
 @media screen and (min-width: 1280px) {
-/*    #main {
-        width: 0%;
-   }*/
-   .version {
+    #main{
+        width: 77%;
+    }
+   #topnav{
+    display: none;
+   }
+  .version {
        left: 43%;
        font-size: larger;
        top: 3em;
@@ -468,24 +360,14 @@ center {
      display: none;
 }
 }
-@media screen and (max-width: 1280px) {
-    #main {
-        width: 100%;
-       padding-top: 80px;
-   }
-   #mylogo {
-       width: 100px;
-       height: 50px;
-  }
-}
 @media screen and (max-width: 500px) {
     #main {
         width: 100%;
-        padding: 50px;
+        padding: 60px;
    }
    #mylogo {
-       width: 100px;
-       height: 50px;
+       width: 80px;
+       height: 40px;
        position: abosolute;
        left: -50px;
   }
