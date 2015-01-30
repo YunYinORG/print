@@ -112,13 +112,22 @@ nav li:hover a, nav li.active a, nav li.active span {
     color: rgba(0, 0, 0, 0.9);
 }
 
+@media screen and (max-width: 500px){
+  #main{
+    text-align: center;
+  }
+  .text-center{
+    display: block;
+    margin: auto;
+  }
+}
+
 @media screen and (max-width: 1280px) {
     #main {
       position: absolute;
       top: 0px;
       width: 100%;
       padding-top: 80px;
-      text-align: center;
     }
    .version {
        left: 1.5em;
@@ -129,10 +138,6 @@ nav li:hover a, nav li.active a, nav li.active span {
        width: 80px;
        height: 40px;
     }
-    .text-center {
-      display: block;
-      margin: auto;
-    }
 }
 
 @media screen and (min-width: 1280px) {
@@ -140,8 +145,8 @@ nav li:hover a, nav li.active a, nav li.active span {
       width: 77%;
   }
   #header {
-    min-height: 100% !important;
-    position: relative;
+    /*min-height: 100% !important;
+    */position: relative;
     float: left;
     width: 23%;
     padding: 2em 1% 0 1%;

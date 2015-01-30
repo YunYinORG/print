@@ -67,7 +67,8 @@ footer a {
 }
 @media(min-width: 992px) {
     img {
-        width: 80%;
+        width: 60%;
+        height: 80%;
    }
 /*   #login>.btn {
        margin-top: 3px;
