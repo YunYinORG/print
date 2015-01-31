@@ -23,11 +23,11 @@ drop table if exists user;
 /*==============================================================*/
 create table code
 (
-   id                   int not null auto_increment,
-   use_id               int not null,
+   id                   bigint not null auto_increment,
+   use_id               bigint not null,
    code                 char(32),
    time                 timestamp not null default CURRENT_TIMESTAMP,
-   type                 char(8),
+   type                 tinyint,
    primary key (id)
 );
 
@@ -38,7 +38,7 @@ create table feedback
 (
    id                   int not null auto_increment,
    email                char(32),
-   phone                char(20),
+   phone                char(16),
    message              text,
    time                 timestamp not null default CURRENT_TIMESTAMP,
    primary key (id)
@@ -49,13 +49,13 @@ create table feedback
 /*==============================================================*/
 create table file
 (
-   id                   int not null auto_increment,
+   id                   bigint not null auto_increment,
    pri_id               int not null,
-   use_id               int not null,
-   name                 char(64),
+   use_id               bigint not null,
+   name                 char(32),
    url                  char(64),
    time                 timestamp not null default CURRENT_TIMESTAMP,
-   requirements         char(100),
+   requirements         varchar(128),
    copies               int default 1,
    double_side          bool,
    status               tinyint,
@@ -67,10 +67,10 @@ create table file
 /*==============================================================*/
 create table notification
 (
-   id                   int not null auto_increment,
-   fil_id               int not null,
+   id                   bigint not null auto_increment,
+   fil_id               bigint not null,
    content              text,
-   to_id                int,
+   to_id                bigint,
    type                 tinyint,
    primary key (id)
 );
@@ -81,12 +81,12 @@ create table notification
 create table printer
 (
    id                   int not null auto_increment,
-   name                 char(20),
-   account              char(30),
+   name                 char(16),
+   account              char(16),
    password             char(32),
-   address              char(30),
-   phone                char(20),
-   qq                   char(15),
+   address              char(32),
+   phone                char(16),
+   qq                   char(16),
    primary key (id),
    unique key AK_account_unique (account)
 );
@@ -96,7 +96,7 @@ create table printer
 /*==============================================================*/
 create table token
 (
-   to_id                int not null,
+   to_id                bigint not null,
    type                 tinyint not null,
    time                 timestamp not null default CURRENT_TIMESTAMP,
    token                char(64),
@@ -109,14 +109,14 @@ create table token
 /*==============================================================*/
 create table user
 (
-   id                   int not null auto_increment,
+   id                   bigint not null auto_increment,
    student_number       char(10),
    password             char(32),
-   name                 char(6),
-   gender               char(3),
-   phone                char(20),
-   email                char(32),
-   status               char(32) default '1',
+   name                 char(8),
+   gender               char(2),
+   phone                char(16),
+   email                char(64),
+   status               tinyint default '1',
    primary key (id),
    unique key AK_student_number_unique (student_number)
 );
