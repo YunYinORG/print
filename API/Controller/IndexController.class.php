@@ -9,7 +9,7 @@
 // +------------------------------------------------------------------
 // | 云印南开
 // +------------------------------------------------------------------
-// | Copyright (c) 2014 云印南开团队 All rights reserved.
+// | Copyright (c) 2014-2015 云印南开团队 All rights reserved.
 // +------------------------------------------------------------------
 /**
  * Class and Function List:
@@ -44,18 +44,20 @@ class IndexController extends RestController
 		$Model       = null;
 		switch ($type) 
 		{
-		case C('STUDENT'):
-			$account     = I('post.number', 0, '/^(\d{7}|\d{11})$/');
-			$Model       = M('user')->where("student_number='%d'", $account);			
+		case C('STUDENT_API'):
+			$account     = I('post.number', 0, '/^(\d{7}|\d{10})$/');
+			$Model       = M('user');
+			$where['student_number']= $account;			
 			break;
 
 		case C('PRINTER'):
-			$account = I('post.account', null, '/^\w{3,28}$/');
-			$Model   = M('printer')->where("account='%s'", $account);
+			$account = I('post.account', null, '/^\w{3,16}$/');
+			$Model   = M('printer');
+			$where['account']= $account;
 			break;
 
 		default:
-			$data['err']       = '未知类型';
+			$data['err']       = '不允许此接口登录';
 		}
 		
 		if (!isset($data)) 
@@ -113,7 +115,7 @@ class IndexController extends RestController
 		switch ($this->_method) 
 		{
 		case 'delete':
-			if (M('token')->where('token="%s"', $token)->delete() === false) 
+			if (M('token')->where('token="%s"', md5($token))->delete() === false) 
 			{
 				$data['msg']       = '删除成功！';
 			} else

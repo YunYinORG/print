@@ -1,19 +1,8 @@
 {//关于我们}
 <extend name="Public/template/base.html"/>
 <block name='header'>
-<include file="./Public/template/nav.html" about="current_page_item"/>
+<include file="./Public/template/nav.html" about="active"/>
 </block>
 <block name='content'>
-<div class="text-warning">
-<h2>用户使用</h2>
-<p>
-	<ul>
-		<li>选择文件 — 选择打印店 — 设置打印分数和单双面 — 传到打印店 。</li>
-		<li>可以在打印店空闲的时候提前为你打印（你可以查看打印状态，当然亦可以设置到店后现场打印）</li>
-		<li>无论何种打印队列多长到店的同学优先打印</li>
-		<li>另外通过云印南开平台传递的文件比携带U盘的同学优先打印（打印店已同意）。</li>
-	</ul>
-</p>
-</div>
 <include file="./Public/template/about.html"/>
 </block>

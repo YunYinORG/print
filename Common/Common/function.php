@@ -6,7 +6,7 @@
 // +------------------------------------------------------------------
 // | 云印南开
 // +------------------------------------------------------------------
-// | Copyright (c) 2014 云印南开团队 All rights reserved.
+// | Copyright (c) 2014-2015 云印南开团队 All rights reserved.
 // +------------------------------------------------------------------
 
 /**
@@ -16,8 +16,12 @@
  * - update_token()
  * - delete_token()
  * - auth_token()
+ * - encode_old()
  * - encode()
  * - delete_file()
+ * - cache_name()
+ * - send_mail()
+ * - send_sms()
  * Classes list:
  */
 
@@ -53,7 +57,7 @@ function update_token($id, $type)
 	case C('STUDENT'):
 	case C('PRINTER'):
 	case C('PRINTER_WEB'):
-		
+	case C('STUDENT_API'):
 		// code...
 		break;
 
@@ -61,15 +65,18 @@ function update_token($id, $type)
 		
 		return false;
 	}
-	
+	$token=token($id);
+
 	$data['to_id']       = $id;
 	$data['type']       = $type;
 	$Token = M('token');
+	//删除之前token
 	$Token->where($data)->delete();
-	$data['token'] = token($id);
+	//更新token
+	$data['token'] =md5($token);
 	if ($Token->add($data)) 
 	{
-		return $data['token'];
+		return $token;
 	} else
 	{
 		return false;
@@ -98,7 +105,7 @@ function delete_token($info, $type = null)
 		break;
 
 	default:
-		$data['token'] = $info;
+		$data['token'] = md5($info);
 		break;
 	}
 	return M('token')->where($data)->delete();
@@ -111,17 +118,32 @@ function delete_token($info, $type = null)
  *@return array  $info 验证失败返回空值null
  *					$info['id']用户id
  *					$info['type']用户类型
- *@version 1.0
+ *@version 2.0
  *@author NewFuture
  */
 function auth_token($token) 
 {
-	return M('token')->cache(true, 60)->field(array('type', 'to_id' => 'id'))->getByToken($token);
+	return M('token')->cache(true, 60)->field(array('type', 'to_id' => 'id'))->getByToken(md5($token));
+}
+
+/**
+ *encode_old($pwd, $id)
+ *原始密码加密
+ *过渡使用，全部更新后，去掉此函数
+ *@param $pwd 原始密码
+ *@param $id验证对象账号
+ *@return 字符串
+ *@author NewFuture
+ */
+function encode_old($pwd, $id) 
+{
+	return crypt($pwd, $id);
 }
 
 /**
  *encode($pwd, $id)
  *密码加密
+ * 新密码加密过程 md5(pwd)——>crypt()->md5()
  *@param $pwd 原始密码
  *@param $id验证对象账号
  *@return 字符串
@@ -129,7 +151,7 @@ function auth_token($token)
  */
 function encode($pwd, $id) 
 {
-	return crypt($pwd, $id);
+	return md5(crypt($pwd, $id));
 }
 
 /**
@@ -161,18 +183,45 @@ function delete_file($path)
  *cache_name($type,$id)
  *缓存key生成，用于对打印店和用户的
  *@param $path 文件路径
+ *@return string 缓存字段名
  *@author NewFuture
  */
-function cache_name($type,$id)
+function cache_name($type, $id) 
 {
-	switch ($type) {
-		case 'printer':
-			return 'PFV_'.$id;
-			break;
-		case 'user':
-			return 'UFV_'.$id;
-		default:
-			return $type.'_'.$id;
-			break;
+	switch ($type) 
+	{
+	case 'printer':
+		return 'PFV_' . $id;
+		break;
+
+	case 'user':
+		return 'UFV_' . $id;
+	default:
+		return $type . '_' . $id;
+		break;
 	}
+}
+
+/**
+ *send_mail($toMail,$content,$mailType)
+ *发送邮件
+ *@param $toMail 收件人邮箱
+ *@param $content string 邮件主要内容
+ *@param $mailType 邮件类型
+ *@return bool 是否发送成功
+ */
+function send_mail($toMail, $content, $mailType) 
+{
+}
+
+/**
+ *send_sms($toMail,$content,$mailType)
+ *发送短信
+ *@param $toPhone 接收手机号
+ *@param $content mixed 信息主要内容
+ *@param $smsType 短信类型
+ *@return bool 是否发送成功
+ */
+function send_sms($toPhone, $content, $smsType) 
+{
 }
