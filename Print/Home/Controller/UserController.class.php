@@ -60,13 +60,14 @@ class UserController extends Controller
      */
     public function auth() 
     {
-        $User           = D('User');
+       
         $student_number = I('post.student_number', null, '/^(\d{7}|\d{10})$/');
         if ($student_number) 
         {
             $key            = 'auth_' . $student_number;
             $times          = S($key);
             if ($times > C('MAX_TRIES')) 
+
             {
                 \Think\Log::record('auth爆破警告：ip:' . get_client_ip() . ',number:' . $student_number, 'NOTIC', true);
                 $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（ps:你的行为已被系统记录）', '/Index/index', 5);
@@ -78,6 +79,7 @@ class UserController extends Controller
         {
             $this->error('学号格式错误！');
         }
+        $User           = D('User');
         $password = encode(I('post.password'), $student_number);
         $result   = $User->where("student_number='$student_number'")->find();
         if ($result) 

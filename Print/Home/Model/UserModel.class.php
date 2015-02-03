@@ -40,7 +40,7 @@ class UserModel extends Model
     	if (isset($result['email'])&&$result['email'])
     	{
     		$email=$result['email'];
-    		$at=strpos($email, '@')
+    		$at=strpos($email, '@');
     		$result['mask_email']=substr_replace($email, '***',1,$at-1);
 		}else{
 			$result['mask_email']=null;
@@ -52,7 +52,7 @@ class UserModel extends Model
     	}else{
     		$result['mask_phone']=null;
     	}
-    	return true;
+    	return $result;
     }
 
 }
