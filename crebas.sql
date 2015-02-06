@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2014/12/31 22:21:30                          */
+/* Created on:     2015/2/6 13:24:14                            */
 /*==============================================================*/
 
 
@@ -36,7 +36,7 @@ create table code
 /*==============================================================*/
 create table feedback
 (
-   id                   int not null auto_increment,
+   id                   bigint not null auto_increment,
    email                char(32),
    phone                char(16),
    message              text,
@@ -50,9 +50,9 @@ create table feedback
 create table file
 (
    id                   bigint not null auto_increment,
-   pri_id               int not null,
+   pri_id               bigint not null,
    use_id               bigint not null,
-   name                 char(32),
+   name                 char(64),
    url                  char(64),
    time                 timestamp not null default CURRENT_TIMESTAMP,
    requirements         varchar(128),
@@ -80,7 +80,7 @@ create table notification
 /*==============================================================*/
 create table printer
 (
-   id                   int not null auto_increment,
+   id                   bigint not null auto_increment,
    name                 char(16),
    account              char(16),
    password             char(32),
@@ -116,7 +116,7 @@ create table user
    gender               char(2),
    phone                char(16),
    email                char(64),
-   status               tinyint default '1',
+   status               tinyint default 1,
    primary key (id),
    unique key AK_student_number_unique (student_number)
 );
