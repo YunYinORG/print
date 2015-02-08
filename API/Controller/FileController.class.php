@@ -27,11 +27,14 @@ class FileController extends RestController
 {
 	
 	// REST允许的请求类型列表
-	protected $allowMethod = array('get', 'delete', 'put', 'post',);
-	protected $defaultType = 'json';
+	protected $allowMethod     = array('get', 'delete', 'put', 'post');
 	
 	// REST允许请求的资源类型列表
-	protected $allowType   = array('xml', 'json',);
+	protected $allowType       = array('xml', 'json',);
+	protected $defaultType     = 'json';
+	protected $allowOutputType = array(
+		'json'                 => 'application/json',
+		 'xml'                 => 'application/xml');
 	
 	/**
 	 *index
@@ -42,17 +45,25 @@ class FileController extends RestController
 	 */
 	public function index() 
 	{
-		$info        = auth();
+		$info            = auth();
+		$info['id']=1;
+		$info['type']=4;
 		if ($info) 
 		{
 			switch ($info['type']) 
 			{
 			case C('PRINTER'):
-				$where['pri_id']             = $info['id'];
+			case C('PRINTER_WEB'):
+				$field           = 'id,use_id,name,url,time,status,copies,double_side,use_name,student_number';
+				$where['pri_id']                 = $info['id'];
+				$File            = D('FileView');
 				break;
 
 			case C('STUDENT'):
-				$where['use_id'] = $info['id'];
+			case C('STUDENT_API'):
+				$field = 'id,pri_id,name,time,status,copies,double_side';
+				$where['use_id']       = $info['id'];
+				$File  = M('File');
 				break;
 
 			default:
@@ -71,7 +82,7 @@ class FileController extends RestController
 				$cache_key = false;
 				
 				// cache_name('printer', $info['id']);
-				$data['files']           = D('FileView')->where($where)->page($page, 10)->cache($cache_key, 10)->select();
+				$data['files']           = $File->field($field)->where($where)->page($page, 10)->cache($cache_key, 10)->select();
 			}
 		} else
 		{
@@ -94,6 +105,8 @@ class FileController extends RestController
 	public function id($value = '') 
 	{
 		$info  = auth();
+		$info['id']       = 1;
+		$info['type']       = 2;
 		if (!$info) 
 		{
 			$data['err']       = '认证失败';
@@ -117,7 +130,7 @@ class FileController extends RestController
 				$data['err']      = '位置类型';
 			}
 			
-			$fid  = I('get.id', null, 'intval');
+			$fid  = I('id', null, 'intval');
 			
 			if (!$data && $fid) 
 			{
@@ -128,12 +141,11 @@ class FileController extends RestController
 				switch ($this->_method) 
 				{
 				case 'get':
-					$where['status']      = array('gt', '0');
+					$where['status']      = array('gt', 0);
 					$data = $File->where($where)->find();
 					break;
 
 				case 'put':
-				case 'post':
 					if (!isset($where['pri_id'])) 
 					{
 						$data['err']             = '只允许打印店进行此操作';
@@ -183,7 +195,7 @@ class FileController extends RestController
 								$data['err'] = '不允许逆向设置！';
 							} elseif ($File->where('id="%d"', $fid)->setField('status', $status_code)) 
 							{
-								$data['msg'] = '修改完成！';
+								$data['status'] = $status_code;
 								
 								//删除缓存
 								// S(cache_name('printer', $info['id']), null);
@@ -208,7 +220,7 @@ class FileController extends RestController
 						$file = $File->where($where)->field('url,pri_id')->find();
 						if ($file) 
 						{
-							if (delete_file("./Uploads/" . $file['url'])) 
+							if (delete_file('./Uploads/' . $file['url'])) 
 							{
 								$save['status']      = 0;
 								$save['url']      = '';
@@ -217,8 +229,7 @@ class FileController extends RestController
 									
 									//删除缓存
 									// S(cache_name('printer',$file['pri_id']),null);
-									
-									
+									$data['id']      = '删除成功！';
 								}
 							} else
 							{
@@ -230,10 +241,21 @@ class FileController extends RestController
 						}
 					}
 					break;
+
+				case 'post':
+
+					$data['err']='暂未开放！';
+					break;
+
+				default :
+					$data['err']='未知操作类型！';
 				}
+
 			}
 		}
 		$type = ($this->_type == 'xml') ? 'xml' : 'json';
+		
+		// dump($data);
 		$this->response($data, $type);
 	}
 }

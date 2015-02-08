@@ -45,15 +45,15 @@ class IndexController extends RestController
 		switch ($type) 
 		{
 		case C('STUDENT_API'):
-			$account     = I('post.number', 0, '/^(\d{7}|\d{10})$/');
+			$account     = I('post.account', 0, '/^(\d{7}|\d{10})$/');
 			$Model       = M('user');
-			$where['student_number']= $account;			
+			$where['student_number']             = $account;
 			break;
 
 		case C('PRINTER'):
 			$account = I('post.account', null, '/^\w{3,16}$/');
 			$Model   = M('printer');
-			$where['account']= $account;
+			$where['account']         = $account;
 			break;
 
 		default:
@@ -99,6 +99,7 @@ class IndexController extends RestController
 				$data['err'] == '账号格式错误!';
 			}
 		}
+		$data['version']=C('API_VERSION');
 		$this->response($data, (($this->_type == 'xml') ? 'xml' : 'json'));
 	}
 	
@@ -115,6 +116,7 @@ class IndexController extends RestController
 		switch ($this->_method) 
 		{
 		case 'delete':
+			 //删除token
 			if (M('token')->where('token="%s"', md5($token))->delete() === false) 
 			{
 				$data['msg']       = '删除成功！';
@@ -124,8 +126,19 @@ class IndexController extends RestController
 			}
 			break;
 
+		case 'put':
+			 //强制更新token
+			$token = update_token($token);
+			if ($token) 
+			{				
+				$data['token']       = $token;
+			} else
+			{
+				$data['err']       = '更新失败！';
+			}
+
 		default:
-			$data['err'] = '非法操作！';
+			$data['err']       = '非法操作！';
 			break;
 		}
 		$this->response($data, (($this->_type == 'xml') ? 'xml' : 'json'));

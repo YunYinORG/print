@@ -17,6 +17,10 @@ return array(
 		'Token' => 'Index/token' ,
 		'File/:id' => 'File/id',
 		'Notification/:id' => 'Notification/id',
+		'User/:id' => 'User/id',
+		'Printer/:id' => 'Printer/id',
 	) ,
+
+	'API_VERSION'=>1.1,
 );
 

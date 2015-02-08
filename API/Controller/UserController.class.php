@@ -16,7 +16,6 @@
  * Function list:
  * - index()
  * - id()
- * - phone()
  * Classes list:
  * - UserController extends RestController
  */
@@ -43,9 +42,9 @@ class UserController extends RestController
 	public function index() 
 	{
 		$info        = auth();
-		if ($inf && $info['type'] == C('STUDENT_API')) 
+		if ($info && ($info['type'] == C('STUDENT_API') || $info['type'] == C('STUDENT'))) 
 		{
-			$data        = D('User')->field('id,student_number,name,gender,phone,email,status')->getById($info['id']);
+			$data        = D('User')->field('id,student_number,name,gender,phone,email')->getById($info['id']);
 			
 			//手机号和邮箱打码
 			$data['email']             = $data['mask_email'];
@@ -62,7 +61,7 @@ class UserController extends RestController
 	
 	/**
 	 *id
-	 *根据id查看用户信息，供打印店使用
+	 *根据id查看用户信息，
 	 * 支持操作get，put
 	 *@return json,xml
 	 *		查询返回，详细信息列表
@@ -72,66 +71,112 @@ class UserController extends RestController
 	public function id($id   = '') 
 	{
 		$info = auth();
-		if (!$info) 
-		{
-			$data['err']      = '认证失败';
-		} else
+		$id   = I('id', null, 'int');
+		if ($info && $id) 
 		{
 			
-			//查询用户信息;
-			
-			
-		}
-		$type = ($this->_type == 'xml') ? 'xml' : 'json';
-		$this->response($data, $type);
-	}
-	
-	/**
-	 *phone
-	 *查看用户手机号
-	 * 支持操作get，put
-	 *@return json,xml
-	 *		查询返回，详细信息列表
-	 *		修改，返回操作结果msg
-	 *		出错返回err
-	 */
-	public function phone($id   = '') 
-	{
-		$info = auth();
-		if (!$info) 
-		{
-			$data['err']      = '认证失败';
-		} else
-		{
 			switch ($info['type']) 
 			{
-			case C('STUDENT'):
 			case C('STUDENT_API'):
-				$user = M('User')->field('student_number,phone')->getById($info['id']);
-				if ($user['phone']) 
+			case C('STUDENT'):
+				if ($info['id'] != $id) 
 				{
-					import('Encrypt', COMMON_PATH, 'php');
-					$data['phone'] = decrypt_phone($user['phone'], $user['student_number'], $info['id']);
-				} else
-				{
-					$data['phone'] = null;
+					$data['err']      = '只允许查看自己的信息';
 				}
 				break;
 
 			case C('PRINTER'):
 			case C('PRINTER_WEB'):
-				
-				//todo
-				//验证是否有未删除文件在此
+				$file['file.pri_id']=$info['id'];
+				$file['file.use_id']=$id;
+				$file['file.status']=array('gt',0);
+				if(!M('file')->where($file)->getField('id'))
+				{
+					$data['err']='只允许查看当前在此打印的用户信息';
+				}
 				break;
 
 			default:
 				
-				$data['err'] = '未定义类型';
+				$data['err']='未知类型';
 				break;
 			}
+			if (!isset($data)) 
+			{
+				$where['user.id']      = $id;
+				$where['user.status']      = array('gt', 0);
+				$data = M('User')->where($where)->field('id,name,student_number,gender,phone,email,status')->find();
+				if ($data) 
+				{
+					import('Common.Encrypt',COMMON_PATH, '.php');
+					if ($data['email']) 
+					{
+						decrypt_email($data['email']);
+					}
+					if ($data['phone']) 
+					{
+						decrypt_phone($data['phone'], $data['student_number'], $id);
+					}
+				}else{
+					$data['err']='查询用户不存';
+				}
+			}
+		} else
+		{
+			$data['err']      = '认证失败';
 		}
 		$type = ($this->_type == 'xml') ? 'xml' : 'json';
 		$this->response($data, $type);
 	}
+	
+	// /**
+	//  *phone
+	//  *查看用户手机号
+	//  * 支持操作get，put
+	//  *@return json,xml
+	//  *		查询返回，详细信息列表
+	//  *		修改，返回操作结果msg
+	//  *		出错返回err
+	//  */
+	// public function phone($id   = '')
+	// {
+	// 	$info = auth();
+	// 	if (!$info)
+	// 	{
+	// 		$data['err']      = '认证失败';
+	// 	} else
+	// 	{
+	// 		switch ($info['type'])
+	// 		{
+	// 		case C('STUDENT'):
+	// 		case C('STUDENT_API'):
+	// 			$user = M('User')->field('student_number,phone')->getById($info['id']);
+	// 			if ($user['phone'])
+	// 			{
+	// 				import('Encrypt', COMMON_PATH, 'php');
+	// 				$data['phone'] = decrypt_phone($user['phone'], $user['student_number'], $info['id']);
+	// 			} else
+	// 			{
+	// 				$data['phone'] = null;
+	// 			}
+	// 			break;
+	
+	// 		case C('PRINTER'):
+	// 		case C('PRINTER_WEB'):
+	
+	// 			//todo
+	// 			//验证是否有未删除文件在此
+	// 			break;
+	
+	// 		default:
+	
+	// 			$data['err'] = '未定义类型';
+	// 			break;
+	// 		}
+	// 	}
+	// 	$type = ($this->_type == 'xml') ? 'xml' : 'json';
+	// 	$this->response($data, $type);
+	// }
+	
+	
 }

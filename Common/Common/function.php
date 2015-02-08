@@ -34,53 +34,57 @@
  */
 function token($id) 
 {
-	$str = md5(str_shuffle($id . time()));
-	return $id . $str;
+	$t   = time();
+	$str = str_shuffle(md5($id . $t . rand()));
+	return $id . '_' . $str . '_' . $t;
 }
 
 /**
- *update_token($id, $type)
+ *update_token($info, $type=null)
  *生成和更新token
- *@param  int $id 用户id
+ *@param  mixed $info 用户id或者token值
  *@param  int $type用户类型，读取配置
  *@return mixed
  *			stinrg  生成或者更新的token字符串
  *			bool flase 生成失败
- *@version 1.0
+ *@version 1.1
  *@author NewFuture
  */
-function update_token($id, $type) 
+function update_token($info, $type  = null) 
 {
-	
+	$Token = M('token');
 	switch ($type) 
 	{
 	case C('STUDENT'):
 	case C('PRINTER'):
 	case C('PRINTER_WEB'):
 	case C('STUDENT_API'):
-		// code...
+		$data['to_id']       = $info;
+		$data['type']       = $type;
+		
+		//删除之前token；再更新token
+		$Token->where($data)->delete();
+		$token = token($info);
+		$data['token']       = md5($token);
+		if (!$Token->add($data)) 
+		{
+			return false;
+		}
 		break;
 
 	default:
-		
-		return false;
+		list($id,)        = explode('_', $info);
+		$data['to_id']       = $id;
+		$data['token']       = md5($info);
+		$token = token($id);
+		if (!$Token->where($data)->save(array('token' => md5($token)))) 
+		{
+			return false;
+		}
+		break;
 	}
-	$token=token($id);
-
-	$data['to_id']       = $id;
-	$data['type']       = $type;
-	$Token = M('token');
-	//删除之前token
-	$Token->where($data)->delete();
-	//更新token
-	$data['token'] =md5($token);
-	if ($Token->add($data)) 
-	{
-		return $token;
-	} else
-	{
-		return false;
-	}
+	
+	return $token;
 }
 
 /**
@@ -123,7 +127,7 @@ function delete_token($info, $type = null)
  */
 function auth_token($token) 
 {
-	return M('token')->cache(true, 60)->field(array('type', 'to_id' => 'id'))->getByToken(md5($token));
+	return M('token')->field(array('type', 'to_id' => 'id'))->getByToken(md5($token));
 }
 
 /**

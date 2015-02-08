@@ -2,7 +2,7 @@
 // ===================================================================
 // | FileName: 		NotificationController.class.php
 // ===================================================================
-// | Discription：	NotificationController 消息查询接口
+// | Discription：	NotificationController 通知查询接口
 //		<命名规范：>
 // ===================================================================
 // +------------------------------------------------------------------
@@ -50,7 +50,7 @@ class NotificationController extends RestController
 		$info        = auth();
 		if ($info) 
 		{
-			$where['oid']             = $info['oid'];
+			$where['to_id']             = $info['id'];
 			$data        = M('Nofification')->where($where)->select();
 		} else
 		{
@@ -76,7 +76,7 @@ class NotificationController extends RestController
 		} else
 		{
 			
-			$where['oid']              = $info['oid'];
+			$where['to_id']              = $info['id'];
 			$where['id']              = I('id',0,'int');
 			
 			$Nofification = M('Nofification')->cache(true, 60)->where($where);

@@ -47,11 +47,11 @@ function encrypt_phone($phone, $snum, $id)
  * @param $id int 用户id,
  * @return string(11) 加密后的手机号
  */
-function decrypt_phone($phone, $snum, $id)
+function decrypt_phone(&$phone, $snum, $id)
 {
     $mid = substr($phone, -10, 6);
     $end = substr($phone, -4);
-    return substr($phone, 0, -10) . decrypt_mid($mid, $snum, $id) . decrypt_end($end);
+    return $phone=substr($phone, 0, -10) . decrypt_mid($mid, $snum, $id) . decrypt_end($end);
 }
 
 /**
