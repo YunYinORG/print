@@ -1,8 +1,10 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/2/6 13:24:14                            */
+/* Created on:     2015/2/8 17:02:24                            */
 /*==============================================================*/
 
+
+drop table if exists cardlog;
 
 drop table if exists code;
 
@@ -17,6 +19,19 @@ drop table if exists printer;
 drop table if exists token;
 
 drop table if exists user;
+
+/*==============================================================*/
+/* Table: cardlog                                               */
+/*==============================================================*/
+create table cardlog
+(
+   id                   bigint not null auto_increment,
+   find_id              bigint not null,
+   lost_id              bigint not null,
+   time                 datetime default CURRENT_TIMESTAMP,
+   status               tinyint,
+   primary key (id)
+);
 
 /*==============================================================*/
 /* Table: code                                                  */
@@ -117,9 +132,18 @@ create table user
    phone                char(16),
    email                char(64),
    status               tinyint default 1,
+   device_code          varchar(16),
+   last_login           datetime default CURRENT_TIMESTAMP,
+   card_on              bool default 1,
    primary key (id),
    unique key AK_student_number_unique (student_number)
 );
+
+alter table cardlog add constraint FK_user_find_card foreign key (find_id)
+      references user (id) on delete restrict on update restrict;
+
+alter table cardlog add constraint FK_user_lost_card foreign key (lost_id)
+      references user (id) on delete restrict on update restrict;
 
 alter table code add constraint FK_code_of_user foreign key (use_id)
       references user (id) on delete restrict on update restrict;
