@@ -21,6 +21,6 @@ return array(
 		'Token'=>array('Token/create','',array('method'=>'post')),
 	) ,
 
-	'API_VERSION'=>1.1,
+	'API_VERSION'=>1.2,
 );
 

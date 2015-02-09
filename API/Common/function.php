@@ -30,6 +30,6 @@
  */
 function auth() 
 {
-	$token = I('get.token',null,'/^\w{32,63}$/');
+	$token = I('server.HTTP_TOKEN',null,'/^\w{32,63}$/');
 	return ($token?auth_token($token):false);
 }

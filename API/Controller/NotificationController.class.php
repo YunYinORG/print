@@ -54,7 +54,7 @@ class NotificationController extends RestController
 			$data        = M('Nofification')->where($where)->select();
 		} else
 		{
-			$data['err']             = '认证失败';
+			$data['err']             = 'unauthored';
 		}
 		$type        = ($this->_type == 'xml') ? 'xml' : 'json';
 		$this->response($data, $type);
@@ -67,12 +67,12 @@ class NotificationController extends RestController
 	 *@return json,xml
 	 *@author NewFuture
 	 */
-	public function id($value        = '') 
+	public function id() 
 	{
 		$info         = auth();
 		if (!$info) 
 		{
-			$data['err']              = '认证失败';
+			$data['err']              = 'unauthored';
 		} else
 		{
 			
@@ -95,7 +95,7 @@ class NotificationController extends RestController
 					$data['err'] = '删除失败！';
 				}
 			default:
-				$data['err'] = '不支持操作！';
+				$data['err'] = 'unkown method';
 				break;
 			}
 		}

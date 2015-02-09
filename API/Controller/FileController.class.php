@@ -46,8 +46,6 @@ class FileController extends RestController
 	public function index() 
 	{
 		$info            = auth();
-		$info['id']=1;
-		$info['type']=4;
 		if ($info) 
 		{
 			switch ($info['type']) 
@@ -67,7 +65,7 @@ class FileController extends RestController
 				break;
 
 			default:
-				$data['err'] = '不支持类型';
+				$data['err'] = 'unkown user type';
 				break;
 			}
 			if (!isset($data)) 
@@ -86,7 +84,7 @@ class FileController extends RestController
 			}
 		} else
 		{
-			$data['err']           = '认证失败';
+			$data['err']           = 'unauthored';
 		}
 		$type      = ($this->_type == 'xml') ? 'xml' : 'json';
 		$this->response($data, $type);
@@ -102,14 +100,12 @@ class FileController extends RestController
 	 *		出错返回err
 	 *@author NewFuture
 	 */
-	public function id($value = '') 
+	public function id() 
 	{
 		$info  = auth();
-		$info['id']       = 1;
-		$info['type']       = 2;
 		if (!$info) 
 		{
-			$data['err']       = '认证失败';
+			$data['err']       = 'unauthored';
 		} else
 		{
 			
@@ -127,7 +123,7 @@ class FileController extends RestController
 				break;
 
 			default:
-				$data['err']      = '位置类型';
+				$data['err']      = 'unkown user type';
 			}
 			
 			$fid  = I('id', null, 'intval');
@@ -229,7 +225,7 @@ class FileController extends RestController
 									
 									//删除缓存
 									// S(cache_name('printer',$file['pri_id']),null);
-									$data['id']      = '删除成功！';
+									$data['msg']      = '删除成功！';
 								}
 							} else
 							{
@@ -244,18 +240,27 @@ class FileController extends RestController
 
 				case 'post':
 
-					$data['err']='暂未开放！';
+					$data['err']='POST method not support';
 					break;
 
 				default :
-					$data['err']='未知操作类型！';
+					$data['err']='unkown method';
 				}
 
 			}
 		}
 		$type = ($this->_type == 'xml') ? 'xml' : 'json';
-		
-		// dump($data);
 		$this->response($data, $type);
 	}
+
+/**
+* upload
+* 上传文件
+* 通过post路由
+*/
+public function upload()
+{
+	# code...
+}
+
 }

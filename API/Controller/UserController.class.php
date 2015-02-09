@@ -53,7 +53,7 @@ class UserController extends RestController
 			unset($data['mask_phone']);
 		} else
 		{
-			$data['err']      = '无权访问';
+			$data['err']      = 'unauthored';
 		}
 		$type = ($this->_type == 'xml') ? 'xml' : 'json';
 		$this->response($data, $type);
@@ -68,13 +68,12 @@ class UserController extends RestController
 	 *		修改，返回操作结果msg
 	 *		出错返回err
 	 */
-	public function id($id   = '') 
+	public function id() 
 	{
 		$info = auth();
 		$id   = I('id', null, 'int');
 		if ($info && $id) 
 		{
-			
 			switch ($info['type']) 
 			{
 			case C('STUDENT_API'):
@@ -98,7 +97,7 @@ class UserController extends RestController
 
 			default:
 				
-				$data['err']='未知类型';
+				$data['err']='unkown user type';
 				break;
 			}
 			if (!isset($data)) 
@@ -123,7 +122,7 @@ class UserController extends RestController
 			}
 		} else
 		{
-			$data['err']      = '认证失败';
+			$data['err']      = 'unauthored';
 		}
 		$type = ($this->_type == 'xml') ? 'xml' : 'json';
 		$this->response($data, $type);
@@ -176,7 +175,5 @@ class UserController extends RestController
 	// 	}
 	// 	$type = ($this->_type == 'xml') ? 'xml' : 'json';
 	// 	$this->response($data, $type);
-	// }
-	
-	
+	// }	
 }

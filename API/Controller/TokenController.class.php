@@ -24,7 +24,7 @@ use Think\Controller\RestController;
 class TokenController extends RestController
 {
 	
-	protected $allowMethod = array('post', 'delete',);
+	protected $allowMethod = array('post','put','delete',);
 	protected $defaultType = 'json';
 	
 	// REST允许请求的资源类型列表
@@ -66,7 +66,7 @@ class TokenController extends RestController
 				$data['err']       = '更新失败！';
 			}
 		default:
-			$data['err']       = '不支持操作！';
+			$data['err']       = 'unkown method';
 			break;
 		}
 		$this->response($data, (($this->_type == 'xml') ? 'xml' : 'json'));
@@ -133,12 +133,12 @@ class TokenController extends RestController
 						}
 					} else
 					{
-						$data['err'] = '验证失败';
+						$data['err'] = 'authored failed';
 					}
 				}
 			} else
 			{
-				$data['err'] == '账号格式错误!';
+				$data['err'] == 'illegal account';
 			}
 		}
 		$data['version'] = C('API_VERSION');

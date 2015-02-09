@@ -1,4 +1,4 @@
-API说明文档 *v1.1*
+API说明文档 *v1.2*
 ===========
 API接口设计和调用方式
 ---------
@@ -13,6 +13,7 @@ API接口设计和调用方式
 3.  **File** 文件相关
 4.  **User** 用户信息相关
 5.  **Printer** 打印店信息
+6.  API请求测试
 
 ### REST接口
 -----
@@ -28,16 +29,34 @@ API接口设计和调用方式
 
 
 ### 认证方式
- 统一为 uri?token=xxxxxxx;
+-----
+ 从1.0版本之后,认证令牌需包含在uri请求header中;
+ `"Token: replace_the_token_string_here"`
 
 ### 返回数据（响应）
- 返回数据格式默认`json`，也支持`xml`(均以json为例说明,根据实际请求格式返回）
+-----
+返回数据格式默认`json`，也支持`xml`(均以json为例说明,根据实际请求格式返回）
+数据格式包含在uri请求的header中的Accept参数
+
+>
+  请求返回json格式的数据 `"Accept: application/json"`
+  请求返回xml格式的数据 `"Accept: application/xml"`
+  未设置时返回json格式数据
+>
+
  **操作失败**时,统一返回出错原因信息
  ````json
   {
     "err":"错误信息"
   }
  ````
+
+常见错误信息
+>
+`"unauthored"` 未认证（使用的token无效）
+`"unkown method"` 未知操作或不支持（如有的uri仅支持GET）
+`"author failed"` 登录认证失败
+>
 
 # 二.接口调用方式
 #### 入口为/api.php
@@ -123,9 +142,9 @@ baseURL="http://print.nkumstc.cn/api.php";
   URI操作示意:
 
 >
- `GET /Notification/?token=xxxxxxxxxxxx`
- `GET /Notification/?token=xxxxxxxxxxxx&page=2`
- `GET /Notification/?token=xxxxxxxxxxxx&start=123&page=2`
+ `GET /Notification/`
+ `GET /Notification/?page=2`
+ `GET /Notification/?start=123&page=2`
 >
 
   get参数:
@@ -156,7 +175,7 @@ baseURL="http://print.nkumstc.cn/api.php";
 
   2.2.1  **get**获取通知详情：
 
-  URI操作示意 : `GET /Notification/123?token=xxxxxxxxxxxx`
+  URI操作示意 : `GET /Notification/123`
 
   读取成功，返回通知详细内容
 
@@ -171,7 +190,7 @@ baseURL="http://print.nkumstc.cn/api.php";
 
   2.2.2  **delete**删除通知:
 
-  URI操作示意: `DELETE /Notification/123?token=xxxxxxxxxxxx`
+  URI操作示意: `DELETE /Notification/123`
   
   删除成功，返回操作消息
 
@@ -186,7 +205,7 @@ baseURL="http://print.nkumstc.cn/api.php";
 
 ##### 3.1  文件列表 `/File/`
   **get**获取文件列表:
-     URI操作示意:`GET /File/?token=xxxxxxxxxxxx`
+     URI操作示意:`GET /File/`
    
    get参数
 ````c
@@ -268,7 +287,7 @@ baseURL="http://print.nkumstc.cn/api.php";
 ##### 3.2 单个文件操作 `/File/1234`
   
   3.2.1 **get** 文件详细信息
-    URI操作示意: `GET /File/1234?token=xxxxxxxxxxxx`
+    URI操作示意: `GET /File/1234`
   
   获取成功返回文件详细信息
 ````json
@@ -289,7 +308,7 @@ baseURL="http://print.nkumstc.cn/api.php";
   3.2.2 **put** 文件状态修改(**仅允许打印店操作**)
     更新文件状态，不可逆向修改，已删除或者已支付的文件不可修改
    
-   URI操作示意: `PUT /File/1234?token=xxxxxxxxxxxx`
+   URI操作示意: `PUT /File/1234`
 
    put参数：
    ````
@@ -307,7 +326,7 @@ baseURL="http://print.nkumstc.cn/api.php";
   3.2.3 **delete** 删除文件(**仅允许学生用户操作**)
    文件删除操作，仅在文件刚上传(下载之前)和已支付的状态才允许删除
    
-   URI操作示意: `DELETE /File/1234?token=xxxxxxxxxxxx`
+   URI操作示意: `DELETE /File/1234`
 
    操作成功，返回操作提示
    ````json
@@ -322,10 +341,10 @@ baseURL="http://print.nkumstc.cn/api.php";
 ### 4. 用户 User
 -----
 
-##### 4.1  获取自己的信息(仅限学生使用) `/User/`
+##### 4.1  获取自己的信息(仅限学生使用) `/User`
   **get**获取:
   
-  URI操作示意: `GET /User/?token=xxxxxxxxxxxx`
+  URI操作示意: `GET /User`
 
   成功返回用户信息
   ````json
@@ -345,7 +364,7 @@ baseURL="http://print.nkumstc.cn/api.php";
 
  **get** 获取
  
- URI操作示意: `GET /User/?token=xxxxxxxxxxxx`
+ URI操作示意: `GET /User/123`
 
  获取成功返回用户详细信息
 
@@ -402,7 +421,7 @@ baseURL="http://print.nkumstc.cn/api.php";
 
  **get** 获取
  
- URI操作示意: `GET /Printer/1?token=xxxxxxxxxxxx`
+ URI操作示意: `GET /Printer/1`
 
  获取成功返回打印店详细信息(未完待续)
 
@@ -415,6 +434,46 @@ baseURL="http://print.nkumstc.cn/api.php";
     "qq": "打印店QQ"
   }
  ````
+
+### 6. API请求测试
+-----
+
+6.1 API共有了五个公开的测试链接
+数据格式支持`json`,`xml`和`html`
+
+6.1.1 查看请求信息`/Index/test`
+6.1.2 测试get 请求 `/Index/get`
+6.1.3 测试post请求 `/Index/post`
+6.1.4 测试put 请求 `/Index/put`
+6.1.5 测试delete请求 `/Index/delete` 
+
+6.2 请求请求举例，这里用curl操作，返回json为例
+
+get测试
+````cmd
+curl -H "Accept: application/json" "baseURL/Index/get?data=testdata"
+````
+post测试
+````cmd
+curl -X POST -d "data=testdata" -H "Accept: application/json" "baseURL/Index/post"
+````
+put测试
+````cmd
+curl -X PUT -d "data=testdata" -H "Accept: application/json" "baseURL/Index/put"
+````
+get,post,put 测试有效时返回结果
+````json
+{"code":1,"param":{"data":"testdata"}}
+````
+
+delete 测试
+````cmd
+curl -X DELETE -H "Accept: application/json" "baseURL/Index/delete"
+````
+delete有效时的返回结果
+````json
+{"code":1}
+````
 
 ----
 authored by [NewFuture](https://github.com/New-Future)

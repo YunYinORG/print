@@ -66,7 +66,6 @@ class PrinterController extends RestController
 	public function id() 
 	{
 		$info = auth();
-		$info['type']      = 4;
 		$id   = I('id', 0, 'int');
 		if ($info && $id && ($info['type'] == C('STUDENT_API') || $info['type'] == C('STUDENT'))) 
 		{
@@ -77,7 +76,7 @@ class PrinterController extends RestController
 			}
 		} else
 		{
-			$data['err']      = '无权查看';
+			$data['err']      = 'unauthored';
 		}
 		$type = ($this->_type == 'xml') ? 'xml' : 'json';
 		$this->response($data, $type);
