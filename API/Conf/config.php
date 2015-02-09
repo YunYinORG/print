@@ -14,11 +14,11 @@ return array(
 	'URL_ROUTER_ON' => true,
 	
 	'URL_ROUTE_RULES' => array(
-		'Token' => 'Index/token' ,
 		'File/:id' => 'File/id',
 		'Notification/:id' => 'Notification/id',
 		'User/:id' => 'User/id',
 		'Printer/:id' => 'Printer/id',
+		'Token'=>array('Token/create','',array('method'=>'post')),
 	) ,
 
 	'API_VERSION'=>1.1,

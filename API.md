@@ -8,7 +8,7 @@ API接口设计和调用方式
 
 ### 模块
 ----
-1.  **Index**(和Token) 认证相关
+1.  **Token** 认证登录相关
 2.  **Notification** 通知推送相关
 3.  **File** 文件相关
 4.  **User** 用户信息相关
@@ -50,11 +50,11 @@ baseURL="http://print.nkumstc.cn/api.php";
 如查询打印店的接口`/Printer/` ，则实际的`URI`是`http://print.nkumstc.cn/api.php/Printer/`
 >
 
-### 1. 登录和令牌
+### 1. 登录和令牌 Token
 ------
-##### 1.1 生成令牌(登录) 【请注意：云印南开令牌生成接口强制使用https接口】 
+##### 1.1 生成令牌(登录) `/Token`
  **post** 生成:
-    URI操作示意：`POST /`
+    URI操作示意：`POST /Token`
  
  post参数： 
  
