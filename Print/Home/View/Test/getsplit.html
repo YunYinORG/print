@@ -1,0 +1,53 @@
+<!--
+<table cellpadding=3 cellspacing=5>
+<volist name="list" id="vo">
+<tr>
+<td >[ {$vo.create_time|date='Y-m-d H:i:s',###} ] {$vo.title} </td>
+</tr>
+</volist>
+<tr>        
+</tr>
+</table>
+<div class="result page">{$page}</div>
+-->
+
+    <table class="table">
+        <thead>
+            <tr>
+            <th>文件状态</th>
+                <th>文件名</th>    
+                <th>上传时间</th>
+                <th>所选打印店</th>                
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="list" id="vo">
+            <tr>
+              
+                <td id="{$vo.id}_status">
+                    <switch name="vo['status']">
+                    <case value="1">已上传</case>
+                    <case value="2">已下载</case>
+                    <case value="3">打印中</case>
+                    <case value="4">已打印</case>
+                    <case value="5">已支付</case>
+                    <case value="0">已删除</case>
+                    <default />未知状态
+                    </switch>
+                </td>
+                <td><a href="__UPLOAD__/{$vo.url}">[{$vo.id}]{$vo.name}</a></td>
+                <td>{$vo.time}</td>
+                <td>{$vo.pri_name}[{$vo.pri_id}]</td>
+                <td>
+                <if condition="($vo.status gt 1)AND($vo.status lt 5)">
+                    <button type="button" fid="{$vo.id}"class="btn btn-danger" disabled="disabled">删除</button>
+                <else />
+                    <button type="button" fid="{$vo.id}"class="delete btn btn-danger">删除</button>
+                </if>
+                </td>
+            </tr>
+            </volist>
+        </tbody>
+    </table>
+<div class="result page">{$page}</div>
