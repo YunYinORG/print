@@ -18,7 +18,7 @@ return array(
 		'Notification/:id' => 'Notification/id',
 		'User/:id' => 'User/id',
 		'Printer/:id' => 'Printer/id',
-		'Token'=>array('Token/create','',array('method'=>'post')),
+		'Token/:token'=>'Token/token',
 	) ,
 
 	'API_VERSION'=>1.2,

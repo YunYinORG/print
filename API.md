@@ -27,11 +27,11 @@ API接口设计和调用方式
    删除`delete`
 >
 
-
 ### 认证方式
 -----
  从1.0版本之后,认证令牌需包含在uri请求header中;
  `"Token: replace_the_token_string_here"`
+Token在通过API登录成功时，会得到一个32到48位的随机字符串作为访问令牌
 
 ### 返回数据（响应）
 -----
@@ -95,15 +95,10 @@ baseURL="http://print.nkumstc.cn/api.php";
 
   ````
 
-##### 1.2 更新令牌 `/Token` 
+##### 1.2 更新令牌 `/Token/xxxxxxxxxx` 
  **put** 更新: 
   
- URI操作示意：`PUT /Token`
-
- put参数：
- ````c
-    token="当前访问令牌";
- ```` 
+ URI操作示意：`PUT /Token/your_token_string_is_here`
 
 操作成功,返回新生成的令牌相关信息
 ````json
@@ -113,15 +108,10 @@ baseURL="http://print.nkumstc.cn/api.php";
 
 ````
 
-##### 1.3 删除令牌（注销） `/Token` 
+##### 1.3 删除令牌（注销） `/Token/xxxxxxxxxx` 
  **delete** 删除: 
   
- URI操作示意：`DELETE /Token`
-
- put参数：
- ````c
-    token="当前访问令牌";
- ```` 
+ URI操作示意：`DELETE /Token/your_token_string_is_here`
 
 操作成功,返回
 ````json
