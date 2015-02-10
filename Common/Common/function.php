@@ -22,6 +22,7 @@
  * - cache_name()
  * - send_mail()
  * - send_sms()
+ * - random()
  * Classes list:
  */
 
@@ -34,9 +35,7 @@
  */
 function token($id) 
 {
-	$t   = time();
-	$str = str_shuffle(md5($id . $t . rand()));
-	return $id . '_' . $str . '_' . $t;
+	return $id . random(1, 'W') . random(30) . random(1, 'W') . time();
 }
 
 /**
@@ -73,7 +72,11 @@ function update_token($info, $type  = null)
 		break;
 
 	default:
-		list($id,)        = explode('_', $info);
+		if (!preg_match('/^\d+/', $info, $result)) 
+		{
+			return false;
+		}
+		$id    = $result[0];
 		$data['to_id']       = $id;
 		$data['token']       = md5($info);
 		$token = token($id);
@@ -228,4 +231,60 @@ function send_mail($toMail, $content, $mailType)
  */
 function send_sms($toPhone, $content, $smsType) 
 {
+}
+
+/**
+ *random($n,$mode='')
+ *生成n位随机字符串
+ *@param int $n 字符个数
+ *@param string $mode='' 生成方式
+ *				''默认快速生成不重复字符串
+ *				包含'N':Number数字，
+ *				包含'W':Word包含所有字母（=L+U）,
+ *				包含'L':Low小写字母，
+ *				包含'U':Up大写字母
+ *@return string n位随机字符串
+ *
+ *@example  $str=random(4，'N');快速生成4位随机数字
+ *			$str=random(16,'NU');生成由数字和大写字母组成的16位字符串
+ *			$str=random(32);生成32位任意随机字符串
+ */
+function random($n, $mode = '') 
+{
+	
+	//10位一下的数字使用随机数快速生成
+	if ($n < 10 && $mode == 'N') 
+	{
+		$max  = pow(10, $n);
+		return substr($max + rand(1, $max), -$n);
+	}
+	
+	$str = '';
+	
+	//是否含有数字
+	if (strstr($mode, 'N') != null) 
+	{
+		$str.= '1234567890';
+	}
+	
+	//是否含由字母或者大小写
+	if (strstr($mode, 'W') != null) 
+	{
+		$str.= 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	} elseif (strstr($mode, 'L') != null) 
+	{
+		$str.= 'abcdefghijklmnopqrstuvwxyz';
+	} elseif (strstr($mode, 'U') != null) 
+	{
+		$str.= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	}
+	
+	//默认全部使用
+	if (!$str) 
+	{
+		$str.= 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	}
+	
+	$str = str_repeat($str, $n * 10 / strlen($str) + 1);
+	return substr(str_shuffle($str), 0, $n);
 }
