@@ -45,16 +45,17 @@ class IndexController extends RestController
 		$BaseURL     = 'http://' . I('server.HTTP_HOST') . '/api.php';
 		
 		$header      = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>云印API</title><style rel="stylesheet" type="text/css">*{text-align:center} li{list-style:none}</style></head>';
-		$body        = "<body><h1><b>云印</b><small><sup>南天</sup></small>开放API</h1><h3>当前API版本<u>$version</u></h3>";
-		$main        = "<main><h4>最新API文档<a href='$api_doc'>$api_doc</a><br/></h4>
-<ul><h5>API测试链接(支持json,xml,和html格式)</h5>
+		$body        = "<body><h1><b>云印</b><small><sup>南天</sup></small>开放API<small>【版本<u>$version</u>】</small></h1>";
+		$main        = "<main><h4>最新API文档： <a href='$api_doc'>$api_doc</a><br/></h4>
+<h4>云印API接口示意图</h4><img src='/Public/images/api.png' alt='云印API接口示意图'>
+<ul><h5>API测试链接(支持json,xml,和html格式返回数据)</h5>
 <li>查看请求信息$BaseURL/Index/test</li>
 <li><code>GET</code>操作测试$BaseURL/Index/get</li>
 <li><code>POST</code>操作测试$BaseURL/Index/post</li>
 <li><code>PUT</code>操作测试$BaseURL/Index/put</li>
-<li><code>DELETE</code>操作测试$BaseURL/Index/delete</li>操作测试返回说明：<br/>
-<q>code为1表示操作方式正确,param为请求参数</q></ul></main>";
-		$footer      = '<footer>Copyright &copy; 2014-2015 <a href="/">云印南天</a></footer></body></html>';
+<li><code>DELETE</code>操作测试$BaseURL/Index/delete</li>
+<small>操作测试返回说明：<q>code为1表示操作方式正确,param为请求参数</q></small></ul></main>";
+		$footer      = '<footer>Copyright &copy; 2014-2015 云印南天</footer></body></html>';
 		$this->show($header . $body . $main . $footer);
 	}
 	
