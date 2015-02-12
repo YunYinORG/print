@@ -1,4 +1,4 @@
-API说明文档 *v1.2*
+API说明文档 *v1.3*
 ===========
 API接口设计和调用方式
 ---------
@@ -8,12 +8,13 @@ API接口设计和调用方式
 
 ### 模块
 ----
+O.  API请求测试
 1.  **Token** 认证登录相关
 2.  **Notification** 通知推送相关
 3.  **File** 文件相关
 4.  **User** 用户信息相关
 5.  **Printer** 打印店信息
-6.  API请求测试
+
 
 ### REST接口
 -----
@@ -68,6 +69,61 @@ baseURL="http://print.nkumstc.cn/api.php";
 一下所有接口的的地址相对于此`baseURL`
 如查询打印店的接口`/Printer/` ，则实际的`URI`是`http://print.nkumstc.cn/api.php/Printer/`
 >
+
+
+### 0. API请求测试
+-----
+
+0.1 API共有了六个公开的测试链接
+数据格式支持`json`,`xml`和`html`
+
+0.1.1 查看请求信息`/Index/test`
+0.1.2 测试get 请求 `/Index/get`
+0.1.3 测试post请求 `/Index/post`
+0.1.4 测试put 请求 `/Index/put`
+0.1.5 测试delete请求 `/Index/delete`
+0.1.6 测试token传递 `/Index/token` 
+
+0.2 请求请求举例，这里用curl操作，返回json为例
+
+get测试
+````cmd
+curl -H "Accept: application/json" "baseURL/Index/get?data=testdata"
+````
+post测试
+````cmd
+curl -X POST -d "data=testdata" -H "Accept: application/json" "baseURL/Index/post"
+````
+put测试
+````cmd
+curl -X PUT -d "data=testdata" -H "Accept: application/json" "baseURL/Index/put"
+````
+get,post,put 测试有效时返回结果
+````json
+{"code":1,"param":{"data":"testdata"}}
+````
+
+delete 测试
+````cmd
+curl -X DELETE -H "Accept: application/json" "baseURL/Index/delete"
+````
+delete有效时的返回结果
+````json
+{"code":1}
+````
+
+token 测试 
+````cmd
+curl -H "Token: qLvF6BEhMHX0kNGTyxKQef6PjRNDS0dvz5xaKsTwyIDd5H0" -H "Accept: application/xml" "baseURL/Index/token"
+````
+token 读取成功时的返回结果（xml格式为例）
+````xml
+<?xml version="1.0" encoding="utf-8"?>
+<think>
+  <token>qLvF**********************S0dvz5xaKsTwyIDd5H0</token>
+</think>
+````
+
 
 ### 1. 登录和令牌 Token
 ------
@@ -424,46 +480,6 @@ baseURL="http://print.nkumstc.cn/api.php";
     "qq": "打印店QQ"
   }
  ````
-
-### 6. API请求测试
------
-
-6.1 API共有了五个公开的测试链接
-数据格式支持`json`,`xml`和`html`
-
-6.1.1 查看请求信息`/Index/test`
-6.1.2 测试get 请求 `/Index/get`
-6.1.3 测试post请求 `/Index/post`
-6.1.4 测试put 请求 `/Index/put`
-6.1.5 测试delete请求 `/Index/delete` 
-
-6.2 请求请求举例，这里用curl操作，返回json为例
-
-get测试
-````cmd
-curl -H "Accept: application/json" "baseURL/Index/get?data=testdata"
-````
-post测试
-````cmd
-curl -X POST -d "data=testdata" -H "Accept: application/json" "baseURL/Index/post"
-````
-put测试
-````cmd
-curl -X PUT -d "data=testdata" -H "Accept: application/json" "baseURL/Index/put"
-````
-get,post,put 测试有效时返回结果
-````json
-{"code":1,"param":{"data":"testdata"}}
-````
-
-delete 测试
-````cmd
-curl -X DELETE -H "Accept: application/json" "baseURL/Index/delete"
-````
-delete有效时的返回结果
-````json
-{"code":1}
-````
 
 ----
 authored by [NewFuture](https://github.com/New-Future)

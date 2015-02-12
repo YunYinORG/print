@@ -21,6 +21,6 @@ return array(
 		'Token/:token'=>'Token/token',
 	) ,
 
-	'API_VERSION'=>1.2,
+	'API_VERSION'=>1.3,
 );
 

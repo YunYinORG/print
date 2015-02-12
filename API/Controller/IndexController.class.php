@@ -20,6 +20,7 @@
  * - post()
  * - put()
  * - delete()
+ * - token()
  * Classes list:
  * - IndexController extends RestController
  */
@@ -54,7 +55,8 @@ class IndexController extends RestController
 <li><code>POST</code>操作测试$BaseURL/Index/post</li>
 <li><code>PUT</code>操作测试$BaseURL/Index/put</li>
 <li><code>DELETE</code>操作测试$BaseURL/Index/delete</li>
-<small>操作测试返回说明：<q>code为1表示操作方式正确,param为请求参数</q></small></ul></main>";
+<li><code>Token</code>传递测试$BaseURL/Index/token</li>
+<small>操作测试返回说明：<q>code为1表示操作方式正确,param为请求参数；token显示为0则传递失败</q></small></ul></main>";
 		$footer      = '<footer>Copyright &copy; 2014-2015 云印南天</footer></body></html>';
 		$this->show($header . $body . $main . $footer);
 	}
@@ -94,7 +96,7 @@ class IndexController extends RestController
 	/**
 	 *get操作测试
 	 */
-	public function get() 
+	public function get($name = '') 
 	{
 		$data['code']      = $this->_method == 'get' ? 1 : 0;
 		$data['param']      = I('get.');
@@ -150,6 +152,22 @@ class IndexController extends RestController
 		{
 			echo '此链接测试不适用浏览器直接测试！';
 			var_dump($data);
+		} else
+		{
+			$this->response($data, $this->_type);
+		}
+	}
+	
+	/**
+	 *token测试
+	 */
+	public function token() 
+	{
+		$token = get_token();
+		$data['token']=$token? substr_replace($token, '**********************', 4,24):0;
+		if ($this->_type == 'html') 
+		{
+			echo $token ? :'0<br>请保证测试的token为34~48位的字母或数字构成的字符串，否则会被过滤掉！';
 		} else
 		{
 			$this->response($data, $this->_type);
