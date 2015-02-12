@@ -8,12 +8,12 @@ API接口设计和调用方式
 
 ### 模块
 ----
-O.  API请求测试
-1.  **Token** 认证登录相关
-2.  **Notification** 通知推送相关
-3.  **File** 文件相关
-4.  **User** 用户信息相关
-5.  **Printer** 打印店信息
+  O.  API请求测试
+  1.  **Token** 认证登录相关
+  2.  **Notification** 通知推送相关
+  3.  **File** 文件相关
+  4.  **User** 用户信息相关
+  5.  **Printer** 打印店信息
 
 
 ### REST接口
@@ -21,29 +21,35 @@ O.  API请求测试
  uri为资源地址
 
  对所有资源操作只有四种: 
->
-   读取`get`，
-   添加`post`，
-   修改`put`，
-   删除`delete`
->
+> 读取`get`，
+
+> 添加`post`,
+
+> 修改`put`，
+
+> 删除`delete`
+
 
 ### 认证方式
 -----
  从1.0版本之后,认证令牌需包含在uri请求header中;
+ 
  `"Token: replace_the_token_string_here"`
+
 Token在通过API登录成功时，会得到一个32到48位的随机字符串作为访问令牌
+
 
 ### 返回数据（响应）
 -----
 返回数据格式默认`json`，也支持`xml`(均以json为例说明,根据实际请求格式返回）
-数据格式包含在uri请求的header中的Accept参数
 
->
-  请求返回json格式的数据 `"Accept: application/json"`
-  请求返回xml格式的数据 `"Accept: application/xml"`
-  未设置时返回json格式数据
->
+数据格式包含在uri请求的header中的`Accept`参数
+
+> 请求返回json格式的数据 `"Accept: application/json"`
+ 
+>请求返回xml格式的数据 `"Accept: application/xml"`
+ 
+>未设置时返回json格式数据
 
  **操作失败**时,统一返回出错原因信息
  ````json
@@ -53,11 +59,11 @@ Token在通过API登录成功时，会得到一个32到48位的随机字符串�
  ````
 
 常见错误信息
->
-`"unauthored"` 未认证（使用的token无效）
-`"unkown method"` 未知操作或不支持（如有的uri仅支持GET）
-`"author failed"` 登录认证失败
->
+>`"unauthored"` 未认证（使用的token无效）
+
+>`"unkown method"` 未知操作或不支持（如有的uri仅支持GET）
+
+>`"author failed"` 登录认证失败
 
 # 二.接口调用方式
 #### 入口为/api.php
@@ -65,26 +71,31 @@ Token在通过API登录成功时，会得到一个32到48位的随机字符串�
 baseURL="http://print.nkumstc.cn/api.php";
 ````
 
->
-一下所有接口的的地址相对于此`baseURL`
-如查询打印店的接口`/Printer/` ，则实际的`URI`是`http://print.nkumstc.cn/api.php/Printer/`
->
+>一下所有接口的的地址相对于此`baseURL`
+
+>如查询打印店的接口`/Printer/` ，则实际的`URI`是`http://print.nkumstc.cn/api.php/Printer/`
+
 
 
 ### 0. API请求测试
 -----
 
-0.1 API共有了六个公开的测试链接
+##### 0.1 API共有了六个公开的测试链接
 数据格式支持`json`,`xml`和`html`
 
 0.1.1 查看请求信息`/Index/test`
+
 0.1.2 测试get 请求 `/Index/get`
+
 0.1.3 测试post请求 `/Index/post`
+
 0.1.4 测试put 请求 `/Index/put`
+
 0.1.5 测试delete请求 `/Index/delete`
+
 0.1.6 测试token传递 `/Index/token` 
 
-0.2 请求请求举例，这里用curl操作，返回json为例
+##### 0.2 请求请求举例，这里用curl操作，返回json为例
 
 get测试
 ````cmd
@@ -187,11 +198,12 @@ token 读取成功时的返回结果（xml格式为例）
 
   URI操作示意:
 
->
- `GET /Notification/`
- `GET /Notification/?page=2`
- `GET /Notification/?start=123&page=2`
->
+> `GET /Notification/`
+
+>`GET /Notification/?page=2`
+
+> `GET /Notification/?start=123&page=2`
+
 
   get参数:
   ````c
@@ -287,7 +299,7 @@ token 读取成功时的返回结果（xml格式为例）
           "time": "2015-02-05 22:08:00",
           "status": "1",
           "copies": "1",
-          "double_side": "0"
+          "double_side": "0",
           "use_name": "用户名",
           "student_number": "学号"
         }
@@ -352,6 +364,7 @@ token 读取成功时的返回结果（xml格式为例）
 ````
 
   3.2.2 **put** 文件状态修改(**仅允许打印店操作**)
+  
     更新文件状态，不可逆向修改，已删除或者已支付的文件不可修改
    
    URI操作示意: `PUT /File/1234`
@@ -370,6 +383,7 @@ token 读取成功时的返回结果（xml格式为例）
    ````
 
   3.2.3 **delete** 删除文件(**仅允许学生用户操作**)
+  
    文件删除操作，仅在文件刚上传(下载之前)和已支付的状态才允许删除
    
    URI操作示意: `DELETE /File/1234`
