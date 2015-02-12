@@ -1,0 +1,78 @@
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<!--
+<form id="upload" method="post" action="__URL__/posttest" enctype="multipart/form-data">
+<input name="file_0" id="basic" type="file" />
+<input type="submit" value="提交" >
+</form> -->
+
+
+<button id="btn1">Add a place</button>
+
+<script>
+    $(document).ready(function(){
+        var times = 1;
+        $("#btn1").click(function(){
+            if(times < 5)
+            {
+                var time = times - 1;
+                $("#setting_"+time).after('<br><fieldset id="setting_'+times+'"><div class="form-group"><input type="file" name="file_'+times+'" id="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="CheckSuffix(this)"></div><div class="form-group"><label for="copies">设置打印份数</label><small class="text-info">(0表示到店后现场打印)</small><input name="copies_'+times+'" type="number" id="copies" value="1"></div><div class="checkbox"><label><input name="double_side_'+times+'" id="double_side" value="1" type="checkbox">双面打印</label></div></fieldset><br>');
+                times = times + 1;
+            }
+            else
+            {
+                alert('Maximum approach');
+            }
+        });
+    });
+</script>
+
+
+<form role="form" action="__URL__/posttest" method="post" id="print" enctype="multipart/form-data">
+        <fieldset id='setting'>
+            <p class="help-block"><span>文档<small>（.pdf .doc .docx和.wps）</small>可设置提前打印;讲义<small>（.ppt和.pptx）</small>需要到店打印;部分手机浏览器可能会出现上传异常</span></p>
+            <label id="myfile" for="file">上传要打印的文件<span class='text-warning small'>(文件最大限制10Mb)</span></label>
+            <div id='price' class='price text-info'>单面:<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面:<span id='double'  class='text-danger'>1角每张</span></div>  
+        </fieldset>
+        <br/>
+        <br/>
+        
+        
+        
+        <fieldset id='setting_0'>
+            <div class="form-group">
+                <input type="file" name="file_0" id="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="CheckSuffix(this)">
+            </div>
+            <div class="form-group">
+                <label for="copies">设置打印份数</label><small class='text-info'>(0表示到店后现场打印)</small>
+                <input name="copies_0" type="number" id="copies" value="1">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input name="double_side_0" id='double_side' value="1" type="checkbox">双面打印
+                </label>
+            </div>   
+        </fieldset>
+        
+        
+        <div class="form-group">
+            <label for='pri_id'>选择想去的打印店：</label>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="pri_id" value="2" checked="checked"/>
+                光辉岁月<span class='text-primary'>[8：00——23：00]</span><small class='text-info'>(二食堂浴园旁)</small></label>
+                <br />
+                <label>
+                    <input type="radio" name="pri_id" value="3"/>
+                精诚快印<span class='text-primary'>[8：30——20：30]</span><small class='text-info'>(新图和数码小院之间)</small></label>
+                <br />
+                <label>
+                    <input type="radio" name="pri_id" value="4"/>
+                快捷复印<span class='text-primary'>[8：00——22：00]</span><small class='text-info'>(南开出版社后)</small></label>
+                <br />
+                <label>
+                    <input type="radio" name="pri_id" value="1" />
+                天达印务<span class='text-primary'>[9：00——22：00]</span><small class='text-info'>(西门附近，22宿下)</small></label>
+            </div>
+        </div>
+    <input type="submit" id="modaltrigger" class="flatbtn" value="开始传送">
+</form>
