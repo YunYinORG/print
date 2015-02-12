@@ -42,7 +42,7 @@ class IndexController extends RestController
 	public function index() 
 	{
 		$version     = C('API_VERSION');
-		$api_doc     = 'https://github.com/nkumstc/print/';
+		$api_doc     = 'https://github.com/nkumstc/print/blob/master/API.md';
 		$BaseURL     = 'http://' . I('server.HTTP_HOST') . '/api.php';
 		
 		$header      = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>云印API</title><style rel="stylesheet" type="text/css">*{text-align:center} li{list-style:none}</style></head>';

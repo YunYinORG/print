@@ -233,7 +233,6 @@ function send_sms($toPhone, $content, $smsType)
 {
 }
 
-<<<<<<< HEAD
 /**
  *random($n,$mode='')
  *生成n位随机字符串
@@ -289,7 +288,6 @@ function random($n, $mode = '')
 	$str = str_repeat($str, $n * 10 / strlen($str) + 1);
 	return substr(str_shuffle($str), 0, $n);
 }
-=======
 
 function qiniu_encode($str) // URLSafeBase64Encode
 {
@@ -312,4 +310,3 @@ function qiniu_sign($url)
 }
 
 ?>
->>>>>>> origin/master
