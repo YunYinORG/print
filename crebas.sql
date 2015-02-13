@@ -1,8 +1,10 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/2/8 17:02:24                            */
+/* Created on:     2015/2/13 20:54:51                           */
 /*==============================================================*/
 
+
+drop table if exists card;
 
 drop table if exists cardlog;
 
@@ -12,6 +14,8 @@ drop table if exists feedback;
 
 drop table if exists file;
 
+drop table if exists mobile;
+
 drop table if exists notification;
 
 drop table if exists printer;
@@ -19,6 +23,17 @@ drop table if exists printer;
 drop table if exists token;
 
 drop table if exists user;
+
+/*==============================================================*/
+/* Table: card                                                  */
+/*==============================================================*/
+create table card
+(
+   id                   bigint not null,
+   sms_on               bool default 1,
+   blocked              bool,
+   primary key (id)
+);
 
 /*==============================================================*/
 /* Table: cardlog                                               */
@@ -74,6 +89,20 @@ create table file
    copies               int default 1,
    double_side          bool,
    status               tinyint,
+   color                tinyint default 2,
+   ppt_layout           char(16),
+   primary key (id)
+);
+
+/*==============================================================*/
+/* Table: mobile                                                */
+/*==============================================================*/
+create table mobile
+(
+   id                   bigint not null,
+   device_code          varchar(16),
+   last_login           datetime default CURRENT_TIMESTAMP,
+   status               tinyint,
    primary key (id)
 );
 
@@ -102,6 +131,9 @@ create table printer
    address              char(32),
    phone                char(16),
    qq                   char(16),
+   profile              varchar(1024),
+   price                varchar(128),
+   image                longblob,
    primary key (id),
    unique key AK_account_unique (account)
 );
@@ -128,16 +160,18 @@ create table user
    student_number       char(10),
    password             char(32),
    name                 char(8),
+   school               char(16),
    gender               char(2),
    phone                char(16),
    email                char(64),
    status               tinyint default 1,
-   device_code          varchar(16),
    last_login           datetime default CURRENT_TIMESTAMP,
-   card_on              bool default 1,
    primary key (id),
    unique key AK_student_number_unique (student_number)
 );
+
+alter table card add constraint FK_card_info_of_user foreign key (id)
+      references user (id) on delete restrict on update restrict;
 
 alter table cardlog add constraint FK_user_find_card foreign key (find_id)
       references user (id) on delete restrict on update restrict;
@@ -152,6 +186,9 @@ alter table file add constraint FK_file_of_printer foreign key (pri_id)
       references printer (id) on delete restrict on update restrict;
 
 alter table file add constraint FK_file_of_user foreign key (use_id)
+      references user (id) on delete restrict on update restrict;
+
+alter table mobile add constraint FK_mobile_device_of_user foreign key (id)
       references user (id) on delete restrict on update restrict;
 
 alter table notification add constraint FK_notification_of_file foreign key (fil_id)
