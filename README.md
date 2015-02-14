@@ -11,7 +11,7 @@
 * 多文件不能一次
 * 提前判断文件大小
 * 低版本浏览器适配
-
+* doc等格式提示转pdf
 
 ## Features to add
 * 打印店文件到达通知
@@ -20,7 +20,6 @@
 * 打印店主页和自主管理
 * 手机绑定
 * 邮箱绑定和验证
-* ...
 * 神秘功能
 * 更安全和开放的API接口（提供APP接入所有接口）
 * ...
@@ -33,27 +32,6 @@
 * 隐私数据加密（手机号和邮箱保存加密）
 
 
-
-## 团队主要人员及分工
-#### 1.项目发起人
-[李旭昇](https://github.com/jeffli678)
-#### 2.指导和系统设计
-[NewFuture](https://github.com/New-Future)
-#### 3.数据库设计
-[牛亮](https://github.com/wangxiaodiu) [梁崇军]()
-#### 4.后端实现
-[孙卓豪]() [牛亮](https://github.com/wangxiaodiu) [梁崇军]() [NewFuture](https://github.com/New-Future)
-#### 5.前端实现
-[杜晓唐]() [孙卓豪]() [王博]()
-#### 6.打印店客户端
-[宋剑超]()
-#### 7.测试维护
-[刘安]() [王雨晴]() [赵泽坤]()
-#### 8.图形设计
-[陈超]()
-#### 9.运营推广
-[崔金锐]()
-
 ##框架目录
 
 使用是请将 `Common/Conf/secret.php.sample` 改成 `Common/Conf/secret.php` 修改相应配置
@@ -65,8 +43,13 @@
 |
 |─Common     后端公共模块目录
 |    |─Common       公共库目录
-|    |    |─Urp.class.php        urp验证
+|    |    |─Encrypt.php        加密函数库
 |    |    └─function.php        公共函数文件
+|    |─Model       公用模型
+|    |    └─UserModel.class.php       用户模型
+|    |─Verify       验证库
+|    |    |─Urp.class.php        urp验证
+|    |    └─EduOnline.class.php       教育在线验证
 |    └─Conf                公共配置目录
 |         |─config.php             公共配置文件
 |         |─secret.php             安全配置文件
@@ -120,15 +103,33 @@
 >>
 
 
-
 ## 仓库分支说明
     包含web端，客户端，数据 三个稳定分支
+
 1. [master](https://github.com/nkumstc/print/tree/master) web端源码仓库分支
 2. [DB](https://github.com/nkumstc/print/tree/DB)     数据库设计源码仓库分支
 3. [printer](https://github.com/nkumstc/print/tree/printer) 打印店客户端和源码仓库分支
 
-##其他
 
+## 团队主要人员及分工
+#### 1.项目发起人
+[李旭昇](https://github.com/jeffli678)
+#### 2.指导和系统设计
+[NewFuture](https://github.com/New-Future)
+#### 3.数据库设计
+[牛亮](https://github.com/wangxiaodiu) [梁崇军]()
+#### 4.后端实现
+[孙卓豪]() [牛亮](https://github.com/wangxiaodiu) [NewFuture](https://github.com/New-Future)
+#### 5.前端实现
+[王博]() [孙卓豪]()
+#### 6.打印店客户端
+[宋剑超]()
+#### 7.测试维护
+[王雨晴]() [梁崇军]()
+#### 8.图形设计
+[陈超]()
+
+##其他
 
 API相关说明:[API.md](https://github.com/nkumstc/print/blob/master/API.md)
 

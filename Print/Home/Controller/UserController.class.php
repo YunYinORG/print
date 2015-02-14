@@ -100,7 +100,7 @@ class UserController extends Controller
             
             if ($User->create()) 
             {
-                import(C('VERIFY_WAY'), COMMON_PATH);
+                import(C('VERIFY_WAY'), COMMON_PATH,'.php');
                 if ($name   = getName($student_number, I('post.password'))) 
                 {
                     $data['name']        = $name;

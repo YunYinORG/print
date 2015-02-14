@@ -18,7 +18,7 @@ return array(
     'DB_SQL_BUILD_CACHE' => true,
 
     //验证方式
-    'VERIFY_WAY'=>'Common.Urp',
+    'VERIFY_WAY'=>'Verify.NankaiUrp',
 
     //URL设定
     'URL_PARAMS_BIND'          =>    TRUE,
