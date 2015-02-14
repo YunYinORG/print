@@ -5,7 +5,8 @@ return array(
 	'SHOW_PAGE_TRACE' => 0, 
 	'FILE_UPLOAD_TYPE' => 'Sae',
 	 'TMPL_PARSE_STRING' => array(
-	 	'__PUBLIC__' => 'http://nkuprint.sinaapp.com/Public', 
+	 	'__PUBLIC__' => '/Public', 
+	 	'__CDNLIB__'=>' http://cdn.bootcss.com',
 	 	'__UPLOAD__' => 'http://nkuprint-uploads.stor.sinaapp.com',
 	 ),
 );

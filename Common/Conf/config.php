@@ -34,9 +34,10 @@ return array(
     //模板渲染转义
     'TMPL_PARSE_STRING' => array(
         '__PUBLIC__'     =>   '/Public',
+        '__CDNLIB__'     =>   '/Public/lib',
+        '__UPLOAD__'   =>   '/Uploads',
         '__JS__'                =>   '/Public/js',
         '__CSS__'            =>   '/Public/css',
-        '__UPLOAD__'   =>   '/Uploads',
     ) ,
 
     //用户登录类型
