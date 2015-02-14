@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/2/13 20:54:51                           */
+/* Created on:     2015/2/14 17:14:57                           */
 /*==============================================================*/
 
 
@@ -30,7 +30,7 @@ drop table if exists user;
 create table card
 (
    id                   bigint not null,
-   sms_on               bool default 1,
+   notification_off     tinyint default 0,
    blocked              bool,
    primary key (id)
 );
@@ -43,7 +43,7 @@ create table cardlog
    id                   bigint not null auto_increment,
    find_id              bigint not null,
    lost_id              bigint not null,
-   time                 datetime default CURRENT_TIMESTAMP,
+   time                 timestamp default CURRENT_TIMESTAMP,
    status               tinyint,
    primary key (id)
 );
@@ -89,8 +89,8 @@ create table file
    copies               int default 1,
    double_side          bool,
    status               tinyint,
-   color                tinyint default 2,
-   ppt_layout           char(16),
+   color                bool,
+   ppt_layout           tinyint,
    primary key (id)
 );
 
@@ -101,8 +101,9 @@ create table mobile
 (
    id                   bigint not null,
    device_code          varchar(16),
-   last_login           datetime default CURRENT_TIMESTAMP,
+   last_login           timestamp default CURRENT_TIMESTAMP,
    status               tinyint,
+   device_type          char(16),
    primary key (id)
 );
 
@@ -125,15 +126,23 @@ create table notification
 create table printer
 (
    id                   bigint not null auto_increment,
-   name                 char(16),
-   account              char(16),
-   password             char(32),
+   name                 char(16) not null,
+   account              char(16) not null,
+   password             char(32) not null,
    address              char(32),
    phone                char(16),
    qq                   char(16),
-   profile              varchar(1024),
-   price                varchar(128),
-   image                longblob,
+   profile              text,
+   image_url            char(64),
+   open_time            char(32),
+   status               tinyint default 1,
+   rank                 int default 0,
+   campus               char(32),
+   price_color          int,
+   price_no_color       int,
+   price_single         int,
+   price_double         int,
+   price_more           varchar(128),
    primary key (id),
    unique key AK_account_unique (account)
 );
@@ -165,7 +174,7 @@ create table user
    phone                char(16),
    email                char(64),
    status               tinyint default 1,
-   last_login           datetime default CURRENT_TIMESTAMP,
+   last_login           timestamp default CURRENT_TIMESTAMP,
    primary key (id),
    unique key AK_student_number_unique (student_number)
 );
