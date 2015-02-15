@@ -51,7 +51,7 @@ class NotificationController extends RestController
 		if ($info) 
 		{
 			$where['to_id']             = $info['id'];
-			$data        = M('Nofification')->where($where)->select();
+			$data        = M('Notification')->where($where)->select();
 		} else
 		{
 			$data['err']             = 'unauthored';
