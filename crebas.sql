@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/2/14 17:14:57                           */
+/* Created on:     2015/2/16 20:27:24                           */
 /*==============================================================*/
 
 
@@ -58,6 +58,7 @@ create table code
    code                 char(32),
    time                 timestamp not null default CURRENT_TIMESTAMP,
    type                 tinyint,
+   content              varchar(64),
    primary key (id)
 );
 
