@@ -34,9 +34,19 @@
  */
 function encrypt_phone($phone, $snum, $id)
 {
-    $mid = substr($phone, -10, 6);
-    $end = substr($phone, -4);
-    return substr($phone, 0, -10) . encrypt_mid($mid, $snum, $id) . encrypt_end($end);
+    if(!$phone)
+    {
+       return $phone;
+    }
+    if($snum&&$id)
+    {
+       $mid = substr($phone, -10, 6);
+       $end = substr($phone, -4);
+       return substr($phone, 0, -10) . encrypt_mid($mid, $snum, $id) . encrypt_end($end);      
+    }else{
+        E('参数不足！');
+    }
+
 }
 
 /**
@@ -49,9 +59,18 @@ function encrypt_phone($phone, $snum, $id)
  */
 function decrypt_phone(&$phone, $snum, $id)
 {
-    $mid = substr($phone, -10, 6);
-    $end = substr($phone, -4);
-    return $phone=substr($phone, 0, -10) . decrypt_mid($mid, $snum, $id) . decrypt_end($end);
+    if(!$phone){
+        return $phone;
+    }
+    if($snum&&$id)
+    {
+        $mid = substr($phone, -10, 6);
+        $end = substr($phone, -4);
+        return $phone=substr($phone, 0, -10) . decrypt_mid($mid, $snum, $id) . decrypt_end($end);        
+    }else{
+        E('参数不足！');
+    }
+
 }
 
 /**
@@ -219,6 +238,10 @@ function aes_decode(&$cipher, $key)
  */
 function encrypt_email($email)
 {
+    if(!$email)
+    {
+        return $email;
+    }
     list($name, $domain) = explode('@', $email);
     //aes加密
     $name2 = substr($name, 1);
@@ -246,6 +269,10 @@ function encrypt_email($email)
  */
 function decrypt_email(&$email)
 {
+    if(!$email)
+    {
+        return $email;
+    }
     list($name, $domain) = explode('@', $email);
     $name2 = substr($name, 1);
     if (strlen($name2) < 24) {

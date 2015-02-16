@@ -23,6 +23,12 @@
  * - send_mail()
  * - send_sms()
  * - random()
+ * - qiniu_encode()
+ * - qiniu_sign()
+ * - get_user_by_phone()
+ * - get_phone_by_id()
+ * - send_sms_code()
+ * - check_sms_code()
  * Classes list:
  */
 
@@ -289,24 +295,154 @@ function random($n, $mode = '')
 	return substr(str_shuffle($str), 0, $n);
 }
 
-function qiniu_encode($str) // URLSafeBase64Encode
+function qiniu_encode($str)
+
+// URLSafeBase64Encode
+
+
 {
-    $find = array('+', '/');
-    $replace = array('-', '_');
-    return str_replace($find, $replace, base64_encode($str));
-}
- 
- 
-function qiniu_sign($url) 
-{//$info里面的url
-    $setting = C ( 'UPLOAD_SITEIMG_QINIU' );
-    $duetime = NOW_TIME + 86400;//下载凭证有效时间
-    $DownloadUrl = $url . '?e=' . $duetime;
-    $Sign = hash_hmac ( 'sha1', $DownloadUrl, $setting ["driverConfig"] ["secrectKey"], true );
-    $EncodedSign = Qiniu_Encode ( $Sign );
-    $Token = $setting ["driverConfig"] ["accessKey"] . ':' . $EncodedSign;
-    $RealDownloadUrl = $DownloadUrl . '&token=' . $Token;
-    return $RealDownloadUrl;
+	$find    = array('+', '/');
+	$replace = array('-', '_');
+	return str_replace($find, $replace, base64_encode($str));
 }
 
+function qiniu_sign($url) 
+{
+	
+	//$info里面的url
+	$setting         = C('UPLOAD_SITEIMG_QINIU');
+	$duetime         = NOW_TIME + 86400;
+	
+	//下载凭证有效时间
+	$DownloadUrl     = $url . '?e=' . $duetime;
+	$Sign            = hash_hmac('sha1', $DownloadUrl, $setting["driverConfig"]["secrectKey"], true);
+	$EncodedSign     = Qiniu_Encode($Sign);
+	$Token           = $setting["driverConfig"]["accessKey"] . ':' . $EncodedSign;
+	$RealDownloadUrl = $DownloadUrl . '&token=' . $Token;
+	return $RealDownloadUrl;
+}
+
+/**
+ *get_user_by_phone($phone,$limitOne=true)
+ *根据手机号查找用户
+ *@param $phone 电话号码
+ *@param $limitOne bool 查找一个或者多个
+ *					   为false时查找所有人
+ *@return array 返回一个或者全部查找结果
+ */
+function get_user_by_phone($phone, $limitOne = true) 
+{
+	import('Common.Encrypt', COMMON_PATH, '.php');
+	$tail     = encrypt_end(substr($phone, -4));
+	$where['phone']          = array('LIKE', '%%' . $tail);
+	$info     = M('User')->where($where)->field('id,student_number,phone')->select();
+	if (!$info) 
+	{
+		return false;
+	}
+	$result = '';
+	foreach ($info as $user) 
+	{
+		if ($phone == decrypt_phone($user['phone'], $user['student_number'], $user['id'])) 
+		{
+			if ($limitOne) 
+			{
+				return $user;
+			} else
+			{
+				$result[] = $user;
+			}
+		}
+	}
+	return $result;
+}
+
+/**
+ *get_phone_by_id($id)
+ *根据id查找用户
+ *@param $id  电话号码
+ *@return string 返回号码
+ */
+function get_phone_by_id($id) 
+{
+	if (!$id) 
+	{
+		return false;
+	}
+	$user = M('User')->field('student_number,phone')->getById($id);
+	if ($user) 
+	{
+		import('Common.Encrypt', COMMON_PATH, '.php');
+		return decrypt_phone($user['phone'], $user['student_number'], $id);
+	}
+	return false;
+}
+
+/**
+ *send_sms_code($phone,$type)
+ *给用户发送验证码
+ *@param $phone  手机码
+ *@param $type   类型
+ *@return string 返回号码
+ */
+function send_sms_code($phone, $type) 
+{
+	$info = S($type . $phone);
+	if ($info) 
+	{
+		if ($info['times'] > 5) 
+		{
+			\Think\Log::record('手机号验证发送失败：ip:' . get_client_ip() . ',phone:' . $phone);
+			return 0;
+		} else
+		{
+			$code = $info['code'];
+			$info['times']      = $info['times'] + 1;
+		}
+	} else
+	{
+		$code = random(6, 'N');
+		$info['code']      = $code;
+		$info['times']      = 0;
+		$info['tries']      = 0;
+	}
+	S($type . $phone, $info, 600);
+	return send_sms($phone, $code, 1);
+}
+
+/**
+ *send_sms_code($phone,$type)
+ *给用户发送验证码
+ *@param $phone  手机码
+ *@param $code 	验证码
+ *@param $type   类型
+ *@return bool true 验证成功
+ *			  false 验证失败
+ *			  0 尝试次数达到限制
+ *			  null 验证信息不存在
+ */
+function check_sms_code($phone, $code, $type) 
+{
+	$info = S($type . $phone);
+	if ($info) 
+	{
+		if ($info['code'] == $code) 
+		{
+			S($type . $phone, null);
+			return true;
+		} elseif ($info['tries'] >= 5) 
+		{
+			S($type . $phone, null);
+			return 0;
+		} else
+		{
+			$info['tries'] = $info['tries'] + 1;
+			S($type . $phone, $info, 600);
+			return false;
+		}
+	} else
+	{
+		return null;
+	}
+}
 ?>

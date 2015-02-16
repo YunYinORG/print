@@ -21,6 +21,11 @@
  * - notice()
  * - forget()
  * - change()
+ * - bindPhone()
+ * - verifyPhone()
+ * - getPhone()
+ * - getEmail()
+ * - bindEmail()
  * - logout()
  * - _empty()
  * Classes list:
@@ -37,7 +42,7 @@ class UserController extends Controller
      */
     public function index() 
     {
-        $id         = Use_id(U('Index/index'));
+        $id         = use_id(U('Index/index'));
         if ($id) 
         {
             $User       = M('User');
@@ -60,14 +65,14 @@ class UserController extends Controller
      */
     public function auth() 
     {
-       
-        $student_number = I('post.student_number', null, '/^(\d{7}|\d{10})$/');
+        
+        $student_number = I('post.student_number', null, '/^\d{7}|\d{10}$/');
         if ($student_number) 
         {
             $key            = 'auth_' . $student_number;
             $times          = S($key);
             if ($times > C('MAX_TRIES')) 
-
+            
             {
                 \Think\Log::record('auth爆破警告：ip:' . get_client_ip() . ',number:' . $student_number, 'NOTIC', true);
                 $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（ps:你的行为已被系统记录）', '/Index/index', 5);
@@ -79,7 +84,7 @@ class UserController extends Controller
         {
             $this->error('学号格式错误！');
         }
-        $User           = D('User');
+        $User     = D('User');
         $password = encode(I('post.password'), $student_number);
         $result   = $User->where("student_number='$student_number'")->find();
         if ($result) 
@@ -100,7 +105,7 @@ class UserController extends Controller
             
             if ($User->create()) 
             {
-                import(C('VERIFY_WAY'), COMMON_PATH,'.php');
+                import(C('VERIFY_WAY'), COMMON_PATH, '.php');
                 if ($name   = getName($student_number, I('post.password'))) 
                 {
                     $data['name']        = $name;
@@ -174,10 +179,10 @@ class UserController extends Controller
             $this->redirect('index');
         }
         
-        $student_number = I('post.student_number',false, '/^(\d{7}|\d{10})$/');
+        $student_number = I('post.student_number', false, '/^(\d{7}|\d{10})$/');
         if (!$student_number) 
         {
-          $this->display();
+            $this->display();
         } else
         {
             $key   = 'auth_' . $student_number;
@@ -196,7 +201,7 @@ class UserController extends Controller
             $re_password  = I('post.re_password');
             if ($password && $re_password && $student_number && $urp_password) 
             {
-                import(C('VERIFY_WAY'), COMMON_PATH);
+                import(C('VERIFY_WAY'), COMMON_PATH, '.php');
                 if (getName($student_number, $urp_password)) 
                 {
                     if ($password == $re_password) 
@@ -256,14 +261,142 @@ class UserController extends Controller
     }
     
     /**
+     *绑定手机号
+     *给手机号发送验证码
+     *@param 手机号 
+     */
+    public function bindPhone() 
+    {
+        $id    = use_id('/');
+        $phone = I('phone', false, C('REGEX_PHONE'));
+        if (!$phone || !$id) 
+        {
+            $this->error('手机号码无效！');
+        }
+        
+        //手机号查重
+        if (get_user_by_phone($phone)) 
+        {
+            $this->error('此手机号已经绑定过账号！');
+        } else
+        {
+            $result = send_sms_code($phone, 'bind');
+            if ($result == true) 
+            {
+                session('bind_phone', $phone);
+            } elseif ($result === 0) 
+            {
+                $this->error(array('code' => - 1, 'msg' => '发送次数过多'));
+            } else
+            {
+                $this->error(array('code'       => 0, 'msg'       => '发送失败'));
+            }
+        }
+    }
+    
+    /**
+     *验证短信并绑定手机号
+     *@param code 验证码
+     */
+    public function verifyPhone() 
+    {
+        $phone = session('bind_phone');
+        if (!$phone) 
+        {
+            $this->error('手机号不存在！');
+        } elseif (get_user_by_phone($phone)) 
+        {
+            $this->error('此手机号已经绑定过账号！');
+        }
+        $code   = I('code', false, '/^\d{6}$/');
+        $sid    = student_number();
+        $uid    = use_id();
+        if ($code && $sid && $uid) 
+        {
+            $result = check_sms_code($phone, $code, 'bind');
+            if ($result) 
+            {
+                import('Common.Encrypt', COMMON_PATH, '.php');
+                $phone = encrypt_phone($phone, $sid, $uid);
+                M('User')->where('id=%d', $uid)->setField('phone', $phone);
+            } elseif ($result === false) 
+            {
+                $this->error('验证失败，请重试！');
+            } else
+            {
+                $this->error('验证信息过期！','/User/bindPhone');
+            }
+        } else
+        {
+            $this->error('验证信息错误');
+        }
+    }
+    
+    /**
+     *getPhone()
+     *查看手机号码
+     */
+    public function getPhone() 
+    {
+        $uid = use_id();
+        if (!$uid) 
+        {
+            $this->error('请登录！');
+        }
+        $phone = get_phone_by_id($uid);
+        if (IS_AJAX) 
+        {
+            $this->success(array('phone' => $phone));
+        } else
+        {
+            echo $phone;
+        }
+    }
+    
+    /**
+     *getEmail()
+     *查看邮箱
+     */
+    public function getEmail() 
+    {
+        $uid = use_id();
+        if (!$uid) 
+        {
+            $this->error('请登录！');
+        }
+        $email = M('User')->getFieldById($uid, 'email');
+        import('Common.Encrypt', COMMON_PATH, '.php');
+        decrypt_email($email);
+        if (IS_AJAX) 
+        {
+            $this->success(array('email' => $email));
+        } else
+        {
+            echo $email;
+        }
+    }
+    
+    public function bindEmail() 
+    {
+        $email = I('email');
+        import('Common.Encrypt', COMMON_PATH, '.php');
+        $email = encrypt_email($email);
+        M('User')->where('id=%d', use_id())->setField('email', $email);
+    }
+    
+    /**
      *注销
      */
     public function logout() 
     {
-        delete_token(cookie('token'));
-        session(null);
+        $token = cookie('token');
+        if ($token) 
+        {
+            delete_token($token);
+        }
         cookie(null);
         session('[destroy]');
+        session(null);
         $this->redirect('Index/index');
     }
     
