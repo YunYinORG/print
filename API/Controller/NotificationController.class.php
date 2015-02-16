@@ -79,15 +79,15 @@ class NotificationController extends RestController
 			$where['to_id']              = $info['id'];
 			$where['id']              = I('id',0,'int');
 			
-			$Nofification = M('Nofification')->cache(true, 60)->where($where);
+			$Notification = M('Notification')->cache(true, 60)->where($where);
 			switch ($this->_method) 
 			{
 			case 'get':
-				$data         = $Nofification->find();
+				$data         = $Notification->find();
 				break;
 
 			case 'delete':
-				if ($Nofification->delete() !== false) 
+				if ($Notification->delete() !== false) 
 				{
 					$data['msg'] = '删除成功！';
 				} else
