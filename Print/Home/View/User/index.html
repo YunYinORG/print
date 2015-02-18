@@ -37,17 +37,20 @@ font-size: 16px;
         <div>
            学校 {$data['school']}
         </div>
+        <div>
+        	学号 {$data['student_number']}
+        </div>
+         <div class="row">
+            <span class='small'>手机</span><i class='btn glyphicon glyphicon-eye-open' id='getPhone'></i>
+            <span id='phone_detail' class='info'><span class="label label-info">{$data['mask_phone']|default='绑定手机'}</span><span class='btn glyphicon glyphicon-pencil'></span></span>
+            <div id='bind_phone' class='input-group' style='display:none'> <label class="input-group-addon">+86</label><input id='phone' type="text" url='__URL__/bindPhone' name="phone" placeholder='你的手机号' class="form-control"/><span class="input-group-btn"><button onclick="bindPhone()" class='btn btn-success glyphicon glyphicon-check'>发送验证码</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
+    </div>
          <div class="row">
         <div>
-            <span class='small'>邮箱</span>
-            <span id='email_detail' class='info'><span class="label label-info">{$data['email']|default='绑定邮箱'}</span><span class='btn glyphicon glyphicon-pencil'></span></span>
+            <span class='small'>邮箱</span><i id='getEmail' class='btn glyphicon glyphicon-eye-open'></i>
+            <span id='email_detail' class='info'><span class='label label-info'>{$data['mask_email']|default='绑定邮箱'}</span><span class='btn glyphicon glyphicon-pencil'></span></span>
             <div id='bind_email' class='input-group' style='display:none'><input id="email" type="email" name="email" placeholder='你的常用邮箱' url='__URL__/bindEmail' class="form-control"/> <span class="input-group-btn"><button onclick="bindEmail()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
         </div>
-    </div>
-        <div class="row">
-            <span class='small'>手机</span>
-            <span id='phone_detail' class='info'><span class="label label-info">{$data['phone']|default='绑定手机'}</span><span class='btn glyphicon glyphicon-pencil'></span></span>
-            <div id='bind_phone' class='input-group' style='display:none'> <label class="input-group-addon">+86</label><input id='phone' type="text" url='__URL__/bindPhone' name="phone" placeholder='你的手机号' class="form-control"/><span class="input-group-btn"><button onclick="bindPhone()" class='btn btn-success glyphicon glyphicon-check'>发送验证码</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
     </div>
         <div class="ChangePwd">
             <div class="subtitle">
@@ -87,8 +90,8 @@ font-size: 16px;
 <BLOCK name='end'>
 <script>
 M = $('#Modal');
-$('.info').click(function() {
-    var info = $(this);
+$('.glyphicon-pencil').click(function() {
+    var info = $(this).parent();
     info.hide(50);
     info.next().show(100);
 });
@@ -157,12 +160,12 @@ function bindPhone(type) {
             if (status) {
                 if (data.status) {
                         Mh.html('发送成功 验证手机');
-                        Mb.html("<div class='input-group'><input id='sms_code' name='code' type='text' class='form-control' placeholder='填写验证码' autocomplete='off' required/><span class='input-group-btn'><button class='btn btn-success' onclick='verifySMSCode(this)'>开始验证</button><button id='resend' class='btn' onclick='bindPhone()' disabled>重发验证码</button></span></div><br>");    
+                        Mb.html("<div class='input-group'><input id='sms_code' name='code' type='text' class='form-control' placeholder='六位数字验证码' autocomplete='off' required/><span class='input-group-btn'><button class='btn btn-success' onclick='verifySMSCode(this)'>开始验证</button><button id='resend' class='btn' onclick='bindPhone()' disabled>重发验证码</button></span></div><br>");    
                         count(document.getElementById("resend"), 60);
                         M.modal('show');
                     }else{
                     Mh.html('发送失败');
-                    Mb.html(data.info.msg);
+                    Mb.html(data.info);
                 }
             } else {
                 Mh.html('异常');
@@ -223,5 +226,47 @@ function count(btn, c) {
         btn.innerHTML = "重发验证码";                 
     }       
 };
+
+//获取邮箱
+$('#getEmail').click(function()
+{
+	$.get('/User/getEmail',null,function(data,status){
+		if(status){
+			if(status)
+			{
+			 	$('#email_detail').children('.label').html(data.info.email);
+			 	$('#getEmail').hide();
+			}else{
+				  M.find('.modal-title').html('查询失败');
+                  M.find('.modal-body').html(data.info);
+                  M.show();
+			}
+		}else{
+  				M.find('.modal-title').html('服务器通讯异常！');
+                M.find('.modal-body').html('检查网络，稍后重试');
+                M.show();
+		}
+	});
+});
+
+$('#getPhone').click(function(gp){
+	$.get('/User/getPhone',null,function(data,status){
+		if(status){
+			if(status)
+			{
+			 	$('#phone_detail').children('.label').html(data.info.phone);
+			 	$('#getPhone').hide();
+			}else{
+				  M.find('.modal-title').html('查询失败');
+                  M.find('.modal-body').html(data.info);
+                  M.show();
+			}
+		}else{
+  				M.find('.modal-title').html('服务器通讯异常！');
+                M.find('.modal-body').html('检查网络，稍后重试');
+                M.show();
+		}
+	});
+});
 </script>   
 </BLOCK>

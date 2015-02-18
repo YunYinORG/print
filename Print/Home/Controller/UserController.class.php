@@ -329,22 +329,10 @@ class UserController extends Controller
                 $this->success('发送成功');
             } elseif ($result === 0) 
             {
-                if (IS_AJAX) 
-                {
-                    $this->error(array('code' => - 1, 'msg' => '发送次数过多,临时禁用此功能'));
-                } else
-                {
-                    $this->error('发送次数过多');
-                }
+                $this->error('发送次数过多');
             } else
             {
-                if (IS_AJAX) 
-                {
-                    $this->error(array('code' => 0, 'msg' => '发送失败'));
-                } else
-                {
-                    $this->error('发送失败');
-                }
+                $this->error('发送失败');
             }
         }
     }
