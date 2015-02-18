@@ -26,6 +26,7 @@
  * - qiniu_encode()
  * - qiniu_sign()
  * - get_user_by_phone()
+ * - get_user_by_email()
  * - get_phone_by_id()
  * - send_sms_code()
  * - check_sms_code()
@@ -323,38 +324,52 @@ function qiniu_sign($url)
 }
 
 /**
- *get_user_by_phone($phone,$limitOne=true)
+ *get_user_by_phone($phone)
  *根据手机号查找用户
  *@param $phone 电话号码
- *@param $limitOne bool 查找一个或者多个
- *					   为false时查找所有人
  *@return array 返回一个或者全部查找结果
  */
-function get_user_by_phone($phone, $limitOne = true) 
+function get_user_by_phone($phone) 
 {
 	import('Common.Encrypt', COMMON_PATH, '.php');
-	$tail     = encrypt_end(substr($phone, -4));
-	$where['phone']          = array('LIKE', '%%' . $tail);
-	$info     = M('User')->where($where)->field('id,student_number,phone')->select();
+	$tail = encrypt_end(substr($phone, -4));
+	$where['phone']      = array('LIKE', '%%' . $tail);
+	$info = M('User')->where($where)->field('id,student_number,phone')->select();
 	if (!$info) 
 	{
 		return false;
 	}
-	$result = '';
 	foreach ($info as $user) 
 	{
 		if ($phone == decrypt_phone($user['phone'], $user['student_number'], $user['id'])) 
 		{
-			if ($limitOne) 
-			{
-				return $user;
-			} else
-			{
-				$result[] = $user;
-			}
+			return $user;
 		}
 	}
-	return $result;
+	return false;
+}
+
+/**
+ *get_user_by_email($email)
+ *根据邮箱查找用户
+ *@param $email 邮箱
+ *@return int 返回对应用户的id
+ */
+function get_user_by_email($email) 
+{
+	if (strpos($email, '@') == 1) 
+	{
+		$q1        = '`email` LIKE "' . substr_replace($email, '%', 1, 0) . '"';
+		$q2        = 'length(`email`)<' . (strlen($email) + 23);
+		$condition = $q2. ' AND ' . $q2;
+		$id        = M('User')->where($condition)->getField('id');
+	} else
+	{
+		import('Common.Encrypt', COMMON_PATH, '.php');
+		$en_email = encrypt_email($email);
+		$id       = M('User')->getFieldByEmail($en_email, 'id');
+	}
+	return $id;
 }
 
 /**

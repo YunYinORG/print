@@ -27,10 +27,10 @@ class UserModel extends Model
 	 );
 	
 	//自动验证
-	protected $_validate = array(
-		array('student_number', 'require', 'Require student_number'),
-		array('password', 'require', 'Require password'),
-		 );
+	// protected $_validate = array(
+	// 	array('student_number', 'require', 'Require student_number'),
+	// 	array('password', 'require', 'Require password'),
+	// 	 );
 	
 	/**
 	*查询成功的回调方法
@@ -53,6 +53,13 @@ class UserModel extends Model
     		$result['mask_phone']=null;
     	}
     	return $result;
+    }
+
+    public function getEmail($value='')
+    {
+    	    $email=$this->data['email'];
+    		$at=strpos($email, '@');
+    		return substr_replace($email, '***',1,$at-1);
     }
 
 }
