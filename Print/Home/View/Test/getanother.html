@@ -15,12 +15,6 @@
 <script type="text/javascript" src="__JS__/plupload.full.min.js"></script>
 <script type="text/javascript" src="__JS__/jquery.ui.plupload.js"></script>
 
-<!-- debug 
-<script type="text/javascript" src="../../js/moxie.js"></script>
-<script type="text/javascript" src="../../js/plupload.dev.js"></script>
-<script type="text/javascript" src="../../js/jquery.ui.plupload/jquery.ui.plupload.js"></script>
--->
-
 </head>
 <body style="font: 13px Verdana; background: #eee; color: #333">
 
@@ -101,6 +95,10 @@ $(function() {
 		}
 		return false; // Keep the form from submitting
 	});
+	$(document).ready(function(){
+		$('#uploader_start').hide();
+	});
+
 });
 </script>
 </body>

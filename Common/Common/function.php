@@ -179,7 +179,14 @@ function delete_file($path)
 		$s        = Think\Think::instance('SaeStorage');
 		return $s->delete($domain, $filePath);
 		break;
-
+	case 'QINIU':
+        $setting = C('UPLOAD_SITEIMG_QINIU');
+        $config = $setting['driverConfig'];
+        $config['timeout'] = 300;
+        $url = str_replace('/','_',$path);
+        $qiniu = new Think\Upload\Driver\Qiniu\QiniuStorage($config);
+        return $qiniu->del($url);		
+        break;
 	default:
 		return @unlink($path);
 		break;
@@ -289,24 +296,45 @@ function random($n, $mode = '')
 	return substr(str_shuffle($str), 0, $n);
 }
 
-function qiniu_encode($str) // URLSafeBase64Encode
+
+function download($url)
 {
-    $find = array('+', '/');
-    $replace = array('-', '_');
-    return str_replace($find, $replace, base64_encode($str));
+	switch (C('FILE_UPLOAD_TYPE')) 
+	{
+	case 'QINIU':
+		$url = 'http://7vihnm.com1.z0.glb.clouddn.com/'.str_replace('/','_',$url);
+        $RealDownloadUrl = qiniu_sign($url);
+        return $RealDownloadUrl;
+		break;
+
+	case 'NATIVE':
+		return "/Uploads/".$url;
+		break;
+	default:
+		return "/Uploads/".$url;
+		break;
+	}
 }
- 
- 
-function qiniu_sign($url) 
-{//$info里面的url
-    $setting = C ( 'UPLOAD_SITEIMG_QINIU' );
-    $duetime = NOW_TIME + 86400;//下载凭证有效时间
+
+function qiniu_sign($url) //$info閲岄潰鐨剈rl
+{
+	$setting = C ( 'UPLOAD_SITEIMG_QINIU' );
+	$find = array('+', '/');
+    $replace = array('-', '_');
+    $duetime = NOW_TIME + 86400;//涓嬭浇鍑瘉鏈夋晥鏃堕棿
     $DownloadUrl = $url . '?e=' . $duetime;
     $Sign = hash_hmac ( 'sha1', $DownloadUrl, $setting ["driverConfig"] ["secrectKey"], true );
-    $EncodedSign = Qiniu_Encode ( $Sign );
+    $EncodedSign = str_replace($find, $replace, base64_encode($Sign));
     $Token = $setting ["driverConfig"] ["accessKey"] . ':' . $EncodedSign;
     $RealDownloadUrl = $DownloadUrl . '&token=' . $Token;
     return $RealDownloadUrl;
 }
+
+
+
+
+
+
+
 
 ?>
