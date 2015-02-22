@@ -2,6 +2,11 @@
 <extend name="Public/template/base.html"/>
 <block name='head'>
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/modal.css">
+<script src="__PUBLIC__/js/plupload.full.min.js"></script>
+<script src="__PUBLIC__/js/jquery.plupload.queue.min.js"></script>
+<script src="__PUBLIC__/js/plupload_zh_CN.js"></script>
+<link href="__PUBLIC__/css/jquery.plupload.queue.css" rel="stylesheet" type="text/css" media="all" />
+
 </block>
 <block name='header'>
 <include file="./Public/template/nav.html" add="active"/>
@@ -10,7 +15,7 @@
 <div class="title">
     <h2>设置打印信息</h2>
 </div>
-<div id="featured">
+<div id="featured" class="container">
     <p class="text-warning alert alert-warning">
     打印店可在空闲时提前打印收到的文件,你可以在文件记录中查看文件状态（网页已做手机端适配）;<br/>无论打印队列多长，到店可以直接打印，如果打印店没有提前打印，你可直接到店打印；<br/>
     对于提前打印的文件请于打印完成后24小时内取走；对于所有情况请于2天内完成打印；<br/>
@@ -18,9 +23,14 @@
     <form role="form" action="__URL__/upload" method="post" id="print" enctype="multipart/form-data">
         <fieldset>
             <div class="form-group">
-                <label id="myfile" for="file">上传要打印的文件<span class='text-warning small'>(文件最大限制10Mb)</span></label>
+                <label id="myfile" for="file">上传要打印的文件<span class='text-warning small'>(文件最大限制100Mb)</span></label>
+            
+<div id="uploader">
+    <p>你的浏览器不支持Flash, Silverlight 或 HTML5。</p>
+</div>
+
                 <input type="file" name="file" id="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="CheckSuffix(this)">
-                <p class="help-block"><span>文档<small>（.pdf .doc .docx和.wps）</small>可设置提前打印;讲义<small>（.ppt和.pptx）</small>需要到店打印;部分手机浏览器可能会出现上传异常</span></p>
+                <p class="help-block"><span>文档<small>（.pdf .doc .docx和.wps）</small>可设置提前打印,建议使用pdf格式;讲义<small>（.ppt和.pptx）</small>需要到店打印;部分手机浏览器可能会出现上传异常</span></p>
             </div>
         </fieldset>
         <div class="form-group">
@@ -50,9 +60,12 @@
             </div>
             <div class="checkbox">
                 <label>
-                    <input name="double_side" id='double_side' value="1" type="checkbox">双面打印<div id='price' class='price text-info'>单面:<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面:<span id='double'  class='text-danger'>1角每张</span>
+                    <input name="" id="" value="" type="checkbox">彩印
+                    <br>
+                    <input name="double_side" id='double_side' value="1" type="checkbox">双面打印
+                    <div id='price' class='price text-info'>单面:<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面:<span id='double'  class='text-danger'>1角每张</span>
                 </div>
-            </label>
+                </label>
         </div>
     </fieldset>
     <input type="submit" id="modaltrigger" class="flatbtn" value="开始传送">
@@ -82,6 +95,40 @@
     }
     // document.getElementById('myfile').value="当前欲打印的文件为"+file;
 }
+
+$(function() {
+    $("#uploader").pluploadQueue({
+        runtimes : 'html5,flash,silverlight,html4',
+        url : "/__URL__/Uploads",
+        chunk_size : '1mb',
+        rename : true,
+        dragdrop: true,
+        filters : {
+            max_file_size : '100mb',
+            // Specify what files to browse for
+            mime_types: [
+                {title : "Document files", extensions : "doc,docx,pdf,wps"},
+                {title : "Presentation files", extensions : "ppt,pptx"}
+            ]
+        },
+ 
+        // Resize images on clientside if we can
+        resize: {
+            width : 200,
+            height : 200,
+            quality : 90,
+            crop: true // crop to exact dimensions
+        },
+ 
+ 
+        // Flash settings
+        flash_swf_url : '/__PUBLIC__/js/Moxie.swf',
+     
+        // Silverlight settings
+        silverlight_xap_url : '/__PUBLIC__/js/Moxie.xap'
+    });
+});
+
 $("#modaltrigger").on('click', function() {
     $("#modaltrigger").attr('disabled', true);
     if (!$("#print").submit()) {
@@ -95,5 +142,6 @@ var i= this.value;
 $('#single').html(price[i][0]);
 $('#double').html(price[i][1]);
 });
+
 </script>
 </block>

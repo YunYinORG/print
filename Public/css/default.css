@@ -107,12 +107,21 @@ nav li:hover a, nav li.active a, nav li.active span {
 }
 
 @media screen and (max-width: 500px){
-  #main{
+  #main {
     text-align: center;
   }
-  .text-center{
+  #uploader {
+    display: none;
+  }
+  .text-center {
     display: block;
     margin: auto;
+  }
+}
+
+@media screen and (min-width: 500px){
+  #file {
+    display: none;
   }
 }
 
@@ -144,6 +153,9 @@ nav li:hover a, nav li.active a, nav li.active span {
     float: left;
     width: 23%;
     padding: 2em 1% 0 1%;
+  }
+  #uploader {
+    width: 70%;
   }
   nav {
       text-align: center !important;
