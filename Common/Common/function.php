@@ -23,6 +23,13 @@
  * - send_mail()
  * - send_sms()
  * - random()
+ * - qiniu_encode()
+ * - qiniu_sign()
+ * - get_user_by_phone()
+ * - get_user_by_email()
+ * - get_phone_by_id()
+ * - send_sms_code()
+ * - check_sms_code()
  * Classes list:
  */
 
@@ -193,28 +200,6 @@ function delete_file($path)
 	}
 }
 
-/**
- *cache_name($type,$id)
- *缓存key生成，用于对打印店和用户的
- *@param $path 文件路径
- *@return string 缓存字段名
- *@author NewFuture
- */
-function cache_name($type, $id) 
-{
-	switch ($type) 
-	{
-	case 'printer':
-		return 'PFV_' . $id;
-		break;
-
-	case 'user':
-		return 'UFV_' . $id;
-	default:
-		return $type . '_' . $id;
-		break;
-	}
-}
 
 /**
  *send_mail($toMail,$content,$mailType)
@@ -316,25 +301,162 @@ function download($url)
 	}
 }
 
-function qiniu_sign($url) //$info閲岄潰鐨剈rl
+function qiniu_encode($str)// URLSafeBase64Encode
 {
-	$setting = C ( 'UPLOAD_SITEIMG_QINIU' );
-	$find = array('+', '/');
-    $replace = array('-', '_');
-    $duetime = NOW_TIME + 86400;//涓嬭浇鍑瘉鏈夋晥鏃堕棿
-    $DownloadUrl = $url . '?e=' . $duetime;
-    $Sign = hash_hmac ( 'sha1', $DownloadUrl, $setting ["driverConfig"] ["secrectKey"], true );
-    $EncodedSign = str_replace($find, $replace, base64_encode($Sign));
-    $Token = $setting ["driverConfig"] ["accessKey"] . ':' . $EncodedSign;
-    $RealDownloadUrl = $DownloadUrl . '&token=' . $Token;
-    return $RealDownloadUrl;
+	$find    = array('+', '/');
+	$replace = array('-', '_');
+	return str_replace($find, $replace, base64_encode($str));
 }
 
+function qiniu_sign($url) 
+{
+	
+	//$info里面的url
+	$setting         = C('UPLOAD_SITEIMG_QINIU');
+	$duetime         = NOW_TIME + 86400;//下载凭证有效时间
+	$DownloadUrl     = $url . '?e=' . $duetime;
+	$Sign            = hash_hmac('sha1', $DownloadUrl, $setting["driverConfig"]["secrectKey"], true);
+	$EncodedSign     = Qiniu_Encode($Sign);
+	$Token           = $setting["driverConfig"]["accessKey"] . ':' . $EncodedSign;
+	$RealDownloadUrl = $DownloadUrl . '&token=' . $Token;
+	return $RealDownloadUrl;
+}
 
+/**
+ *get_user_by_phone($phone)
+ *根据手机号查找用户
+ *@param $phone 电话号码
+ *@return array 返回一个或者全部查找结果
+ */
+function get_user_by_phone($phone) 
+{
+	import('Common.Encrypt', COMMON_PATH, '.php');
+	$tail = encrypt_end(substr($phone, -4));
+	$where['phone']      = array('LIKE', '%%' . $tail);
+	$info = M('User')->where($where)->field('id,student_number,phone')->select();
+	if (!$info) 
+	{
+		return false;
+	}
+	foreach ($info as $user) 
+	{
+		if ($phone == decrypt_phone($user['phone'], $user['student_number'], $user['id'])) 
+		{
+			return $user;
+		}
+	}
+	return false;
+}
 
+/**
+ *get_user_by_email($email)
+ *根据邮箱查找用户
+ *@param $email 邮箱
+ *@return int 返回对应用户的id
+ */
+function get_user_by_email($email) 
+{
+	if (strpos($email, '@') == 1) 
+	{
+		$q1        = '`email` LIKE "' . substr_replace($email, '%', 1, 0) . '"';
+		$q2        = 'length(`email`)<' . (strlen($email) + 23);
+		$condition = $q2. ' AND ' . $q2;
+		$id        = M('User')->where($condition)->getField('id');
+	} else
+	{
+		import('Common.Encrypt', COMMON_PATH, '.php');
+		$en_email = encrypt_email($email);
+		$id       = M('User')->getFieldByEmail($en_email, 'id');
+	}
+	return $id;
+}
 
+/**
+ *get_phone_by_id($id)
+ *根据id查找用户
+ *@param $id  电话号码
+ *@return string 返回号码
+ */
+function get_phone_by_id($id) 
+{
+	if (!$id) 
+	{
+		return false;
+	}
+	$user = M('User')->field('student_number,phone')->getById($id);
+	if ($user) 
+	{
+		import('Common.Encrypt', COMMON_PATH, '.php');
+		return decrypt_phone($user['phone'], $user['student_number'], $id);
+	}
+	return false;
+}
 
+/**
+ *send_sms_code($phone,$type)
+ *给用户发送验证码
+ *@param $phone  手机码
+ *@param $type   类型
+ *@return string 返回号码
+ */
+function send_sms_code($phone, $type) 
+{
+	$info = S($type . $phone);
+	if ($info) 
+	{
+		if ($info['times'] > 5) 
+		{
+			\Think\Log::record('手机号验证发送失败：ip:' . get_client_ip() . ',phone:' . $phone);
+			return 0;
+		} else
+		{
+			$code = $info['code'];
+			$info['times']      = $info['times'] + 1;
+		}
+	} else
+	{
+		$code = random(6, 'N');
+		$info['code']      = $code;
+		$info['times']      = 0;
+		$info['tries']      = 0;
+	}
+	S($type . $phone, $info, 600);
+	return send_sms($phone, $code, 1);
+}
 
-
-
+/**
+ *check_sms_code($phone,$code,$type)
+ *验证手机验证码
+ *@param $phone  手机码
+ *@param $code 	验证码
+ *@param $type   类型
+ *@return bool true 验证成功
+ *			  false 验证失败
+ *			  0 尝试次数达到限制
+ *			  null 验证信息不存在
+ */
+function check_sms_code($phone, $code, $type) 
+{
+	$info = S($type . $phone);
+	if ($info) 
+	{
+		if ($info['code'] == $code) 
+		{
+			S($type . $phone, null);
+			return true;
+		} elseif ($info['tries'] >= 5) 
+		{
+			S($type . $phone, null);
+			return 0;
+		} else
+		{
+			$info['tries'] = $info['tries'] + 1;
+			S($type . $phone, $info, 600);
+			return false;
+		}
+	} else
+	{
+		return null;
+	}
+}
 ?>

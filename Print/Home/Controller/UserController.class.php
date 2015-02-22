@@ -18,9 +18,15 @@
  * Function list:
  * - index()
  * - auth()
- * - notice()
+ * - register()
  * - forget()
  * - change()
+ * - bindPhone()
+ * - verifyPhone()
+ * - getPhone()
+ * - getEmail()
+ * - bindEmail()
+ * - verifyEmail()
  * - logout()
  * - _empty()
  * Classes list:
@@ -37,13 +43,11 @@ class UserController extends Controller
      */
     public function index() 
     {
-        $id         = Use_id(U('Index/index'));
+        $id         = use_id(U('Index/index'));
         if ($id) 
         {
-            $User       = M('User');
+            $User       = D('User');
             $data       = $User->where("id=%d", $id)->find();
-            
-            // session('student_number', $data['student_number']);
             $this->data = $data;
             $this->display();
         } else
@@ -60,17 +64,18 @@ class UserController extends Controller
      */
     public function auth() 
     {
-       
-        $student_number = I('post.student_number', null, '/^(\d{7}|\d{10})$/');
-        if ($student_number) 
+        
+        $number   = I('post.student_number', null, C('REGEX_NUMBER'));
+        $password = I('post.password');
+        
+        if ($number && $password) 
         {
-            $key            = 'auth_' . $student_number;
-            $times          = S($key);
+            $key      = 'auth_' . $number;
+            $times    = S($key);
             if ($times > C('MAX_TRIES')) 
-
             {
-                \Think\Log::record('auth爆破警告：ip:' . get_client_ip() . ',number:' . $student_number, 'NOTIC', true);
-                $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（ps:你的行为已被系统记录）', '/Index/index', 5);
+                \Think\Log::record('auth爆破警告：ip:' . get_client_ip() . ',number:' . $number, 'NOTIC', true);
+                $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（ps:你的行为已被系统记录）', '/', 5);
             } else
             {
                 S($key, $times + 1, 3600);
@@ -79,102 +84,132 @@ class UserController extends Controller
         {
             $this->error('学号格式错误！');
         }
-        $User           = D('User');
-        $password = encode(I('post.password'), $student_number);
-        $result   = $User->where("student_number='$student_number'")->find();
-        if ($result) 
+        
+        $User     = M('User');
+        $info     = $User->where('student_number="%s"', $number)->field('id,password,status')->find();
+        if ($info) 
         {
-            if ($result['password'] == $password) 
+            
+            //尝试登录
+            if (strlen($info['password']) == 16) 
             {
-                session('use_id', $User->id);
-                $token = update_token($User->id, C('STUDENT'));
+                
+                //更新密码加密方式，就加密过渡
+                if ($info['password'] == encode_old($password, $number)) 
+                {
+                    $password = md5($password);
+                    $password = encode($password, $number);
+                    $info['password']          = $password;
+                    $User->save($info);
+                } else
+                {
+                    $this->error('密码或者账号错误！');
+                }
+            } else
+            {
+                $password = md5($password);
+                $password = encode($password, $number);
+            }
+            
+            if ($info['password'] != $password) 
+            {
+                $this->error('密码验证错误！');
+            } elseif ($info['status'] < 1) 
+            {
+                $this->error('此账号已被封禁！');
+            } else
+            {
+                session('use_id', $info['id']);
+                $token = update_token($info['id'], C('STUDENT'));
                 cookie('token', $token, 3600 * 24 * 30);
                 S($key, null);
                 $this->redirect('/File/index');
-            } else
-            {
-                $this->error('密码验证错误！');
             }
         } else
         {
             
-            if ($User->create()) 
+            //尚未注册，先判断学校导入学校验证文件
+            $number = I('student_number', null, C('REGEX_NUMBER_NKU'));
+            if (preg_match(C('REGEX_NUMBER_NKU'), $number)) 
             {
-                import(C('VERIFY_WAY'), COMMON_PATH,'.php');
-                if ($name   = getName($student_number, I('post.password')))
-                {
-                    session('student_number', $student_number);
-                    session('first_name', $name);
-                    session('password',$password);
-                    S($key, null);
-                    $this->redirect('User/notice');
-                } else
-                {
-                    $this->error('学校账号实名认证失败！');
-                }
+                import(C('VERIFY_WAY'), COMMON_PATH, '.php');
+                $data['school'] = '南开大学';
+            } elseif (preg_match(C('REGEX_NUMBER_TJU'), $number)) 
+            {
+                $this->error('北洋大学暂未开放注册！');
+                $data['school'] = '天津大学';
             } else
             {
-                $this->error('信息不合法：' . $User->getError());
+                $this->error('你输入的学号' . $number . ',不是南开或者天大在读学生的的学号，如果你是南开或者天大的在读学生请联系我们！');
+            }
+            
+            //实名验证
+            if ($name = getName($number, $password)) 
+            {
+                $data['name']      = $name;
+                $data['student_number']      = $number;
+                $data['password']      = $password;
+                session('authData', $data);
+                $this->data = $data;
+                $this->display('notice');
+            } else
+            {
+                $this->error($data['school'] . '学校账号实名认证失败！');
             }
         }
     }
-
-    //首次注册
-    public function notice() 
+    
+    /**
+     *首次注册,设置密码
+     *@param ignore int 是否使用认证的默认密码
+     *@param password 密码
+     */
+    public function register() 
     {
-        $stu_number  = session('student_number');
-        $name = session('first_name');
-        $urp_password = session('password');
-        $User           = D('User');
-        if ($name && $stu_number && $urp_password) 
+        $data       = session('authData');
+        if ($data) 
         {
-            $jump = I('jump');
-            $password    = I('post.password');
-            $re_password = I('post.re_password');
-            if (!$password && !$jump) 
+            $is_ignore  = I('post.ignore', null, 'int');
+            $password   = I('post.password');
+            if ($is_ignore == 1) 
             {
-                $this->data  = session('first_name');
-                $this->display();
-            } elseif ($password != $re_password) 
+                
+                //使用默认密码
+                $data['password']            = encode(md5($data['password']), $data['student_number']);
+            } elseif ($is_ignore === 0 && $password && $password == I('post.re_password')) 
             {
-                $this->data = session('first_name') . '[密码不一致重新输入]';
-                $this->display();
-            } elseif ($jump) {
-                $data['name']        = $name;
-                $data['student_number']        = $stu_number;
-                $data['password']        = $urp_password;
-                $result = $User->add($data);
-                if ($result) 
-                {
-                    session('use_id', $result);
-                    session('first_name', null);
-                    session('password', null);
-                    $this->success('注册成功');
-                } else
-                {
-                    echo "dssdafdsfdsafs";
-//                    $this->error('注册失败：' . $User->getError());
-                }
+                
+                //重设密码
+                $data['password']            = encode(md5($password), $data['student_number']);
             } else
             {
-                $data['name']        = $name;
-                $data['student_number']        = $stu_number;
-                $data['password']        = encode($password,$stu_number);
-                $result = $User->add($data);
-                if ($result) 
-                {
-                    session('use_id', $result);
-                    session('first_name', null);
-                    session('password', null);                    
-                    $this->redirect('File/add', null, 0, '密码设置成功！');
-                } else
-                {
-                    $this->error('注册失败：' . $User->getError());
-                }
+                
+                //显示提示信息
+                //设置密码
+                $this->data = $data;
+                $this->display('notice');
+                return;
+            }
+            
+            if ($uid = M('User')->add($data)) 
+            {
+                
+                //注册成功！
+                session('authData', null);
+                session('use_id', $uid);
+                $token = update_token($uid, C('STUDENT'));
+                cookie('token', $token, 3600 * 24 * 30);
+                $this->redirect('index', null, 0, '注册成功！');
+            } else
+            {
+                
+                //注册失败
+                \Think\Log::record('注册失败：ip:' . get_client_ip() . ',number:' . $data['student_number']);
+                $this->error('注册失败');
             }
         } else
         {
-            $this->redirect('Index/index');
+            $this->redirect('/');
         }
     }
     
@@ -186,10 +221,10 @@ class UserController extends Controller
             $this->redirect('index');
         }
         
-        $student_number = I('post.student_number',false, '/^(\d{7}|\d{10})$/');
+        $student_number = I('post.student_number', false, '/^(\d{7}|\d{10})$/');
         if (!$student_number) 
         {
-          $this->display();
+            $this->display();
         } else
         {
             $key   = 'auth_' . $student_number;
@@ -208,13 +243,13 @@ class UserController extends Controller
             $re_password  = I('post.re_password');
             if ($password && $re_password && $student_number && $urp_password) 
             {
-                import(C('VERIFY_WAY'), COMMON_PATH);
+                import(C('VERIFY_WAY'), COMMON_PATH, '.php');
                 if (getName($student_number, $urp_password)) 
                 {
                     if ($password == $re_password) 
                     {
                         
-                        if (false !== M('User')->where('student_number=' . $student_number)->setField('password', encode($password, $student_number))) 
+                        if (false !== M('User')->where('student_number=' . $student_number)->setField('password', encode(md5($password), $student_number))) 
                         {
                             S($key, null);
                             $this->redirect('Index/index', null, 0, "密码重置成功！");
@@ -268,14 +303,227 @@ class UserController extends Controller
     }
     
     /**
+     *绑定手机号
+     *给手机号发送验证码
+     *@param phone 手机号
+     */
+    public function bindPhone() 
+    {
+        $id    = use_id('/');
+        $phone = I('phone', false, C('REGEX_PHONE'));
+        if (!$phone || !$id) 
+        {
+            $this->error('手机号码无效！');
+        }
+        
+        //手机号查重
+        if (get_user_by_phone($phone)) 
+        {
+            $this->error('此手机号已经绑定过账号！');
+        } else
+        {
+            $result = send_sms_code($phone, 'bind');
+            if ($result == true) 
+            {
+                session('bind_phone', $phone);
+                $this->success('发送成功');
+            } elseif ($result === 0) 
+            {
+                $this->error('发送次数过多');
+            } else
+            {
+                $this->error('发送失败');
+            }
+        }
+    }
+    
+    /**
+     *验证短信并绑定手机号
+     *@param code 验证码
+     */
+    public function verifyPhone() 
+    {
+        $phone = session('bind_phone');
+        if (!$phone) 
+        {
+            $this->error('手机号不存在！');
+        } elseif (get_user_by_phone($phone)) 
+        {
+            $this->error('此手机号已经绑定过账号！');
+        }
+        $code   = I('code', false, '/^\d{6}$/');
+        $sid    = student_number();
+        $uid    = use_id();
+        if ($code && $sid && $uid) 
+        {
+            $result = check_sms_code($phone, $code, 'bind');
+            if ($result) 
+            {
+                import('Common.Encrypt', COMMON_PATH, '.php');
+                $phone = encrypt_phone($phone, $sid, $uid);
+                if(M('User')->where('id=%d', $uid)->setField('phone', $phone))
+                {
+                    $this->success($phone.'绑定成功！');
+                }else{
+                    $this->success($phone.'绑定失败！');
+                }
+            } elseif ($result === false) 
+            {
+                $this->error('验证失败，请重试！');
+            } else
+            {
+                $this->error('验证信息过期！', '/User/bindPhone');
+            }
+        } else
+        {
+            $this->error('验证信息错误');
+        }
+    }
+    
+    /**
+     *getPhone()
+     *查看手机号码
+     */
+    public function getPhone() 
+    {
+        $uid = use_id();
+        if (!$uid) 
+        {
+            $this->error('请登录！');
+        }
+        $phone = get_phone_by_id($uid);
+        if (IS_AJAX) 
+        {
+            $this->success(array('phone' => $phone));
+        } else
+        {
+            echo $phone;
+        }
+    }
+    
+    /**
+     *getEmail()
+     *查看邮箱
+     */
+    public function getEmail() 
+    {
+        $uid = use_id();
+        if (!$uid) 
+        {
+            $this->error('请登录！');
+        }
+        $email = M('User')->getFieldById($uid, 'email');
+        import('Common.Encrypt', COMMON_PATH, '.php');
+        decrypt_email($email);
+        if (IS_AJAX) 
+        {
+            $this->success(array('email' => $email));
+        } else
+        {
+            echo $email;
+        }
+    }
+    
+    /**
+     *bindEmail()
+     *绑定邮箱，给邮箱发送验证邮件
+     *@param email 邮件
+     */
+    public function bindEmail() 
+    {
+        $uid   = use_id();
+        $email = I('email', false, C('REGEX_EMAIL'));
+        if ($email && $uid) 
+        {
+            if (get_user_by_email($email)) 
+            {
+                $this->error('此邮箱已经绑定过账号！');
+            } else
+            {
+                $data['use_id']      = $uid;
+                $data['type']      = 1;
+                $Code = M('code');
+                $Code->where($data)->delete();
+                
+                $data['code']     = random(32);
+                $data['content']     = $email;
+                $cid = $Code->add($data);
+                if ($cid) 
+                {
+                    $url = U('User/verifyEmail', 'id=' . $cid . '&code=' . $data['code'], '', true);
+                    if (send_mail($email, $url, 1)) 
+                    {
+                        $this->success('验证邮件已发送到' . $email.'请及时到邮箱验证查收');
+                    } else
+                    {
+                        $this->error('验证邮件发送失败！');
+                    }
+                } else
+                {
+                    $this->error('信息生成失败！');
+                }
+            }
+        } else
+        {
+            $this->error('信息不足！');
+        }
+    }
+    
+    /**
+     *veifyEmail()
+     *绑定邮箱，给邮箱发送验证邮件
+     *@param id 邮件验证id
+     *@param code 验证码
+     */
+    public function verifyEmail() 
+    {
+        $id   = I('id', false, 'int');
+        $code = I('code', false, '/^\w{32}/');
+        if ($id && $code) 
+        {
+            $map['id']      = $id;
+            $map['code']      = $code;
+            $map['type']      = 1;
+            $info = M('Code')->where($map)->Field('use_id,content')->find();
+            if ($info) 
+            {
+                M('Code')->where('id=%d', $id)->delete();
+                $email = $info['content'];
+                
+                import('Common.Encrypt', COMMON_PATH, '.php');
+                if (get_user_by_email($email)) 
+                {
+                    $this->error('此邮箱已经绑定过账号！');
+                } elseif (M('User')->where('id=%d', $info['use_id'])->setField('email', encrypt_email($email))) 
+                {
+                    $this->success('绑定成功！', '/');
+                } else
+                {
+                    $this->error('邮箱绑定失败！');
+                }
+            } else
+            {
+                $this->error('验证信息已不存在！');
+            }
+        } else
+        {
+            $this->error('信息不完整');
+        }
+    }
+    
+    /**
      *注销
      */
     public function logout() 
     {
-        delete_token(cookie('token'));
-        session(null);
+        $token = cookie('token');
+        if ($token) 
+        {
+            delete_token($token);
+        }
         cookie(null);
         session('[destroy]');
+        session(null);
         $this->redirect('Index/index');
     }
     
