@@ -19,10 +19,10 @@
  * - encode_old()
  * - encode()
  * - delete_file()
- * - cache_name()
  * - send_mail()
  * - send_sms()
  * - random()
+ * - download()
  * - qiniu_encode()
  * - qiniu_sign()
  * - get_user_by_phone()
@@ -186,31 +186,75 @@ function delete_file($path)
 		$s        = Think\Think::instance('SaeStorage');
 		return $s->delete($domain, $filePath);
 		break;
+
 	case 'QINIU':
-        $setting = C('UPLOAD_SITEIMG_QINIU');
-        $config = $setting['driverConfig'];
-        $config['timeout'] = 300;
-        $url = str_replace('/','_',$path);
-        $qiniu = new Think\Upload\Driver\Qiniu\QiniuStorage($config);
-        return $qiniu->del($url);		
-        break;
+		$setting = C('UPLOAD_SITEIMG_QINIU');
+		$config  = $setting['driverConfig'];
+		$config['timeout']         = 300;
+		$url     = str_replace('/', '_', $path);
+		$qiniu   = new Think\Upload\Driver\Qiniu\QiniuStorage($config);
+		return $qiniu->del($url);
+		break;
+
 	default:
 		return @unlink($path);
 		break;
 	}
 }
 
-
 /**
- *send_mail($toMail,$content,$mailType)
+ *send_mail($toMail,$msg,$mailType)
  *发送邮件
  *@param $toMail 收件人邮箱
- *@param $content string 邮件主要内容
+ *@param $msg string 邮件主要内容
  *@param $mailType 邮件类型
  *@return bool 是否发送成功
  */
-function send_mail($toMail, $content, $mailType) 
+function send_mail($toMail, $msg, $mailType) 
 {
+	switch ($mailType) 
+	{
+	case 1:
+		//绑定验证邮箱
+	$title='验证邮件';
+	$content="点击验证链接<a href='$msg'>$msg</a>";
+		break;
+
+	case 2:
+		$title='密码找回';
+		//找回密码
+		break;
+
+	default:
+		//直接发送
+		break;
+	}
+	
+	switch (C('MAIL_WAY')) 
+	{
+	case 'sae':
+		
+		// sae mail
+		break;
+
+	case 'phpmailer':
+	default:
+        $mail=new \Vendor\PHPMailer();
+		$mail->AddAddress($toMail);
+		$mail->Subject = $title;
+		$mail->Body    = $content;
+		$mail->IsSMTP();
+		$mail->IsHTML(true);
+		$mail->SMTPAuth = true;
+		$mail->CharSet  = 'UTF-8';
+		$mail->Host     = C('MAIL_SMTP');
+		$mail->From     = C('VERIFY_EMAIL');
+		$mail->Username = C('VERIFY_EMAIL');
+		$mail->Password = C('VERIFY_PWD');
+		$mail->FromName = '云印南天';
+		
+		return $mail->Send();
+	}
 }
 
 /**
@@ -281,27 +325,31 @@ function random($n, $mode = '')
 	return substr(str_shuffle($str), 0, $n);
 }
 
-
-function download($url)
+function download($url) 
 {
 	switch (C('FILE_UPLOAD_TYPE')) 
 	{
 	case 'QINIU':
-		$url = 'http://7vihnm.com1.z0.glb.clouddn.com/'.str_replace('/','_',$url);
-        $RealDownloadUrl = qiniu_sign($url);
-        return $RealDownloadUrl;
+		$url             = 'http://7vihnm.com1.z0.glb.clouddn.com/' . str_replace('/', '_', $url);
+		$RealDownloadUrl = qiniu_sign($url);
+		return $RealDownloadUrl;
 		break;
 
 	case 'NATIVE':
-		return "/Uploads/".$url;
+		return "/Uploads/" . $url;
 		break;
+
 	default:
-		return "/Uploads/".$url;
+		return "/Uploads/" . $url;
 		break;
 	}
 }
 
-function qiniu_encode($str)// URLSafeBase64Encode
+function qiniu_encode($str)
+
+// URLSafeBase64Encode
+
+
 {
 	$find    = array('+', '/');
 	$replace = array('-', '_');
@@ -313,7 +361,9 @@ function qiniu_sign($url)
 	
 	//$info里面的url
 	$setting         = C('UPLOAD_SITEIMG_QINIU');
-	$duetime         = NOW_TIME + 86400;//下载凭证有效时间
+	$duetime         = NOW_TIME + 86400;
+	
+	//下载凭证有效时间
 	$DownloadUrl     = $url . '?e=' . $duetime;
 	$Sign            = hash_hmac('sha1', $DownloadUrl, $setting["driverConfig"]["secrectKey"], true);
 	$EncodedSign     = Qiniu_Encode($Sign);
@@ -360,7 +410,7 @@ function get_user_by_email($email)
 	{
 		$q1        = '`email` LIKE "' . substr_replace($email, '%', 1, 0) . '"';
 		$q2        = 'length(`email`)<' . (strlen($email) + 23);
-		$condition = $q2. ' AND ' . $q2;
+		$condition = $q2 . ' AND ' . $q2;
 		$id        = M('User')->where($condition)->getField('id');
 	} else
 	{
