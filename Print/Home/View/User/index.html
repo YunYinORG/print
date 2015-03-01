@@ -4,71 +4,63 @@
 <include file="./Public/template/nav.html" info="active"/>
 </block>
 
-<block name='head'>
-<style type="text/css">
-#subtitle {
-font-family: "Comic Sans MS", cursive;
-font-size: 24px;
-color: #666;
-text-align: left;
-}
-.subtitle {
-font-family: "Comic Sans MS", cursive;
-font-size: 24px;
-color: #333;
-}
-.userinfo {
-font-family: "Lucida Console", Monaco, monospace;
-font-size: 16px;
-}
-</style>
-
-</block>
 <block name='content'>
-    <div class="title" >
-        <h3>{$data.name}信息管理</h3>
+    <div class="title">
+        <h2>信息管理 <a class="btn btn-success" href="__URL__/logout" style="text-decoration: none;color: #FFFFFF">注销(重新登录)</a></h2>
     </div>
-    <div>
-        <div class="user">
-            <div class="btn btn-danger">
-			<a href="__URL__/logout">注销(重新登录)</a>
+    <br/>
+    <div class="container">
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <div class="col-sm-3 input-group">
+                    <span class="input-group-addon" id="sizing-addon1">姓名</span>
+                         <input class="form-control" id="disabledInput" type="text" placeholder="{$data.name}" disabled>
+                </div>
             </div>
+      <div class="form-group">
+      <div class="col-sm-3 input-group">
+        <span class="input-group-addon" id="sizing-addon1">学校</span>
+         <input class="form-control" id="disabledInput" type="text" 
+            placeholder="{$data['school']}" disabled>
+      </div>
+   </div>
+         <div class="form-group">
+      <div class="col-sm-3 input-group">
+        <span class="input-group-addon" id="sizing-addon1">学号</span>
+         <input class="form-control" id="disabledInput" type="text" 
+            placeholder="{$data['student_number']}" disabled>
+      </div>
         </div>
-        <div>
-           学校 {$data['school']}
-        </div>
-        <div>
-        	学号 {$data['student_number']}
-        </div>
+   </form>
          <div class="row">
-            <span class='small'>手机</span><i class='btn glyphicon glyphicon-eye-open' id='getPhone'></i>
+         <h3>联系信息</h3>
+            <span class='small'>&nbsp;手机</span><i class='btn glyphicon glyphicon-eye-open' id='getPhone'></i>
             <span id='phone_detail' class='info'><span class="label label-info">{$data['mask_phone']|default='绑定手机'}</span><span class='btn glyphicon glyphicon-pencil'></span></span>
-            <div id='bind_phone' class='input-group' style='display:none'> <label class="input-group-addon">+86</label><input id='phone' type="text" url='__URL__/bindPhone' name="phone" placeholder='你的手机号' class="form-control"/><span class="input-group-btn"><button onclick="bindPhone()" class='btn btn-success glyphicon glyphicon-check'>发送验证码</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
-    </div>
+            <div id='bind_phone' class='input-group col-sm-4' style='display:none'> <label class="input-group-addon">+86</label><input id='phone' type="text" url='__URL__/bindPhone' name="phone" placeholder='你的手机号' class="form-control"/><span class="input-group-btn"><button onclick="bindPhone()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
+         </div>
+
          <div class="row">
-        <div>
-            <span class='small'>邮箱</span><i id='getEmail' class='btn glyphicon glyphicon-eye-open'></i>
+            <span class='small'>&nbsp;邮箱</span><i id='getEmail' class='btn glyphicon glyphicon-eye-open'></i>
             <span id='email_detail' class='info'><span class='label label-info'>{$data['mask_email']|default='绑定邮箱'}</span><span class='btn glyphicon glyphicon-pencil'></span></span>
-            <div id='bind_email' class='input-group' style='display:none'><input id="email" type="email" name="email" placeholder='你的常用邮箱' url='__URL__/bindEmail' class="form-control"/> <span class="input-group-btn"><button onclick="bindEmail()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
+            <div id='bind_email' class='input-group col-sm-4' style='display:none'><input id="email" type="email" name="email" placeholder='你的常用邮箱' url='__URL__/bindEmail' class="form-control"/> <span class="input-group-btn"><button onclick="bindEmail()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
         </div>
-    </div>
-        <div class="ChangePwd">
-            <div class="subtitle">
-                <p>修改密码</p>
-            </div>
-            <form  class="form-group" role="form" method="post" action="__URL__/change">
-                <div class="input-group">
-                    <label class="input-group-addon" for="deprecated_password">当前密码</label>
+        <div class="row">
+            <h3>修改密码</h3>
+            <form class="form-horizontal" role="form" method="post" action="__URL__/change">
+                <div class="input-group col-sm-3">
+                    <span class="input-group-addon" id="sizing-addon1" for="deprecated_password">当前密码</span>
                     <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password" required>
                 </div>
-                 <div class="input-group">
-                    <label class="input-group-addon"  for="password">新的密码</label>
-                    <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password" required>
-                </div> 
-                <div class="input-group">
-                    <label class="input-group-addon"  for="re_password">确认密码</label>
+                 <div class="input-group col-sm-3">
+                    <span class="input-group-addon" id="sizing-addon1"  for="password">新的密码</span>
+                    <input class="form-control" placeholder='要设置的密码' name="password" type="password" id="password" required>
+                </div>
+    
+                <div class="input-group col-sm-3">
+                    <span class="input-group-addon" id="sizing-addon1"  for="re_password">确认密码</span>
                     <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password" required>
                 </div> 
+                <br/>
                 <div class="input-group text-center">
                 <button type="submit" class="btn btn-success">确定</button>
                 </div>
@@ -160,7 +152,7 @@ function bindPhone(type) {
             if (status) {
                 if (data.status) {
                         Mh.html('发送成功 验证手机');
-                        Mb.html("<div class='input-group'><input id='sms_code' name='code' type='text' class='form-control' placeholder='六位数字验证码' autocomplete='off' required/><span class='input-group-btn'><button class='btn btn-success' onclick='verifySMSCode(this)'>开始验证</button><button id='resend' class='btn' onclick='bindPhone()' disabled>重发验证码</button></span></div><br>");    
+                        Mb.html("<div class='input-group col-sm-4'><input id='sms_code' name='code' type='text' class='form-control' placeholder='六位数字验证码' autocomplete='off' required/><span class='input-group-btn'><button class='btn btn-success' onclick='verifySMSCode(this)'>开始验证</button><button id='resend' class='btn' onclick='bindPhone()' disabled>重发验证码</button></span></div><br>");    
                         count(document.getElementById("resend"), 60);
                         M.modal('show');
                     }else{
@@ -230,43 +222,43 @@ function count(btn, c) {
 //获取邮箱
 $('#getEmail').click(function()
 {
-	$.get('/User/getEmail',null,function(data,status){
-		if(status){
-			if(status)
-			{
-			 	$('#email_detail').children('.label').html(data.info.email);
-			 	$('#getEmail').hide();
-			}else{
-				  M.find('.modal-title').html('查询失败');
+    $.get('/User/getEmail',null,function(data,status){
+        if(status){
+            if(status)
+            {
+                $('#email_detail').children('.label').html(data.info.email);
+                $('#getEmail').hide();
+            }else{
+                  M.find('.modal-title').html('查询失败');
                   M.find('.modal-body').html(data.info);
                   M.show();
-			}
-		}else{
-  				M.find('.modal-title').html('服务器通讯异常！');
+            }
+        }else{
+                M.find('.modal-title').html('服务器通讯异常！');
                 M.find('.modal-body').html('检查网络，稍后重试');
                 M.show();
-		}
-	});
+        }
+    });
 });
 
 $('#getPhone').click(function(gp){
-	$.get('/User/getPhone',null,function(data,status){
-		if(status){
-			if(status)
-			{
-			 	$('#phone_detail').children('.label').html(data.info.phone);
-			 	$('#getPhone').hide();
-			}else{
-				  M.find('.modal-title').html('查询失败');
+    $.get('/User/getPhone',null,function(data,status){
+        if(status){
+            if(status)
+            {
+                $('#phone_detail').children('.label').html(data.info.phone);
+                $('#getPhone').hide();
+            }else{
+                  M.find('.modal-title').html('查询失败');
                   M.find('.modal-body').html(data.info);
                   M.show();
-			}
-		}else{
-  				M.find('.modal-title').html('服务器通讯异常！');
+            }
+        }else{
+                M.find('.modal-title').html('服务器通讯异常！');
                 M.find('.modal-body').html('检查网络，稍后重试');
                 M.show();
-		}
-	});
+        }
+    });
 });
 </script>   
 </BLOCK>

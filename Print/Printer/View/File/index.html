@@ -25,9 +25,9 @@
             <volist name="data" id="vo">
             <tr file_id="{$vo.id}">
                 <if condition="$vo.status eq 1">
-                    <td><a target='_blank' class="set" fid='{$vo.id}' href="__UPLOAD__/{$vo.url}">[{$vo.id}]{$vo.name}</a></td>
+                    <td><a target='_blank' class="set download" fid='{$vo.id}' href="__UPLOAD__/{$vo.url}">[{$vo.id}]{$vo.name}</a></td>
                 <else />
-                    <td><a target='_blank' href="__UPLOAD__/{$vo.url}">[{$vo.id}]{$vo.name}</a></td>
+                    <td><a target='_blank' class="download" href="__UPLOAD__/{$vo.url}">[{$vo.id}]{$vo.name}</a></td>
                 </if>
                 <td>
 <if condition="$vo.copies gt 0">
@@ -104,6 +104,29 @@ $("table").on('click', '.set', function() {
         } else {
             alert(data.info);
         }
+    });
+});
+$("table").on('click', '.download', function(event) {
+    event.preventDefault();
+    var URL = "/Printer/File/download";
+    var btn = $(this);
+    var fid = btn.attr('fid');
+    var status = $('#' + fid + '_status');
+    var sid = status.attr('data');
+    console.log(sid);
+    var set_s = 0;
+    if (sid == 1) {
+        set_s = 2;
+    } else if (sid <= 3 && sid >= 2) {
+        set_s = 4;
+    } else if (sid == 4) {
+        set_s = 5;
+    }
+    $.post(URL, {
+        fid: fid,
+        status: set_s
+    }, function(data) {
+        window.open(data, "_blank") 
     });
 });
 isRefreshing = false;

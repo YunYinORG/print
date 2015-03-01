@@ -157,6 +157,12 @@ nav li:hover a, nav li.active a, nav li.active span {
   #uploader {
     width: 70%;
   }
+  #Choose_printer {
+    width: 50%;
+  }
+  .alert{
+    width: 70%;
+  }
   nav {
       text-align: center !important;
       display: block !important;

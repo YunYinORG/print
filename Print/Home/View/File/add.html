@@ -1,41 +1,62 @@
 ﻿{//文件上传页}
 <extend name="Public/template/base.html"/>
+
+
+
 <block name='head'>
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/modal.css">
-<script src="__PUBLIC__/js/plupload.full.min.js"></script>
-<script src="__PUBLIC__/js/jquery.plupload.queue.min.js"></script>
-<script src="__PUBLIC__/js/plupload_zh_CN.js"></script>
-<link href="__PUBLIC__/css/jquery.plupload.queue.css" rel="stylesheet" type="text/css" media="all" />
-
+<link rel="stylesheet" href="http://cdn.bootcss.com/jqueryui/1.10.3/css/base/jquery-ui.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/jquery.ui.plupload.css" type="text/css" />
 </block>
+
+
 <block name='header'>
 <include file="./Public/template/nav.html" add="active"/>
 </block>
+
+
+
 <block name='content'>
+
 <div class="title">
     <h2>设置打印信息</h2>
 </div>
+
 <div id="featured" class="container">
     <p class="text-warning alert alert-warning">
     打印店可在空闲时提前打印收到的文件,你可以在文件记录中查看文件状态（网页已做手机端适配）;<br/>无论打印队列多长，到店可以直接打印，如果打印店没有提前打印，你可直接到店打印；<br/>
     对于提前打印的文件请于打印完成后24小时内取走；对于所有情况请于2天内完成打印；<br/>
     价格上保证不比带U盘的价格贵（有时候甚至会更便宜），所有打印店均在量大时可减价。</p>
-    <form role="form" action="__URL__/upload" method="post" id="print" enctype="multipart/form-data">
-        <fieldset>
-            <div class="form-group">
-                <label id="myfile" for="file">上传要打印的文件<span class='text-warning small'>(文件最大限制100Mb)</span></label>
-            
-<div id="uploader">
-    <p>你的浏览器不支持Flash, Silverlight 或 HTML5。</p>
-</div>
 
-                <input type="file" name="file" id="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="CheckSuffix(this)">
-                <p class="help-block"><span>文档<small>（.pdf .doc .docx和.wps）</small>可设置提前打印,建议使用pdf格式;讲义<small>（.ppt和.pptx）</small>需要到店打印;部分手机浏览器可能会出现上传异常</span></p>
+
+    <form id="form" method="post" action="__URL__/post">
+        
+        <label id="myfile" for="file">上传要打印的文件</label>
+        <p class="small alert alert-info">文档<small>（.pdf .doc .docx和.wps）</small>建议使用pdf格式。单个文件最大不超过100Mb，单次上传最多不超过20个文件。</p>
+        <div id="uploader">
+            <p class="small alert alert-danger">你的浏览器不支持Flash, Silverlight 或 HTML5。暂时只支持单文件上传。</p>
+        <!--此处input需修改成旧版的单文件上传按钮以兼容不支持plupload的浏览器-->
+            <input type="file"/>
+        </div>
+        <p id="console"></p>
+
+        <fieldset>
+            <div class="form-group alert-warning">
+                <p class="help-block"><span></span></p>
             </div>
         </fieldset>
+        <!--此处后台需调整-->
         <div class="form-group">
             <label for='pri_id'>选择想去的打印店：</label>
-            <div class="radio">
+            <select class="form-control" id="Choose_printer">
+                <option name="pri_id" value="1">天达印务<span class='text-primary'>[9：00——22：00]</span><small class='text-info'>(西门附近，22宿下)</small></option>
+                <option name="pri_id" value="2">光辉岁月[8：00——23：00](二食堂浴园旁)</option>
+                <option name="pri_id" value="3">精诚快印[8：30——20：30](新图和数码小院之间)</option>
+                <option name="pri_id" value="4">快捷复印[8：00——22：00](南开出版社后)</option>
+            </select>
+        </div>
+
+            <!--div class="radio">
                 <label>
                     <input type="radio" name="pri_id" value="2" checked="checked"/>
                 光辉岁月<span class='text-primary'>[8：00——23：00]</span><small class='text-info'>(二食堂浴园旁)</small></label>
@@ -52,96 +73,133 @@
                     <input type="radio" name="pri_id" value="1" />
                 天达印务<span class='text-primary'>[9：00——22：00]</span><small class='text-info'>(西门附近，22宿下)</small></label>
             </div>
-        </div>
+        </div-->
+
         <fieldset id='setting'>
             <div class="form-group">
                 <label for="copies">设置打印份数</label><small class='text-info'>(0表示到店后现场打印)</small>
                 <input name="copies" type="number" id="copies" value="1">
             </div>
+        <!--后台需改动，支持ppt打印格式选择-->
+        <div id="pptprint">
+         <span><strong>ppt打印格式</strong></span>
+         <div class="btn-group btn-group-sm" role="group" aria-label="...">
+            <button type="button" class="btn btn-default">1x1</button>
+            <button type="button" class="btn btn-default">1x2</button>
+            <button type="button" class="btn btn-default">2x2</button>
+            <button type="button" class="btn btn-default">2x3</button>
+         </div>
+        </div>
             <div class="checkbox">
                 <label>
                     <input name="" id="" value="" type="checkbox">彩印
-                    <br>
+                    <br/>
                     <input name="double_side" id='double_side' value="1" type="checkbox">双面打印
-                    <div id='price' class='price text-info'>单面:<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面:<span id='double'  class='text-danger'>1角每张</span>
-                </div>
+                    <div id='price' class='price text-info'>单面:<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面:<span id='double' class='text-danger'>1角每张</span>
+                    </div>
                 </label>
-        </div>
-    </fieldset>
-    <input type="submit" id="modaltrigger" class="flatbtn" value="开始传送">
-</form>
+            </div>
+        </fieldset>
+    <input type="submit" value="开始传送" class="flatbtn"/>
+
+    </form>
 </div>
 </block>
+
+
+
+
+
 <block name='end'>
+
+
+<script type="text/javascript" src="http://cdn.bootcss.com/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="__JS__/plupload.full.min.js"></script>
+<script type="text/javascript" src="__JS__/jquery.ui.plupload.js"></script>
+<script type="text/javascript" src="__JS__/plupload_zh_CN.js"></script>
 <script language="javascript">
-    function CheckSuffix(n) {
-    var pos = n.value.lastIndexOf(".");
-    var suffix = n.value.substring(pos + 1);
-    var doc_suffix = ['pdf', 'doc', 'docx', 'wps'];
-    var other_suffix = ['ppt', 'pptx'];
-    if (doc_suffix.indexOf(suffix)>=0) {
-        $('#copies').attr('disabled', false);
-        $('#double_side').attr('disabled', false);
-        $("#modaltrigger").attr('disabled', false).attr('class', 'flatbtn-blu');
-        $('#setting').show(200);
-    } else if (other_suffix.indexOf(suffix)>=0) {
-        $('#copies').val(0).attr('disabled', true);
-        $('#double_side').attr('disabled', true);
-        $('#setting').hide(100);
-        $("#modaltrigger").attr('disabled', false).attr('class', 'flatbtn-blu');
-    } else {
-        alert('目前支持上传文档和ppt')
-        $("#modaltrigger").attr('disabled', true).attr('class', 'flatbtn');
-    }
-    // document.getElementById('myfile').value="当前欲打印的文件为"+file;
-}
 
 $(function() {
-    $("#uploader").pluploadQueue({
+    var uploader = $("#uploader").plupload({
+        // General settings
         runtimes : 'html5,flash,silverlight,html4',
-        url : "/__URL__/Uploads",
-        chunk_size : '1mb',
-        rename : true,
-        dragdrop: true,
+        url : '__URL__/upload',
+
+        // User can upload no more then 20 files in one go (sets multiple_queues to false)
+        max_file_count: 20,
+
         filters : {
+            // Maximum file size
             max_file_size : '100mb',
             // Specify what files to browse for
             mime_types: [
-                {title : "Document files", extensions : "doc,docx,pdf,wps"},
-                {title : "Presentation files", extensions : "ppt,pptx"}
-            ]
+                {title : "Pdf files", extensions : "pdf"},
+                {title : "Doc files", extensions : "doc,docx,ppt,pptx,wps"}
+            ],
+                        prevent_duplicates: true
         },
- 
-        // Resize images on clientside if we can
-        resize: {
-            width : 200,
-            height : 200,
-            quality : 90,
-            crop: true // crop to exact dimensions
+
+        // Rename files by clicking on their titles
+        rename: true,
+        
+        // Sort files
+        sortable: true,
+
+        // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+        dragdrop: true,
+
+        // Views to activate
+        views: {
+            list: true,
+            thumbs: false, // Show thumbs
+            active: 'thumbs'
         },
- 
- 
+
         // Flash settings
-        flash_swf_url : '/__PUBLIC__/js/Moxie.swf',
-     
+        flash_swf_url : '../../js/Moxie.swf',
+
         // Silverlight settings
-        silverlight_xap_url : '/__PUBLIC__/js/Moxie.xap'
+        silverlight_xap_url : '../../js/Moxie.xap'
     });
+        uploader.bind('Error', function(up, err) {
+            document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+        });
+
+    // Handle the case when form was submitted before uploading has finished
+    $('#form').submit(function(e) {
+        // Files in queue upload them first
+        if ($('#uploader').plupload('getFiles').length > 0) {
+
+            // When all files are uploaded submit form
+            $('#uploader').on('complete', function() {
+                $('#form')[0].submit();
+            });
+
+            $('#uploader').plupload('start');
+        } else {
+            alert("You must have at least one file in the queue.");
+        }
+        return false; // Keep the form from submitting
+    });
+    $(document).ready(function(){
+        $('#uploader_start').hide();
+    });
+
 });
 
-$("#modaltrigger").on('click', function() {
-    $("#modaltrigger").attr('disabled', true);
-    if (!$("#print").submit()) {
-        $("#modaltrigger").attr('disabled',false);
-    }
-}).attr('disabled', true);
+
+
+
 var price=[[],['1角每张','0.14元每张(7分每面)'],['少量1角每张，过百份7分每张','1角每张'],['少量1角每张，过百份8分每张','1角每张'],['少量1角每张，过百份8分每张','1角每张']];
 $("[name='pri_id']").change(
 function() {
-var i= this.value;
+var i = this.value;
 $('#single').html(price[i][0]);
 $('#double').html(price[i][1]);
 });
+
+//缺少js功能：如上传列表中有ppt/pptx，不允许再上传其他格式文件。此时ppt控制格式的按钮组display，否则隐藏。
+
 
 </script>
 </block>

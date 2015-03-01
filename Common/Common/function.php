@@ -197,7 +197,7 @@ function delete_file($path)
 		break;
 
 	default:
-		return @unlink($path);
+		return @unlink("./Uploads/" . $path);
 		break;
 	}
 }
@@ -215,31 +215,39 @@ function send_mail($toMail, $msg, $mailType)
 	switch ($mailType) 
 	{
 	case 1:
+		
 		//绑定验证邮箱
-	$title='验证邮件';
-	$content="点击验证链接<a href='$msg'>$msg</a>";
+		$title   = '验证邮件';
+		$content = "点击验证链接<a href='$msg'>$msg</a>";
 		break;
 
 	case 2:
-		$title='密码找回';
+		$title = '密码找回';
+		
 		//找回密码
 		break;
 
 	default:
+		$title = '来自云印的通知'; //无论如何都应该有一个标题
+
 		//直接发送
 		break;
 	}
 	
 	switch (C('MAIL_WAY')) 
 	{
-	case 'sae':
-		
-		// sae mail
+	case 'sae':// sae mail
+		$mail = new SaeMail();
+		$ret = $mail->quickSend($toMail, $title , $content, C('VERIFY_EMAIL'), C('VERIFY_PWD'), C('MAIL_SMTP'));
+		if ($ret === false)
+		{
+			\Think\Log::record("saemail error:".$mail->errno().":".$mail->errmsg(), 'WARN', true);
+		}
 		break;
 
 	case 'phpmailer':
 	default:
-        $mail=new \Vendor\PHPMailer();
+		$mail = new \Vendor\PHPMailer();
 		$mail->AddAddress($toMail);
 		$mail->Subject = $title;
 		$mail->Body    = $content;
@@ -252,13 +260,22 @@ function send_mail($toMail, $msg, $mailType)
 		$mail->Username = C('VERIFY_EMAIL');
 		$mail->Password = C('VERIFY_PWD');
 		$mail->FromName = '云印南天';
-		
-		return $mail->Send();
+		try
+		{
+			$mail->Send();
+		}
+		catch(phpmailerException $e)
+		{
+			\Think\Log::record("phpmail error:".$e, 'WARN', true);
+			return 0;
+		}
+		return 1;
 	}
 }
 
+
 /**
- *send_sms($toMail,$content,$mailType)
+ *send_sms($toPhone,$content,$smsType)
  *发送短信
  *@param $toPhone 接收手机号
  *@param $content mixed 信息主要内容
@@ -267,6 +284,31 @@ function send_mail($toMail, $msg, $mailType)
  */
 function send_sms($toPhone, $content, $smsType) 
 {
+	switch ($smsType) 
+	{
+	case 1:
+		
+		//验证码
+		$msg = 'content=' . rawurlencode('您的验证码是：' . $content . '。请不要把验证码泄露给其他人。');
+		break;
+
+	default:
+		// code...
+		break;
+	}
+	$account = 'account=' . C('SMS_APPID') . '&password=' . C('SMS_TOKEN') . '&mobile=' . $toPhone;
+	$curl    = curl_init();
+	curl_setopt($curl, CURLOPT_URL, C('SMS_URL'));
+	curl_setopt($curl, CURLOPT_HEADER, false);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($curl, CURLOPT_NOBODY, true);
+	curl_setopt($curl, CURLOPT_POST, true);
+	$post_data = $account . '&' . $msg;
+	curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
+	$return_str = curl_exec($curl);
+	curl_close($curl);
+	$xml = simplexml_load_string($return_str);
+    return intval($xml->code) == 2;
 }
 
 /**
@@ -345,11 +387,7 @@ function download($url)
 	}
 }
 
-function qiniu_encode($str)
-
-// URLSafeBase64Encode
-
-
+function qiniu_encode($str) // URLSafeBase64Encode
 {
 	$find    = array('+', '/');
 	$replace = array('-', '_');

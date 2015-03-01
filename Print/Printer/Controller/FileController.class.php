@@ -38,12 +38,12 @@ class FileController extends Controller
 		if ($pid) 
 		{
 			$condition['pri_id']        = $pid;
-				$cache_key   = cache_name('printer', $pid);
+//				$cache_key   = cache_name('printer', $pid);
 				$condition['status']             = array('between', '1,4');
 				$this->assign('history', false);
 				$this->title = '打印任务列表';
 				$File        = D('FileView');
-			$this->data  = $File->where($condition)->order('file.id desc')->cache($cache_key, 10)->select();
+			$this->data  = $File->where($condition)->order('file.id desc')->select();//cache($cache_key, 10)->select();
 			$this->display();
 		} else
 		{
@@ -63,7 +63,7 @@ class FileController extends Controller
 				$this->title = '已打印文件历史记录';
 			$File        = D('FileView');
 			$count      = $File->where($condition)->count();
-            $Page       = new \Think\Page($count,2);
+            $Page       = new \Think\Page($count,10);
             $show       = $Page->show();
 			$this->data  = $File->where($condition)->order('file.id desc')->limit($Page->firstRow.','.$Page->listRows)->select();//cache($cache_key, 10)->select();
             $this->assign('page',$show);
@@ -84,7 +84,7 @@ class FileController extends Controller
 			$map['id']            = array('gt', I('file_id', null, 'intval'));
 			$map['status']            = array('between', '1,4');
 			$File       = D('FileView');
-			$cache_key  = cache_name('printer', $pid);
+			// $cache_key  = cache_name('printer', $pid);
 			$this->data = $File->where($map)->order('file.id desc')->limit(10)->select();
 			$this->display();
 		}
@@ -115,8 +115,8 @@ class FileController extends Controller
 				$File->where('id="%d"', $fid)->cache(true)->setField('status', $status);
 				
 				//删除缓存
-				S(cache_name('printer', $pid), null);
-				S(cache_name('user', $uid), null);
+//				S(cache_name('printer', $pid), null);
+//				S(cache_name('user', $uid), null);
 				$this->success('更新成功');
 			} else
 			{
@@ -128,6 +128,25 @@ class FileController extends Controller
 		}
 	}
 	
+	
+	public function download()
+    {
+		$pid    = pri_id(U('Index/index'));
+		$fid    = I('fid', null, 'intval');
+		$status = I('status');
+        $map['pri_id']        = $pid;
+        $map['id']        = $fid;
+        $map['status']        = array('gt', 0);
+        $File   = M('File');
+        $url    = $File->where($map)->getField('url');
+        if ($url) 
+        {
+            echo download($url);
+        } else
+        {
+            $this->error('Can not get the URL');
+        }
+    }
 	/**
 	 *404页
 	 */
