@@ -150,7 +150,7 @@ function bindPhone(type) {
             if (status) {
                 if (data.status) {
                         Mh.html('发送成功 验证手机');
-                            Mb.html("<div class='input-group col-sm-4'><input id='sms_code' name='code' type='text' class='form-control' placeholder='六位数字验证码' autocomplete='off' required/><span class='input-group-btn'><button class='btn btn-success' onclick='verifySMSCode(this)'>开始验证</button><button id='resend' class='btn' onclick='bindPhone()' disabled>重发验证码</button></span></div><br>");
+                            Mb.html("<div class='input-group'><input id='sms_code' name='code' type='text' class='form-control' placeholder='六位数字验证码' autocomplete='off' required/><span class='input-group-btn'><button class='btn btn-success' onclick='verifySMSCode(this)'>开始验证</button><button id='resend' class='btn' onclick='bindPhone()' disabled>重发验证码</button></span></div><br>");
                         count(document.getElementById("resend"), 60);
                         M.modal('show');
                     }else{

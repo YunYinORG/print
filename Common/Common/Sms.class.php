@@ -87,7 +87,7 @@ class Sms
                 $headers['content']         = $data;
             }
             $opts['http']         = $headers;
-          echo   $result  = file_get_contents($this->_url, false, stream_context_create($opts));
+            $result  = file_get_contents($this->_url, false, stream_context_create($opts));
         }
         return $result;
     }
