@@ -286,29 +286,29 @@ function send_sms($toPhone, $content, $smsType)
 {
 	switch ($smsType) 
 	{
-	case 1:
-		
-		//验证码
-		$msg = 'content=' . rawurlencode('您的验证码是：' . $content . '。请不要把验证码泄露给其他人。');
-		break;
+		case 1:
+			
+			//验证码
+			if (C('SMS_SUPPORTER') == 'huyi') 
+			{
+				$msg = rawurlencode('您的验证码是：' . $content . '。请不要把验证码泄露给其他人。');
+				$tid = null;
+			} 
+			else
+			{
+				$msg = $content;
+				$tid = 1844;
+			}
+			break;
 
-	default:
-		// code...
-		break;
+		default:
+			
+			// code...
+			break;
 	}
-	$account = 'account=' . C('SMS_APPID') . '&password=' . C('SMS_TOKEN') . '&mobile=' . $toPhone;
-	$curl    = curl_init();
-	curl_setopt($curl, CURLOPT_URL, C('SMS_URL'));
-	curl_setopt($curl, CURLOPT_HEADER, false);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($curl, CURLOPT_NOBODY, true);
-	curl_setopt($curl, CURLOPT_POST, true);
-	$post_data = $account . '&' . $msg;
-	curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
-	$return_str = curl_exec($curl);
-	curl_close($curl);
-	$xml = simplexml_load_string($return_str);
-    return intval($xml->code) == 2;
+	
+	$SMS = new Common\Common\Sms();
+	return $SMS->sendSms($toPhone, $msg, $tid);
 }
 
 /**
