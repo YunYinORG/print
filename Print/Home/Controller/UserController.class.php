@@ -285,11 +285,11 @@ class UserController extends Controller
         $re_password         = I('post.re_password');
         if ($user && $deprecated_password && $password) 
         {
-            if ($user['password'] == encode($deprecated_password, $user['student_number'])) 
+            if ($user['password'] == encode(md5($deprecated_password), $user['student_number'])) 
             {
                 if ($password == $re_password) 
                 {
-                    M('User')->where('id=%d', $uid)->setField('password', encode($password, $user['student_number']));
+                    M('User')->where('id=%d', $uid)->setField('password', encode(md5($password), $user['student_number']));
                     $this->redirect('logout', null, 0, '密码修改成功重新登陆！');
                 } else
                 {
@@ -360,13 +360,16 @@ class UserController extends Controller
             $result = check_sms_code($phone, $code, 'bind');
             if ($result) 
             {
+                session('bind_phone',null);
+                $true_phone=$phone;
                 import('Common.Encrypt', COMMON_PATH, '.php');
                 $phone = encrypt_phone($phone, $sid, $uid);
                 if(M('User')->where('id=%d', $uid)->setField('phone', $phone))
                 {
-                    $this->success($phone.'绑定成功！');
+                    $this->success($true_phone.'绑定成功！');
+
                 }else{
-                    $this->success($phone.'绑定失败！');
+                    $this->error('name');($phone.'绑定失败！');
                 }
             } elseif ($result === false) 
             {
