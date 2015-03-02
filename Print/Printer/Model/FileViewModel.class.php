@@ -16,6 +16,8 @@ class FileViewModel extends ViewModel
 			'status',
 			'copies',
 			'double_side',
+			'color',
+			'ppt_layout'
 		) ,
 		'user'            => array(
 			'name'=>'use_name',

@@ -416,7 +416,7 @@ function download($url)
 	switch (C('FILE_UPLOAD_TYPE')) 
 	{
 	case 'QINIU':
-		$url             = 'http://7vihnm.com1.z0.glb.clouddn.com/' . str_replace('/', '_', $url);
+		$url             = 'http://7vzu30.com1.z0.glb.clouddn.com/' . str_replace('/', '_', $url);
 		$RealDownloadUrl = qiniu_sign($url);
 		return $RealDownloadUrl;
 		break;
