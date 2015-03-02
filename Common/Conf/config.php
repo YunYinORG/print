@@ -65,4 +65,13 @@ return array(
     'REGEX_TOKEN'=>'/^\w{38,48}$/',
     'REGEX_PHONE'=>'/^1[3458]\d{9}$/',
     'REGEX_EMAIL'=>'/^[\w\.\-]{1,17}@[A-Za-z,0-9,\-,\.]{1,30}\.[A-Za-z]{2,6}$/',
+
+    //文件上传相关配置
+    'FILE_UPLOAD_TYPE' => 'QINIU',//默认存储提供商
+    'FILE_UPLAOD_CONFIG'=>array(  //默认配置
+                'maxSize' => 10485760,//10 * 1024 * 1024,//文件大小
+                'rootPath' => './Uploads/',
+                'exts' => array('pdf', 'doc', 'docx', 'wps', 'ppt', 'pptx'),
+                'saveName' => array ('uniqid', ''),
+                ),
 );

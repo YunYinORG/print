@@ -169,15 +169,59 @@ function encode($pwd, $id)
 }
 
 /**
+ *upload_file($storage='') 
+ *上传文件
+ *@param $storage=''存储服务商 默认读取FILE_UPLOAD_TYPE
+ *@param $config=array() 自定义配置，可以覆盖默认配置
+ *@return mixed 上传信息
+ */
+function upload_file($storage='',$config=array()) 
+{
+	if(empty($_FILES)){
+		return false;
+	}
+	//基本设置
+	$config=array_merge(C('FILE_UPLAOD_CONFIG'),$config);
+	//驱动配置
+	$driverConfig='';
+
+	switch (strtoupper($storage)){
+		case 'QINIU':
+			$diver='QINIU';
+			//上传驱动的配置
+			$driverConfig=C('UPLOAD_CONFIG_'.$driver);
+			break;
+
+		case 'SAE':
+			$diver='SAE';
+			break;
+
+		case 'LOCAL':
+			$driver='LOCAL';
+			break;
+		default:
+			//读取默认上传类型和配置
+			$driver=C('FILE_UPLOAD_TYPE');	
+			break;
+	}
+
+	$Upload=new \Think\Upload($config,$driver,$driverConfig);
+	return $Upload->upload();
+}
+
+/**
  *delete_file($path)
  *删除上传文件
  *@param $path 文件路径
+ *@param $storage='' 存储服务商
  *@author NewFuture
  */
-function delete_file($path) 
+function delete_file($path,$storage='') 
 {
-	
-	switch (C('FILE_UPLOAD_TYPE')) 
+	if(!$storage){
+		$storage=C('FILE_UPLOAD_TYPE');
+	}
+	switch ($storage) 
 	{
 	case 'Sae':
 		$arr      = explode('/', ltrim($path, './'));
@@ -286,29 +330,29 @@ function send_sms($toPhone, $content, $smsType)
 {
 	switch ($smsType) 
 	{
-	case 1:
-		
-		//验证码
-		$msg = 'content=' . rawurlencode('您的验证码是：' . $content . '。请不要把验证码泄露给其他人。');
-		break;
+		case 1:
+			
+			//验证码
+			if (C('SMS_SUPPORTER') == 'huyi') 
+			{
+				$msg = rawurlencode('您的验证码是：' . $content . '。请不要把验证码泄露给其他人。');
+				$tid = null;
+			} 
+			else
+			{
+				$msg = $content;
+				$tid = 1844;
+			}
+			break;
 
-	default:
-		// code...
-		break;
+		default:
+			
+			// code...
+			break;
 	}
-	$account = 'account=' . C('SMS_APPID') . '&password=' . C('SMS_TOKEN') . '&mobile=' . $toPhone;
-	$curl    = curl_init();
-	curl_setopt($curl, CURLOPT_URL, C('SMS_URL'));
-	curl_setopt($curl, CURLOPT_HEADER, false);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($curl, CURLOPT_NOBODY, true);
-	curl_setopt($curl, CURLOPT_POST, true);
-	$post_data = $account . '&' . $msg;
-	curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
-	$return_str = curl_exec($curl);
-	curl_close($curl);
-	$xml = simplexml_load_string($return_str);
-    return intval($xml->code) == 2;
+	
+	$SMS = new Common\Common\Sms();
+	return $SMS->sendSms($toPhone, $msg, $tid);
 }
 
 /**
