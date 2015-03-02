@@ -169,15 +169,59 @@ function encode($pwd, $id)
 }
 
 /**
+ *upload_file($storage='') 
+ *上传文件
+ *@param $storage=''存储服务商 默认读取FILE_UPLOAD_TYPE
+ *@param $config=array() 自定义配置，可以覆盖默认配置
+ *@return mixed 上传信息
+ */
+function upload_file($storage='',$config=array()) 
+{
+	if(empty($_FILES)){
+		return false;
+	}
+	//基本设置
+	$config=array_merge(C('FILE_UPLAOD_CONFIG'),$config);
+	//驱动配置
+	$driverConfig='';
+
+	switch (strtoupper($storage)){
+		case 'QINIU':
+			$diver='QINIU';
+			//上传驱动的配置
+			$driverConfig=C('UPLOAD_CONFIG_'.$driver);
+			break;
+
+		case 'SAE':
+			$diver='SAE';
+			break;
+
+		case 'LOCAL':
+			$driver='LOCAL';
+			break;
+		default:
+			//读取默认上传类型和配置
+			$driver=C('FILE_UPLOAD_TYPE');	
+			break;
+	}
+
+	$Upload=new \Think\Upload($config,$driver,$driverConfig);
+	return $Upload->upload();
+}
+
+/**
  *delete_file($path)
  *删除上传文件
  *@param $path 文件路径
+ *@param $storage='' 存储服务商
  *@author NewFuture
  */
-function delete_file($path) 
+function delete_file($path,$storage='') 
 {
-	
-	switch (C('FILE_UPLOAD_TYPE')) 
+	if(!$storage){
+		$storage=C('FILE_UPLOAD_TYPE');
+	}
+	switch ($storage) 
 	{
 	case 'Sae':
 		$arr      = explode('/', ltrim($path, './'));
