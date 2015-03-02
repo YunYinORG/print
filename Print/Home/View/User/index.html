@@ -5,30 +5,15 @@
 </block>
 <block name='content'>
 <div class="title">
-    <h2>我的信息管理 <a class="btn btn-success" href="__URL__/logout">注销(重新登录)</a></h2>
+    <h2>{$data['student_number']}&nbsp;<small style="font-type:Arial;font-size:12px;color:#AAAAAA">{$data['name']}，来自{$data['school']}</small></h2>
 </div>
 <div class="container">
-<h3>认证信息</h3>
-    <div class="form-group">
-        <div class="col-sm-4 input-group">
-            <span class="input-group-addon">姓名</span>
-            <input class="form-control" type="text" value="{$data.name}" disabled>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-4 input-group">
-            <span class="input-group-addon">学校</span>
-            <input class="form-control" type="text" value="{$data['school']}" disabled>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-4 input-group">
-            <span class="input-group-addon">学号</span>
-            <input class="form-control" type="text" value="{$data['student_number']}" disabled>
-        </div>
-    </div>
+ <section class="row">
+    <span class='label label-success'><a href="__URL__/logout" style="text-decoration: none; color: #FFFFFF">退出登录</a></span><span class="label label-danger"><a href="mailto:feedback@print.nkumstc.cn" style="text-decoration: none; color: #FFFFFF">信息有误</a></span>
+    <br/>
+    <br/>
+ </section>
     <section class="row">
-        <h3>联系信息</h3>
         <div>
             <span>手机</span>
             <span id='phone_detail' class='info'><i class='btn glyphicon glyphicon-eye-open' id='getPhone'></i><span class="label label-info">{$data['mask_phone']|default='绑定手机'}</span></span><span class='btn glyphicon glyphicon-pencil'></span>
@@ -41,11 +26,10 @@
         </div>
         <div id='bind_email' class='input-group col-sm-4' style='display:none'><input id="email" type="email" name="email" placeholder='你的常用邮箱' url='__URL__/bindEmail' class="form-control"/> <span class="input-group-btn"><button onclick="bindEmail()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
 
-    </section>
-    <section class="row">
-        <h3>密码管理</h3>
-        <span>修改<i class='btn glyphicon glyphicon-pencil'></i></span>
+        <span>重置密码<i class='btn glyphicon glyphicon-pencil'></i></span>
+
         <form style='display:none' class="form-horizontal" onsubmit="changePwd(this)" role="form" method="post" action="__URL__/change">
+          <br/>
             <div class="input-group col-sm-4">
                 <span class="input-group-addon" for="deprecated_password">当前密码</span>
                 <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password" required>
@@ -64,6 +48,7 @@
                 <span class='cancel btn btn-warning'>取消</span>
             </div>
         </form>
+
     </section>
 </div>
 <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
