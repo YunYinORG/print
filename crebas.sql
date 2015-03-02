@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/2/16 20:27:24                           */
+/* Created on:     2015/3/2 20:33:03                            */
 /*==============================================================*/
 
 
@@ -10,15 +10,17 @@ drop table if exists cardlog;
 
 drop table if exists code;
 
+drop table if exists device;
+
 drop table if exists feedback;
 
 drop table if exists file;
 
-drop table if exists device;
-
 drop table if exists notification;
 
 drop table if exists printer;
+
+drop table if exists school;
 
 drop table if exists token;
 
@@ -30,7 +32,7 @@ drop table if exists user;
 create table card
 (
    id                   bigint not null,
-   off     tinyint default 0,
+   off                  tinyint default 0,
    blocked              bool default 0,
    primary key (id)
 );
@@ -59,6 +61,19 @@ create table code
    time                 timestamp not null default CURRENT_TIMESTAMP,
    type                 tinyint,
    content              varchar(64),
+   primary key (id)
+);
+
+/*==============================================================*/
+/* Table: device                                                */
+/*==============================================================*/
+create table device
+(
+   id                   bigint not null,
+   code                 varchar(16),
+   last_login           timestamp default CURRENT_TIMESTAMP,
+   status               tinyint,
+   type                 tinyint,
    primary key (id)
 );
 
@@ -96,19 +111,6 @@ create table file
 );
 
 /*==============================================================*/
-/* Table: mobile                                                */
-/*==============================================================*/
-create table device
-(
-   id                   bigint not null,
-   code                 varchar(16),
-   last_login           timestamp default CURRENT_TIMESTAMP,
-   status               tinyint,
-   type                 tinyint,
-   primary key (id)
-);
-
-/*==============================================================*/
 /* Table: notification                                          */
 /*==============================================================*/
 create table notification
@@ -127,6 +129,7 @@ create table notification
 create table printer
 (
    id                   bigint not null auto_increment,
+   sch_id               bigint not null,
    name                 char(16) not null,
    account              char(16) not null,
    password             char(32) not null,
@@ -138,7 +141,7 @@ create table printer
    open_time            char(32),
    status               tinyint default 1,
    rank                 int default 0,
-   school               varchar(16),
+   school               bigint,
    price_color          int,
    price_no_color       int,
    price_single         int,
@@ -146,6 +149,17 @@ create table printer
    price_more           text,
    primary key (id),
    unique key AK_account_unique (account)
+);
+
+/*==============================================================*/
+/* Table: school                                                */
+/*==============================================================*/
+create table school
+(
+   id                   bigint not null auto_increment,
+   name                 varchar(32),
+   address              varchar(128),
+   primary key (id)
 );
 
 /*==============================================================*/
@@ -167,10 +181,10 @@ create table token
 create table user
 (
    id                   bigint not null auto_increment,
+   sch_id               bigint not null,
    student_number       char(10),
    password             char(32),
    name                 char(8),
-   school               varchar(16),
    gender               char(2),
    phone                char(16),
    email                char(64),
@@ -192,15 +206,21 @@ alter table cardlog add constraint FK_user_lost_card foreign key (lost_id)
 alter table code add constraint FK_code_of_user foreign key (use_id)
       references user (id) on delete restrict on update restrict;
 
+alter table device add constraint FK_mobile_device_of_user foreign key (id)
+      references user (id) on delete restrict on update restrict;
+
 alter table file add constraint FK_file_of_printer foreign key (pri_id)
       references printer (id) on delete restrict on update restrict;
 
 alter table file add constraint FK_file_of_user foreign key (use_id)
       references user (id) on delete restrict on update restrict;
 
-alter table mobile add constraint FK_mobile_device_of_user foreign key (id)
-      references user (id) on delete restrict on update restrict;
-
 alter table notification add constraint FK_notification_of_file foreign key (fil_id)
       references file (id) on delete restrict on update restrict;
+
+alter table printer add constraint FK_printer_blong_to_school foreign key (sch_id)
+      references school (id) on delete restrict on update restrict;
+
+alter table user add constraint FK_user_blong_to_school foreign key (sch_id)
+      references school (id) on delete restrict on update restrict;
 
