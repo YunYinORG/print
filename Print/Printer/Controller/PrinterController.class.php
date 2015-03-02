@@ -149,18 +149,26 @@ class PrinterController extends Controller
         {
             $this->error('无效账号：'.I('post.account'));
         }
-        $password = encode(I('post.password'), $account);
         $result   = $Printer->where('account="%s"', $account)->find();
         if ($result) 
         {
             $key      = 'auth_p_' . $account;
             $times    = S($key);
+            $password_old = encode_old(I('post.password'),  $account);
+            $password_new = encode(md5(I('post.password')), $account);
             if ($times > C('MAX_TRIES')) 
             {
                 \Think\Log::record('打印店爆破警告：ip:' . get_client_ip() . ',account:' . $account, 'NOTIC', true);
                 $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（ps:你的行为已被系统记录）');
-            } elseif ($result["password"] == $password) 
+            } elseif ($result["password"] == $password_new || $result["password"] == $password_old) 
             {
+                //更新密码加密方式，就加密过渡
+                if($result["password"] == $password_old)
+                {
+                    $result['password'] = $password_new;
+                    $Printer->save($result);
+                }
+
                 session('pri_id', $Printer->id);
                 $token = update_token($Printer->id, C('PRINTER_WEB'));
                 cookie('token', $token, 3600 * 24 * 30);
