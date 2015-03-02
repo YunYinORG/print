@@ -5,8 +5,8 @@
 
 <block name='head'>
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/modal.css">
-<link rel="stylesheet" href="http://cdn.bootcss.com/jqueryui/1.10.3/css/base/jquery-ui.css" type="text/css" />
-<link rel="stylesheet" href="__CSS__/jquery.ui.plupload.css" type="text/css" />
+<!--<link rel="stylesheet" href="http://cdn.bootcss.com/jqueryui/1.10.3/css/base/jquery-ui.css" type="text/css" />
+<link rel="stylesheet" href="__CSS__/jquery.ui.plupload.css" type="text/css" />-->
 </block>
 
 
@@ -29,33 +29,32 @@
     价格上保证不比带U盘的价格贵（有时候甚至会更便宜），所有打印店均在量大时可减价。</p>
 
 
-    <form id="form" method="post" action="__URL__/post">
+    <form id="form" method="post" action="__URL__/uploadOne" enctype="multipart/form-data">
         
         <label id="myfile" for="file">上传要打印的文件</label>
         <p class="small alert alert-info">文档<small>（.pdf .doc .docx和.wps）</small>建议使用pdf格式。单个文件最大不超过100Mb，单次上传最多不超过20个文件。</p>
-        <div id="uploader">
+<!--        <div id="uploader">
             <p class="small alert alert-danger">你的浏览器不支持Flash, Silverlight 或 HTML5。暂时只支持单文件上传。</p>
-        <!--此处input需修改成旧版的单文件上传按钮以兼容不支持plupload的浏览器-->
-            <input type="file"/>
+        此处input需修改成旧版的单文件上传按钮以兼容不支持plupload的浏览器
         </div>
-        <p id="console"></p>
-
+        <p id="console"></p>-->
+        <input type="file" name="file"/>
         <fieldset>
             <div class="form-group alert-warning">
                 <p class="help-block"><span></span></p>
             </div>
-        </fieldset>
+
         <!--此处后台需调整-->
         <div class="form-group">
             <label for='pri_id'>选择想去的打印店：</label>
-            <select class="form-control" id="Choose_printer">
-                <option name="pri_id" value="1">天达印务<span class='text-primary'>[9：00——22：00]</span><small class='text-info'>(西门附近，22宿下)</small></option>
-                <option name="pri_id" value="2">光辉岁月[8：00——23：00](二食堂浴园旁)</option>
-                <option name="pri_id" value="3">精诚快印[8：30——20：30](新图和数码小院之间)</option>
-                <option name="pri_id" value="4">快捷复印[8：00——22：00](南开出版社后)</option>
+            <select class="form-control" name="pri_id" id="Choose_printer">
+                <option value="1">天达印务<span class='text-primary'>[9：00——22：00]</span><small class='text-info'>(西门附近，22宿下)</small></option>
+                <option value="2">光辉岁月[8：00——23：00](二食堂浴园旁)</option>
+                <option value="3">精诚快印[8：30——20：30](新图和数码小院之间)</option>
+                <option value="4">快捷复印[8：00——22：00](南开出版社后)</option>
             </select>
         </div>
-
+        </fieldset>
             <!--div class="radio">
                 <label>
                     <input type="radio" name="pri_id" value="2" checked="checked"/>
@@ -83,16 +82,16 @@
         <!--后台需改动，支持ppt打印格式选择-->
         <div id="pptprint">
          <span><strong>ppt打印格式</strong></span>
-         <div class="btn-group btn-group-sm" role="group" aria-label="...">
-            <button type="button" class="btn btn-default">1x1</button>
-            <button type="button" class="btn btn-default">1x2</button>
-            <button type="button" class="btn btn-default">2x2</button>
-            <button type="button" class="btn btn-default">2x3</button>
-         </div>
+         <select class="form-control" name="ppt_layout">
+                <option value="1">1X1</option>
+                <option value="2">1X2</option>
+                <option value="3">2X2</option>
+                <option value="4">2X3</option>
+            </select>
         </div>
             <div class="checkbox">
                 <label>
-                    <input name="" id="" value="" type="checkbox">彩印
+                    <input name="color" id="" value="1" type="checkbox">彩印
                     <br/>
                     <input name="double_side" id='double_side' value="1" type="checkbox">双面打印
                     <div id='price' class='price text-info'>单面:<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面:<span id='double' class='text-danger'>1角每张</span>
@@ -113,12 +112,12 @@
 <block name='end'>
 
 
-<script type="text/javascript" src="http://cdn.bootcss.com/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<!--<script type="text/javascript" src="http://cdn.bootcss.com/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script type="text/javascript" src="__JS__/plupload.full.min.js"></script>
 <script type="text/javascript" src="__JS__/jquery.ui.plupload.js"></script>
-<script type="text/javascript" src="__JS__/plupload_zh_CN.js"></script>
+<script type="text/javascript" src="__JS__/plupload_zh_CN.js"></script>-->
 <script language="javascript">
-
+/*
 $(function() {
     var uploader = $("#uploader").plupload({
         // General settings
@@ -186,7 +185,7 @@ $(function() {
     });
 
 });
-
+*/
 
 
 

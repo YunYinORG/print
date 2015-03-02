@@ -91,7 +91,7 @@ class UserController extends Controller
         {
             
             //尝试登录
-            if (strlen($info['password']) == 16) 
+            if (strlen($info['password']) == 13) 
             {
                 
                 //更新密码加密方式，就加密过渡

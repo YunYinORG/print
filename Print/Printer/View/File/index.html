@@ -15,6 +15,8 @@
                 <th>待打印文件</th>
                 <th>份数</th>
                 <th>单双</th>
+                <th>彩印</th>
+                <th>ppt打印格式</th>
                 <th>上传者</th>
                 <th>上传时间</th>               
                 <th>打印状态</th>
@@ -42,6 +44,22 @@
                 <else/>
                 单面
                 </if>
+                </td>
+                <td>
+                <if condition="vo.color gt 0">
+                彩印
+                <else/>
+                黑白
+                </if>
+                </td>
+                <td>
+                    <switch name="vo['ppt_layout']">
+                    <case value="1">1X1</case>
+                    <case value="2">1X2</case>
+                    <case value="3">2X2</case>
+                    <case value="4">2X3</case>
+                    <default />不是ppt
+                    </switch>
                 </td>
                 <td>{$vo.use_name}[{$vo.student_number}]</td>
                  <td>{$vo.time}</td>               

@@ -187,13 +187,13 @@ function upload_file($storage='',$config=array())
 
 	switch (strtoupper($storage)){
 		case 'QINIU':
-			$diver='QINIU';
+			$driver='QINIU';
 			//上传驱动的配置
 			$driverConfig=C('UPLOAD_CONFIG_'.$driver);
 			break;
 
 		case 'SAE':
-			$diver='SAE';
+			$driver='SAE';
 			break;
 
 		case 'LOCAL':
@@ -232,12 +232,12 @@ function delete_file($path,$storage='')
 		break;
 
 	case 'QINIU':
-		$setting = C('UPLOAD_SITEIMG_QINIU');
-		$config  = $setting['driverConfig'];
-		$config['timeout']         = 300;
+		$setting = C('UPLOAD_CONFIG_QINIU');
+		$setting['timeout']         = 300;
 		$url     = str_replace('/', '_', $path);
-		$qiniu   = new Think\Upload\Driver\Qiniu\QiniuStorage($config);
-		return $qiniu->del($url);
+		$qiniu   = new Think\Upload\Driver\Qiniu\QiniuStorage($setting);
+		$result = $qiniu->del($url);
+		return true;
 		break;
 
 	default:
@@ -261,8 +261,8 @@ function send_mail($toMail, $msg, $mailType)
 	case 1:
 		
 		//绑定验证邮箱
-		$title   = '验证邮件';
-		$content = "点击验证链接<a href='$msg'>$msg</a>";
+		$title   = '云印验证邮件';
+		$content='欢迎加入云印的大家庭哦！<br/>云小印专注于为您提供最方便快捷的校园打印体验，让您随时打印，随手可取，无需“忧”盘！<br/>请点击以下链接绑定此的邮箱：('.$toMail.") <a href='$msg'>$msg</a>";
 		break;
 
 	case 2:
@@ -421,7 +421,7 @@ function download($url)
 		return $RealDownloadUrl;
 		break;
 
-	case 'NATIVE':
+	case 'LOCAL':
 		return "/Uploads/" . $url;
 		break;
 
