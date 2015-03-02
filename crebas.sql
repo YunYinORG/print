@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/3/2 20:33:03                            */
+/* Created on:     2015/3/2 21:05:30                            */
 /*==============================================================*/
 
 
@@ -141,7 +141,6 @@ create table printer
    open_time            char(32),
    status               tinyint default 1,
    rank                 int default 0,
-   school               bigint,
    price_color          int,
    price_no_color       int,
    price_single         int,
