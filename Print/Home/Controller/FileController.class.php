@@ -77,10 +77,9 @@ class FileController extends Controller
     public function uploadOne() 
     {
         $uid  = use_id(U('/Index/index'));
-        
         if ($uid) 
         {
-            $info = upload_file();
+            $info = upload_file('QINIU');
             $name = isset($info['file']['name']) ? $info['file']['name'] : false;
             if ($info && $name) 
             {                
@@ -97,7 +96,6 @@ class FileController extends Controller
                 $data['status'] = 1;
                 $data['color'] = I('post.color', 0, 'int');
                 $data['ppt_layout'] = I('post.ppt_layout', 0, 'int');
-                
                 // $data['requirements']              = I('post.requirements');
                 if (M('File')->add($data)) 
                 {
@@ -261,7 +259,6 @@ class FileController extends Controller
                         //                        S(cache_name('user',$uid),null);
                         //                        S(cache_name('printer',$file['pri_id']),null);
                         $this->success($result);
-                        return;
                     }
                     $this->error('记录更新异常');
                 }

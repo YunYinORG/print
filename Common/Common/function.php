@@ -187,13 +187,13 @@ function upload_file($storage='',$config=array())
 
 	switch (strtoupper($storage)){
 		case 'QINIU':
-			$diver='QINIU';
+			$driver='QINIU';
 			//上传驱动的配置
 			$driverConfig=C('UPLOAD_CONFIG_'.$driver);
 			break;
 
 		case 'SAE':
-			$diver='SAE';
+			$driver='SAE';
 			break;
 
 		case 'LOCAL':
@@ -232,12 +232,12 @@ function delete_file($path,$storage='')
 		break;
 
 	case 'QINIU':
-		$setting = C('UPLOAD_SITEIMG_QINIU');
-		$config  = $setting['driverConfig'];
-		$config['timeout']         = 300;
+		$setting = C('UPLOAD_CONFIG_QINIU');
+		$setting['timeout']         = 300;
 		$url     = str_replace('/', '_', $path);
-		$qiniu   = new Think\Upload\Driver\Qiniu\QiniuStorage($config);
-		return $qiniu->del($url);
+		$qiniu   = new Think\Upload\Driver\Qiniu\QiniuStorage($setting);
+		$result = $qiniu->del($url);
+		return true;
 		break;
 
 	default:
@@ -421,7 +421,7 @@ function download($url)
 		return $RealDownloadUrl;
 		break;
 
-	case 'NATIVE':
+	case 'LOCAL':
 		return "/Uploads/" . $url;
 		break;
 

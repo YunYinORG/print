@@ -67,7 +67,7 @@ return array(
     'REGEX_EMAIL'=>'/^[\w\.\-]{1,17}@[A-Za-z,0-9,\-,\.]{1,30}\.[A-Za-z]{2,6}$/',
 
     //文件上传相关配置
-    'FILE_UPLOAD_TYPE' => 'LOCAL',//默认存储提供商LOACL SAE QINIU
+    'FILE_UPLOAD_TYPE' => 'QINIU',//默认存储提供商LOACL SAE QINIU
     'FILE_UPLAOD_CONFIG'=>array(  //默认配置
                 'maxSize' => 10485760,//10 * 1024 * 1024,//文件大小
                 'rootPath' => './Uploads/',
