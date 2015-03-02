@@ -261,8 +261,8 @@ function send_mail($toMail, $msg, $mailType)
 	case 1:
 		
 		//绑定验证邮箱
-		$title   = '验证邮件';
-		$content = "点击验证链接<a href='$msg'>$msg</a>";
+		$title   = '云印验证邮件';
+		$content='欢迎加入云印的大家庭哦！<br/>云小印专注于为您提供最方便快捷的校园打印体验，让您随时打印，随手可取，无需“忧”盘！<br/>请点击以下链接绑定此的邮箱：('.$toMail.") <a href='$msg'>$msg</a>";
 		break;
 
 	case 2:
