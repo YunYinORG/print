@@ -14,7 +14,7 @@ drop table if exists feedback;
 
 drop table if exists file;
 
-drop table if exists mobile;
+drop table if exists device;
 
 drop table if exists notification;
 
@@ -30,8 +30,8 @@ drop table if exists user;
 create table card
 (
    id                   bigint not null,
-   notification_off     tinyint default 0,
-   blocked              bool,
+   off     tinyint default 0,
+   blocked              bool default 0,
    primary key (id)
 );
 
@@ -91,20 +91,20 @@ create table file
    double_side          bool,
    status               tinyint,
    color                bool,
-   ppt_layout           tinyint,
+   ppt_layout           tinyint default 0,
    primary key (id)
 );
 
 /*==============================================================*/
 /* Table: mobile                                                */
 /*==============================================================*/
-create table mobile
+create table device
 (
    id                   bigint not null,
-   device_code          varchar(16),
+   code                 varchar(16),
    last_login           timestamp default CURRENT_TIMESTAMP,
    status               tinyint,
-   device_type          char(16),
+   type                 tinyint,
    primary key (id)
 );
 
@@ -138,12 +138,12 @@ create table printer
    open_time            char(32),
    status               tinyint default 1,
    rank                 int default 0,
-   campus               char(32),
+   school               varchar(16),
    price_color          int,
    price_no_color       int,
    price_single         int,
    price_double         int,
-   price_more           varchar(128),
+   price_more           text,
    primary key (id),
    unique key AK_account_unique (account)
 );
@@ -170,7 +170,7 @@ create table user
    student_number       char(10),
    password             char(32),
    name                 char(8),
-   school               char(16),
+   school               varchar(16),
    gender               char(2),
    phone                char(16),
    email                char(64),
