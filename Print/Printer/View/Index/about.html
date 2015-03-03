@@ -1,18 +1,16 @@
 {//关于我们}
 <extend name="Public/template/printerbase.html"/>
 <block name='header'>
-<include file="./Public/template/printernav.html" about="current_page_item"/>
+<include file="./Public/template/printernav.html" about="action"/>
 </block>
 <block name='content'>
-<div class="text-warning">
-<h2>打印店使用</h2>
-<p>
-	<ul>
-		<li>用户名和密码登录进入打印店界面</li>
-		<li>进入打印文件列表,选择未打印文件进行打印</li>
-		<li>同学到店付款取走</li>
-	</ul>
-</p>
+
+<h2>打印店使用流程</h2>
+<div class="text-warning well">
+		<p>1.用户名和密码登录进入打印店界面<br/>
+		2.进入打印文件列表,选择未打印文件进行打印<br/>
+		3.同学到店付款取走
+		</p>
 </div>
 <include file="./Public/template/about.html"/>
 </block>

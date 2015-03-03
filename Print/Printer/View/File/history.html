@@ -2,14 +2,16 @@
 <extend name="Public/template/printerbase.html"/>
 <block name='title'>{$title}</block>
 <block name='header'>
-<include file="./Public/template/printernav.html" list="current_page_item"/>
+<include file="./Public/template/printernav.html" list="active"/>
 </block>
 <block name='content'>
 <div class="title" >
     <h2>{$title}</h2>
 </div>
 <div class="container">
-    <table class=" table table-responsive">
+    <div class="row"><div class="col-lg-8">
+    <div class="table-responsive">
+    <table class="table">
         <thead>
             <tr>
                 <th>文件</th>
@@ -66,5 +68,7 @@
         </tbody>
     </table>
     <div class="result page">{$page}</div>
+    </div>
+    </div></div>
 </div>
 </block>
