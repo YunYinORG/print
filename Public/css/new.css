@@ -21,6 +21,13 @@ img {
     filter: alpha(opacity=95);
     border-radius: 20px;
 }
+img.logos
+{
+    height:28px;
+    width:78px;
+    border-radius:6px;
+}
+
 footer {
     padding-top: 1em;
 }
@@ -64,6 +71,10 @@ footer a {
 #login>.btn {
     margin-top: 2px;
 }
+}
+li.logo-list
+{
+    width:85px;
 }
 @media(min-width: 992px) {
     img {
