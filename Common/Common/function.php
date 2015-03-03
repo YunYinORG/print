@@ -416,8 +416,16 @@ function download($url)
 	switch (C('FILE_UPLOAD_TYPE')) 
 	{
 	case 'QINIU':
-		$url             = 'http://7vzu30.com1.z0.glb.clouddn.com/' . str_replace('/', '_', $url);
-		$RealDownloadUrl = qiniu_sign($url);
+		$setting         = C('UPLOAD_CONFIG_QINIU');
+		$url             = 'http://'.$setting['domain']. str_replace('/', '_', $url);
+		$duetime         = NOW_TIME + 86400;
+		
+		//下载凭证有效时间
+		$DownloadUrl     = $url . '?e=' . $duetime;
+		$Sign            = hash_hmac('sha1', $DownloadUrl, $setting["secrectKey"], true);
+		$EncodedSign     = str_replace(array('+', '/'), array('-', '_'), base64_encode($Sign));
+		$Token           = $setting["accessKey"] . ':' . $EncodedSign;
+		$RealDownloadUrl = $DownloadUrl . '&token=' . $Token;
 		return $RealDownloadUrl;
 		break;
 
@@ -429,29 +437,6 @@ function download($url)
 		return "/Uploads/" . $url;
 		break;
 	}
-}
-
-function qiniu_encode($str) // URLSafeBase64Encode
-{
-	$find    = array('+', '/');
-	$replace = array('-', '_');
-	return str_replace($find, $replace, base64_encode($str));
-}
-
-function qiniu_sign($url) 
-{
-	
-	//$info里面的url
-	$setting         = C('UPLOAD_SITEIMG_QINIU');
-	$duetime         = NOW_TIME + 86400;
-	
-	//下载凭证有效时间
-	$DownloadUrl     = $url . '?e=' . $duetime;
-	$Sign            = hash_hmac('sha1', $DownloadUrl, $setting["driverConfig"]["secrectKey"], true);
-	$EncodedSign     = Qiniu_Encode($Sign);
-	$Token           = $setting["driverConfig"]["accessKey"] . ':' . $EncodedSign;
-	$RealDownloadUrl = $DownloadUrl . '&token=' . $Token;
-	return $RealDownloadUrl;
 }
 
 /**
