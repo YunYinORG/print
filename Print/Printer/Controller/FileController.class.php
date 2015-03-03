@@ -133,18 +133,23 @@ class FileController extends Controller
     {
 		$pid    = pri_id(U('Index/index'));
 		$fid    = I('fid', null, 'intval');
-		$status = I('status');
+		// $status = I('status');
         $map['pri_id']        = $pid;
         $map['id']        = $fid;
         $map['status']        = array('gt', 0);
         $File   = M('File');
-        $url    = $File->where($map)->getField('url');
-        if ($url) 
+        $info    = $File->where($map)->field('url,status')->find();
+
+        if ($info) 
         {
-            echo download($url);
+        	if($info['status']==C('FILE_UPLOAD'))
+        	{
+        		$File->where('id=%d',$fid)->setField('status',C('FILE_DOWNLOAD'));
+        	}
+            redirect(download($info['url']));
         } else
         {
-            $this->error('Can not get the URL');
+            $this->error('文件已删除，不能再下载！');
         }
     }
 	/**
