@@ -1,98 +1,89 @@
 ﻿{//文件上传页}
 <extend name="Public/template/base.html"/>
-
-
-
 <block name='head'>
 <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/modal.css">
 </block>
-
-
 <block name='header'>
 <include file="./Public/template/nav.html" add="active"/>
 </block>
-
 <block name='content'>
-
 <div class="title">
     <h2>设置打印信息</h2>
 </div>
-
 <div id="featured" class="container">
     <p class="text-warning alert alert-warning">
     打印店可在空闲时提前打印收到的文件,你可以在文件记录中查看文件状态（网页已做手机端适配）;<br/>无论打印队列多长，到店可以直接打印，如果打印店没有提前打印，你可直接到店打印；<br/>
     对于提前打印的文件请于打印完成后24小时内取走；对于所有情况请于2天内完成打印；<br/>
     价格上保证不比带U盘的价格贵（有时候甚至会更便宜），所有打印店均在量大时可减价。</p>
-
     <form id="print" method="post" action="__URL__/uploadOne" enctype="multipart/form-data">
-    <div class="row">
-        <div class="col-lg-5">
-        <div class="form-group">
-    	<div class="upload-btn">
-    	<div class="upload-area"><span class="glyphicon glyphicon-open"></span>点击上传文件<small>(不超过10MB)</small></div>
-    	<input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onchange="checkSuffix(this)">
-    	</div>
-    	</div>
-    	</div>
-    </div>
-    <div class="row">
-    	<div class="col-lg-4">
-    	<ul id="upload-list" class="list-group" style="margin-bottom:0px;margin-top:10px"></ul>
-    	</div>
-    	<div class="col-lg-3">
-        <fieldset id='setting1'>
-    	<div style="display:none;margin-top:10px;margin-bottom:0px" id="pptprint">
-        <select class="form-control" name="ppt_layout">
-                <option value="1">PPT打印格式：1x1</option>
-                <option value="2">1x2</option>
-                <option value="3">2x2</option>
-                <option value="4">2x3</option>
-        </select>
-    	</div>
-    	</fieldset>
-    	</div>
+        <div class="row">
+            <div class="text-center col-lg-5">
+                <div class="form-group">
+                    <div class="upload-btn">
+                        <div class="upload-area"><span class="glyphicon glyphicon-open"></span>点击上传文件<small>(不超过10MB)</small></div>
+                        <input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onchange="checkSuffix(this)">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+            <ul id="upload-list" class="list-group" style="margin-bottom:0px;margin-top:10px"></ul>
+        </div>
+        <div class="col-lg-3">
+            <fieldset id='setting1'>
+                <div style="display:none;margin-top:10px;margin-bottom:0px" id="pptprint">
+                    <select class="form-control" name="ppt_layout">
+                        <option value="">PPT打印格式</option>
+                        <option value="1">1x1</option>
+                        <option value="2">1x2</option>
+                        <option value="3">2x2</option>
+                        <option value="4">2x3</option>
+                    </select>
+                </div>
+            </fieldset>
+        </div>
     </div>
     <br/>
-	<div class="row">
-    	<div class="col-lg-4">
-    		<div class="form-group">
-            <select class="form-control" name="pri_id" onchange="priceChange(this)">
-                <option value="1">天达印务[9：00——22：00](西门附近，22宿下)</option>
-                <option value="2">光辉岁月[8：00——23：00](二食堂浴园旁)</option>
-                <option value="3">精诚快印[8：30——20：30](新图和数码小院之间)</option>
-                <option value="4">快捷复印[8：00——22：00](南开出版社后)</option>
-            </select>
-     		</div>
-     		<div id='price' class='well help-block' style="font-size:13px">单面：<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面：<span id='double' class='text-danger'>1角每张</span><br/>彩印：<span id='color_print' class='text-danger'></span></div>
-     	</div>
-     	<fieldset id="setting2">
-     	<div class="col-lg-4">
-    	<div class="form-group">
-        	<input name="copies" type="number" id="copies" value="0" style="width:15%"><strong>份</strong>
-        	<small style="font-size:13px;color:#AAAAAA">0表示到店后现场打印</small>
-    	</div>
-         <div class="checkbox">
-                <label for="printcolor">
-                    <input name="color" id="printcolor" value="1" type="checkbox"><strong>彩印</strong>
-                </label>
-                <label for="double_side">
-                <input name="double_side" id='double_side' value="1" type="checkbox"><strong>双面打印</strong>
-                </label>
-         </div>
-    	</fieldset>
-    	
-    	</div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                <select class="form-control" name="pri_id" onchange="priceChange(this)">
+                    <option value="1">天达印务[9：00——22：00](西门附近，22宿下)</option>
+                    <option value="2">光辉岁月[8：00——23：00](二食堂浴园旁)</option>
+                    <option value="3">精诚快印[8：30——20：30](新图和数码小院之间)</option>
+                    <option value="4">快捷复印[8：00——22：00](南开出版社后)</option>
+                </select>
+            </div>
+            <div id='price' class='well help-block' style="font-size:13px">单面：<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面：<span id='double' class='text-danger'>1角每张</span><br/>彩印：<span id='color_print' class='text-danger'></span></div>
+        </div>
+        <fieldset id="setting2">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <input name="copies" type="number" id="copies" value="0" style="width:15%"><strong>份</strong>
+                    <small style="font-size:13px;color:#AAAAAA">0表示到店后现场打印</small>
+                </div>
+                <div class="checkbox">
+                    <label for="printcolor">
+                        <input name="color" id="printcolor" value="1" type="checkbox"><strong>彩印</strong>
+                    </label>
+                    <label for="double_side">
+                        <input name="double_side" id='double_side' value="1" type="checkbox"><strong>双面打印</strong>
+                    </label>
+                </div>
+            </fieldset>
+        </div>
     </div>
-    <input type="submit" value="开始传送" class="flatbtn" id="modaltrigger" disabled="true">
-
-    </form>
+    <div class="row">
+        <div class="text-center col-lg-5">
+            <button type="submit" class="flatbtn" id="modaltrigger">开始传送</button>
+        </div>
+    </div>
+</form>
+</div>
 </block>
-
-
 <block name='end'>
-
 <script language="javascript" type="text/javascript">
-
 function checkSuffix(n) {
     var pos = n.value.lastIndexOf('.');
     var suffix = n.value.substring(pos + 1);
@@ -101,6 +92,7 @@ function checkSuffix(n) {
     var other_suffix = ['ppt', 'pptx'];
     var xls_suffix = ['xls','xlsx'];
     if (doc_suffix.indexOf(suffix) >= 0) {
+        alert('打印小常识：将文档转成PDF格式，打印出来的格式基本不会发生变化！（任性就随意了(^▽^)）')
         $('#setting2').show();
         $('#pptprint').hide();
         $('#copies').attr('disabled', false);
@@ -121,7 +113,7 @@ function checkSuffix(n) {
         $('#setting2').show();
         $('#copies').attr('disabled', false);
         $('#double_side').attr('disabled', false);
-        $("#modaltrigger").attr('disabled', false).attr('class', 'flatbtn-blu');    
+            $("#modaltrigger").attr('disabled', false).attr('class', 'flatbtn-blu');
         var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
         $("#upload-list").html('<li style="font-size: 13px;" class="list-group-item" style="border-style:none">当前文件：'+fname +'</li>');
     } else if(xls_suffix.indexOf(suffix) >= 0){
@@ -135,24 +127,19 @@ function checkSuffix(n) {
         $("#upload-list").html('<li style="font-size: 13px;" class="list-group-item">不支持'+ suffix + '格式文件。</li>');
         $("#modaltrigger").attr('disabled', true).attr('class', 'flatbtn');
     }
-
 }
-
 function priceChange(n){
     var i = n.value;
-
     var thePrice = [ [], ['1角每张','0.14元每张（7分每面）'],['少量1角每张，过百份7分每张','1角每张'],['少量1角每张，过百份8分每张','1角每张'],['少量1角每张，过百份8分每张','1角每张']
         ];
     $('#single').html(thePrice[i][0]);
     $('#double').html(thePrice[i][1]);
 }
-
 $("#modaltrigger").on('click', function() {
     $("#modaltrigger").attr('disabled', true);
     if (!$("#print").submit()) {
         $("#modaltrigger").attr('disabled',false);
     }
-});
-
+}).attr('disabled',true);
 </script>
 </block>
