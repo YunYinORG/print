@@ -68,6 +68,37 @@ nav li:hover a, nav li.active a, nav li.active span {
     color: #0AFC50;
 }
 
+.upload-btn{
+  border-style: solid;
+  border-width: 2px;
+  float: left;
+  height: 40px;
+  background: #FFFFFF;
+  width: 200px;
+  position: relative;
+}
+
+.upload-area {
+  text-align:center;
+  padding-top: 8px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+#upload-file {
+    width: 200px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 30px;
+    outline: medium none;
+    position: absolute;
+    filter:alpha(opacity=0);
+    -moz-opacity:0;
+    opacity:0; 
+    left: 0px;
+    top: 0px;
+}
+
 #banner {
     margin-bottom: 4em;
 }
@@ -125,7 +156,7 @@ nav li:hover a, nav li.active a, nav li.active span {
   }
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: 1275px) {
     #main {
       position: absolute;
       top: 0px;
@@ -143,22 +174,18 @@ nav li:hover a, nav li.active a, nav li.active span {
     }
 }
 
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 1275px) {
   #main {
       width: 77%;
   }
   #header {
-    /*min-height: 100% !important;
-    */position: relative;
+    position: relative;
     float: left;
     width: 23%;
     padding: 2em 1% 0 1%;
   }
   #uploader {
     width: 70%;
-  }
-  #Choose_printer {
-    width: 50%;
   }
   .alert{
     width: 70%;
@@ -248,7 +275,6 @@ nav li:hover a, nav li.active a, nav li.active span {
     width: 35%;
   }
   .version{
-    
     top: -1.5em;
   }
 }
