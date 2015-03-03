@@ -82,6 +82,8 @@ label{
 
 .field input{
 	/* The text boxes */
+	width: 110%;
+	height: 90%;
 	border:1px solid white;
 	color:#666666;
 	font-family:Arial,Helvetica,sans-serif;

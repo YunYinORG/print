@@ -7,21 +7,37 @@
 </block>
 <block name='content'>
 <div class="title" >
-    <h2>{$data.name}打印店信息管理</h2>
+    <h2>{$data.account}<small style="font-type:Arial;font-size:12px;color:#AAAAAA">&nbsp;{$data['name']}</small></h2>
 </div>
 
-<div class="info">
-    <div class="user">
-        <div class="subtitle">
-            <a href="__URL__/logout">退出登陆</a>
+<div class="container">
+<section class="row">
+    <span class='label label-success'><a href="__URL__/logout" style="text-decoration: none; color: #FFFFFF">退出登录</a></span><span class="label label-danger"><a href="mailto:feedback@print.nkumstc.cn" style="text-decoration: none; color: #FFFFFF">信息有误</a></span>
+    <br/>
+    <br/>
+</section>
+
+
+<section class="row">
+        <div>
+            <span>QQ</span>&nbsp;&nbsp;
+            <span class='info'><span class='label label-info'>{$data['qq']}</span></span><!--span class='btn glyphicon glyphicon-pencil'></span-->
         </div>
-    </div>
-</div>
-<div class="ChangePwd">
-    <div class="subtitle">
-        <p>修改密码</p>
-    </div>
-    <form  class="form-group" role="form" method="post" action="__URL__/changePwd">
+        <div>
+            <span>电话</span>
+            <span class='info'><span class="label label-info">{$data['phone']}</span></span><!--span class='btn glyphicon glyphicon-pencil'></span-->
+        </div>
+        <!--div class='input-group col-sm-4' style='display:none'><input name="phone" type="text" url='__URL__/post' name="phone" placeholder='你的手机号' class="form-control"/><span class="input-group-btn"><button type="submit" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div-->
+
+        <div>
+            <span>地址</span>
+            <span class='info'><span class='label label-info'>{$data['address']}</span></span><!--span class='btn glyphicon glyphicon-pencil'></span-->
+        </div>
+        <!--div class='input-group col-sm-4' style='display:none'><input id="address" type="text" name="address" placeholder='新地址' url='__URL__/post' class="form-control"/> <span class="input-group-btn"><button type="submit" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div-->
+
+</section>
+    <!--span>重置密码<i class='btn glyphicon glyphicon-pencil'></i></span>
+    <form style="display:none;" class="form-group" role="form" method="post" action="__URL__/changePwd">
                 <div class="input-group">
                     <label class="input-group-addon" for="deprecated_password">当前密码</label>
                     <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password">
@@ -33,8 +49,25 @@
                 <div class="input-group">
                     <label class="input-group-addon" for="re_password">确认密码</label>
                     <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
-                </div> 
+                </div>
+                 <div class="input-group text-center">
                 <button type="submit" class="btn btn-success">确定</button>
-            </form>
+                <span class='cancel btn btn-warning'>取消</span>
+                </div>
+    </form-->
 </div>
+</block>
+<BLOCK name='end'>
+<script>
+$('.glyphicon-pencil').click(function() {
+    var info = $(this).parent();
+    info.hide(50);
+    info.next().show(100);
+});
+$('.cancel').click(function() {
+    var set = $(this).parent().parent();
+    set.hide(50);
+    set.prev().show(100);
+});
+</script>
 </block>
