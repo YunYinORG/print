@@ -119,7 +119,7 @@ class PrinterController extends Controller
         $Printer = D('Printer');
         
         $data['account']         = I('post.account');
-        $data['password']         = encode(I('post.password'), I('post.account'));
+        $data['password']         = encode(md5(I('post.password')), I('post.account'));
         $data['name']         = I('post.name');
         $data['address']         = I('post.address');
         $data['phone']         = I('post.phone');
