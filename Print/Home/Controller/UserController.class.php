@@ -133,11 +133,11 @@ class UserController extends Controller
             if (preg_match(C('REGEX_NUMBER_NKU'), $number)) 
             {
                 import(C('VERIFY_WAY'), COMMON_PATH, '.php');
-                $data['school'] = '南开大学';
+                $data['sch_id'] = 1;
             } elseif (preg_match(C('REGEX_NUMBER_TJU'), $number)) 
             {
                 $this->error('北洋大学暂未开放注册！');
-                $data['school'] = '天津大学';
+                $data['sch_id'] =2;
             } else
             {
                 $this->error('你输入的学号' . $number . ',不是南开或者天大在读学生的的学号，如果你是南开或者天大的在读学生请联系我们！');
@@ -153,7 +153,8 @@ class UserController extends Controller
                 $this->display('notice');
             } else
             {
-                $this->error($data['school'] . '学校账号实名认证失败！');
+                $school=M('school')->cache('school',36000)->getFieldById($data['sch_id'],'name');
+                $this->error($data['sch_id'] . '学校账号实名认证失败！');
             }
         }
     }

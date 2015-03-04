@@ -13,7 +13,12 @@
                 <div class='alert alert-warning'>
                     亲爱的<strong class='text-success'>{$data['name']}</strong>
                     <ul>
-                    <li>恭喜你，通过了 <q>{$data['school']}</q> <code>实名认证</code>;</li>
+                    <li>恭喜你，通过了 <q>
+                    <switch name="$data['sch_id']" >
+                        <case value="1">南开大学</case>
+                        <case value="2">天津大学</case>
+                    </switch>
+                    </q> <code>实名认证</code>;</li>
                         <li>现在你已经可以使用<strong >云印南天</strong>平台啦！</li>
                         <li>在使用之前我们强烈建议你设置新密码,<b class='text-info'>你也可以跳过设置</b>,将使用认证密码作为登录密码</li>
                         <li>当然不论使用什么密码,我们会对密码进行三次<code>不可逆加密</code>（即使数据库泄露也不可能反向获取你的真实密码）;</li>
