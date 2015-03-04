@@ -10,7 +10,7 @@
 return array(
     //安全配置文件，相同内容可以覆盖配置文件    
     'LOAD_EXT_CONFIG' => 'secret',
-
+    'COOKIE_HTTPONLY' => true,//开启httponly,禁止js读取cookie
     //调试信息
    'SHOW_PAGE_TRACE' => 1,
 
