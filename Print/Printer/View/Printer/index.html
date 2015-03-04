@@ -36,8 +36,8 @@
         <!--div class='input-group col-sm-4' style='display:none'><input id="address" type="text" name="address" placeholder='新地址' url='__URL__/post' class="form-control"/> <span class="input-group-btn"><button type="submit" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div-->
 
 </section>
-    <!--span>重置密码<i class='btn glyphicon glyphicon-pencil'></i></span>
-    <form style="display:none;" class="form-group" role="form" method="post" action="__URL__/changePwd">
+    <span>重置密码<i class='btn glyphicon glyphicon-pencil'></i></span>
+    <form style="display:none;" class="form-group col-md-8" role="form" method="post" action="__URL__/changePwd">
                 <div class="input-group">
                     <label class="input-group-addon" for="deprecated_password">当前密码</label>
                     <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password">
@@ -54,7 +54,7 @@
                 <button type="submit" class="btn btn-success">确定</button>
                 <span class='cancel btn btn-warning'>取消</span>
                 </div>
-    </form-->
+    </form>
 </div>
 </block>
 <BLOCK name='end'>
@@ -70,4 +70,4 @@ $('.cancel').click(function() {
     set.prev().show(100);
 });
 </script>
-</block>
+</BLOCK>

@@ -70,9 +70,9 @@ class PrinterController extends Controller
         {
             $Printer      = M('Printer');
             $pri          = $Printer->field('account,password')->cache(true)->getById($id);
-            if ($pri['password'] == encode($old_password, $pri['account'])) 
+            if ($pri['password'] == encode(md5($old_password), $pri['account'])) 
             {
-                if ($Printer->where('id=' . $id)->cache(true)->setField('password', encode($password, $pri['account'])) !== fasle) 
+                if ($Printer->where('id=' . $id)->setField('password', encode(md5($password), $pri['account'])) !== fasle) 
                 {
                     $this->success('修改成功', 1);
                 } else
@@ -144,12 +144,12 @@ class PrinterController extends Controller
     public function auth() 
     {
         $Printer  = M('Printer');
-        $account  = I('post.account', null, '/^\w{3,28}$/');
+        $account  = I('post.account', null, C('REGEX_ACCOUNT'));
         if(!$account)
         {
             $this->error('无效账号：'.I('post.account'));
         }
-        $result   = $Printer->where('account="%s"', $account)->find();
+        $result   = $Printer->where('account="%s"', $account)->field('id,password,status')->find();
         if ($result) 
         {
             $key      = 'auth_p_' . $account;
@@ -169,8 +169,8 @@ class PrinterController extends Controller
                     $Printer->save($result);
                 }
 
-                session('pri_id', $Printer->id);
-                $token = update_token($Printer->id, C('PRINTER_WEB'));
+                session('pri_id', $result['id']);
+                $token = update_token($result['id'], C('PRINTER_WEB'));
                 cookie('token', $token, 3600 * 24 * 30);
                 S($key, null);
                 $this->redirect('Printer/File/index');
