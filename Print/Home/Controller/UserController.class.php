@@ -127,7 +127,10 @@ class UserController extends Controller
             }
         } else
         {
-            
+            if(!C('REG_OPEN'))
+            {
+                $this->error('对不起，目前注册暂时关闭，请您谅解！');
+            }            
             //尚未注册，先判断学校导入学校验证文件
             $number = I('student_number', null, C('REGEX_NUMBER_NKU'));
             if (preg_match(C('REGEX_NUMBER_NKU'), $number)) 
