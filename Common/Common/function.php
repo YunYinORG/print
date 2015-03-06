@@ -227,9 +227,15 @@ function send_mail($toMail, $msg, $mailType)
 		//找回密码
 		break;
 
+	 case 3:
+        $title = '校园卡认领通知';
+		$content=$msg;
+		//找回密码
+		break;
+        
 	default:
 		$title = '来自云印的通知'; //无论如何都应该有一个标题
-
+	
 		//直接发送
 		break;
 	}
@@ -259,7 +265,7 @@ function send_mail($toMail, $msg, $mailType)
 		$mail->From     = C('VERIFY_EMAIL');
 		$mail->Username = C('VERIFY_EMAIL');
 		$mail->Password = C('VERIFY_PWD');
-		$mail->FromName = '云印南天';
+		$mail->FromName = '云小印';
 		try
 		{
 			$mail->Send();

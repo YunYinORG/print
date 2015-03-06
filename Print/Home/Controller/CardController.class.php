@@ -99,7 +99,7 @@ class CardController extends Controller
         
         $User      = M('User');
         $Card      = M('Card');
-        $send_user = $uid ? $User->field('id,school,student_number,name,phone,email')->getById($uid) : false;
+        $send_user = $uid ? $User->field('id,sch_id,student_number,name,phone,email')->getById($uid) : false;
         if (!$send_user) 
         {
             $this->error('请登录！', '/');
@@ -156,12 +156,13 @@ class CardController extends Controller
                 {
                     $recv_email = decrypt_email($recv_user['email']);
                     $content    = '亲爱的<i>' . $recv_user['name'] . '</i>同学：<br/>';
-                    $content.= $send_user['school'] . '的<i>' . $send_user['name'] . '</i>同学,声称捡到你的一卡通<br/>';
-                    $content.= $send_user['name'] . "同学的手机号:<b><a herf='tel:$send_phone'>$send_phone</a></b>;<br/>";
+                    $school=M('school')->cache(true)->getFieldById($send_user['sch_id'],'name');
+                    $content.= $school . '的<i>' . $send_user['name'] . '</i>同学说TA捡到了你的校园<br/>';
+                    $content.= $send_user['name'] . "同学的手机号:<b> <a herf='tel:$send_phone'>$send_phone</a></b>;<br/>";
                     if ($send_user['email']) 
                     {
-                        $send_email = decrypt_email($recv_user['email']);
-                        $content.= $send_user['name'] . "同学的邮箱:<b><a href='mailto:$send_email'>$send_email</a></b>;<br/>";
+                        $send_email = decrypt_email($send_user['email']);
+                        $content.= $send_user['name'] . "同学的邮箱: <b><a href='mailto:$send_email'>$send_email</a></b>;<br/>";
                     }
                     $mail_result = send_mail($recv_email, $content, 3);
                     $success|= $mail_result;
