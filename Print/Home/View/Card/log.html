@@ -1,0 +1,105 @@
+<extend name="Public/template/base.html"/>
+<block name='header'>
+<include file="./Public/template/nav.html" card="active"/>
+</block>
+<block name='content'>
+<h1 class="text-center text-primary">我的校园卡找回记录</h1>
+<section class='row alert alert-danger'>
+    <h2>丢失记录</h2>
+    <EMPTY name='lost'>
+    你还没有丢过卡哦o(^▽^)o
+    <ELSE/>
+    <foreach name="lost" item="v">
+    <div>
+        <span class='name label label-info'> {$v['find_name']} ({$v['find_number']})</span>
+        同学于 <span class=''>{$v['time']}</span> 捡到我的卡
+        <switch name="v['status']" >
+        <case value="-1">
+        <span class='label label-danger'>已举报</span>
+        </case>
+        <case value="0">
+        <span class='label label-primary'>已忽略</span>
+        </case>
+        <case value="1">
+        <span class='label label-success'>已感谢</span>
+        </case>
+        <default />
+        <span class='result' id="{$v['id']}">
+        <button class="btn btn-success" value="1">感谢</button><button class="btn btn-danger" value="-1">举报</button>
+        </span>
+        </switch>
+    </div>
+    </foreach>
+    </EMPTY>
+</section>
+<section class='row alert alert-success'>
+    <h2>找到记录</h2>
+    <EMPTY name='find'>
+    空空如也!
+    <ELSE/>
+    <foreach name="find" item="v">
+    <div>
+        我在<span class=''>{$v['time']}</span>捡到
+        <span class='label label-info'> {$v['lost_name']} ({$v['lost_number']})</span> 同学的卡
+        <switch name="v['status']" >
+        <case value="-1">
+        <span class='label label-danger'>被举报</span>
+        </case>
+        <case value="0">
+        <span class='label label-primary'>被忽略</span>
+        </case>
+        <case value="1">
+        <span class='label label-success'>收到感谢</span>
+        </case>
+        <default />
+        <span class='label label-warning'>待处理</span>
+        </switch>
+    </div>
+    </foreach>
+    </EMPTY>
+</section>
+</block>
+<block name='end'>
+<script>
+$('.result>button').click(function() {
+    var status = this.value;
+    var msg = '确认';
+    switch (status) {
+        case '1':
+            msg = '确认TA真的捡到你的卡，对TA表示感谢！';
+            break;
+        case '-1':
+            msg = '确认TA在骚扰，举报TA！（被举报超过2次，系统将会对他经验此功能！）';
+            break;
+    }
+    if (confirm(msg)) {
+        var url = '/Card/result';
+        var id = $(this).parent('.result').hide().attr('id');
+        $.post(url, {
+            'id': id,
+            'status': status
+        }, function(data, result) {
+            var r = $('#' + id).show();
+            if (result == 'success') {
+                if (data.status) {
+                    switch (status) {
+                        case '1':
+                            r.html('已感谢');
+                            break;
+                        case '0':
+                            r.html('已忽略');
+                            break;
+                        case '-1':
+                            r.html('已举报');
+                            break;
+                    }
+                }
+                alert(data.info);
+            } else {
+                alert('服务器连接出错！');
+            }
+        })
+    }
+});
+</script>
+</block>

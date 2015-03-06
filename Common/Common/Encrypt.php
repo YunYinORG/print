@@ -289,6 +289,6 @@ function decrypt_email(&$email)
         //aes解解码
         aes_decode($name2, C('ENCRYPT_EMAIL'));
     }
-    $email = $name[0] . $name2 . '@' . $domain;
+    $email = $name[0] . trim($name2) . '@' . $domain;
     return $email;
 }

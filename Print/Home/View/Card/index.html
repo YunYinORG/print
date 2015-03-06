@@ -1,0 +1,92 @@
+<extend name="Public/template/base.html"/>
+<block name='header'>
+<include file="./Public/template/nav.html" card="active"/>
+</block>
+<block name='content'>
+ <h1 class="text-center text-primary">校园卡找回中心</h1>
+<section class='row'>
+    <ul class="text-center list-inline">
+        <li><a class="btn btn-success" href="log">校园找回记录<span class='label'>{$new}</span></a></li>
+        <li><a class="btn btn-warning" href="help">志愿者送还平台</a></li>
+    </ul>
+</section>
+<section class='row alert well col-xs-offset-1'>
+    <h2 class="text-center">捡到了TA的校园卡</h2>
+    <form role="form" method="post" onsubmit="return find(this);" action="__URL__/find">
+        <div class="col-md-4 col-md-offset-1">
+            <label class="sr-only"  for="number">学号</label>
+            <input class="form-control" placeholder='失主卡号' name="number" type="text" id="number" autocomplete="off" required>
+        </div>
+        <div class="col-md-4">
+            <label class="sr-only"  for="name">姓名</label>
+            <input class="form-control" placeholder='失主姓名' name="name" type="text" id="name" autocomplete="off" required>
+        </div>
+        <div class="text-center col-md-2">
+            <button type="submit" id='submit' class="form-control btn btn-danger">通知失主</button>
+        </div>
+    </form>
+</section>
+<section class='row alert alert-warning col-xs-offset-1'>
+    <div class="col-xs-10 col-xs-offset-1">
+        <ul>
+            <li>如果你拾到了同学的校园卡（学号相关证件）,在此输入TA的<q>卡号（学号）</q>和TA的<q>姓名</q>;</li>
+            <li>系统会把你的联系方式（绑定的<code>手机号</code>和绑定的<code>邮箱</code>）和丢失信息通知到TA的手机和邮箱,TA直接联系你;</li>
+            <li>为了防止恶意使用,每个人的使用次数有限制;如果收到骚扰举报将永久封禁此功能</li>
+            <li>如果你不想透露自己的联系方式，或者现在无法联系到失主,你可以交给<a href="help">第三方平台</a>来处理</li>
+        </ul>
+    </div>
+</section>
+<section class='row alert alert-success col-xs-offset-1'>
+    <div class="col-xs-10 col-xs-offset-1">
+        校园找回平台，线上找回系统由<a>云印平台</a>全力支持；<br/>南开大学的线下送还服务由<a>南开计控志愿服务部</a>提供支持。<br/>
+        任何问题请及时联系我们。
+    </div>
+</section>
+</block>
+<block name='end'>
+<script>
+function find(f) {
+    var name = f['name'].value;
+    var number = f['number'].value;
+    if (!/^(\d{7}|\d{10})$/.test(number)) {
+        alert('卡号（学号）格式不对');
+        f['number'].focus()
+    } else if (!/^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]){2,8}$/.test(name)) {
+        alert('请填写正确的名字');
+        f['name'].focus();
+    } else if (confirm('确认让系统短信或邮件通知 ' + name + ' (' + number + ')？')) {
+        $('#submit').attr('disabled', true).html('正在核实...');
+        var url = f.action;
+        $.post(url, {
+            'name': name,
+            'number': number
+        }, function(data, status) {
+            var title = $('#modal_label');
+            var content = $('#modal_content');
+            var link = $('#modal_url').html('');
+            var btn = $('#submit');
+            if (status == "success") {
+                if (data.status) {
+                    title.html('成功提示');
+                    content.html(data.info);
+                    btn.html('已经通知');
+                } else {
+                    if (data.url) {
+                        link.attr('href', data.url).html('点此查看帮助');
+                    }
+                    title.html('错误提示');
+                    btn.html('通知失主').attr('disabled', false);
+                    content.html(data.info);
+                }
+            } else {
+                title.html('服务器错误');
+                content.html('服务器链接出错');
+                btn.html('稍后再试');
+            }
+            $('#modal').modal('show');
+        });
+    }
+    return false;
+} 
+</script>
+</block>
