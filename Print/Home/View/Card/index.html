@@ -42,6 +42,17 @@
         任何问题请及时联系我们。
     </div>
 </section>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="modal_label"></h3>
+            </div>
+            <div class="modal-body"><span id='modal_content'></span><a id="modal_url"></a></div>
+        </div>
+    </div>
+</div>
 </block>
 <block name='end'>
 <script>
@@ -72,7 +83,7 @@ function find(f) {
                     btn.html('已经通知');
                 } else {
                     if (data.url) {
-                        link.attr('href', data.url).html('点此查看帮助');
+                        link.attr('href', data.url).html('解决这个问题');
                     }
                     title.html('错误提示');
                     btn.html('通知失主').attr('disabled', false);
