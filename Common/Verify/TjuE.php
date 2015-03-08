@@ -14,7 +14,6 @@
 *           bool false /null 验证失败返回false或空值
 *@author 赵雅慧
 */
-
 function getName($stu_number, $pwd) 
 {
     $url = 'http://e.tju.edu.cn/Main/logon.do';
