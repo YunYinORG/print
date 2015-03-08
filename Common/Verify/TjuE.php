@@ -14,7 +14,6 @@
 *           bool false /null 验证失败返回false或空值
 *@author 赵雅慧
 */
-header('Content-Type: text/html; charset=utf-8');
 
 function getName($stu_number, $pwd) 
 {
