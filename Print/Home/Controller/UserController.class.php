@@ -129,7 +129,6 @@ class UserController extends Controller
         {
                 
             //尚未注册，先判断学校导入学校验证文件
-            $number = I('student_number', null, C('REGEX_NUMBER_NKU'));
             if (preg_match(C('REGEX_NUMBER_NKU'), $number)) 
             {
                 if(!C('NKU_OPEN'))
@@ -141,7 +140,7 @@ class UserController extends Controller
             } elseif (preg_match(C('REGEX_NUMBER_TJU'), $number)) 
             {
                $VERIFY_WAY=C('VERIFY_TJU');
-                $data['sch_id'] =2;
+               $data['sch_id'] =2;
             } else
             {
                 $this->error('你输入的学号' . $number . ',不是南开或者天大在读学生的的学号，如果你是南开或者天大的在读学生请联系我们！');
