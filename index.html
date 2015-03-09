@@ -4,68 +4,93 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
         <meta name="renderer" content="webkit">
-        <title>云印南天</title>
+        <title>云印南天官网</title>
+        <!--         <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css"> -->
         <style type="text/css">
-        img{ max-height:520px;max-width: 90%;}
-        body{color:#222;-webkit-text-size-adjust:none;}
-        body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl, dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,textarea,th,td,iframe{margin:0; padding:0;}
-        h1,h2,h3,h4,h5,h6{font-size:100%;}
-        body,button,input,select,textarea {font-family:Tahoma,Arial,Roboto,”Droid Sans”,”Helvetica Neue”,”Droid Sans Fallback”,”Heiti SC”,sans-self;font-size:62.5%; line-height:1.5;}
-        ol,ul{list-style:none;}
-
-        html,body{ width:100%; height:100%; overflow:hidden;}
-        .section-wrap{ width:100%;height:100%;overflow:visible;transition:transform 1s cubic-bezier(0.86,0,0.03,1);-webkit-transition:-webkit-transform 1s cubic-bezier(0.86,0,0.03,1);}
-        .section-wrap .section{ position:relative; width:100%; height:100%; background-position:center center; background-repeat:no-repeat;}
-        .section-wrap .section .title{width:100%;position:absolute;top:10%;color:#fff;font-size:2.4em;text-align:center;}
-        .section-wrap .section .title p{ padding:0 4%;opacity:0}
-        .section-wrap .section .title.active .tit{ opacity:1;transform:translateY(-25px);-webkit-transform:translateY(-25px);transition:all 2s cubic-bezier(0.86,0,0.8,1);-webkit-transition:all 2s cubic-bezier(0.86,0,0.8,1);}
-        .section-wrap .section-1{ background-color:#5eb5c9}
-        .section-wrap .section-2{ background-color:#f0ad4e}
-        .section-wrap .section-3{ background-color:#5bc0de}
-        .section-wrap .section-4{ background-color:#d9534f}
-        .section-wrap .section-5{ background-color:#5cb85c}
-        .put-section-0{ transform:translateY(0);-webkit-transform:translateY(0);}
-        .put-section-1{ transform:translateY(-100%);-webkit-transform:translateY(-100%);}
-        .put-section-2{ transform:translateY(-200%);-webkit-transform:translateY(-200%);}
-        .put-section-3{ transform:translateY(-300%);-webkit-transform:translateY(-300%);}
-        .put-section-4{ transform:translateY(-400%);-webkit-transform:translateY(-400%);}
-        .section-btn{ width:14px;position:fixed;right:4%;top:50%;}
-        .section-btn li{ width:14px;height:14px;cursor:pointer;text-indent:-9999px;border-radius:50%;-webkit-border-radius:50%;margin-bottom:12px; background:#BD362F;text-align:center; color:#fff; onsor:pointer;}
-        .section-btn li.on{ background:#fff}
-        .arrow{ opacity:1;animation:arrow 3s cubic-bezier(0.5,0,0.1,1) infinite;-webkit-animation:arrow 3s cubic-bezier(0.5,0,0.1,1) infinite;transform:rotate(-90deg);-webkit-transform:rotate(-90deg); position:absolute;bottom:10px;left:50%;margin-left:-30px;width:60px;height:60px;border-radius:100%;-webkit-border-radius:100%;line-height:60px;text-align:center;font-size:20px;color:#fff;border:1px solid #fff;cursor:pointer;overflow:hidden;}
-        .arrow:hover{ animation-play-state:paused;-webkit-animation-play-state:paused;}
-        @keyframes arrow{ %0,%100{bottom:10px; opacity:1;} 50%{bottom:50px; opacity:.5} }
-        @-webkit-keyframes arrow{ %0,%100{bottom:10px; opacity:1;} 50%{bottom:50px; opacity:.5} }
-        ul#developers{
-        float: left;
-        width: 45%;
-        padding: 1%;
-        margin-left: 6%;
-        }
-        #developers li{
-        /*font-size: 85%;*/
-        text-align: left;
-        }
-        ul#contributors{
-        padding: 1%;
-        margin: 0;
-        float: left;
-        width: 45%;
-        }
-        #contributors li{
-        /*font-size: 75%;*/
-        text-align: left;
-        /*clear: left;*/
-        }
-        ul h4{text-align: left; color:floralwhite;}
-        .name{/*width: 3em;float: left;*/color: yellow}
-        /*		.info{width: 7em;float: left;}*/
-        .email{text-decoration: none;color: cyan;}
+                                img{ max-height:520px;max-width: 90%;}
+                                body{color:#222;-webkit-text-size-adjust:none;}
+                                body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl, dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,textarea,th,td,iframe{margin:0; padding:0;}
+                                /*h1{font-size: 2em}*/
+                                /*h2{font-size: 1.5em}*/
+                                /*h1,h2,h3,h4,h5,h6{font-size:100%;}*/
+                                body,button,input,select,textarea {font-family:Tahoma,Arial,Roboto,”Droid Sans”,”Helvetica Neue”,”Droid Sans Fallback”,”Heiti SC”,sans-self;font-size:62.5%; line-height:1.5;}
+                                ol,ul{list-style:none;}
+                                html,body{ width:100%; height:100%; overflow:hidden;}
+                                .section-wrap{ width:100%;height:100%;overflow:visible;transition:transform 1s cubic-bezier(0.86,0,0.03,1);-webkit-transition:-webkit-transform 1s cubic-bezier(0.86,0,0.03,1);}
+                                .section-wrap .section{ position:relative; width:100%; height:100%; background-position:center center; background-repeat:no-repeat;}
+                                .section-wrap .section .title{width:100%;position:absolute;top:10%;color:#fff;f/*ont-size:1.4em*/;text-align:center;}
+                                .section-wrap .section .title p{ padding:0 4%;opacity:0.9}
+                                .section-wrap .section .title.active .tit{ opacity:1;transform:translateY(-25px);-webkit-transform:translateY(-25px);transition:all 2s cubic-bezier(0.86,0,0.8,1);-webkit-transition:all 2s cubic-bezier(0.86,0,0.8,1);}
+                                .section-wrap .section-1{ background-color:#5eb5c9}
+                                .section-wrap .section-2{ background-color:#f0ad4e}
+                                .section-wrap .section-3{ background-color:#5bc0de}
+                                .section-wrap .section-4{ background-color:#d9534f}
+                                .section-wrap .section-5{ background-color:#5cb85c}
+                                .put-section-0{ transform:translateY(0);-webkit-transform:translateY(0);}
+                                .put-section-1{ transform:translateY(-100%);-webkit-transform:translateY(-100%);}
+                                .put-section-2{ transform:translateY(-200%);-webkit-transform:translateY(-200%);}
+                                .put-section-3{ transform:translateY(-300%);-webkit-transform:translateY(-300%);}
+                                .put-section-4{ transform:translateY(-400%);-webkit-transform:translateY(-400%);}
+                                .section-btn{ width:14px;position:fixed;right:4%;top:50%;}
+                                .section-btn li{ width:14px;height:14px;cursor:pointer;text-indent:-9999px;border-radius:50%;-webkit-border-radius:50%;margin-bottom:12px; background:#BD362F;text-align:center; color:#fff; onsor:pointer;}
+                                .section-btn li.on{ background:#fff}
+                                .arrow{ opacity:1;animation:arrow 3s cubic-bezier(0.5,0,0.1,1) infinite;-webkit-animation:arrow 3s cubic-bezier(0.5,0,0.1,1) infinite;transform:rotate(-90deg);-webkit-transform:rotate(-90deg); position:absolute;bottom:10px;left:50%;margin-left:-30px;width:60px;height:60px;border-radius:100%;-webkit-border-radius:100%;line-height:60px;text-align:center;font-size:20px;color:#fff;border:1px solid #fff;cursor:pointer;overflow:hidden;}
+                                .arrow:hover{ animation-play-state:paused;-webkit-animation-play-state:paused;}
+                                @keyframes arrow{ %0,%100{bottom:10px; opacity:1;} 50%{bottom:50px; opacity:.5} }
+                                @-webkit-keyframes arrow{ %0,%100{bottom:10px; opacity:1;} 50%{bottom:50px; opacity:.5} }
+                            .section-5 ul li{display: inline;}
+                            .lead{font-size: 2em}
+                            h1{font-size: 3em}
+                            h2{font-size: 2.7em}
+                            h3{font-size: 2.4em}
+                            h4{font-size: 2.2em}
+                            h6{font-size: 2em}
+                            a{text-decoration: none;color: inherit;}
+                            /*  #developers li{
+                                text-align: left;
+                                }
+                            */
+                                #contributors li{
+                                text-align: left;
+                                }
+                                ul h4{color:floralwhite;}
+                                .name{color: yellow}
+                                .email{text-decoration: none;color: cyan;
+                                width:200px;  overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
+                                .footer li {
+                        display: inline;
+                        min-width: 10%;
+                        }
+                                @media all and (max-width:800px){
+                        }
+                        @media all and (min-width:800px) {
+                        /* ul#developers{
+                                float: left;
+                                width: 45%;
+                                padding: 1%;
+                                margin-left: 6%;
+                                }
+                                ul#contributors{
+                                padding: 1%;
+                                margin: 0;
+                                float: left;
+                                width: 45%;
+                                }*/
+                    
+                        /* 页脚竖线 */
+                        footer li:before {
+                        margin-right: 0.5em;
+                        content: '|';
+                        }
+                        footer li:first-child:before {
+                        content: ' ';
+                        }
+                        }
         </style>
         <!--[if lte IE 8]>
         <style type="text/css">
-        html,body{width:100%; height:100%; overflow:scroll}
-        .section-btn{display:none;}
+                                html,body{width:100%; height:100%; overflow:scroll}
+                                .section-btn{display:none;}
         </style>
         <![endif]-->
     </head>
@@ -74,94 +99,100 @@
             <div class="section section-1">
                 <div class="title active">
                     <div class="title active">
-                        <h1 class="tit">云印<small>南天</small></h1>
+                        <h1 class="tit"><strong>云印</strong>南天</h1>
                         <h3>南开大学 天津大学 校园云打印平台</h3>
-                        <img src="image/logo.png"/>
+                        <a title="进入云印南天" href="#"><img alt="云印南天" src="image/logo.png"/></a>
+                        <p class="lead">以极客精神雕琢更安全方便的校园服务</p>
+                            <ul class="footer">
+                                <li><a href="http://weibo.com/cloudPrint" title="关注云印南天官方微博"><img src="image/icon/weibo.png"></a></li><li><a title="云印南开人人公共主页" href="http://page.renren.com/602117408"><img src="image/icon/renren.png"></a></li><li><a title="GitHub上查看云印开源项目" href="https://github.com/nkumstc/print"><img src="image/icon/github.png"></a></li><li><a title="邮箱联系" class="emaillink" href="mailto:contactATyunyin.org"><img src="image/icon/email.png"></a></li>
+                            </ul>
                     </div>
                 </div>
             </div>
             <div class="section section-2">
                 <div class="title">
                     <h2 class="tit">南开大学</h2>
-                    <div>2015年1月1日在南开正式开放公测,彼时叫“云印南开”</div>
+                    <p class="lead">2015年1月1日在南开正式开放公测,彼时叫“云印南开”</p>
                     <img alt="南开大学校园打印店地图" src="image/map.jpg"/>
                 </div>
             </div>
             <div class="section section-3">
                 <div class="title">
                     <h2 class="tit">天津大学</h2>
-                    <div>将于2015年3月15日对北洋正式开放,同时更名为“云印南天”</div>
+                    <p class="lead">将于2015年3月15日对北洋正式开放,同时更名为“云印南天”</p>
                     <img alt="天津大学校园打印店地图" src="image/map.jpg"/>
                 </div>
             </div>
             <div class="section section-4">
                 <div class="title">
                     <h2 class="tit">关于云印</h2>
-                    <ul id='developers'>
-                        <h4>核心开发者(MAIL LIST)</h4>
-                        <li>
-                            <span class="name">牛　亮</span><span class="info">(数据库和安全)</span><a href="" class="email">niuliang3ATyunyin.org</a>
+                    <p class="lead"><strong><q>云印南天</q>（原<q>云印南开</q>）是一个开源项目，也是一个非商业化、非从属于学校机构的独立平台。</strong></p>
+                    <p class="lead">云印项目，源自南开大学，目前由南开和北洋成员共同推动发展。云印平台，由云印组织核心技术团队提供长期技术支持，由云印运营团队负责运营推广，与校园合作组织共同维护和宣传。聚集分享大家的智慧，利用互联网信息，用心提供更<strong>安全</strong><strong>方便</strong>的校园服务。</p>
+                    <ul id='developers' class="col-md-5 col-md-offset-1 col-sm-10  center-block" >
+                        <h4>MAIL LIST</h4>
+                        <li class="row">
+                            <span class="name">牛　亮</span><span class="info">(数据库和安全)</span><a class="email">niuliang3ATyunyin.org</a>
                         </li>
-                        <li>
-                            <span class="name">孙卓豪</span><span class="info">(文件处理存储)</span><a href="" class="email">605527108ATyunyin.org</a>
+                        <li class="row">
+                            <span class="name">孙卓豪</span><span class="info">(文件处理存储)</span><a class="email">605527108ATyunyin.org</a>
                         </li>
-                        <li>
-                            <span class="name">王　博</span><span class="info">(前端设备适配)</span><a href="" class="email">wbATyunyin.org</a>
+                        <li class="row">
+                            <span class="name">王　博</span><span class="info">(前端设备适配)</span><a class="email">wbATyunyin.org</a>
                         </li>
-                        <li>
-                            <span class="name">杜晓唐</span><span class="info">(前端页面设计)</span><a href="" class="email">duxiaotangATyunyin.org</a>
+                        <li class="row">
+                            <span class="name">杜晓唐</span><span class="info">(前端页面设计)</span><a class="email">duxiaotangATyunyin.org</a>
                         </li>
-                        <li>
-                            <span class="name">梁崇军</span><span class="info">(插件和第三方)</span><a href="" class="email">icoconutATyunyin.org</a>
+                        <li class="row">
+                            <span class="name">梁崇军</span><span class="info">(插件和第三方)</span><a class="email">icoconutATyunyin.org</a>
                         </li>
-                        <li>
-                            <span class="name">宋剑超</span><span class="info">(打印店客户端)</span><a href="" class="email">songjianchaoATyunyin.org</a>
+                        <li class="row">
+                            <span class="name">宋剑超</span><span class="info">(打印店客户端)</span><a class="email">songjianchaoATyunyin.org</a>
                         </li>
-                        <li>
-                            <span class="name">刘未来</span><span class="info">(负责全部设计)</span><a href="" class="email">newfutureATyunyin.org</a>
+                        <li class="row">
+                            <span class="name">刘未来</span><span class="info">(负责全部设计)</span><a class="email">newfutureATyunyin.org</a>
                         </li>
                     </ul>
-                    <ul id='contributors'>
-                        <h4>所有贡献者(contributors)</h4>
-                        <li><span class="info">发起项目:</span><span class="name">李旭昇</span></li>
+                    <ul id='contributors' class="col-md-5 col-sm-10 center-block">
+                        <h4>contributors</h4>
+                        <li ><span class="info">发起项目:</span><span class="name">李旭昇</span></li>
                         <li><span class="info">推广运营:</span><span class="name">崔金锐</span>,<span class='name'>王雨晴</span>,<span class='name'>崔梦焱</span></li>
                         <li><span class="info">天大扩展:</span><span class="name">赵雅惠</span>,<span class='name'>何吉元</span></li>
                         <li><span class="info">图形设计:</span><span class="name">陈超</span>(地图和LOGO),<span class='name'>华伟彤</span></li>
                         <li><span class="info">前期宣传:</span><span class="name">刘策</span>,<span class='name'>姜帆</span></li>
                         <li><span class="info">开发参与:</span><span class="name">罗永洪</span>（APP）,<span class="name">梁鹏</span>,<span class='name'>sdffdsa</span></li>
                         <li><span class="info">其他贡献:</span><span class="name">刘安</span>,<span class='name'>赵泽坤</span>,<span class="name">NKBBS讨论者</span>和<span class="name">2014内测者</span><span>...</span></li>
-
                     </ul>
-
                 </div>
             </div>
             <div class="section section-5">
                 <div class="title">
                     <h2 class="tit">合作支持</h2>
-                    <ul>
+                    <ul><h6>平台提供商</h6>
                         <li>云之讯</li>
                         <li>互亿无线</li>
                         <li>新浪云引擎</li>
                         <li>七牛云存储</li>
-                        <li>又拍云存储</li>
+                        <!-- <li>又拍云存储</li> -->
                     </ul>
-                    <ul>
-                        <li>GitHub</li>
-                        <li>ThinkPHP</li>
-                    </ul>
-
-                    <ul>
+                    <ul><h6>基础支持单位</h6>
                         <li>南开大学微软俱乐部</li>
                         <li>南开大学机器人所</li>
                         <li>天津大学微软俱乐部</li>
                     </ul>
-                    <ul>
-                    	<li>加入我们</li>
-                    	<li>业务合作</li>
-                    	<li>宣传推广</li>
-                    	<li>意见反馈</li>
-                    	<li>&copy;云印南天2014-2015</li>
+                    <ul><h6>开源项目支持</h6>
+                        <li>GitHub</li>
+                        <li>ThinkPHP</li>
+                        <li>Bootstrap</li>
                     </ul>
+                    <footer>
+                        <ul class="footer">
+                            <li><a class="emaillink" href="mailto:joinATyunin.org">加入我们</a></li>
+                            <li><a class="emaillink" href="mailto:contactATyunin.org">业务合作</a></li>
+                            <li><a class="emaillink" href="mailto:contactATyunin.org">宣传合作</a></li>
+                            <li><a class="emaillink" href="mailto:feedbackATyunin.org">意见反馈</a></li>
+                            <li>&copy;<a href="/">云印南天2014-2015</a></li>
+                        </ul>
+                    </footer>
                 </div>
             </div>
         </section>
@@ -175,63 +206,71 @@
         <div class="arrow">&laquo;</div>
         <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
         <script type="text/javascript">
-        //此处引用：鼠标滚轮mousewheel插件
-        !function(a){"function"==typeof define&&define.amd?define(["jquery"],a):"object"==typeof exports?module.exports=a:a(jQuery)}(function(a){function b(b){var g=b||window.event,h=i.call(arguments,1),j=0,l=0,m=0,n=0,o=0,p=0;if(b=a.event.fix(g),b.type="mousewheel","detail"in g&&(m=-1*g.detail),"wheelDelta"in g&&(m=g.wheelDelta),"wheelDeltaY"in g&&(m=g.wheelDeltaY),"wheelDeltaX"in g&&(l=-1*g.wheelDeltaX),"axis"in g&&g.axis===g.HORIZONTAL_AXIS&&(l=-1*m,m=0),j=0===m?l:m,"deltaY"in g&&(m=-1*g.deltaY,j=m),"deltaX"in g&&(l=g.deltaX,0===m&&(j=-1*l)),0!==m||0!==l){if(1===g.deltaMode){var q=a.data(this,"mousewheel-line-height");j*=q,m*=q,l*=q}else if(2===g.deltaMode){var r=a.data(this,"mousewheel-page-height");j*=r,m*=r,l*=r}if(n=Math.max(Math.abs(m),Math.abs(l)),(!f||f>n)&&(f=n,d(g,n)&&(f/=40)),d(g,n)&&(j/=40,l/=40,m/=40),j=Math[j>=1?"floor":"ceil"](j/f),l=Math[l>=1?"floor":"ceil"](l/f),m=Math[m>=1?"floor":"ceil"](m/f),k.settings.normalizeOffset&&this.getBoundingClientRect){var s=this.getBoundingClientRect();o=b.clientX-s.left,p=b.clientY-s.top}return b.deltaX=l,b.deltaY=m,b.deltaFactor=f,b.offsetX=o,b.offsetY=p,b.deltaMode=0,h.unshift(b,j,l,m),e&&clearTimeout(e),e=setTimeout(c,200),(a.event.dispatch||a.event.handle).apply(this,h)}}function c(){f=null}function d(a,b){return k.settings.adjustOldDeltas&&"mousewheel"===a.type&&b%120===0}var e,f,g=["wheel","mousewheel","DOMMouseScroll","MozMousePixelScroll"],h="onwheel"in document||document.documentMode>=9?["wheel"]:["mousewheel","DomMouseScroll","MozMousePixelScroll"],i=Array.prototype.slice;if(a.event.fixHooks)for(var j=g.length;j;)a.event.fixHooks[g[--j]]=a.event.mouseHooks;var k=a.event.special.mousewheel={version:"3.1.12",setup:function(){if(this.addEventListener)for(var c=h.length;c;)this.addEventListener(h[--c],b,!1);else this.onmousewheel=b;a.data(this,"mousewheel-line-height",k.getLineHeight(this)),a.data(this,"mousewheel-page-height",k.getPageHeight(this))},teardown:function(){if(this.removeEventListener)for(var c=h.length;c;)this.removeEventListener(h[--c],b,!1);else this.onmousewheel=null;a.removeData(this,"mousewheel-line-height"),a.removeData(this,"mousewheel-page-height")},getLineHeight:function(b){var c=a(b),d=c["offsetParent"in a.fn?"offsetParent":"parent"]();return d.length||(d=a("body")),parseInt(d.css("fontSize"),10)||parseInt(c.css("fontSize"),10)||16},getPageHeight:function(b){return a(b).height()},settings:{adjustOldDeltas:!0,normalizeOffset:!0}};a.fn.extend({mousewheel:function(a){return a?this.bind("mousewheel",a):this.trigger("mousewheel")},unmousewheel:function(a){return this.unbind("mousewheel",a)}})});
-
-        $(function(){
-        var i=0;
-        var $btn = $('.section-btn li'),
-        $wrap = $('.section-wrap'),
-        $arrow = $('.arrow');
-
-        /*当前页面赋值*/
-        function up(){i++;if(i==$btn.length){i=0};}
-        function down(){i--;if(i<0){i=$btn.length-1};}
-
-        /*页面滑动*/
-        function run(){
-        $btn.eq(i).addClass('on').siblings().removeClass('on');
-        $wrap.attr("class","section-wrap").addClass(function() { return "put-section-"+i; }).find('.section').eq(i).find('.title').addClass('active');
-        };
-
-        /*右侧按钮点击*/
-        $btn.each(function(index) {
-        $(this).click(function(){
-        i=index;
-        run();
-        })
-        });
-
-        /*翻页按钮点击*/
-        $arrow.one('click',go);
-        function go(){
-        up();run();
-        setTimeout(function(){$arrow.one('click',go)},1000)
-        };
-
-        /*响应鼠标*/
-        $wrap.one('mousewheel',mouse_);
-        function mouse_(event){
-        if(event.deltaY<0) {up()}
-        else{down()}
-        run();
-        setTimeout(function(){$wrap.one('mousewheel',mouse_)},1000)
-        };
-
-        /*响应键盘上下键*/
-        $(document).one('keydown',k);
-        function k(event){
-        var e=event||window.event;
-        var key=e.keyCode||e.which||e.charCode;
-        switch(key)	{
-        case 38: down();run();
-        break;
-        case 40: up();run();
-        break;
-        };
-        setTimeout(function(){$(document).one('keydown',k)},1000);
-        }
-        });
+                               
+                        window.onload=function(){
+                        	 //此处引用：鼠标滚轮mousewheel插件
+                                !function(a){"function"==typeof define&&define.amd?define(["jquery"],a):"object"==typeof exports?module.exports=a:a(jQuery)}(function(a){function b(b){var g=b||window.event,h=i.call(arguments,1),j=0,l=0,m=0,n=0,o=0,p=0;if(b=a.event.fix(g),b.type="mousewheel","detail"in g&&(m=-1*g.detail),"wheelDelta"in g&&(m=g.wheelDelta),"wheelDeltaY"in g&&(m=g.wheelDeltaY),"wheelDeltaX"in g&&(l=-1*g.wheelDeltaX),"axis"in g&&g.axis===g.HORIZONTAL_AXIS&&(l=-1*m,m=0),j=0===m?l:m,"deltaY"in g&&(m=-1*g.deltaY,j=m),"deltaX"in g&&(l=g.deltaX,0===m&&(j=-1*l)),0!==m||0!==l){if(1===g.deltaMode){var q=a.data(this,"mousewheel-line-height");j*=q,m*=q,l*=q}else if(2===g.deltaMode){var r=a.data(this,"mousewheel-page-height");j*=r,m*=r,l*=r}if(n=Math.max(Math.abs(m),Math.abs(l)),(!f||f>n)&&(f=n,d(g,n)&&(f/=40)),d(g,n)&&(j/=40,l/=40,m/=40),j=Math[j>=1?"floor":"ceil"](j/f),l=Math[l>=1?"floor":"ceil"](l/f),m=Math[m>=1?"floor":"ceil"](m/f),k.settings.normalizeOffset&&this.getBoundingClientRect){var s=this.getBoundingClientRect();o=b.clientX-s.left,p=b.clientY-s.top}return b.deltaX=l,b.deltaY=m,b.deltaFactor=f,b.offsetX=o,b.offsetY=p,b.deltaMode=0,h.unshift(b,j,l,m),e&&clearTimeout(e),e=setTimeout(c,200),(a.event.dispatch||a.event.handle).apply(this,h)}}function c(){f=null}function d(a,b){return k.settings.adjustOldDeltas&&"mousewheel"===a.type&&b%120===0}var e,f,g=["wheel","mousewheel","DOMMouseScroll","MozMousePixelScroll"],h="onwheel"in document||document.documentMode>=9?["wheel"]:["mousewheel","DomMouseScroll","MozMousePixelScroll"],i=Array.prototype.slice;if(a.event.fixHooks)for(var j=g.length;j;)a.event.fixHooks[g[--j]]=a.event.mouseHooks;var k=a.event.special.mousewheel={version:"3.1.12",setup:function(){if(this.addEventListener)for(var c=h.length;c;)this.addEventListener(h[--c],b,!1);else this.onmousewheel=b;a.data(this,"mousewheel-line-height",k.getLineHeight(this)),a.data(this,"mousewheel-page-height",k.getPageHeight(this))},teardown:function(){if(this.removeEventListener)for(var c=h.length;c;)this.removeEventListener(h[--c],b,!1);else this.onmousewheel=null;a.removeData(this,"mousewheel-line-height"),a.removeData(this,"mousewheel-page-height")},getLineHeight:function(b){var c=a(b),d=c["offsetParent"in a.fn?"offsetParent":"parent"]();return d.length||(d=a("body")),parseInt(d.css("fontSize"),10)||parseInt(c.css("fontSize"),10)||16},getPageHeight:function(b){return a(b).height()},settings:{adjustOldDeltas:!0,normalizeOffset:!0}};a.fn.extend({mousewheel:function(a){return a?this.bind("mousewheel",a):this.trigger("mousewheel")},unmousewheel:function(a){return this.unbind("mousewheel",a)}})});
+                                $(function(){
+                                var i=0;
+                                var $btn = $('.section-btn li'),
+                                $wrap = $('.section-wrap'),
+                                $arrow = $('.arrow');
+                                /*当前页面赋值*/
+                                function up(){i++;if(i==$btn.length){i=0};}
+                                function down(){i--;if(i<0){i=$btn.length-1};}
+                                /*页面滑动*/
+                                function run(){
+                                $btn.eq(i).addClass('on').siblings().removeClass('on');
+                                $wrap.attr("class","section-wrap").addClass(function() { return "put-section-"+i; }).find('.section').eq(i).find('.title').addClass('active');
+                                };
+                                /*右侧按钮点击*/
+                                $btn.each(function(index) {
+                                $(this).click(function(){
+                                i=index;
+                                run();
+                                })
+                                });
+                                /*翻页按钮点击*/
+                                $arrow.one('click',go);
+                                function go(){
+                                up();run();
+                                setTimeout(function(){$arrow.one('click',go)},1000)
+                                };
+                                /*响应鼠标*/
+                                $wrap.one('mousewheel',mouse_);
+                                function mouse_(event){
+                                if(event.deltaY<0) {up()}
+                                else{down()}
+                                run();
+                                setTimeout(function(){$wrap.one('mousewheel',mouse_)},1000)
+                                };
+                                /*响应键盘上下键*/
+                                $(document).one('keydown',k);
+                                function k(event){
+                                var e=event||window.event;
+                                var key=e.keyCode||e.which||e.charCode;
+                                switch(key)	{
+                                case 38: down();run();
+                                break;
+                                case 40: up();run();
+                                break;
+                                };
+                                setTimeout(function(){$(document).one('keydown',k)},1000);
+                                }
+                                });
+			$('.emaillink').click(function(){this.href=this.hrefreplace("AT","@");});
+                        var emails=$('.email');
+                        var e;
+                        for(var i in emails){
+                        e=emails[i].innerHTML
+                        if(e)
+                        {
+                e=e.replace("AT","@");
+                        emails[i].href='mailto:'+e;
+                        emails[i].innerHTML='邮件联系';
+                            }
+                        }
+                        };
         </script>
     </body>
 </html>
