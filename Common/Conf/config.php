@@ -18,7 +18,8 @@ return array(
     'DB_SQL_BUILD_CACHE' => true,
 
     //验证方式
-    'VERIFY_WAY'=>'Verify.NankaiUrp',
+    'VERIFY_NKU'=>'Verify.NankaiUrp',
+    'VERIFY_TJU'=>'Verify.TjuE'
 
     //URL设定
     'URL_PARAMS_BIND'          =>    TRUE,

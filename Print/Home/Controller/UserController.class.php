@@ -127,25 +127,27 @@ class UserController extends Controller
             }
         } else
         {
-            if(!C('REG_OPEN'))
-            {
-                $this->error('对不起，目前注册暂时关闭，请您谅解！');
-            }            
+                
             //尚未注册，先判断学校导入学校验证文件
             $number = I('student_number', null, C('REGEX_NUMBER_NKU'));
             if (preg_match(C('REGEX_NUMBER_NKU'), $number)) 
             {
-                import(C('VERIFY_WAY'), COMMON_PATH, '.php');
+                if(!C('NKU_OPEN'))
+                {
+                    $this->error('对不起，由于南开内网原因，目前注册暂时关闭，请您谅解！');
+                }       
+                $VERIFY_WAY=C('VERIFY_NKU');
                 $data['sch_id'] = 1;
             } elseif (preg_match(C('REGEX_NUMBER_TJU'), $number)) 
             {
-                $this->error('北洋大学暂未开放注册！');
+               $VERIFY_WAY=C('VERIFY_TJU');
                 $data['sch_id'] =2;
             } else
             {
                 $this->error('你输入的学号' . $number . ',不是南开或者天大在读学生的的学号，如果你是南开或者天大的在读学生请联系我们！');
             }
             
+            import($VERIFY_WAY, COMMON_PATH, '.php');
             if ($name = getName($number, $password)) 
             {
                 $data['name']      = $name;
@@ -216,65 +218,81 @@ class UserController extends Controller
         }
     }
     
-    //密码找回
+    //密码找回页
     public function forget() 
     {
         if (use_id()) 
         {
             $this->redirect('index');
-        }
-        
-        $student_number = I('post.student_number', false, '/^(\d{7}|\d{10})$/');
-        if (!$student_number) 
+        }        
+        else
         {
             $this->display();
-        } else
-        {
-            $key   = 'auth_' . $student_number;
-            $times = S($key);
-            if ($times > C('MAX_TRIES')) 
-            {
-                \Think\Log::record('forget爆破警告：ip:' . get_client_ip() . ',number:' . $student_number, 'NOTIC', true);
-                $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（提示：你的行为已被系统记录）');
-            } else
-            {
-                S($key, $times + 1, 3600);
-            }
-            
-            $urp_password = I('post.urp_password');
-            $password     = I('post.password');
-            $re_password  = I('post.re_password');
-            if ($password && $re_password && $student_number && $urp_password) 
-            {
-                import(C('VERIFY_WAY'), COMMON_PATH, '.php');
-                if (getName($student_number, $urp_password)) 
-                {
-                    if ($password == $re_password) 
-                    {
-                        
-                        if (false !== M('User')->where('student_number=' . $student_number)->setField('password', encode(md5($password), $student_number))) 
-                        {
-                            S($key, null);
-                            $this->redirect('Index/index', null, 0, "密码重置成功！");
-                        } else
-                        {
-                            $this->error('重置失败！');
-                        }
-                    } else
-                    {
-                        $this->error("密码不一致");
-                    }
-                } else
-                {
-                    $this->error($student_number . '校园账号验证失败！');
-                }
-            } else
-            {
-                $this->display();
-            }
         }
     }
     
+    /**
+    *再次认证找回密码
+    */
+    public function findPwdVerify()
+    {
+         if($number = I('post.number', false, C('REGEX_NUMBER_NKU')))
+        {
+            if(!C('NKU_OPEN')){
+                $this->error('sorry，由于南开内网原因，暂时不可使用此渠道找回密码！');
+            }else{
+                $VERIFY_WAY=C('VERIFY_NKU');
+            }
+        }elseif($number=I('post.number', false, C('REGEX_NUMBER_TJU'))) {
+           $VERIFY_WAY=C('VERIFY_TJU');
+        }else{
+            $this->error('好像不是南开或者的在读学生额>_ < ?');
+        }
+
+        $key   = 'auth_' . $number;
+        $times = S($key);
+        if ($times > C('MAX_TRIES')) 
+        {
+            \Think\Log::record('forget爆破警告：ip:' . get_client_ip() . ',number:' . $number, 'NOTIC', true);
+            $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（提示：你的行为已被系统记录）');
+        } else
+        {
+            S($key, $times + 1, 3600);
+        }
+        
+        $urp_password = I('post.urp_password');
+        $password     = I('post.password');
+        $re_password  = I('post.re_password');
+        if ($password && $re_password && $number && $urp_password) 
+        {
+            import($VERIFY_WAY, COMMON_PATH, '.php');
+            if (getName($number, $urp_password)) 
+            {
+                if ($password == $re_password) 
+                {
+                    if (false !== M('User')->where('student_number=' . $number)->setField('password', encode(md5($password), $student_number))) 
+                    {
+                        S($key, null);
+                        $this->redirect('Index/index', null, 0, "密码重置成功！");
+                    } else
+                    {
+                        $this->error('重置失败或者未注册！');
+                    }
+                } else
+                {
+                    $this->error("密码不一致");
+                }
+            } else
+            {
+                $this->error($number . '校园账号验证失败！');
+            }
+        } else
+        {
+            $this->error('密码不能空哦！');
+        }
+    }
+
+
     /**
      *修改密码
      */

@@ -1,8 +1,5 @@
 <?php
-//urp登陆验证
-//使用示例
-//import('Common.Urp',COMMON_PATH);
-//$name = get_urp_name('1234556','*******');
+//天大办公网登验证
 
 /**
 *function get_urp_name($stu_number,$pwd) 

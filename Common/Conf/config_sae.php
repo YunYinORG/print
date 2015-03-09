@@ -1,9 +1,9 @@
 <?php
 /*SAE配置*/
 return array(
-	'VERIFY_WAY' => 'Verify.NankaiEduOnline', 
+	'VERIFY_NKU' => 'Verify.NankaiEduOnline', 
 	'SHOW_PAGE_TRACE' => 0, 
-    'REG_OPEN' => false,
+    'NKU_OPEN' => false,
 	'FILE_UPLOAD_TYPE' => 'QINIU',
 	 'TMPL_PARSE_STRING' => array(
 	 	'__PUBLIC__' => '/Public', 
