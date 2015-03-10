@@ -28,7 +28,7 @@
         <tbody id="tablehead">
             <volist name="data" id="vo">
             <tr file_id="{$vo.id}">
-                <td><a target='_blank' class="download" href="__URL__/download/?fid={$vo.id}">[{$vo.id}]{$vo.name}</a></td>
+                <td><a target='_blank' class="set download" href="__URL__/download/?fid={$vo.id}">[{$vo.id}]{$vo.name}</a></td>
                 <td>
 <if condition="$vo.copies gt 0">
  {$vo.copies}
@@ -56,7 +56,7 @@
                     <case value="2">1X2</case>
                     <case value="3">2X2</case>
                     <case value="4">2X3</case>
-                    <default />不是ppt
+                    <default />
                     </switch>
                 </td>
                 <td>{$vo.use_name}[{$vo.student_number}]</td>
@@ -124,29 +124,6 @@ $("table").on('click', '.set', function() {
         }
     });
 });
-// $("table").on('click', '.download', function(event) {
-//     event.preventDefault();
-//     var URL = "/Printer/File/download";
-//     var btn = $(this);
-//     var fid = btn.attr('fid');
-//     var status = $('#' + fid + '_status');
-//     var sid = status.attr('data');
-//     console.log(sid);
-//     var set_s = 0;
-//     if (sid == 1) {
-//         set_s = 2;
-//     } else if (sid <= 3 && sid >= 2) {
-//         set_s = 4;
-//     } else if (sid == 4) {
-//         set_s = 5;
-//     }
-//     $.post(URL, {
-//         fid: fid,
-//         status: set_s
-//     }, function(data) {
-//         window.open(data, "_blank") 
-//     });
-// });
 isRefreshing = false;
 
 function refresh() {

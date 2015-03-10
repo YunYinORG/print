@@ -91,7 +91,7 @@ class FileController extends Controller
                 $data['use_id']      = $uid;
                 $data['name']      = $name;
                 $data['url']      = $info['file']['savepath'] . $info['file']['savename'];
-                $data['copies']      = I('post.copies', 0, 'int');;
+                $data['copies']      = I('post.copies', 0, 'int') < 0 ? 0 : I('post.copies',0,'int');
                 $data['double_side'] = I('post.double_side', 0, 'int');
                 $data['status'] = 1;
                 $data['color'] = I('post.color', 0, 'int');

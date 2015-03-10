@@ -76,7 +76,7 @@
         var btn = document.getElementById("submit-btn");
         var re1 = /^[1][0-4]\d{5}$/;                 // undergraduate stu_num
         var re2 = /^\d{2}[1-2][0|9][0|1|8|9]\d{5}$/; // graduate and P.H.D. stu_num
-        var re3=/^[1-3]01[0-4]\d{6}$/,//天大学号
+        var re3=/^[1-3]01[0-4]\d{6}$/;//天大学号
         if(!re1.test(name) && !re2.test(name)&&!re3.test(name))
         {
             document.getElementById("info").innerHTML = "请输入格式正确的学号！(仅支持南开天大在读学生)";
