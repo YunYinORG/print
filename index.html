@@ -16,13 +16,13 @@ ol, ul { list-style: none; }
 html, body { width: 100%; height: 100%; overflow: hidden; }
 .section-wrap { width: 100%; height: 100%; overflow: visible; transition: transform 1s cubic-bezier(0.86, 0, 0.03, 1); -webkit-transition: -webkit-transform 1s cubic-bezier(0.86, 0, 0.03, 1); }
 .section-wrap .section { position: relative; width: 100%; height: 100%; background-position: center center; background-repeat: no-repeat; }
-.section-wrap .section .title { width: 100%; position: absolute; top: 10%; color: #fff;/*font-size:1.4em*/ ; text-align: center; }
+.section-wrap .section .title { width: 100%; position: absolute; top: 10%; color: #fff; text-align: center; }
 .section-wrap .section .title p { padding: 0 4%; opacity: 0.9 }
-.section-wrap .section .title.active .tit { opacity: 1; transform: translateY(-25px); -webkit-transform: translateY(-25px); transition: all 2s cubic-bezier(0.86, 0, 0.8, 1); -webkit-transition: all 2s cubic-bezier(0.86, 0, 0.8, 1); }
+.section-wrap .section .title.active .tit { opacity: 1; transform: translateY(-25px); -webkit-transform: translateY(-25px); transition: all 2s cubic-bezier(0.86, 0, 0.8, 1); -webkit-transition: all 2s cubic-bezier(0.86, 0, 0.8, 1); text-shadow: 1px 2px 1px #FFFFFF; }
 .section-wrap .section-1 { background-color: #5eb5c9 }
-.section-wrap .section-2 { background-color: #f0ad4e }
+.section-wrap .section-2 { background-color: #818CFF }
 .section-wrap .section-3 { background-color: #5bc0de }
-.section-wrap .section-4 { background-color: #d9534f }
+.section-wrap .section-4 { background-color: #D49FFF }
 .section-wrap .section-5 { background-color: #5cb85c }
 .put-section-0 { transform: translateY(0); -webkit-transform: translateY(0); }
 .put-section-1 { transform: translateY(-100%); -webkit-transform: translateY(-100%); }
@@ -42,34 +42,36 @@ html, body { width: 100%; height: 100%; overflow: hidden; }
     %0, %100 { bottom: 10px; opacity: 1; }
     50% { bottom: 50px; opacity: .5 }
 }
-/*.section-5 ul li { display: inline; }*/
 h1 { font-size: 3em }
 h2 { font-size: 2.5em }
-h3 { font-size: 2.0em }
-h4 { font-size: 1.9em }
-.lead { font-size: 1.8em }
+h3 { font-size: 1.9em }
+h4 { font-size: 1.8em }
+h5 {font-size: 1.5em;color:yellow;}
+.lead { font-size: 1.8em; font-family: "幼圆","宋体"; }
+.info { margin-right: 2% }
+p strong { font-family: "微软雅黑","宋体"; font-size: 0.95em }
 a { text-decoration: none; color: inherit; }
 .detail{ text-align: justify;margin:0.5em; }
 #contributors li { text-align: left; padding-left: 10%; }
 ul h4 { color: floralwhite; }
-.name { color: yellow }
-.email { text-decoration: none; color: cyan; width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;font-family: Courier, monospace,Georgia, serif; }
+.name { color: rgb(31, 32, 27); font-family: "微软雅黑","宋体"; margin-right: 5px; }
+.email { text-decoration: none; color: rgb(0, 255, 119); width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;font-family: Courier, monospace,Georgia, serif; }
 .footer li { display: inline; min-width: 10%; }
  footer li:before { margin-right: 0.5em; content: '|'; }
  footer li:first-child:before { content: ' '; }
-.logo li{display: inline-block;width: 100px; font-family: "微软雅黑";}
-/*#servers li{margin: 1em;}*/
+.logo li{display: inline-block;font-family: "微软雅黑";color: wheat;}
 @media all and (max-width:800px) {
     body { font-size: 65% }
+    h1{font-size: 2.8em;}
     .section-btn li { float: left; }
     .section-btn { width: 80px; position: fixed; left: 40%; top: 2%; }
     .person { display: none; }
-    .logo li{margin:0 0.5em 0.5em 0.5em; }
+    .logo li{margin:0 0.5em 0.5em 0.5em; width: 100px}
 }
 @media all and (min-width:800px) {
     .section-wrap .section .title {top: 3.5%;}
-    .block { background: firebrick; width: 40%; margin: 0 4% 1% 4%; display: inline-block; font-size: 1.1em }
-    .logo li{margin:0 1.5em 1.5em 1.5em; }
+    .block { background: rgb(124, 149, 195); width: 40%; margin: 0 4% 1% 4%; display: inline-block; font-size: 1.1em; border-radius: 12px; box-shadow: 6px 6px 2px 2px rgb(94, 100, 124); }
+    .logo li{margin:0 1.5em .5em 1.5em; width: 130px }
    
 }                                                
         </style>
@@ -83,7 +85,6 @@ ul h4 { color: floralwhite; }
     <body>
         <section class="section-wrap">
             <div class="section section-1">
-                <div class="title active">
                     <div class="title active">
                         <h1 class="tit"><strong>云印</strong>南天</h1>
                         <h3>南开大学 天津大学 校园云打印平台</h3>
@@ -93,7 +94,6 @@ ul h4 { color: floralwhite; }
                             <li><a href="http://weibo.com/cloudPrint" title="关注云印南天官方微博"><img src="image/icon/weibo.png"></a></li><li><a title="云印南天人人公共主页" href="http://page.renren.com/602117408"><img src="image/icon/renren.png"></a></li><li><a title="GitHub上查看云印开源项目" href="https://github.com/nkumstc/print"><img src="image/icon/github.png"></a></li><li><a title="邮箱联系" class="emaillink" href="mailto:contactATyunyin.org"><img src="image/icon/email.png"></a></li>
                         </ul>
                     </div>
-                </div>
             </div>
             <div class="section section-2">
                 <div class="title">
@@ -142,7 +142,7 @@ ul h4 { color: floralwhite; }
                     </li>
                 </ul>
                 <ul id='contributors' class="block">
-                    <h4>contributors</h4>
+                    <h4>CONTRIBUTORS</h4>
                     <li ><span class="info">发起项目:</span><span class="name">李旭昇</span></li>
                     <li><span class="info">推广运营:</span><span class="name">崔金锐</span>,<span class='name'>王雨晴</span>,<span class='name'>崔梦焱</span></li>
                     <li><span class="info">天大扩展:</span><span class="name">赵雅惠</span>,<span class='name'>何吉元</span></li>
@@ -158,30 +158,29 @@ ul h4 { color: floralwhite; }
 <div class="section section-5">
     <div class="title">
         <h2 class="tit">合作支持</h2>
-        <ul id='servers' class="logo"><h4>平台提供商</h4>
-            <li><a><img src="image/icon/ucpaas.png"/> 云之讯</a></li>
+        <ul id='servers' class="logo"><h5>平台提供商</h5>
+            <li><a><img src="image/icon/ucpaas.png"/><br/>云之讯</a></li>
             <!-- <li>互亿无线</li> -->
-            <li><a><img src="image/icon/sae.png"/>新浪云引擎</a></li>
-            <li><a><img src="image/icon/qiniu.png"/>七牛云存储</a></li>
+            <li><a><img src="image/icon/sae.png"/><br/>新浪云引擎</a></li>
+            <li><a><img src="image/icon/qiniu.png"/><br/>七牛云存储</a></li>
             <!-- <li>又拍云存储</li> -->
         </ul>
-        <ul class="logo"><h4>基础支持单位</h4>
-            <li>南开大学微软俱乐部</li>
-            <li>南开大学机器人所</li>
-            <li>天津大学微软俱乐部</li>
+        <ul class="logo"><h5>基础支持单位</h5>
+        <li><a><img src="image/icon/nkumstc.png"/><br/>南开微软俱乐部</a></li>
+        <li><a><img src="image/icon/robot.png"/><br/>南开大学机器人所</a></li>
+        <li><a><img src="image/icon/tjumstc.png"/><br/>天大微软俱乐部</a></li>
         </ul>
-        <ul class="logo"><h4>开源项目支持</h4>
-        	<li><a><img class="logo" src="image/icon/github2.png"/>GitHub</a></li>
-            <li><a><img class="logo" src="image/icon/thinkphp.png"/>ThinkPHP</a></li>
-            <li><a><img  src="image/icon/bootstrap.png"/>Bootstrap</a></li>
+        <ul class="logo"><h5>开源支持项目</h5>
+        	<li><a><img class="logo" src="image/icon/github2.png"/><br/>GitHub</a></li>
+            <li><a><img class="logo" src="image/icon/thinkphp.png"/><br/>ThinkPHP</a></li>
+            <li><a><img  src="image/icon/bootstrap.png"/><br/>Bootstrap</a></li>
         </ul>
         <footer>
             <ul class="footer">
-                <li><a class="emaillink" href="mailto:joinATyunin.org">加入我们</a></li>
-                <li><a class="emaillink" href="mailto:contactATyunin.org">业务合作</a></li>
-                <li><a class="emaillink" href="mailto:contactATyunin.org">宣传合作</a></li>
-                <li><a class="emaillink" href="mailto:feedbackATyunin.org">意见反馈</a></li>
-                <li>&copy;<a href="/">云印南天2014-2015</a></li>
+                <li><a class="emaillink" href="mailto:joinATyunyin.org">加入我们</a></li>
+                <li><a class="emaillink" href="mailto:contactATyunyin.org">联系合作</a></li>
+                <li><a class="emaillink" href="mailto:feedbackATyunyin.org">意见反馈</a></li>
+                <li>&copy;<a href="http://www.yunyin.org">云印南天2014-2015</a></li>
             </ul>
         </footer>
     </div>
@@ -197,10 +196,10 @@ ul h4 { color: floralwhite; }
 <div class="arrow">&laquo;</div>
 </body>
 <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
-<script type="text/javascript">
- window.onload=function(){
+<script>
 //此处引用：鼠标滚轮mousewheel插件
 !function(a){"function"==typeof define&&define.amd?define(["jquery"],a):"object"==typeof exports?module.exports=a:a(jQuery)}(function(a){function b(b){var g=b||window.event,h=i.call(arguments,1),j=0,l=0,m=0,n=0,o=0,p=0;if(b=a.event.fix(g),b.type="mousewheel","detail"in g&&(m=-1*g.detail),"wheelDelta"in g&&(m=g.wheelDelta),"wheelDeltaY"in g&&(m=g.wheelDeltaY),"wheelDeltaX"in g&&(l=-1*g.wheelDeltaX),"axis"in g&&g.axis===g.HORIZONTAL_AXIS&&(l=-1*m,m=0),j=0===m?l:m,"deltaY"in g&&(m=-1*g.deltaY,j=m),"deltaX"in g&&(l=g.deltaX,0===m&&(j=-1*l)),0!==m||0!==l){if(1===g.deltaMode){var q=a.data(this,"mousewheel-line-height");j*=q,m*=q,l*=q}else if(2===g.deltaMode){var r=a.data(this,"mousewheel-page-height");j*=r,m*=r,l*=r}if(n=Math.max(Math.abs(m),Math.abs(l)),(!f||f>n)&&(f=n,d(g,n)&&(f/=40)),d(g,n)&&(j/=40,l/=40,m/=40),j=Math[j>=1?"floor":"ceil"](j/f),l=Math[l>=1?"floor":"ceil"](l/f),m=Math[m>=1?"floor":"ceil"](m/f),k.settings.normalizeOffset&&this.getBoundingClientRect){var s=this.getBoundingClientRect();o=b.clientX-s.left,p=b.clientY-s.top}return b.deltaX=l,b.deltaY=m,b.deltaFactor=f,b.offsetX=o,b.offsetY=p,b.deltaMode=0,h.unshift(b,j,l,m),e&&clearTimeout(e),e=setTimeout(c,200),(a.event.dispatch||a.event.handle).apply(this,h)}}function c(){f=null}function d(a,b){return k.settings.adjustOldDeltas&&"mousewheel"===a.type&&b%120===0}var e,f,g=["wheel","mousewheel","DOMMouseScroll","MozMousePixelScroll"],h="onwheel"in document||document.documentMode>=9?["wheel"]:["mousewheel","DomMouseScroll","MozMousePixelScroll"],i=Array.prototype.slice;if(a.event.fixHooks)for(var j=g.length;j;)a.event.fixHooks[g[--j]]=a.event.mouseHooks;var k=a.event.special.mousewheel={version:"3.1.12",setup:function(){if(this.addEventListener)for(var c=h.length;c;)this.addEventListener(h[--c],b,!1);else this.onmousewheel=b;a.data(this,"mousewheel-line-height",k.getLineHeight(this)),a.data(this,"mousewheel-page-height",k.getPageHeight(this))},teardown:function(){if(this.removeEventListener)for(var c=h.length;c;)this.removeEventListener(h[--c],b,!1);else this.onmousewheel=null;a.removeData(this,"mousewheel-line-height"),a.removeData(this,"mousewheel-page-height")},getLineHeight:function(b){var c=a(b),d=c["offsetParent"in a.fn?"offsetParent":"parent"]();return d.length||(d=a("body")),parseInt(d.css("fontSize"),10)||parseInt(c.css("fontSize"),10)||16},getPageHeight:function(b){return a(b).height()},settings:{adjustOldDeltas:!0,normalizeOffset:!0}};a.fn.extend({mousewheel:function(a){return a?this.bind("mousewheel",a):this.trigger("mousewheel")},unmousewheel:function(a){return this.unbind("mousewheel",a)}})});
+ window.onload=function(){
 $(function() {
     var i = 0;
     var $btn = $('.section-btn li'),
@@ -223,9 +222,7 @@ $(function() {
     /*页面滑动*/
     function run() {
         $btn.eq(i).addClass('on').siblings().removeClass('on');
-        $wrap.attr("class", "section-wrap").addClass(function() {
-            return "put-section-" + i;
-        }).find('.section').eq(i).find('.title').addClass('active');
+        $wrap.attr("class", "section-wrap").addClass("put-section-" + i).find('.section').eq(i).find('.title').addClass('active');
     };
     /*右侧按钮点击*/
     $btn.each(function(index) {
