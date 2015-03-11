@@ -11,10 +11,18 @@
     <h2>设置打印信息</h2>
 </div>
 <div id="featured" class="container">
-    <p class="text-warning alert alert-warning">
-    打印店可在空闲时提前打印收到的文件,你可以在文件记录中查看文件状态（网页已做手机端适配）;<br/>无论打印队列多长，到店可以直接打印，如果打印店没有提前打印，你可直接到店打印；<br/>
-    对于提前打印的文件请于打印完成后24小时内取走；对于所有情况请于2天内完成打印；<br/>
-    价格上保证不比带U盘的价格贵（有时候甚至会更便宜），所有打印店均在量大时可减价。</p>
+        <div class="row" style="display:none;" id="helpBlock"> 
+    <div class="col-lg-8">
+        <p class="text-info well">
+        使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> <code>设置打印份数、格式</code> -> <code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
+        暂时仅支持<code>pdf</code>、<code>doc(x)</code>、<code>wps</code>、<code>ppt(x)</code>格式的文件上传；<br/>
+        如上传文件名出现<code>乱码</code>，请更换浏览器。Chrome下效果最佳，手机建议使用UC浏览器；<br/>
+        打印纸张统一为<code>A4</code>，<code>彩印</code>暂不支持<code>双面</code>，有特殊需求可上传后到店打印；<br/>无论打印店队列多长，到店可直接取货。若打印店没有提前打印，你可以在店直接打印；<br/>
+        对于提前打印的文件请于打印完成后<code>24小时</code>内取走；对于所有情况的打印请于<code>2天内</code>完成；<br/>
+        当前提供价格仅供参考，所有打印店均可在<code>量大时减价</code>；</p>
+    </div>
+    </div>
+    <br/>
     <form id="print" method="post" action="__URL__/uploadOne" enctype="multipart/form-data">
         <div class="row">
             <div class="text-center col-lg-5">
@@ -90,7 +98,6 @@ function checkSuffix(n) {
     var doc_suffix = ['doc', 'docx', 'wps'];
     var pdf_suffix = ['pdf'];
     var other_suffix = ['ppt', 'pptx'];
-    var xls_suffix = ['xls','xlsx'];
     if (doc_suffix.indexOf(suffix) >= 0) {
         alert('打印小常识：将文档转成PDF格式，打印出来的格式基本不会发生变化！（任性就随意了(^▽^)）')
         $('#setting2').show();
@@ -116,24 +123,18 @@ function checkSuffix(n) {
             $("#modaltrigger").attr('disabled', false).attr('class', 'flatbtn-blu');
         var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
         $("#upload-list").html('<li style="font-size: 13px;" class="list-group-item" style="border-style:none">当前文件：'+fname +'</li>');
-    } else if(xls_suffix.indexOf(suffix) >= 0){
-        $('#copies').attr('disabled', true);
-        $('#setting2').hide();
-        $("#modaltrigger").attr('disabled', false).attr('class', 'flatbtn-blu');
-        var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
-        $("#upload-list").html('<li style="font-size: 13px;" class="list-group-item">当前文件：'+ fname +'</li>'+'<li style="font-size: 13px;" class="list-group-item">当前格式仅支持到店打印。');
-    }
-    else {
+    } else {
         $("#upload-list").html('<li style="font-size: 13px;" class="list-group-item">不支持'+ suffix + '格式文件。</li>');
         $("#modaltrigger").attr('disabled', true).attr('class', 'flatbtn');
     }
 }
 function priceChange(n){
     var i = n.value;
-    var thePrice = [ [], ['1角每张','0.14元每张（7分每面）'],['少量1角每张，过百份7分每张','1角每张'],['少量1角每张，过百份8分每张','1角每张'],['少量1角每张，过百份8分每张','1角每张']
+    var thePrice = [ [], ['1角每张','0.14元每张（7分每面）','尚未确定'],['少量1角每张，过百份7分每张','1角每张','尚未确定'],['少量1角每张，过百份8分每张','1角每张','尚未确定'],['少量1角每张，过百份8分每张','1角每张','尚未确定']
         ];
     $('#single').html(thePrice[i][0]);
     $('#double').html(thePrice[i][1]);
+    $('#color_print').html(thePrice[i][2]);
 }
 $("#modaltrigger").on('submit', function() {
     $("#modaltrigger").attr('disabled', true);
@@ -141,5 +142,10 @@ $("#modaltrigger").on('submit', function() {
         $("#modaltrigger").attr('disabled',false);
     }
 }).attr('disabled',true);
+
+$("#helpView").click(function(){
+    $('#helpView').toggleClass('btn-warning')
+    $('#helpBlock').toggle(100);
+});
 </script>
 </block>
