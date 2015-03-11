@@ -1,15 +1,15 @@
 <?php
 
 // ===================================================================
-// | FileName:      InfoController.class.php
+// | FileName:      PrintersController.class.php
 // ===================================================================
-// | Discription：   404 用户控制器
+// | Discription：  打印店信息
 //      <命名规范：>
 // ===================================================================
 // +------------------------------------------------------------------
 // | 云印南开
 // +------------------------------------------------------------------
-// | Copyright (c) 2014 云印南开团队 All rights reserved.
+// | Copyright (c) 2014-2015 云印南开团队 All rights reserved.
 // +------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +------------------------------------------------------------------
@@ -18,16 +18,16 @@
  * Function list:
  * - index()
  * Classes list:
- * - InfoController extends Controller
+ * - PrintersController extends Controller
  */
 namespace Home\Controller;
 use Think\Controller;
-class InfoController extends Controller
+class PrintersController extends Controller
 {
 	public function index($id = 1)
 	{
 	    $Printer = M('Printer');
-	    $list = $Printer->find();
+	    $list = $Printer->select();
 	    if($list)
 	    {
 	        $this->data = $list;

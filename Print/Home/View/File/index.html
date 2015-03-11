@@ -62,7 +62,7 @@
             if(con)
             {
             var URL = "/Home/File/delete";
-            var btn=$(this);
+            var btn=$(this).attr('disabled','true').html('正在删除');
             var fid=btn.attr('fid');
             $.post(URL,{
                 fid:fid,
@@ -71,6 +71,7 @@
                 {
                     btn.parent().parent().hide(1000);
                 }else{
+                     bt.attr('disabled','false').html('删除');
                     alert('操作失败：'+data.info);
                 }
             });

@@ -54,9 +54,7 @@ class PrinterController extends Controller
     
     /**
      *changePwd()
-     *修改资料
-     *@param $key 修改的字段
-     *@param $value 修改值
+     *修改密码
      *注意字段过滤
      */
     public function changePwd() 
@@ -153,6 +151,7 @@ class PrinterController extends Controller
         $data['account']         = I('post.account');
         $data['password']         = encode(md5(I('post.password')), I('post.account'));
         $data['name']         = I('post.name');
+        $data['sch_id']         =1;
         $data['address']         = I('post.address');
         $data['phone']         = I('post.phone');
         $data['qq']         = I('post.qq');
