@@ -152,6 +152,31 @@ class FileController extends Controller
             $this->error('文件已删除，不能再下载！');
         }
     }
+    
+    public function bind()
+    {
+        $pid    = pri_id(U('Index/index'));
+        if($pid)
+        {
+            $student_number = I('student_number');
+            $User = M('User');
+            $uid = $User->where('student_number='.$student_number)->getField('id');
+            $phone = get_phone_by_id($id);
+            if($phone)
+            {
+                $this->success($phone);
+            }
+            else
+            {
+                $this->error('Unknown error');
+            }
+        }
+        else
+        {
+            $this->error('Not validate');
+        }
+    }
+    
 	/**
 	 *404页
 	 */

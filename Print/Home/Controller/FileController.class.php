@@ -63,6 +63,15 @@ class FileController extends Controller
         $uid = use_id(U('Index/index'));
         if ($uid) 
         {
+            $Printer = D('Printer');
+            $User = D('User');
+            $sch_id = $User->where('id='.$uid)->getField('sch_id');
+            $bindPhone = $User->where('id='.$uid)->getField('phone');
+            //Still to improve!!
+            $sort = $sch_id == 2 ? "desc" : "asc";
+            $this->lock = $bindPhone ? 1 : 0;
+            $this->data = $Printer->order('sch_id '.$sort)->find();
+            
             $this->display();
         } 
         else
@@ -124,116 +133,6 @@ class FileController extends Controller
             $this->error('请登录！', '/');
         }
     }
-    
-    //垃圾代码
-    //     /**
-    //      *上传处理
-    //      */
-    
-    //     public function upload()
-    //     {
-    //      /* 设置内部字符编码为 UTF-8 */
-    // //       mb_internal_encoding("UTF-8");
-    //         $uid              = use_id(U('/Index/index'));
-    //         if ($uid)
-    //         {
-    // //            $filename=($double+1).'X'.$copies.'_['.$sid.']_'.date('Y-m-d_H-i_U');
-    //             if(C('FILE_UPLOAD_TYPE') == 'QINIU')
-    //             {
-    //                 $setting = C('UPLOAD_SITEIMG_QINIU');
-    //                 $upload  = new \Think\Upload($setting);
-    //                 $upload->exts = array('doc', 'docx', 'pdf', 'wps', 'ppt', 'pptx');
-    //             }
-    //             else
-    //             {
-    //                 $upload           = new \Think\Upload();
-    //                 $upload->saveName = array ('uniqid', '');
-    //                 $upload->maxSize  = 10485760;
-    //                 $upload->exts     = array('doc', 'docx', 'pdf', 'wps', 'ppt', 'pptx');
-    //                 $upload->rootPath = './Uploads/';
-    //                 $upload->savePath ='';
-    //             }
-    //             $info             = $upload->upload($_FILES);
-    //             if (!$info)
-    //             {
-    //                 $this->error($upload->getError());
-    //             }
-    //             else
-    //             {
-    //                 if(session('files_'.$uid))
-    //                 {
-    //                     $fid = session('files_'.$uid);
-    //                 }
-    //                 else
-    //                 {
-    //                     $fid = 0;
-    //                 }
-    //                 session('name_'.$uid.'_'.$fid,$info['file']['name'],360);
-    //                 session('url_'.$uid.'_'.$fid,$info['file']['savepath'].$info['file']['savename'],360);
-    //                 session('ext_'.$uid.'_'.$fid,$info['file']['ext'],360);
-    //                 session('files_'.$uid,$fid+1);
-    //                 return;
-    //             }
-    
-    //         } else
-    //         {
-    //             $this->error('登录信息已失效', '/Index/index');
-    //         }
-    //     }
-    
-    //     public function post()
-    //     {
-    //         $uid = use_id(U('/Index/index'));
-    
-    //         if ($uid && session('files_'.$uid))
-    //         {
-    //             $sid=M('User')->cache(true)->getFieldById($uid,'student_number');
-    //             $copies=I('post.copies',0,'int');
-    //             $double=I('post.double_side',0,'int');
-    //             $pid = I('post.pri_id',0,'int');
-    //             $fid = session('files_'.$uid);
-    //             $i = 0;
-    //             while($i<$fid)
-    //             {
-    //                 $name=session('name_'.$uid.'_'.$i);
-    //                 if(mb_strlen($name)>62)
-    //                 {
-    //                     $name=mb_substr($name,0,58).'.'.session('ext_'.$uid.'_'.$i);
-    //                 }
-    //                 $data['name']                      = $name;
-    //                 $data['pri_id']                    = $pid;
-    //                 // $data['requirements']              = I('post.requirements');
-    //                 $data['url']                      = session('url_'.$uid.'_'.$i);
-    //                 $data['status']                      = 1;
-    //                 $data['use_id']                      = $uid;
-    //                 $data['copies']                      = $copies;
-    //                 $data['double_side']                      = $double;
-    //                 $File                 = M('File');
-    //                 $result               = $File->cache(true)->add($data);
-    //                 if ($result)
-    //                 {
-    //                     $Notification         = M('Notification');
-    //                     $Notification->fil_id = $result;
-    //                     $Notification->to_id  = $data['pri_id'];
-    //                     $Notification->type   = 1;
-    //                     $Notification->add();
-    //                     //删除缓存
-    //                     // S(cache_name('user',$uid),null);
-    //                     // S(cache_name('printer',$pid),null);
-    
-    //                 } else
-    //                 {
-    //                     $this->error($File->getError(),'/File/add',1);
-    //                 }
-    //                 session('name_'.$uid.'_'.$fid,null);
-    //                 session('url_'.$uid.'_'.$fid,null);
-    //                 session('ext_'.$uid.'_'.$fid,null);
-    //                 $i++;
-    //             }
-    //             session('files_'.$uid,null);
-    //             $this->redirect('File/index',null,0,'上传成功');
-    //         }
-    //     }
     
     
     

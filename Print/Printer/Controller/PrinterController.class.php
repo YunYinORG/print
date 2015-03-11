@@ -93,24 +93,20 @@ class PrinterController extends Controller
     
     public function changeInfo() 
     {
-        
         $id           = pri_id(U('Index/index'));
-        /*
-             $data['qq : qq ,
-             $data['phone  : phone ,
-             $data['address  : address ,
-             $data['profile  : profile ,
-             $data['open_time  : open_time ,
-             $data['price_color  : price_color ,
-             $data['price_no_color  : price_no_color ,
-             $data['price_single  : price_single ,
-             $data['price_double  : price_double ,
-             $data['price_more  : price_more ,
-             */
         if ($id) 
         {
-            $data = $_POST;
-
+            //$data = $_POST;
+             $data['qq'] = I('qq');
+             $data['phone'] = I('phone');
+             $data['address'] = I('address');
+             $data['profile'] = I('profile');
+             $data['open_time'] = I('open_time');
+             $data['price_color'] = I('price_color');
+             $data['price_no_color'] = I('price_no_color');
+             $data['price_single'] = I('price_single');
+             $data['price_double'] = I('price_double');
+             $data['price_more'] = I('price_more');
             $Printer      = M('Printer');
             $result       = $Printer->where('id='.$id)->save($data);
             if ($result) 

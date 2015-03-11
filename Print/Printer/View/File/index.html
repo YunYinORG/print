@@ -28,40 +28,65 @@
         <tbody id="tablehead">
             <volist name="data" id="vo">
             <tr file_id="{$vo.id}">
+                
                 <td><a target='_blank' class="set download" href="__URL__/download/?fid={$vo.id}">[{$vo.id}]{$vo.name}</a></td>
+                
                 <td>
-<if condition="$vo.copies gt 0">
- {$vo.copies}
-                <else/>
-                现打
-                </if>
+                    <if condition="$vo.copies gt 0">
+                    {$vo.copies}
+                    <else/>
+                    现打
+                    </if>
                 </td>
+                
+                
                 <td>
-                <if condition="$vo.double_side gt 0">
-                双面
-                <else/>
-                单面
-                </if>
+                    <if condition="$vo.copies gt 0">
+                        <if condition="$vo.double_side gt 0">
+                        双面
+                        <else/>
+                        单面
+                        </if>
+                    <else/>
+                    </if>
                 </td>
+                
                 <td>
-                <if condition="$vo.color gt 0">
-                彩印
-                <else/>
-                黑白
-                </if>
+                    <if condition="$vo.copies gt 0">
+                        <if condition="$vo.color gt 0">
+                        彩印
+                        <else/>
+                        黑白
+                        </if>
+                    <else/>
+                    </if>
                 </td>
+                
+                
                 <td>
-                    <switch name="vo['ppt_layout']">
-                    <case value="1">1X1</case>
-                    <case value="2">1X2</case>
-                    <case value="3">2X2</case>
-                    <case value="4">2X3</case>
-                    <default />
-                    </switch>
+                    <if condition="$vo.copies gt 0">
+                        <switch name="vo['ppt_layout']">
+                            <case value="1">1X1</case>
+                            <case value="2">1X2</case>
+                            <case value="3">2X2</case>
+                            <case value="4">2X3</case>
+                            <default />
+                        </switch>
+                    <else/>
+                    </if>   
                 </td>
-                <td>{$vo.use_name}[{$vo.student_number}]</td>
-                 <td>{$vo.time}</td>               
-                <td id="{$vo.id}_status" data='{$vo.status}'>
+                
+                
+                <td>
+                    {$vo.use_name}[{$vo.student_number}]
+                    <notempty name="$vo.phone">
+                        <a tabindex="0" role="button" id="{$vo.id}_button" student_number='{$vo.student_number}' class="bind btn btn-success" data-toggle="popover" data-trigger="focus" data-content="Loading...">[BindPhone]</a>
+                    </notempty>
+                </td>
+                
+                <td>{$vo.time}</td>               
+                
+                <td id="{$vo.id}_status" data='{$vo.status}' copies='{$vo.copies}'>
                     <switch name="vo['status']">
                     <case value="1">尚未下载</case>
                     <case value="2">已下载</case>
@@ -71,6 +96,8 @@
                     <default />未知状态
                     </switch>
                 </td>
+                
+                
                 <td>                    
                     <switch name="vo['status']">
                     <case value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></case>
@@ -80,6 +107,8 @@
                     <default />不可操作
                     </switch>                   
                 </td>
+                
+                
             </tr>
             </volist>
         </tbody>
@@ -95,11 +124,16 @@ $("table").on('click', '.set', function() {
     var btn = $(this);
     var fid = btn.attr('fid');
     var status = $('#' + fid + '_status');
+    var copies = status.attr('copies');
     var set_s = status.attr('data') +1 ;
     if (set_s == 3) {
         set_s = set_s + 1;
     }
-    $.get(URL, {
+    if (copies ==0 && set_s==2)
+    {
+        set_s = 4;
+    }
+    $.post(URL, {
         fid: fid,
         status: set_s
     }, function(data) {
@@ -119,6 +153,24 @@ $("table").on('click', '.set', function() {
         }
     });
 });
+
+
+$("table").on('click', '.bind', function() {
+    var URL = "/Printer/File/bind";
+    var btn = $(this);
+    var student_number = btn.attr('student_number');
+    
+    $.post(URL, {
+        student_number: student_number
+    }, function(data) {
+        if (data.status) {
+            btn.attr('data-content',data.info);
+        } else {
+            btn.attr('data-content',data.info);
+        }
+    });
+});
+
 isRefreshing = false;
 
 function refresh() {
@@ -142,6 +194,9 @@ function refresh() {
 }
 $(document).ready(function() {
     setInterval(refresh, 15000);
+    $(function (){
+        $('[data-toggle="popover"]').popover();
+    });
 });
 </script>
 </block>

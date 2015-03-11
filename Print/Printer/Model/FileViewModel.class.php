@@ -23,6 +23,7 @@ class FileViewModel extends ViewModel
 			'name'=>'use_name',
 			'student_number',
 			'_on'            => 'user.id=file.use_id',
+			'phone'
 		) ,
 	);
 }

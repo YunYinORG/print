@@ -26,6 +26,8 @@
                 </div>
             </div>
         </div>
+        
+    <if condition="$lock eq 1">    
         <div class="row">
             <div class="col-lg-4">
                 <ul id="upload-list" class="list-group" style="margin-bottom:0px;margin-top:10px"></ul>
@@ -49,10 +51,9 @@
         <div class="col-lg-4">
             <div class="form-group">
                 <select class="form-control" name="pri_id" onchange="priceChange(this)">
-                    <option value="1">天达印务[9：00——22：00](西门附近，22宿下)</option>
-                    <option value="2">光辉岁月[8：00——23：00](二食堂浴园旁)</option>
-                    <option value="3">精诚快印[8：30——20：30](新图和数码小院之间)</option>
-                    <option value="4">快捷复印[8：00——22：00](南开出版社后)</option>
+                    <volist name="data" id="vo">
+                      <option value="{$vo.id}">{$vo.name}[{$vo.open_time}]({$vo.address})</option>
+                    </volist>
                 </select>
             </div>
             <div id='price' class='well help-block' style="font-size:13px">单面：<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面：<span id='double' class='text-danger'>1角每张</span><br/>彩印：<span id='color_print' class='text-danger'></span></div>
@@ -74,6 +75,10 @@
             </div>
         </fieldset>
     </div>
+    <else />
+    </if>
+    
+    
     <div class="row">
         <div class="text-center col-lg-5">
             <button type="submit" class="flatbtn" id="modaltrigger">开始传送</button>
