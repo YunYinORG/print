@@ -83,7 +83,7 @@ ul h4 { color: floralwhite; }
         <![endif]-->
     </head>
     <body>
-        <section class="section-wrap">
+        <section class="section-wrap put-section-0">
             <div class="section section-1">
                     <div class="title active">
                         <h1 class="tit"><strong>云印</strong>南天</h1>
@@ -210,14 +210,14 @@ $(function() {
         i++;
         if (i == $btn.length) {
             i = 0
-        };
+        }; run();
     }
 
     function down() {
         i--;
         if (i < 0) {
             i = $btn.length - 1
-        };
+        }; run();
     }
     /*页面滑动*/
     function run() {
@@ -236,7 +236,6 @@ $(function() {
 
     function go() {
         up();
-        run();
         setTimeout(function() {
             $arrow.one('click', go)
         }, 1000)
@@ -250,7 +249,6 @@ $(function() {
         } else {
             down()
         }
-        run();
         setTimeout(function() {
             $wrap.one('mousewheel', mouse_)
         }, 1000)
@@ -264,17 +262,60 @@ $(function() {
         switch (key) {
             case 38:
                 down();
-                run();
                 break;
             case 40:
                 up();
-                run();
                 break;
         };
         setTimeout(function() {
             $(document).one('keydown', k)
         }, 1000);
     }
+     
+     //触屏滑动
+	 function start(event) {
+                    event.preventDefault();                      // 阻止触摸事件的默认动作,即阻止滚屏
+                    var touch = event.touches[0];                // touches数组对象获得屏幕上所有的touch，取第一个touch
+                    startPos = {                                 // 取第一个touch的坐标值
+                        x: touch.pageX,
+                        y: touch.pageY,
+                        time: +new Date
+                    };
+ 
+                    // 绑定事件
+                   w.addEventListener('touchmove', move, false);
+                   w.addEventListener('touchend', end, false);
+                   w.removeEventListener('touchstart', start, false);
+
+                }
+     function move(event){
+     	   // 当屏幕有多个touch或者页面被缩放过，就不执行move操作
+                    if (event.touches.length > 1 || event.scale && event.scale !== 1) return;
+                    var touch = event.touches[0];
+                    endPos = {
+                        x: touch.pageX - startPos.x,
+                        y: touch.pageY - startPos.y
+                    };
+     }
+     function end(event){
+     	 var duration = +new Date - startPos.time;    // 滑动的持续时间
+                    if (Number(duration) > 100) {
+                        // 判断是左移还是右移，当偏移量大于50时执行
+                        if (endPos.y < -50||endPos.x < -50) {
+                              up();
+                        } else if(endPos.y > 50 || endPos.x >50) {
+                           down();                         }
+                    }
+                                        // 解绑事件
+                   w.removeEventListener('touchmove', this, false);
+                   w.removeEventListener('touchend', this, false);
+                   setTimeout(function() {w.addEventListener('touchstart', start, false)}, 1000);
+     }
+	 var touch=('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+     if(!!touch){
+     	w=document.getElementsByTagName('section')[0];
+     	 w.addEventListener('touchstart', start, false);
+     }
 });
 $('.emaillink').click(function() {
     this.href = this.href.replace("AT", "@");
@@ -289,6 +330,7 @@ for (var i in emails) {
         emails[i].innerHTML = e.substr(0,13)+'…';
     }
 }
+
  };
 </script>
 </html>
