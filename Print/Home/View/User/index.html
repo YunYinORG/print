@@ -258,7 +258,7 @@ $("#change").click(function(event) {
         }, function(data) {
             if (data.status) {
                 alert(data.info);
-                
+                location.href="/User/logout";
             } else {
                 alert(data.info);
             }
