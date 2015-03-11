@@ -304,16 +304,10 @@ class UserController extends Controller
         $re_password         = I('post.re_password');
         if ($user && $deprecated_password && $password) 
         {
-            if ($user['password'] == encode(md5($deprecated_password), $user['student_number'])) 
+            if ($user['password'] == encode($deprecated_password, $user['student_number'])) 
             {
-                if ($password == $re_password) 
-                {
-                    M('User')->where('id=%d', $uid)->setField('password', encode(md5($password), $user['student_number']));
-                    $this->redirect('logout', null, 0, '密码修改成功重新登陆！');
-                } else
-                {
-                    $this->error('两次密码输入不一致！');
-                }
+                    M('User')->where('id=%d', $uid)->setField('password', encode($password, $user['student_number']));
+                    $this->success('密码修改成功重新登陆！');
             } else
             {
                 $this->error('原密码错误');

@@ -95,8 +95,14 @@ class FileController extends Controller
                 $data['double_side'] = I('post.double_side', 0, 'int');
                 $data['status'] = 1;
                 $data['color'] = I('post.color', 0, 'int');
-                $data['ppt_layout'] = I('post.ppt_layout', 0, 'int');
-                // $data['requirements']              = I('post.requirements');
+                if ($info['file']['ext']=="ppt" ||$info['file']['ext']=="pptx")
+                {
+                    $data['ppt_layout'] = I('post.ppt_layout', 0, 'int');
+                }
+                else
+                {
+                    $data['ppt_layout'] = 0;
+                }    
                 if (M('File')->add($data)) 
                 {
                     

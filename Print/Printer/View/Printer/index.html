@@ -51,7 +51,7 @@
                     <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
                 </div>
                  <div class="input-group text-center">
-                <button type="submit" class="btn btn-success">确定</button>
+                <button id="changePwd" type="submit" class="btn btn-success">确定</button>
                 <span class='cancel btn btn-warning'>取消</span>
                 </div>
     </form>
@@ -68,6 +68,75 @@ $('.cancel').click(function() {
     var set = $(this).parent().parent();
     set.hide(50);
     set.prev().show(100);
+});
+
+
+
+$("#changePwd").click(function(event) {
+    event.preventDefault();
+    
+    var URL = "Printer/Printer/changePwd";
+
+    var deprecated_password = $('#deprecated_password').val();
+    var password = $('#password').val();
+    var re_password = $('#re_password').val();
+    if(re_password == password && re_password && password)
+    {
+        $.post(URL, {
+            deprecated_password : md5(deprecated_password),
+            password: md5(password)
+        }, function(data) {
+            if (data.status) {
+                alert(data.info);
+                
+            } else {
+                alert(data.info);
+            }
+        });
+    }
+    
+    else
+    {
+        alert("Password dose not match with confirm password");
+    }
+    
+    $('#deprecated_password').val('');
+    $('#password').val('');
+    $('#re_password').val('');
+});
+
+
+$("#changeInfo").click(function(event) {
+    event.preventDefault();
+    
+    var URL = "Printer/Printer/changeInfo";
+
+    var deprecated_password = $('#deprecated_password').val();
+    var password = $('#password').val();
+    var re_password = $('#re_password').val();
+    if(re_password == password && re_password && password)
+    {
+        $.post(URL, {
+            deprecated_password : md5(deprecated_password),
+            password: md5(password)
+        }, function(data) {
+            if (data.status) {
+                alert(data.info);
+                
+            } else {
+                alert(data.info);
+            }
+        });
+    }
+    
+    else
+    {
+        alert("Password dose not match with confirm password");
+    }
+    
+    $('#deprecated_password').val('');
+    $('#password').val('');
+    $('#re_password').val('');
 });
 </script>
 </BLOCK>

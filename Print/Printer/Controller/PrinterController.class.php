@@ -89,6 +89,35 @@ class PrinterController extends Controller
         }
     }
     
+    
+    
+    public function changeInfo() 
+    {
+        
+        $id           = pri_id(U('Index/index'));
+        
+        if ($id && $old_password && $password && $password == $re_password) 
+        {
+            $Printer      = M('Printer');
+            $pri          = $Printer->field('account,password')->cache(true)->getById($id);
+            if ($pri['password'] == encode(md5($old_password), $pri['account'])) 
+            {
+                if ($Printer->where('id=' . $id)->setField('password', encode(md5($password), $pri['account'])) !== fasle) 
+                {
+                    $this->success('修改成功', 1);
+                } else
+                {
+                    $this->error($Printer->getError());
+                }
+            } else
+            {
+                $this->error('原密码错误');
+            }
+        } else
+        {
+            $this->error("信息不完整");
+        }
+    }
     /**
      * 注销
      */

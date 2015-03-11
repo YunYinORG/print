@@ -1,6 +1,7 @@
 ﻿{//信息管理页}
 <extend name="Public/template/base.html"/>
 <block name='header'>
+<script src="/Public/js/md5.min.js" ></script>
 <include file="./Public/template/nav.html" info="active"/>
 </block>
 <block name='content'>
@@ -44,7 +45,7 @@
             </div>
             <br/>
             <div class="input-group text-center">
-                <button type="submit" class="btn btn-success">确定</button>
+                <button id="change" type="submit" class="btn btn-success">确定</button>
                 <span class='cancel btn btn-warning'>取消</span>
             </div>
         </form>
@@ -239,5 +240,41 @@ $('#getPhone').click(function(gp){
         }
     });
 });
+
+$("#change").click(function(event) {
+    event.preventDefault();
+    var URL = "/User/change";
+
+    var deprecated_password = $('#deprecated_password').val();
+    var password = $('#password').val();
+    var re_password = $('#re_password').val();
+    
+    
+    if(re_password == password && re_password && password)
+    {
+        $.post(URL, {
+            deprecated_password : md5(deprecated_password),
+            password: md5(password)
+        }, function(data) {
+            if (data.status) {
+                alert(data.info);
+                
+            } else {
+                alert(data.info);
+            }
+        });
+
+    }
+    else
+    {
+        alert("Password dose not match with confirm password");
+    }
+    
+    $('#deprecated_password').val('');
+    $('#password').val('');
+    $('#re_password').val('');
+    
+});
+
 </script>
 </BLOCK>

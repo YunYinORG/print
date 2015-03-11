@@ -95,14 +95,9 @@ $("table").on('click', '.set', function() {
     var btn = $(this);
     var fid = btn.attr('fid');
     var status = $('#' + fid + '_status');
-    var sid = status.attr('data');
-    var set_s = 0;
-    if (sid == 1) {
-        set_s = 2;
-    } else if (sid <= 3 && sid >= 2) {
-        set_s = 4;
-    } else if (sid == 4) {
-        set_s = 5;
+    var set_s = status.attr('data') +1 ;
+    if (set_s == 3) {
+        set_s = set_s + 1;
     }
     $.get(URL, {
         fid: fid,
