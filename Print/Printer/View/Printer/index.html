@@ -6,44 +6,136 @@
 <block name='head'>
 </block>
 <block name='content'>
+
 <div class="title" >
-    <h2>{$data.account}<small style="font-type:Arial;font-size:12px;color:#AAAAAA">&nbsp;{$data['name']}</small></h2>
+    <h2>{$data['name']}<small class="School" style="font-type:Arial;font-size:12px;color:#AAAAAA">&nbsp;{$data.account},来自</small></h2>
+    <span class='label label-success'><a href="__URL__/logout" style="text-decoration: none; color: #FFFFFF">退出登录</a></span><span class="label label-danger"><a href="mailto:feedback@print.nkumstc.cn" style="text-decoration: none; color: #FFFFFF">认证有误</a></span>
+    <br/>
+    <br/>
 </div>
 
 <div class="container">
-<section class="row">
-    <span class='label label-success'><a href="__URL__/logout" style="text-decoration: none; color: #FFFFFF">退出登录</a></span><span class="label label-danger"><a href="mailto:feedback@print.nkumstc.cn" style="text-decoration: none; color: #FFFFFF">信息有误</a></span>
-    <br/>
-    <br/>
-</section>
 
 
-<section class="row">
-        <div>
-            <span>QQ</span>&nbsp;&nbsp;
-            <span class='info'><span class='label label-info'>{$data['qq']}</span></span><!--span class='btn glyphicon glyphicon-pencil'></span-->
-        </div>
-        <div>
-            <span>电话</span>
-            <span class='info'><span class="label label-info">{$data['phone']}</span></span><!--span class='btn glyphicon glyphicon-pencil'></span-->
-        </div>
-        <!--div class='input-group col-sm-4' style='display:none'><input name="phone" type="text" url='__URL__/post' name="phone" placeholder='你的手机号' class="form-control"/><span class="input-group-btn"><button type="submit" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div-->
+<div class="row">
 
-        <div>
-            <span>地址</span>
-            <span class='info'><span class='label label-info'>{$data['address']}</span></span><!--span class='btn glyphicon glyphicon-pencil'></span-->
-        </div>
-        <!--div class='input-group col-sm-4' style='display:none'><input id="address" type="text" name="address" placeholder='新地址' url='__URL__/post' class="form-control"/> <span class="input-group-btn"><button type="submit" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div-->
+<p class="alert alert-warning">请务必提供真实、全面的信息，该页面所填内容将会作为同学们的参考。打印店名称、所在学校不可修改，如有错误请及时联系我们。</p>
+    <div class="col-sm-4">
+        
+    <table class="table">
+<tr>
+    <th style="width:40%">名称</th>
+    <td align="right">{$data['name']}</td>
+</tr>
+<tr>
+    <th>所在学校</th>
+    <td class="School" align="right"></td>
+</tr>
+<tr>
+    <th>手机</th>
+    <td align="right">{$data['phone']}</td>
+</tr>
+<tr>
+    <th>QQ</th>
+    <td align="right">{$data['qq']}</td>
+</tr>
+<tr>
+    <th>地址</th>
+    <td align="right">{$data['address']}</td>
+</tr>
+<tr>
+    <th>营业时间</th>
+    <td align="right">{$data['open_time']}</td>
+</tr>
+<tr>
+    <th>单面价格</th>
+    <td align="right">{$data['price_single']}毛每张</td>
+</tr>
+<tr>
+    <th>双面价格</th>
+    <td align="right">{$data['price_double']}毛每张</td>
+</tr>
+<tr>
+    <th>彩印价格</th>
+    <td align="right">{$data['price_color']}元每张</td>
+</tr>
+<tr>
+    <th>优惠信息</th>
+    <td align="right">{$data['price_more']}</td>
+</tr>
+<tr>
+    <th>打印店简介</th>
+    <td align="right">{$data['profile']}</td>
+</tr>
+    </table>
 
-</section>
-    <span>重置密码<i class='btn glyphicon glyphicon-pencil'></i></span>
-    <form style="display:none;" class="form-group col-md-8" role="form" method="post" action="__URL__/changePwd">
+    </div>
+
+
+
+    <div class="col-sm-5 col-sm-offset-1">
+    
+    <section>
+       <h4>信息修改<i class='btn glyphicon glyphicon-pencil'></i></h4>
+        
+        <form style="display:none;" role="form" method="post" action="">
+            <div class="input-group">
+                <label class="input-group-addon"  for="qq">QQ</label>
+                <input class="form-control" value="{$data['qq']}" name="qq" type="text" id="qq">
+            </div>          
+            <div class="input-group">
+                <label class="input-group-addon"  for="phone">手机</label>
+                <input class="form-control" value="{$data['phone']}" name="phone" type="text" id="phone" required>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon"  for="printaddress">地址</label>
+                <input class="form-control" value="{$data['address']}" placeholder="15字以内" name="address" type="text" id="printaddress" required>
+            </div>
+            <br/>
+
+            <div class="input-group">
+                <label class="input-group-addon"  for="open_time">营业时间</label>
+                <input class="form-control" value="{$data['open_time']}" placeholder="15字以内，如：早七点到晚九点" name="open_time" type="text" id="open_time" required>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon"  for="price_single">单面价格</label>
+                <input class="form-control" value="{$data['price_single']}" placeholder="毛/张" name="price_single" type="text" id="price_single" required>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon"  for="price_double">双面价格</label>
+                <input class="form-control" value="{$data['price_double']}" placeholder="毛/张" name="price_double" type="text" id="price_double" required>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon" for="price_color">彩印价格</label>
+                <input class="form-control" value="{$data['price_color']}" placeholder="元/张" name="price_color" type="text" id="price_color" required>
+            </div>          
+            <br/>
+            <div class="form-group">
+                <label for="price_more">优惠信息</label>
+                <textarea class="form-control" rows="2" value="{$data['price_more']}" placeholder="15字以内，如：过百份7分一张" name="price_more" id="price_more"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="profile">打印店简介</label>
+                <textarea class="form-control" rows="4" value="{$data['profile']}" placeholder="50字以内" name="profile" id="profile"></textarea>
+            </div>
+             <div class="input-group text-center">
+                <button type="submit" class="btn btn-success">确定</button>
+                <span class='cancel btn btn-warning'>取消</span>
+             </div>
+        </form>
+    </section>
+    
+
+
+    <section>
+        <h4>重置密码<i class='btn glyphicon glyphicon-pencil' id="changePwdCtrl"></i></h4>
+        <form style="display:none;" role="form" method="post" action="__URL__/changePwd">
                 <div class="input-group">
                     <label class="input-group-addon" for="deprecated_password">当前密码</label>
                     <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password">
                 </div>
                  <div class="input-group">
-                    <label class="input-group-addon"  for="password">新的密码</label>
+                    <label class="input-group-addon" for="password">新的密码</label>
                     <input class="form-control" placeholder='要设置的密码' name="password" type="password" id="password">
                 </div> 
                 <div class="input-group">
@@ -54,22 +146,36 @@
                 <button id="changePwd" type="submit" class="btn btn-success">确定</button>
                 <span class='cancel btn btn-warning'>取消</span>
                 </div>
-    </form>
+        </form>
+    </section>
+    
+    </div>
+    
+
+
+</div>
 </div>
 </block>
+
 <BLOCK name='end'>
 <script>
+    if({$data['sch_id']} === 1){
+        $('.School').append('南开大学');
+    }
+    else{
+        $('.School').append('天津大学');
+    }
+
 $('.glyphicon-pencil').click(function() {
     var info = $(this).parent();
-    info.hide(50);
     info.next().show(100);
 });
+
 $('.cancel').click(function() {
     var set = $(this).parent().parent();
-    set.hide(50);
+    set.hide(100);
     set.prev().show(100);
 });
-
 
 
 $("#changePwd").click(function(event) {

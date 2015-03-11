@@ -44,7 +44,7 @@ class UserController extends RestController
 		$info        = auth();
 		if ($info && ($info['type'] == C('STUDENT_API') || $info['type'] == C('STUDENT'))) 
 		{
-			$data        = D('User')->field('id,student_number,name,gender,phone,email')->getById($info['id']);
+			$data        = D('User')->field('id,student_number,sch_id,name,gender,phone,email')->getById($info['id']);
 			
 			//手机号和邮箱打码
 			$data['email']             = $data['mask_email'];
@@ -104,7 +104,7 @@ class UserController extends RestController
 			{
 				$where['user.id']      = $id;
 				$where['user.status']      = array('gt', 0);
-				$data = M('User')->where($where)->field('id,name,student_number,gender,phone,email,status')->find();
+				$data = M('User')->where($where)->field('id,name,sch_id,student_number,gender,phone,email,status')->find();
 				if ($data) 
 				{
 					import('Common.Encrypt',COMMON_PATH, '.php');

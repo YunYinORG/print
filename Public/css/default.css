@@ -216,7 +216,6 @@ nav li:hover a, nav li.active a, nav li.active span {
     float: none;
   }
   .navbar-nav > li {
-      float: none;
       display: block;
       position: relative;
       width: 100%;

@@ -20,6 +20,7 @@ return array(
     //验证方式
     'VERIFY_NKU'=>'Verify.NankaiUrp',
     'VERIFY_TJU'=>'Verify.TjuE',
+    'NKU_OPEN'=>true,
 
     //URL设定
     'URL_PARAMS_BIND'          =>    TRUE,

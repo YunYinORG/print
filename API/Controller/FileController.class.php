@@ -52,7 +52,7 @@ class FileController extends RestController
 			{
 			case C('PRINTER'):
 			case C('PRINTER_WEB'):
-				$field           = 'id,use_id,name,url,time,status,copies,double_side,use_name,student_number';
+				$field           = 'id,use_id,name,time,status,copies,double_side,use_name,student_number';
 				$where['pri_id']                 = $info['id'];
 				$File            = D('FileView');
 				break;
@@ -139,6 +139,9 @@ class FileController extends RestController
 				case 'get':
 					$where['status']      = array('gt', 0);
 					$data = $File->where($where)->find();
+					if($data['url']){
+						$data['url']=download($data['url']);
+					}
 					break;
 
 				case 'put':
@@ -216,7 +219,7 @@ class FileController extends RestController
 						$file = $File->where($where)->field('url,pri_id')->find();
 						if ($file) 
 						{
-							if (delete_file('./Uploads/' . $file['url'])) 
+							if (delete_file($file['url'])) 
 							{
 								$save['status']      = 0;
 								$save['url']      = '';
