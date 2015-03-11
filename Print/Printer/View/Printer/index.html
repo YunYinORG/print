@@ -24,7 +24,7 @@
         
     <table class="table">
 <tr>
-    <th style="width:40%">名称</th>
+    <th style="width:45%">名称</th>
     <td align="right">{$data['name']}</td>
 </tr>
 <tr>
@@ -48,16 +48,16 @@
     <td align="right">{$data['open_time']}</td>
 </tr>
 <tr>
-    <th>单面价格</th>
-    <td align="right">{$data['price_single']}毛每张</td>
+    <th>单面价格（黑白）</th>
+    <td align="right">{$data['price_single']}分每张</td>
 </tr>
 <tr>
-    <th>双面价格</th>
-    <td align="right">{$data['price_double']}毛每张</td>
+    <th>双面价格（黑白）</th>
+    <td align="right">{$data['price_double']}分每张</td>
 </tr>
 <tr>
-    <th>彩印价格</th>
-    <td align="right">{$data['price_color']}元每张</td>
+    <th>彩印价格（单面）</th>
+    <td align="right">{$data['price_color']}毛每张</td>
 </tr>
 <tr>
     <th>优惠信息</th>
@@ -76,7 +76,7 @@
     <div class="col-sm-5 col-sm-offset-1">
     
     <section>
-       <h4>信息修改<i class='btn glyphicon glyphicon-pencil'></i></h4>
+        <h4><strong>信息修改</strong><i class='btn glyphicon glyphicon-pencil'></i></h4>
         
         <form  id="changeInfo" style="display:none;" role="form" method="post" action="">
             <div class="input-group">
@@ -95,28 +95,28 @@
 
             <div class="input-group">
                 <label class="input-group-addon"  for="open_time">营业时间</label>
-                <input id="open_time" class="form-control" value="{$data['open_time']}" placeholder="15字以内，如：早七点到晚九点" name="open_time" type="text" id="open_time" required>
+                <input id="open_time" class="form-control" value="{$data['open_time']}" placeholder="如：早七点到晚九点，15字以内" name="open_time" type="text" id="open_time" required>
             </div>
             <div class="input-group">
-                <label class="input-group-addon"  for="price_single">单面价格</label>
-                <input id="price_single" class="form-control" value="{$data['price_single']}" placeholder="毛/张" name="price_single" type="text" id="price_single" required>
+                <label class="input-group-addon"  for="price_single">单面价格（黑白）</label>
+                <input id="price_single" type="number" min="0" class="form-control" value="{$data['price_single']}" placeholder="分/张" name="price_single" id="price_single" required>
             </div>
             <div class="input-group">
-                <label class="input-group-addon"  for="price_double">双面价格</label>
-                <input id="price_double" class="form-control" value="{$data['price_double']}" placeholder="毛/张" name="price_double" type="text" id="price_double" required>
+                <label class="input-group-addon"  for="price_double">双面价格（黑白）</label>
+                <input id="price_double" type="number" min="0" class="form-control" value="{$data['price_double']}" placeholder="分/张" name="price_double" id="price_double" required>
             </div>
             <div class="input-group">
-                <label class="input-group-addon" for="price_color">彩印价格</label>
-                <input id="price_color" class="form-control" value="{$data['price_color']}" placeholder="元/张" name="price_color" type="text" id="price_color" required>
+                <label class="input-group-addon" for="price_color">彩印价格（单面）</label>
+                <input id="price_color" type="number" min="0" class="form-control" value="{$data['price_color']}" placeholder="角/张" name="price_color"  id="price_color" required>
             </div>          
             <br/>
             <div class="form-group">
                 <label for="price_more">优惠信息</label>
-                <textarea id="price_more" class="form-control" rows="2" value="{$data['price_more']}" placeholder="15字以内，如：过百份7分一张" name="price_more" id="price_more"></textarea>
+                <textarea id="price_more" class="form-control" rows="2" placeholder="如：单面黑白打印过百份7分一张，30字以内" name="price_more" id="price_more">{$data['price_more']}</textarea>
             </div>
             <div class="form-group">
                 <label for="profile">打印店简介</label>
-                <textarea required="required" id="profile" class="form-control" rows="4" value="{$data['profile']}" placeholder="50字以内" name="profile" id="profile"></textarea>
+                <textarea required="required" id="profile" class="form-control" rows="4" placeholder="打印店自我介绍，50字以内" name="profile" id="profile">{$data['profile']}</textarea>
             </div>
              <div class="input-group text-center">
                 <button type="submit" class="btn btn-success">确定</button>
@@ -128,7 +128,7 @@
 
 
     <section>
-        <h4>重置密码<i class='btn glyphicon glyphicon-pencil' id="changePwdCtrl"></i></h4>
+        <h4><strong>重置密码</strong><i class='btn glyphicon glyphicon-pencil' id="changePwdCtrl"></i></h4>
         <form  id="changePwd" style="display:none;" role="form" method="post" action="__URL__/changePwd">
                 <div class="input-group">
                     <label class="input-group-addon" for="deprecated_password">当前密码</label>
