@@ -6,7 +6,7 @@
 <block name='head'>
 </block>
 <block name='content'>
-
+<script src="/Public/js/md5.min.js" ></script>
 <div class="title" >
     <h2>{$data['name']}<small class="School" style="font-type:Arial;font-size:12px;color:#AAAAAA">&nbsp;{$data.account},来自</small></h2>
     <span class='label label-success'><a href="__URL__/logout" style="text-decoration: none; color: #FFFFFF">退出登录</a></span><span class="label label-danger"><a href="mailto:feedback@print.nkumstc.cn" style="text-decoration: none; color: #FFFFFF">认证有误</a></span>
@@ -78,7 +78,7 @@
     <section>
        <h4>信息修改<i class='btn glyphicon glyphicon-pencil'></i></h4>
         
-        <form style="display:none;" role="form" method="post" action="">
+        <form  id="changeInfo" style="display:none;" role="form" method="post" action="">
             <div class="input-group">
                 <label class="input-group-addon"  for="qq">QQ</label>
                 <input id="qq" class="form-control" value="{$data['qq']}" name="qq" type="text" id="qq">
@@ -116,10 +116,10 @@
             </div>
             <div class="form-group">
                 <label for="profile">打印店简介</label>
-                <textarea id="profile" class="form-control" rows="4" value="{$data['profile']}" placeholder="50字以内" name="profile" id="profile"></textarea>
+                <textarea required="required" id="profile" class="form-control" rows="4" value="{$data['profile']}" placeholder="50字以内" name="profile" id="profile"></textarea>
             </div>
              <div class="input-group text-center">
-                <button id="changeInfo" type="submit" class="btn btn-success">确定</button>
+                <button type="submit" class="btn btn-success">确定</button>
                 <span class='cancel btn btn-warning'>取消</span>
              </div>
         </form>
@@ -129,10 +129,10 @@
 
     <section>
         <h4>重置密码<i class='btn glyphicon glyphicon-pencil' id="changePwdCtrl"></i></h4>
-        <form style="display:none;" role="form" method="post" action="__URL__/changePwd">
+        <form  id="changePwd" style="display:none;" role="form" method="post" action="__URL__/changePwd">
                 <div class="input-group">
                     <label class="input-group-addon" for="deprecated_password">当前密码</label>
-                    <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password">
+                    <input required="required" class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password">
                 </div>
                  <div class="input-group">
                     <label class="input-group-addon" for="password">新的密码</label>
@@ -143,7 +143,7 @@
                     <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
                 </div>
                  <div class="input-group text-center">
-                <button id="changePwd" type="submit" class="btn btn-success">确定</button>
+                <button type="submit" class="btn btn-success">确定</button>
                 <span class='cancel btn btn-warning'>取消</span>
                 </div>
         </form>
@@ -178,7 +178,7 @@ $('.cancel').click(function() {
 });
 
 
-$("#changePwd").click(function(event) {
+$("#changePwd").on('submit',function(event) {
     event.preventDefault();
     
     var URL = "/Printer/Printer/changePwd";
@@ -212,35 +212,40 @@ $("#changePwd").click(function(event) {
 });
 
 
-$("#changeInfo").click(function(event) {
+$("#changeInfo").on('submit',function(event) {
     event.preventDefault();
     
     var URL = "/Printer/Printer/changeInfo";
 
-    var deprecated_password = $('#deprecated_password').val();
+    var qq = $('#qq').val();
+    var phone = $('#phone').val();
+    var address = $('#address').val();
+    var profile = $('#profile').val();
+    var open_time = $('#open_time').val();
+    var price_color = $('#price_color').val();
+    var price_no_color = $('#price_no_color').val();
+    var price_single = $('#price_single').val();
+    var price_double = $('#price_double').val();
+    var price_more = $('#price_more').val();
     
-    
-    
-    if(re_password == password && re_password && password)
-    {
         $.post(URL, {
-            deprecated_password : md5(deprecated_password),
-            password: md5(password)
+            qq : qq ,
+            phone  : phone ,
+            address  : address ,
+            profile  : profile ,
+            open_time  : open_time ,
+            price_color  : price_color ,
+            price_no_color  : price_no_color ,
+            price_single  : price_single ,
+            price_double  : price_double ,
+            price_more  : price_more
         }, function(data) {
             if (data.status) {
                 alert(data.info);
-
             } else {
                 alert(data.info);
             }
         });
-    }
-    
-    else
-    {
-        alert("Password dose not match with confirm password");
-    }
-    
 });
 </script>
 </BLOCK>

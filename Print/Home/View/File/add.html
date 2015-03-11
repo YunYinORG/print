@@ -135,7 +135,7 @@ function priceChange(n){
     $('#single').html(thePrice[i][0]);
     $('#double').html(thePrice[i][1]);
 }
-$("#modaltrigger").on('click', function() {
+$("#modaltrigger").on('submit', function() {
     $("#modaltrigger").attr('disabled', true);
     if (!$("#print").submit()) {
         $("#modaltrigger").attr('disabled',false);

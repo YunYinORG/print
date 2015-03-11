@@ -65,14 +65,14 @@ class PrinterController extends Controller
         $id           = pri_id(U('Index/index'));
         $old_password = I('deprecated_password');
         $password     = I('password');
-        $re_password  = I('re_password');
-        if ($id && $old_password && $password && $password == $re_password) 
+
+        if ($id && $old_password && $password) 
         {
             $Printer      = M('Printer');
             $pri          = $Printer->field('account,password')->cache(true)->getById($id);
-            if ($pri['password'] == encode(md5($old_password), $pri['account'])) 
+            if ($pri['password'] == encode($old_password, $pri['account'])) 
             {
-                if ($Printer->where('id=' . $id)->setField('password', encode(md5($password), $pri['account'])) !== fasle) 
+                if ($Printer->where('id=' . $id)->setField('password', encode($password, $pri['account'])) !== fasle) 
                 {
                     $this->success('修改成功', 1);
                 } else
@@ -95,23 +95,30 @@ class PrinterController extends Controller
     {
         
         $id           = pri_id(U('Index/index'));
-        
-        if ($id && $old_password && $password && $password == $re_password) 
+        /*
+             $data['qq : qq ,
+             $data['phone  : phone ,
+             $data['address  : address ,
+             $data['profile  : profile ,
+             $data['open_time  : open_time ,
+             $data['price_color  : price_color ,
+             $data['price_no_color  : price_no_color ,
+             $data['price_single  : price_single ,
+             $data['price_double  : price_double ,
+             $data['price_more  : price_more ,
+             */
+        if ($id) 
         {
+            $data = $_POST;
+
             $Printer      = M('Printer');
-            $pri          = $Printer->field('account,password')->cache(true)->getById($id);
-            if ($pri['password'] == encode(md5($old_password), $pri['account'])) 
+            $result       = $Printer->where('id='.$id)->save($data);
+            if ($result) 
             {
-                if ($Printer->where('id=' . $id)->setField('password', encode(md5($password), $pri['account'])) !== fasle) 
-                {
-                    $this->success('修改成功', 1);
-                } else
-                {
-                    $this->error($Printer->getError());
-                }
+                $this->success('Successfully change your info!');
             } else
             {
-                $this->error('原密码错误');
+                $this->error('错误');
             }
         } else
         {

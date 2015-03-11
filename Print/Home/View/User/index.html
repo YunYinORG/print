@@ -33,7 +33,7 @@
           <br/>
             <div class="input-group col-sm-4">
                 <span class="input-group-addon" for="deprecated_password">当前密码</span>
-                <input class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password" required>
+                <input required="required" class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password" required>
             </div>
             <div class="input-group col-sm-4">
                 <span class="input-group-addon"  for="password">新的密码</span>
@@ -241,7 +241,7 @@ $('#getPhone').click(function(gp){
     });
 });
 
-$("#change").click(function(event) {
+$("#change").on('submit',function(event) {
     event.preventDefault();
     var URL = "/User/change";
 
