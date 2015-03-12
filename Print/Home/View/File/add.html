@@ -40,21 +40,24 @@
             <div class="col-lg-4">
                 <ul id="upload-list" class="list-group" style="margin-bottom:0px;margin-top:10px"></ul>
             </div>
-        <div class="col-lg-3">
-            <fieldset id='setting1'>
-                <div style="display:none;margin-top:10px;margin-bottom:0px" id="pptprint">
-                    <select class="form-control" name="ppt_layout">
-                        <option value="">PPT打印格式</option>
-                        <option value="1">1x1</option>
-                        <option value="2">1x2</option>
-                        <option value="3">2x2</option>
-                        <option value="4">2x3</option>
-                    </select>
-                </div>
-            </fieldset>
-        </div>
+            <div class="col-lg-3">
+                <fieldset id='setting1'>
+                    <div style="display:none;margin-top:10px;margin-bottom:0px" id="pptprint">
+                        <select class="form-control" name="ppt_layout">
+                            <option value="">PPT打印格式</option>
+                            <option value="1">1x1</option>
+                            <option value="2">1x2</option>
+                            <option value="3">2x2</option>
+                            <option value="4">2x3</option>
+                        </select>
+                    </div>
+                </fieldset>
+            </div>
         </div>
         <br/>
+    <else />
+    </if>
+    
     <div class="row">
         <div class="col-lg-4">
             <div class="form-group">
@@ -66,6 +69,7 @@
             </div>
             <div id='price' class='well help-block' style="font-size:13px">单面：<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面：<span id='double' class='text-danger'>1角每张</span><br/>彩印：<span id='color_print' class='text-danger'>尚未确定</span></div>
         </div>
+    <if condition="$lock eq 1">    
         <fieldset id="setting2">
             <div class="col-lg-4">
                 <div class="form-group">
@@ -81,11 +85,10 @@
                     </label>
                 </div>
             </div>
-        </fieldset>
-    </div>
+        </fieldset>      
     <else />
     </if>
-    
+    </div>
     
     <div class="row">
         <div class="text-center col-lg-5">
