@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-cmn-Hans">
     <head>
-        <title>云印南开——找回密码</title>
+        <title>云印南天——找回密码</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
@@ -11,23 +11,23 @@
             <div class="col-lg-8 col-lg-offset-2">
                 <h1 class="text-danger text-center">找回密码</h1>
                 <div class='alert alert-warning'>
-                    为了防止你的账号信息滥用，你可以通过再次校验你校园账号（URP）信息，找回你的密码。
-                    <br/>使用你的学号（或者教师号）和URP密码登录并重设新的密码。
-                    <br/>如果账号尚未注册请前往<a title="云印南开" href="/">首页</a>直接注册。
+                    为了防止你的账号信息滥用，你可以通过再次校验你校园账号（南开URP或者天大办公网）信息，找回你的密码。
+                    <br/>使用你的注册学号和校园认证密码密码并重设新的密码。
+                    <br/>如果账号尚未注册请前往<a title="云印南天" href="/">云印南天首页</a>直接注册。
                 </div>
             </div>
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="text-center text-info">
                     <h2>验证并重设密码</h2>
                 </div>
-                <form  role="form" method="post" action="__URL__/findPwdVerify">
+                <form  role="form" method="post" action="__URL__/findPwdVerify" onsubmit="return checkform(this);">
                     <div class="input-group">
                         <label class="input-group-addon"  for="number">学号</label>
-                        <input  class="form-control" placeholder='学号（或教师号）' name="number" type="text" id="number" required>
+                        <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="urp_password">密码</label>
-                        <input  class="form-control" placeholder='URP登录的密码' name="urp_password" type="password" id="urp_password" required>
+                        <input  class="form-control" placeholder='南开URP或天大办公网密码' name="urp_password" type="password" id="urp_password" required>
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="password">新的密码</label>
@@ -35,8 +35,9 @@
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="re_password">确认密码</label>
-                        <input  class="form-control" placeholder='重复刚才的密码' name="re_password" type="password" id="re_password" required>
+                        <input  class="form-control" placeholder='重复刚才的密码' type="password" id="re_password" required>
                     </div>
+                    <input type="hidden" name='isMD5' value="0"/>
                     <div class="text-center">
                         <button type="submit" class="btn btn-lg btn-success">提交</button>
                     </div>
@@ -44,4 +45,18 @@
             </div>
         </div>
     </body>
+    <script>
+function checkform(f){
+    if(f.password.value!=f.re_password.value)
+    {
+        f.password.focus=true;
+        alert('两次密码不一致！');
+        return false;
+    }else{
+        //此处应该md5(password)
+        //f['isMD5'].value=1;
+        return true;
+    }
+}
+    </script>
 </html>

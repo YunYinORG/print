@@ -20,7 +20,8 @@
  * - auth()
  * - register()
  * - forget()
- * - change()
+ * - findPwdVerify()
+ * - changePwd()
  * - bindPhone()
  * - verifyPhone()
  * - getPhone()
@@ -50,7 +51,8 @@ class UserController extends Controller
             $data       = $User->where("id=%d", $id)->find();
             $this->data = $data;
             $this->display();
-        } else
+        } 
+        else
         {
             $this->redirect('Index/index', null, 0, '未登录！');
         }
@@ -76,11 +78,13 @@ class UserController extends Controller
             {
                 \Think\Log::record('auth爆破警告：ip:' . get_client_ip() . ',number:' . $number, 'NOTIC', true);
                 $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（ps:你的行为已被系统记录）', '/', 5);
-            } else
+            } 
+            else
             {
                 S($key, $times + 1, 3600);
             }
-        } else
+        } 
+        else
         {
             $this->error('学号格式错误！');
         }
@@ -101,11 +105,13 @@ class UserController extends Controller
                     $password = encode($password, $number);
                     $info['password']          = $password;
                     $User->save($info);
-                } else
+                } 
+                else
                 {
                     $this->error('密码或者账号错误！');
                 }
-            } else
+            } 
+            else
             {
                 $password = md5($password);
                 $password = encode($password, $number);
@@ -114,10 +120,12 @@ class UserController extends Controller
             if ($info['password'] != $password) 
             {
                 $this->error('密码验证错误！');
-            } elseif ($info['status'] < 1) 
+            } 
+            elseif ($info['status'] < 1) 
             {
                 $this->error('此账号已被封禁！');
-            } else
+            } 
+            else
             {
                 session('use_id', $info['id']);
                 $token = update_token($info['id'], C('STUDENT'));
@@ -125,23 +133,26 @@ class UserController extends Controller
                 S($key, null);
                 $this->redirect('/File/index');
             }
-        } else
+        } 
+        else
         {
-                
+            
             //尚未注册，先判断学校导入学校验证文件
             if (preg_match(C('REGEX_NUMBER_NKU'), $number)) 
             {
-                if(!C('NKU_OPEN'))
+                if (!C('NKU_OPEN')) 
                 {
                     $this->error('对不起，由于南开内网原因，目前注册暂时关闭，请您谅解！');
-                }       
-                $VERIFY_WAY=C('VERIFY_NKU');
-                $data['sch_id'] = 1;
-            } elseif (preg_match(C('REGEX_NUMBER_TJU'), $number)) 
+                }
+                $VERIFY_WAY = C('VERIFY_NKU');
+                $data['sch_id']            = 1;
+            } 
+            elseif (preg_match(C('REGEX_NUMBER_TJU'), $number)) 
             {
-               $VERIFY_WAY=C('VERIFY_TJU');
-               $data['sch_id'] =2;
-            } else
+                $VERIFY_WAY = C('VERIFY_TJU');
+                $data['sch_id']            = 2;
+            } 
+            else
             {
                 $this->error('你输入的学号' . $number . ',不是南开或者天大在读学生的的学号，如果你是南开或者天大的在读学生请联系我们！');
             }
@@ -155,9 +166,10 @@ class UserController extends Controller
                 session('authData', $data);
                 $this->data = $data;
                 $this->display('notice');
-            } else
+            } 
+            else
             {
-                $school=M('school')->cache('school',36000)->getFieldById($data['sch_id'],'name');
+                $school = M('school')->cache('school', 36000)->getFieldById($data['sch_id'], 'name');
                 $this->error($data['sch_id'] . '学校账号实名认证失败！');
             }
         }
@@ -180,12 +192,14 @@ class UserController extends Controller
                 
                 //使用默认密码
                 $data['password']            = encode(md5($data['password']), $data['student_number']);
-            } elseif ($is_ignore === 0 && $password && $password == I('post.re_password')) 
+            } 
+            elseif ($is_ignore === 0 && $password && $password == I('post.re_password')) 
             {
                 
                 //重设密码
                 $data['password']            = encode(md5($password), $data['student_number']);
-            } else
+            } 
+            else
             {
                 
                 //显示提示信息
@@ -204,14 +218,16 @@ class UserController extends Controller
                 $token = update_token($uid, C('STUDENT'));
                 cookie('token', $token, 3600 * 24 * 30);
                 $this->redirect('index', null, 0, '注册成功！');
-            } else
+            } 
+            else
             {
                 
                 //注册失败
                 \Think\Log::record('注册失败：ip:' . get_client_ip() . ',number:' . $data['student_number']);
                 $this->error('注册失败');
             }
-        } else
+        } 
+        else
         {
             $this->redirect('/');
         }
@@ -223,7 +239,7 @@ class UserController extends Controller
         if (use_id()) 
         {
             $this->redirect('index');
-        }        
+        } 
         else
         {
             $this->display();
@@ -231,84 +247,97 @@ class UserController extends Controller
     }
     
     /**
-    *再次认证找回密码
-    */
-    public function findPwdVerify()
+     *再次认证找回密码
+     */
+    public function findPwdVerify() 
     {
-         if($number = I('post.number', false, C('REGEX_NUMBER_NKU')))
+        if ($number     = I('post.number', false, C('REGEX_NUMBER_NKU'))) 
         {
-            if(!C('NKU_OPEN')){
+            if (!C('NKU_OPEN')) 
+            {
                 $this->error('sorry，由于南开内网原因，暂时不可使用此渠道找回密码！');
-            }else{
-                $VERIFY_WAY=C('VERIFY_NKU');
+            } 
+            else
+            {
+                $VERIFY_WAY = C('VERIFY_NKU');
             }
-        }elseif($number=I('post.number', false, C('REGEX_NUMBER_TJU'))) {
-           $VERIFY_WAY=C('VERIFY_TJU');
-        }else{
+        } 
+        elseif ($number     = I('post.number', false, C('REGEX_NUMBER_TJU'))) 
+        {
+            $VERIFY_WAY = C('VERIFY_TJU');
+        } 
+        else
+        {
             $this->error('好像不是南开或者的在读学生额>_ < ?');
         }
-
+        
         $key   = 'auth_' . $number;
         $times = S($key);
         if ($times > C('MAX_TRIES')) 
         {
             \Think\Log::record('forget爆破警告：ip:' . get_client_ip() . ',number:' . $number, 'NOTIC', true);
             $this->error('此账号尝试次数过多，已经暂时封禁，请于一小时后重试！（提示：你的行为已被系统记录）');
-        } else
+        } 
+        else
         {
             S($key, $times + 1, 3600);
         }
         
         $urp_password = I('post.urp_password');
         $password     = I('post.password');
-        $re_password  = I('post.re_password');
-        if ($password && $re_password && $number && $urp_password) 
+        if ($password && $number && $urp_password) 
         {
             import($VERIFY_WAY, COMMON_PATH, '.php');
             if (getName($number, $urp_password)) 
             {
-                if ($password == $re_password) 
+                if (!I('isMD5')) 
                 {
-                    if (false !== M('User')->where('student_number=' . $number)->setField('password', encode(md5($password), $student_number))) 
-                    {
-                        S($key, null);
-                        $this->redirect('Index/index', null, 0, "密码重置成功！");
-                    } else
-                    {
-                        $this->error('重置失败或者未注册！');
-                    }
-                } else
-                {
-                    $this->error("密码不一致");
+                    $password = md5($password);
                 }
-            } else
+                if (false !== M('User')->where('student_number=' . $number)->setField('password', encode($password, $number))) 
+                {
+                    S($key, null);
+                    $this->success('密码重置成功！请重新登录', '/Index/index');
+                } 
+                else
+                {
+                    $this->error('重置失败或者未注册！');
+                }
+            } 
+            else
             {
                 $this->error($number . '校园账号验证失败！');
             }
-        } else
+        } 
+        else
         {
             $this->error('密码不能空哦！');
         }
     }
-
-
+    
     /**
      *修改密码
      */
-    public function change() 
+    public function changePwd() 
     {
         $uid                 = use_id(U('Index/index'));
         $user                = M('User')->field('student_number,password')->getById($uid);
         $deprecated_password = I('post.deprecated_password');
         $password            = I('post.password');
-        $re_password         = I('post.re_password');
         if ($user && $deprecated_password && $password) 
         {
+            $isMD5               = I('isMD5');
+            if (!$isMD5) 
+            {
+                $deprecated_password = md5($deprecated_password);
+                $password            = md5($password);
+            }
             if ($user['password'] == encode($deprecated_password, $user['student_number'])) 
             {
-                    M('User')->where('id=%d', $uid)->setField('password', encode($password, $user['student_number']));
-                    $this->success('密码修改成功重新登陆！');
-            } else
+                M('User')->where('id=%d', $uid)->setField('password', encode($password, $user['student_number']));
+                $this->success('密码修改成功重新登陆！', 'logout');
+            } 
+            else
             {
                 $this->error('原密码错误');
             }
@@ -334,17 +363,20 @@ class UserController extends Controller
         if (get_user_by_phone($phone)) 
         {
             $this->error('此手机号已经绑定过账号！');
-        } else
+        } 
+        else
         {
             $result = send_sms_code($phone, 'bind');
             if ($result == true) 
             {
                 session('bind_phone', $phone);
                 $this->success('发送成功');
-            } elseif ($result === 0) 
+            } 
+            elseif ($result === 0) 
             {
                 $this->error('发送次数过多');
-            } else
+            } 
+            else
             {
                 $this->error('发送失败');
             }
@@ -361,7 +393,8 @@ class UserController extends Controller
         if (!$phone) 
         {
             $this->error('手机号不存在！');
-        } elseif (get_user_by_phone($phone)) 
+        } 
+        elseif (get_user_by_phone($phone)) 
         {
             $this->error('此手机号已经绑定过账号！');
         }
@@ -373,25 +406,30 @@ class UserController extends Controller
             $result = check_sms_code($phone, $code, 'bind');
             if ($result) 
             {
-                session('bind_phone',null);
-                $true_phone=$phone;
+                session('bind_phone', null);
+                $true_phone = $phone;
                 import('Common.Encrypt', COMMON_PATH, '.php');
                 $phone = encrypt_phone($phone, $sid, $uid);
-                if(M('User')->where('id=%d', $uid)->setField('phone', $phone))
+                if (M('User')->where('id=%d', $uid)->setField('phone', $phone)) 
                 {
-                    $this->success($true_phone.'绑定成功！');
-
-                }else{
-                    $this->error('name');($phone.'绑定失败！');
+                    $this->success($true_phone . '绑定成功！');
+                } 
+                else
+                {
+                    $this->error('name');
+                    ($phone . '绑定失败！');
                 }
-            } elseif ($result === false) 
+            } 
+            elseif ($result === false) 
             {
                 $this->error('验证失败，请重试！');
-            } else
+            } 
+            else
             {
                 $this->error('验证信息过期！', '/User/bindPhone');
             }
-        } else
+        } 
+        else
         {
             $this->error('验证信息错误');
         }
@@ -412,7 +450,8 @@ class UserController extends Controller
         if (IS_AJAX) 
         {
             $this->success(array('phone' => $phone));
-        } else
+        } 
+        else
         {
             echo $phone;
         }
@@ -435,7 +474,8 @@ class UserController extends Controller
         if (IS_AJAX) 
         {
             $this->success(array('email' => $email));
-        } else
+        } 
+        else
         {
             echo $email;
         }
@@ -455,7 +495,8 @@ class UserController extends Controller
             if (get_user_by_email($email)) 
             {
                 $this->error('此邮箱已经绑定过账号！');
-            } else
+            } 
+            else
             {
                 $data['use_id']      = $uid;
                 $data['type']      = 1;
@@ -470,17 +511,20 @@ class UserController extends Controller
                     $url = U('User/verifyEmail', 'id=' . $cid . '&code=' . $data['code'], '', true);
                     if (send_mail($email, $url, 1)) 
                     {
-                        $this->success('验证邮件已发送到' . $email.'请及时到邮箱验证查收');
-                    } else
+                        $this->success('验证邮件已发送到' . $email . '请及时到邮箱验证查收');
+                    } 
+                    else
                     {
                         $this->error('验证邮件发送失败！');
                     }
-                } else
+                } 
+                else
                 {
                     $this->error('信息生成失败！');
                 }
             }
-        } else
+        } 
+        else
         {
             $this->error('信息不足！');
         }
@@ -511,18 +555,22 @@ class UserController extends Controller
                 if (get_user_by_email($email)) 
                 {
                     $this->error('此邮箱已经绑定过账号！');
-                } elseif (M('User')->where('id=%d', $info['use_id'])->setField('email', encrypt_email($email))) 
+                } 
+                elseif (M('User')->where('id=%d', $info['use_id'])->setField('email', encrypt_email($email))) 
                 {
                     $this->success('绑定成功！', '/');
-                } else
+                } 
+                else
                 {
                     $this->error('邮箱绑定失败！');
                 }
-            } else
+            } 
+            else
             {
                 $this->error('验证信息已不存在！');
             }
-        } else
+        } 
+        else
         {
             $this->error('信息不完整');
         }
