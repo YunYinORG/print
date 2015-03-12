@@ -1,7 +1,6 @@
 ﻿{//信息管理页}
 <extend name="Public/template/base.html"/>
 <block name='header'>
-<script src="/Public/js/md5.min.js" ></script>
 <include file="./Public/template/nav.html" info="active"/>
 </block>
 <block name='content'>
@@ -29,7 +28,7 @@
 
         <span>重置密码<i class='btn glyphicon glyphicon-pencil'></i></span>
 
-        <form style='display:none' class="form-horizontal" onsubmit="changePwd(this)" role="form" method="post" action="__URL__/change">
+        <form style='display:none' class="form-horizontal" onsubmit="return changePwd(this);" role="form" method="post" action="__URL__/changePwd">
           <br/>
             <div class="input-group col-sm-4">
                 <span class="input-group-addon" for="deprecated_password">当前密码</span>
@@ -41,8 +40,9 @@
             </div>
             <div class="input-group col-sm-4">
                 <span class="input-group-addon"  for="re_password">确认密码</span>
-                <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password" required>
+                <input  class="form-control" placeholder='重复刚设置的密码' type="password" id="re_password" required>
             </div>
+            <input type="hidden" name="idMD5" value="0">
             <br/>
             <div class="input-group text-center">
                 <button id="change" type="submit" class="btn btn-success">确定</button>
@@ -65,6 +65,7 @@
 </div>
 </block>
 <BLOCK name='end'>
+<script src="__JS__/md5.min.js" ></script>
 <script>
 M = $('#Modal');
 $('.glyphicon-pencil').click(function() {
@@ -212,12 +213,12 @@ $('#getEmail').click(function()
             }else{
                 M.find('.modal-title').html('查询失败');
                 M.find('.modal-body').html(data.info);
-                M.show();
+                M.modal('show');
             }
         }else{
                 M.find('.modal-title').html('服务器通讯异常！');
                 M.find('.modal-body').html('检查网络，稍后重试');
-                M.show();
+                M.modal('show');
         }
     });
 });
@@ -231,50 +232,51 @@ $('#getPhone').click(function(gp){
             }else{
                 M.find('.modal-title').html('查询失败');
                 M.find('.modal-body').html(data.info);
-                M.show();
+                M.modal('show');
             }
         }else{
                 M.find('.modal-title').html('服务器通讯异常！');
                 M.find('.modal-body').html('检查网络，稍后重试');
-                M.show();
+                M.modal('show');
         }
     });
 });
 
-$("#change").on('submit',function(event) {
-    event.preventDefault();
-    var URL = "/User/change";
+function changePwd(f) {
+    var URL = f.action;
 
-    var deprecated_password = $('#deprecated_password').val();
-    var password = $('#password').val();
-    var re_password = $('#re_password').val();
+    var deprecated_password = f['deprecated_password'].value;
+    var password = f['password'].value;
+    var re_password = f.re_password.value;
     
     
-    if(re_password == password && re_password && password)
+    if(re_password == password)
     {
         $.post(URL, {
             deprecated_password : md5(deprecated_password),
-            password: md5(password)
+            password: md5(password),
+            isMD5:1
         }, function(data) {
-            if (data.status) {
-                alert(data.info);
-                location.href="/User/logout";
-            } else {
-                alert(data.info);
+            if (data.status) { 
+                M.find('.modal-title').html('修改成功,即将跳转');
+                M.find('.modal-body').html(data.info);
+                M.modal('show');
+                setTimeout(function() {location.href=data.url;}, 5000);
+            } else {                
+                M.find('.modal-title').html('修改失败');
+                M.find('.modal-body').html(data.info);
+                M.modal('show');
             }
         });
 
     }
     else
     {
-        alert("Password dose not match with confirm password");
+                M.find('.modal-title').html('信息有误');
+                M.find('.modal-body').html('两次密码不一致');
+                M.modal('show');
     }
-    
-    $('#deprecated_password').val('');
-    $('#password').val('');
-    $('#re_password').val('');
-    
-});
-
+    return false;
+}
 </script>
 </BLOCK>
