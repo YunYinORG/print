@@ -70,8 +70,8 @@ class FileController extends Controller
             //Still to improve!!
             $sort = $sch_id == 2 ? "desc" : "asc";
             $this->lock = $bindPhone ? 1 : 0;
-            $this->data = $Printer->order('sch_id '.$sort)->find();
-            
+            $this->data = $Printer->select();
+        //    var_dump($this->data);  
             $this->display();
         } 
         else
