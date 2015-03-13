@@ -23,25 +23,52 @@
  */
 namespace Admin\Controller;
 use Think\Controller;
+
 class IndexController extends Controller {
 
     public function index(){
+        if (!admin_id()) {
+            $this->redirect('login');
+        } else {
+            $this->display();
+        }
+    }
+
+    public function login(){
         $this->display();
     }
 
+    public function auth(){
+        if(I('post.account' )==C('ADMIN_ACCOUNT') && I('post.password')==C('ADMIN_PWD'))
+        {
+            session('admin_id', '1');
+            $token = update_token('1', C('ADMIN'));
+            cookie('token', $token, 60 * 15);//15min
+            $this->redirect('index');
+        }
+        else
+        {
+            $this->error("WRONG");
+        }
+    }
+
     /**
-     *注册
+     *打印店注册
      */
     public function printerRegister() {
-        // if (pri_id()) {
-        //     $this->redirect('index');
-        // } else {
+        if (!admin_id()) {
+            $this->redirect('index');
+        } else {
             $this->display();
-        // }
+        }
     }
 
 
     public function addPrinter() {
+        if (!admin_id()) {
+            $this->redirect('index');
+        }
+
         $Printer = D('Printer');
         
         $data['account']  = I('post.account');

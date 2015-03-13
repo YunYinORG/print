@@ -25,7 +25,7 @@ return array(
     //URL设定
     'URL_PARAMS_BIND'          =>    TRUE,
     'URL_MODEL'                        =>    2,
-    'MODULE_ALLOW_LIST'    =>    array('Home','Printer',),
+    'MODULE_ALLOW_LIST'    =>    array('Home','Printer','Admin',),
     'DEFAULT_MODULE'           =>    'Home',  // 默认模块
 
     //数据库配置
@@ -43,6 +43,7 @@ return array(
     ) ,
 
     //用户登录类型
+    'ADMIN' => 0,
     'STUDENT'            => 1,
     'PRINTER'             => 2,
     'PRINTER_WEB'  => 3,

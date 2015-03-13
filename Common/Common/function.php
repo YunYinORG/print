@@ -61,6 +61,7 @@ function update_token($info, $type  = null)
 	$Token = M('token');
 	switch ($type) 
 	{
+	case C('ADMIN'):
 	case C('STUDENT'):
 	case C('PRINTER'):
 	case C('PRINTER_WEB'):
