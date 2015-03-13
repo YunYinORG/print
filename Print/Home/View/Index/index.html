@@ -10,6 +10,8 @@
         <meta name="description" content="云印南开,南开大学云打印平台,南开云印平台" />
         <link href="__CDNLIB__/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
         <link  href="__PUBLIC__/css/new.css" rel="stylesheet" type="text/css" />
+		<script src="__CDNLIB__/jquery/2.1.1/jquery.min.js"></script>
+    <script src="__CDNLIB__/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     </head>
     <body>
     <div class="text-center">
@@ -18,9 +20,23 @@
         </div>
         <main class="container">          
             <div class="col-lg-12">
-                <div class='thumbnail'>
-                    <img src="__PUBLIC__/images/map.jpg" class="img-responsive">
-                </div>
+            	<div id="myCarousel" class="carousel slide">
+   <!-- 轮播（Carousel）项目 -->
+   <div class="carousel-inner">
+      <div class="item active">
+          <img src="__PUBLIC__/images/map.jpg" class="index-img" alt="First slide">
+      </div>
+      <div class="item">
+         <img src="__PUBLIC__/images/map_tju.jpg" class="index-img" alt="Second slide">
+      </div>
+
+   </div>
+   <!-- 轮播（Carousel）导航 -->
+   <a class="carousel-control left" href="#myCarousel" 
+      data-slide="prev">&lsaquo;</a>
+   <a class="carousel-control right" href="#myCarousel" 
+      data-slide="next">&rsaquo;</a>
+</div>       
             </div>
             <IF condition='$islogin'>
             <div  class="col-md-4 col-md-offset-4">

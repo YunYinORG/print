@@ -51,7 +51,6 @@ footer a {
    .myrow {
        width: 79%;
        margin-left: 11%;
-       height: 25%;
   }
 /*  .alert {
       padding: 0px;
@@ -67,6 +66,10 @@ footer a {
     /*font-weight: bold;*/
     /*background-color: transparent;*/
     /*border-color: transparent;*/
+    margin-top:2%;
+}
+.index-img{
+     margin:0 auto;
 }
 #login>.btn {
     margin-top: 2px;
@@ -92,6 +95,7 @@ li.logo-list
    .myrow {
        width: 97%;
        margin-left: 2%;
+       margin-top: 3%;
   }
   #login>.btn {
       margin-top: 3px;
