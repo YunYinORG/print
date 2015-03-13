@@ -83,6 +83,7 @@ li.logo-list
     img {
         width: 70%;
         height: 85%;
+	margin:0 auto;
    }
 /*   #login>.btn {
        margin-top: 3px;
