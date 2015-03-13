@@ -6,13 +6,63 @@
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css">
 </head>
 <body>
-    <form method="post" action="__URL__/addPrinter">
-        账号:<input type="text" name="account"><br>
-        密码:<input type="password" name="password"><br>
-        打印店名称:<input type="text" name="name"><br>
-        地址:<input type="text" name="address"><br>
-        手机号码:<input type="text" name="phone"><br>
-        QQ号:<input type="text" name="qq"><br>
-        <input type="submit" value="submit">
-    </form>
+    <div id="carbonForm" style="margin-top: 107.5px; font-size: 20px;">
+        <h1>打印店注册</h1>
+        <form action="__URL__/addPrinter" method="post" id="signupForm">
+            <div class="fieldContainer">
+                <div class="formRow">
+                    <div class="label">
+                        <label for="name">账号:</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="account" id="name" required>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="label">
+                        <label for="password">密码:</label>
+                    </div>
+                    <div class="field">
+                        <input type="password" name="password" id="password" required>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="label">
+                        <label for="name">打印店名称:</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="name" id="name" required>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="label">
+                        <label for="name">地址:</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="address" id="name" required>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="label">
+                        <label for="name">手机号:</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="phone" id="name" required>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="label">
+                        <label for="name">QQ号:</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="qq" id="name" required>
+                    </div>
+                </div>
+            </div>
+            <div class="signupButton">
+                <input type="submit" name="submit" id="submit" value="确认注册">
+                <input type="button" name="submit" id="submit" value="返回" onclick ="location.href='index'"/>
+            </div>
+        </form>
+    </div>
 </body>
