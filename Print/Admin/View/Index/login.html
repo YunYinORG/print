@@ -2,14 +2,35 @@
 <html lang="zh-cmn-Hans">
 <head>
     <meta charset="UTF-8">
-    <title>云印南开-后台管理页面登录</title>
+    <title>云印南开-后台管理登录</title>
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css">
 </head>
 <body>
-    <form method="post" action="/Admin/Index/auth">
-        <input type="text"     id="account"  name="account"  placeholder="账号" required><br>
-        <input type="password" id="password" name="password" placeholder="密码" required><br>
-        <input type="submit"   id="submit-btn" value="登录"/>
-    </form>
+    <div id="carbonForm" style="margin-top: 107.5px; font-size: 20px;">
+        <h1>后台管理登录</h1>
+        <form action="/Admin/Index/auth" method="post" id="signupForm">
+            <div class="fieldContainer">
+                <div class="formRow">
+                    <div class="label">
+                        <label for="name">账号:</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="account" id="name" required>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="label">
+                        <label for="password">密码:</label>
+                    </div>
+                    <div class="field">
+                        <input type="password" name="password" id="password" required>
+                    </div>
+                </div>
+            </div>
+            <div class="signupButton">
+                <input type="submit" name="submit" id="submit" value="登陆">
+            </div>
+        </form>
+    </div>
 </body>
 </html>

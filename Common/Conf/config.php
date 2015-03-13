@@ -32,7 +32,7 @@ return array(
     'DB_TYPE'                    =>    'mysql',     // 数据库类型
     'DB_PORT'                  =>    '3306',        // 端口
     'DB_PREFIX'               =>    '',    // 数据库表前缀
-   
+
     //模板渲染转义
     'TMPL_PARSE_STRING' => array(
         '__PUBLIC__'     =>   '/Public',
