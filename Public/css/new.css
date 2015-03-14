@@ -11,17 +11,19 @@ html {
 body{
       background-color: transparent;
 }
+.carousel-control{
+	top: 45%;
+	font-size: 100px;
+	.left-bar{
+      	        left: 0;
+      		right: auto;
+		}
+	.right-bar{
+      		right: 0;
+      		left: auto;
+		}
+}
 
-.carousel-control.left-bar{
-      left: 0;
-      right: auto;
-      top: 45%;
-}
-.carousel-control.right-bar{
-      right: 0;
-      left: auto;
-      top: 45%;
-}
 
 .thumbnail {
     border: 1px hidden !important;
@@ -133,6 +135,9 @@ li.logo-list
    #login {
        margin-left: 40%;
   }
+   .carousel-control{
+      font-size: 25px;
+}
 }
 @media(max-width: 568px) {
 /*    .container {
@@ -145,6 +150,7 @@ li.logo-list
       width: 92%;
       margin-left: 5%;
  }
+  
 }
 @media(max-width: 468px) {
     #login {
