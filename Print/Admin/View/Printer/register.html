@@ -12,10 +12,18 @@
             <div class="fieldContainer">
                 <div class="formRow">
                     <div class="label">
+                        <label for="name">打印店名称:</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="name" id="name" required>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <div class="label">
                         <label for="name">账号:</label>
                     </div>
                     <div class="field">
-                        <input type="text" name="account" id="name" required>
+                        <input type="text" name="account" id="account" required>
                     </div>
                 </div>
                 <div class="formRow">
@@ -31,23 +39,15 @@
                         <label for="password">确认密码:</label>
                     </div>
                     <div class="field">
-                        <input type="password" name="password_repeat" id="password" required>
+                        <input type="password" id="password_repeat" required>
                     </div>
                 </div>
                 <div class="formRow">
                     <div class="label">
-                        <label for="name">打印店名称:</label>
+                        <label for="name">简明地址:</label>
                     </div>
                     <div class="field">
-                        <input type="text" name="name" id="name" required>
-                    </div>
-                </div>
-                <div class="formRow">
-                    <div class="label">
-                        <label for="name">地址:</label>
-                    </div>
-                    <div class="field">
-                        <input type="text" name="address" id="name">
+                        <input type="text" placeholder="最多10个字符" name="address" id="address" maxlength="10">
                     </div>
                 </div>
                 <div class="formRow">
@@ -55,7 +55,7 @@
                         <label for="name">手机号:</label>
                     </div>
                     <div class="field">
-                        <input type="text" name="phone" id="name" required>
+                        <input type="text" pattern="1[3458]\d{9}" name="phone" id="phone" required>
                     </div>
                 </div>
                 <div class="formRow">
@@ -71,15 +71,15 @@
                 </div>
             </div>
             <div class="signupButton">
-                <input type="submit" name="submit" id="submit" value="确认注册">
-                <input type="button" name="submit" id="submit" value="返回" onclick ="location.href='index'"/>
+                <input type="submit" value="确认注册">
+                <input type="button" value="返回" onclick ="location.href='index'"/>
             </div>
         </form>
     </div>
 </body>
 <script>
 function checkform(f){
-    if(f.password.value!=f.password_repeat.value)
+    if(f['password'].value!=f.password_repeat.value)
     {
         f.password.focus=true;
         alert('两次密码不一致！');
