@@ -12,6 +12,10 @@ body{
       background-color: transparent;
 }
 
+a.carousel-control.right-bar {
+    right: 0;!important
+    left: auto; !important
+}
 .thumbnail {
     border: 1px hidden !important;
     background-color: transparent;
