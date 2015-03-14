@@ -18,7 +18,29 @@
 
 
 <div class="row">
-<div class="col-sm-8">   
+<div class="col-sm-8">
+    <section>
+        <h4><strong>重置密码</strong><i class='btn glyphicon glyphicon-pencil' id="changePwdCtrl"></i></h4>
+        <form  id="changePwd" style="display:none;" role="form" method="post" action="__URL__/changePwd">
+                <div class="input-group">
+                    <label class="input-group-addon" for="deprecated_password">当前密码</label>
+                    <input required="required" class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password">
+                </div>
+                 <div class="input-group">
+                    <label class="input-group-addon" for="password">新的密码</label>
+                    <input class="form-control" placeholder='要设置的密码' name="password" type="password" id="password">
+                </div> 
+                <div class="input-group">
+                    <label class="input-group-addon" for="re_password">确认密码</label>
+                    <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
+                </div>
+                <br/>
+                 <div class="input-group text-center">
+                <button type="submit" class="btn btn-success" id="changePwdButton">确定</button>
+                <span class='cancel btn btn-warning'>取消</span>
+                </div>
+        </form>
+    </section>
     <section>
         <h4><strong>信息修改</strong></h4>
         
@@ -74,28 +96,7 @@
     
 
 
-    <section>
-        <h4><strong>重置密码</strong><i class='btn glyphicon glyphicon-pencil' id="changePwdCtrl"></i></h4>
-        <form  id="changePwd" style="display:none;" role="form" method="post" action="__URL__/changePwd">
-                <div class="input-group">
-                    <label class="input-group-addon" for="deprecated_password">当前密码</label>
-                    <input required="required" class="form-control" placeholder='正在使用的密码' name="deprecated_password" type="password" id="deprecated_password">
-                </div>
-                 <div class="input-group">
-                    <label class="input-group-addon" for="password">新的密码</label>
-                    <input class="form-control" placeholder='要设置的密码' name="password" type="password" id="password">
-                </div> 
-                <div class="input-group">
-                    <label class="input-group-addon" for="re_password">确认密码</label>
-                    <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
-                </div>
-                <br/>
-                 <div class="input-group text-center">
-                <button type="submit" class="btn btn-success" id="changePwdButton">确定</button>
-                <span class='cancel btn btn-warning'>取消</span>
-                </div>
-        </form>
-    </section>
+
     
 </div>
     
