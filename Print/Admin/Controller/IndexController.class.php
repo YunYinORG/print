@@ -69,12 +69,16 @@ class IndexController extends Controller {
             $this->redirect('index');
         }
 
+        if(I('post.password') != I('post.password_repeat')){
+            $this->error('两次输入的密码不一致！');
+        }
+
         $Printer = D('Printer');
         
         $data['account']  = I('post.account');
         $data['password'] = encode(md5(I('post.password')), I('post.account'));
         $data['name']     = I('post.name');
-        $data['sch_id']   = 1;
+        $data['sch_id']   = I('post.sch_id');
         $data['address']  = I('post.address');
         $data['phone']    = I('post.phone');
         $data['qq']       = I('post.qq');
