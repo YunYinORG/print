@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>云印-打印店管理</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css">
+</head>
+<body>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>打印店名</th>    
+                <th>打印店账号</th>
+                <th>打印店地址</th>
+                <th>打印店手机号</th>                
+                <th>打印店学校</th>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="data" id="vo">
+                <tr>
+                    <td>[{$vo['id']}]{$vo['name']}</td>
+                    <td>{$vo['account']}</td>
+                    <td>{$vo['address']}</td>
+                    <td>{$vo['phone']}</td>
+                    <td>
+                        <switch name="vo['sch_id']">
+                            <case value="1">南开大学</case>
+                            <case value="2">天津大学</case>
+                            <default />未定
+                        </switch>
+                    </td>
+                </tr>
+            </volist>
+        </tbody>
+    </table>
+</body>
+</html>
