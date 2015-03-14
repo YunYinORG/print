@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/3/2 21:05:30                            */
+/* Created on:     2015/3/14 12:46:47                           */
 /*==============================================================*/
 
 
@@ -141,10 +141,7 @@ create table printer
    open_time            char(32),
    status               tinyint default 1,
    rank                 int default 0,
-   price_color          int,
-   price_no_color       int,
-   price_single         int,
-   price_double         int,
+   price                varchar(256),
    price_more           text,
    primary key (id),
    unique key AK_account_unique (account)
