@@ -12,15 +12,17 @@ body{
       background-color: transparent;
 }
 
-.carousel-control.right-bar {
-    right: 0;
-    left: auto; 
+.carousel-control.left-bar{
+      left: 0;
+      right: auto;
+      top: 45%;
+}
+.carousel-control.right-bar{
+      right: 0;
+      left: auto;
+      top: 45%;
 }
 
-.carousel-control
-{
-   top:50%; !important
-}
 .thumbnail {
     border: 1px hidden !important;
     background-color: transparent;
