@@ -63,6 +63,7 @@
         <div class="col-lg-4">
             <div class="form-group">
                 <select class="form-control" name="pri_id" onchange="priceChange(this)">
+                    <option value="">选择打印店</option>
                     <volist name="data" id="vo">
                       <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
                     </volist>
@@ -94,7 +95,7 @@
         </fieldset>      
     <else />
     <div>
-        <a href="/User"><p>请先绑定手机</p></a>
+        <a href="/User" style="text-decoration:none"><p>绑定手机后可进行高级设置提前打印</p></a>
     </div>
     </if>
     </div>
