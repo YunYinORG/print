@@ -63,15 +63,13 @@ class FileController extends Controller
         $uid = use_id(U('Index/index'));
         if ($uid) 
         {
-            $Printer = D('Printer');
-            $User = D('User');
-            $sch_id = $User->where('id='.$uid)->getField('sch_id');
-            $bindPhone = $User->where('id='.$uid)->getField('phone');
-            //Still to improve!!
-            $sort = $sch_id == 2 ? "desc" : "asc";
-            $this->lock = $bindPhone ? 1 : 0;
-            $this->data = $Printer->select();
-        //    var_dump($this->data);  
+            $Printer = M('Printer');
+            $User = M('User');
+            $user = $User->Field('sch_id,phone')->getById($uid);
+            $this->lock = $user['phone'] ? 1 : 0;
+            $condition['sch_id'] = $user['sch_id'];
+            $condition['status'] = 1;
+            $this->data = $Printer->where($condition)->order('rank desc')->Field('name,open_time,address')->cache(true)->select();
             $this->display();
         } 
         else
