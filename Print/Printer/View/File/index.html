@@ -32,7 +32,7 @@
                 <td><a target='_blank' class="set download" href="__URL__/download/?fid={$vo.id}">[{$vo.id}]{$vo.name}</a></td>                
                
          <if condition="$vo.copies eq 0">
-             <td>现打</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>    
+             <td>现打</td><td>-</td><td>-</td><td>-</td>    
       <else/>
             <td> {$vo.copies}</td><td>
                 <if condition="$vo.double_side gt 0">
@@ -55,16 +55,15 @@
                 </td>
             </if>
                 <td>
-                    <notempty name="$vo.phone">
-                        <a tabindex="0" role="button" id="{$vo.id}_button" student_number='{$vo.student_number}' class="bind btn btn-success" data-toggle="popover" data-trigger="focus" data-content="Loading...">[BindPhone]</a>
+                    <notempty name="vo['phone']">
+                    <a tabindex="0" role="button" id="{$vo['id']}_button" uid="{$vo['use_id']}" class="bind glyphicon glyphicon-phone" data-toggle="popover" data-trigger="focus" data-content="Loading..."></a>
                     </notempty>
                     {$vo.use_name}[{$vo.student_number}]
-
                 </td>
                 
                 <td>{$vo.time}</td>               
                 
-                <td id="{$vo.id}_status" data='{$vo.status}' copies='{$vo.copies}'>
+                <td id="{$vo['id']}_status" data="{$vo['status']}" copies="{$vo['copies']}">
                     <switch name="vo['status']">
                     <case value="1">尚未下载</case>
                     <case value="2">已下载</case>
@@ -103,9 +102,9 @@ $("table").on('click', '.set', function() {
     var fid = btn.attr('fid');
     var status = $('#' + fid + '_status');
     var copies = status.attr('copies');
-    var set_s = status.attr('data') +1 ;
+    var set_s = 1 + parseInt(status.attr('data'));
     if (set_s == 3) {
-        set_s = set_s + 1;
+        set_s = 1 + set_s;
     }
     if (copies ==0 && set_s==2)
     {
@@ -132,21 +131,24 @@ $("table").on('click', '.set', function() {
     });
 });
 
-
-$("table").on('click', '.bind', function() {
+phoneIsLoad = 0;
+$("table").on('click', '.bind', function(e) {
     var URL = "/Printer/File/bind";
     var btn = $(this);
-    var student_number = btn.attr('student_number');
-    
-    $.post(URL, {
-        student_number: student_number
-    }, function(data) {
-        if (data.status) {
-            btn.attr('data-content',data.info);
-        } else {
-            btn.attr('data-content',data.info);
-        }
-    });
+    var uid = btn.attr('uid');
+    if(phoneIsLoad == 0)
+    {
+        $('[data-toggle="popover"]').popover();
+        $.get(URL, {
+            uid : uid 
+        }, function(data) {
+            if (data.status) {
+                btn.attr('data-content',data.info);
+                btn.popover('show');
+            }
+        });
+        phoneIsLoad = 1;
+    }
 });
 
 isRefreshing = false;
@@ -172,9 +174,6 @@ function refresh() {
 }
 $(document).ready(function() {
     setInterval(refresh, 15000);
-    $(function (){
-        $('[data-toggle="popover"]').popover();
-    });
 });
 </script>
 </block>

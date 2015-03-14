@@ -35,11 +35,12 @@
             </div>
         </div>
         
-    <if condition="$lock eq 1">    
+
         <div class="row">
             <div class="col-lg-4">
                 <ul id="upload-list" class="list-group" style="margin-bottom:0px;margin-top:10px"></ul>
             </div>
+            <if condition="$lock eq 1">    
             <div class="col-lg-3">
                 <fieldset id='setting1'>
                     <div style="display:none;margin-top:10px;margin-bottom:0px" id="pptprint">
@@ -53,17 +54,17 @@
                     </div>
                 </fieldset>
             </div>
+            <else />
+            </if>
         </div>
         <br/>
-    <else />
-    </if>
     
     <div class="row">
         <div class="col-lg-4">
             <div class="form-group">
                 <select class="form-control" name="pri_id" onchange="priceChange(this)">
                     <volist name="data" id="vo">
-                      <option value="{$vo.id}">{$vo.name}[{$vo.open_time}]({$vo.address})</option>
+                      <option value="{$vo['id']}">{$vo.name}[{$vo.open_time}]({$vo.address})</option>
                     </volist>
                 </select>
             </div>
@@ -87,6 +88,9 @@
             </div>
         </fieldset>      
     <else />
+    <div>
+        <a href="/User"><p>请先绑定手机</p></a>
+    </div>
     </if>
     </div>
     

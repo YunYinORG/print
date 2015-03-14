@@ -105,7 +105,7 @@ class PrinterController extends Controller
              $data['price_single'] = I('price_single');
              $data['price_double'] = I('price_double');
              $data['price_more'] = I('price_more');
-            $Printer      = M('Printer');
+            $Printer      = D('Printer');
             $result       = $Printer->where('id='.$id)->save($data);
             if ($result) 
             {
