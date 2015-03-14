@@ -64,9 +64,14 @@ class PrinterController extends Controller
         $id           = pri_id(U('Index/index'));
         $old_password = I('deprecated_password');
         $password     = I('password');
-
+        $isMD5 = I('isMD5');
         if ($id && $old_password && $password) 
         {
+            if(!isMD5)
+            {
+                $old_password = md5($old_password);
+                $password = md5($password);
+            }
             $Printer      = M('Printer');
             $pri          = $Printer->field('account,password')->cache(true)->getById($id);
             if ($pri['password'] == encode($old_password, $pri['account'])) 
@@ -136,48 +141,7 @@ class PrinterController extends Controller
         cookie(null);
         $this->redirect('Printer/Index/index');
     }
-    
-    /**
-     *注册
-     */
-    public function signup() 
-    {
-        if (pri_id()) 
-        {
-            $this->redirect('index');
-        } else
-        {
-            $this->display();
-        }
-    }
-    
-    public function add() 
-    {
-        $Printer = D('Printer');
-        
-        $data['account']         = I('post.account');
-        $data['password']         = encode(md5(I('post.password')), I('post.account'));
-        $data['name']         = I('post.name');
-        $data['sch_id']         =1;
-        $data['address']         = I('post.address');
-        $data['phone']         = I('post.phone');
-        $data['qq']         = I('post.qq');
-        
-        if ($Printer->create($data)) 
-        {
-            $result  = $Printer->cache(true)->add();
-            if ($result) 
-            {
-                $this->redirect('logout', '', 1, '注册完成请登录');
-            } else
-            {
-                $this->error('数据插入失败' . $Printer->getError());
-            }
-        } else
-        {
-            $this->error('数据创建失败:' . $Printer->getError());
-        }
-    }
+
     
     public function auth() 
     {

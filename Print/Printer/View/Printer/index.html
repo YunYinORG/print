@@ -82,7 +82,7 @@
     <section>
         <h4><strong>信息修改</strong><i class='btn glyphicon glyphicon-pencil'></i></h4>
         
-        <form  id="changeInfo" style="display:none;" role="form" method="post" action="">
+        <form  id="changeInfo" style="display:none;" role="form" method="post" action="/Printer/Printer/changeInfo">
             <div class="input-group">
                 <label class="input-group-addon"  for="qq">QQ</label>
                 <input id="qq" class="form-control" value="{$data['qq']}" name="qq" type="text">
@@ -186,19 +186,19 @@ $('.cancel').click(function() {
 });
 
 
-$("#changePwd").on('submit',function(event) {
-    event.preventDefault();
+$("#changePwd").bind('submit',function() {
     
-    var URL = "/Printer/Printer/changePwd";
-
+    var URL = "/Printer/Printer/changePwd"; 
     var deprecated_password = $('#deprecated_password').val();
     var password = $('#password').val();
     var re_password = $('#re_password').val();
+    
     if(re_password == password && re_password && password)
     {
         $.post(URL, {
             deprecated_password : md5(deprecated_password),
-            password: md5(password)
+            password: md5(password),
+            isMD5 : 1
         }, function(data) {
             if (data.status) {
                 alert(data.info);
@@ -217,6 +217,7 @@ $("#changePwd").on('submit',function(event) {
     $('#deprecated_password').val('');
     $('#password').val('');
     $('#re_password').val('');
+    return false;
 });
 
 
