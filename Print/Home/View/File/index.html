@@ -16,7 +16,11 @@
             <th>文件状态</th>
                 <th>文件名</th>    
                 <th>上传时间</th>
-                <th>所选打印店</th>                
+                <th>所选打印店</th>
+                <th>份数</th>
+                <th>单双</th>
+                <th>彩印</th>
+                <th>PPT格式</th>                
                 <th>操作</th>
             </tr>
         </thead>
@@ -38,6 +42,30 @@
                 <td>[{$vo.id}]{$vo.name}</td>
                 <td>{$vo.time}</td>
                 <td>{$vo.pri_name}[{$vo.pri_id}]</td>
+                <if condition="$vo.copies eq 0">
+             <td>现打</td><td>-</td><td>-</td><td>-</td>    
+      <else/>
+            <td> {$vo.copies}</td><td>
+                <if condition="$vo.double_side gt 0">
+                双面
+                <else/>
+                单面
+                </if>
+                </td>
+                <td>
+                <if condition="$vo.color gt 0"> 彩印<else/>黑白</if>
+                </td>
+                <td>
+                    <switch name="vo['ppt_layout']">
+                    <case value="1">1X1</case>
+                    <case value="2">1X2</case>
+                    <case value="3">2X2</case>
+                    <case value="4">2X3</case>
+                    <default />-
+                    </switch>
+                </td>
+            </if>
+       
                 <td>
                 <if condition="($vo.status gt 1)AND($vo.status lt 5)">
                     <button type="button" fid="{$vo.id}"class="btn btn-danger" disabled="disabled">删除</button>
