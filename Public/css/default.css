@@ -116,26 +116,7 @@ nav li:hover a, nav li.active a, nav li.active span {
     text-align: left;
 }
 
-#copyright {
-    overflow: hidden;
-    padding: 5em 0em;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
 
-#copyright span {
-    display: block;
-    letter-spacing: 0.20em;
-    line-height: 2.5em;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 0.80em;
-    color: rgba(0, 0, 0, 0.7);
-}
-
-#copyright a {
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.9);
-}
 
 @media screen and (max-width: 500px){
   #main {
@@ -277,3 +258,23 @@ nav li:hover a, nav li.active a, nav li.active span {
     top: -1.5em;
   }
 }
+/*footer*/
+footer{
+  overflow: hidden;
+  padding: 2em 0em;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+footer ul{
+  text-align: center;
+}
+footer li{
+  display: inline;
+}
+footer li:before {
+    margin-right: 0.5em;
+    color: rgba(0, 0, 0, 0.09);
+    content: '|';
+ }
+footer li:first-child:before {
+    content: ' ';
+ }
