@@ -122,9 +122,6 @@ nav li:hover a, nav li.active a, nav li.active span {
   #main {
     text-align: center;
   }
-  #uploader {
-    display: none;
-  }
   .text-center {
     display: block;
     margin: auto;
@@ -132,9 +129,6 @@ nav li:hover a, nav li.active a, nav li.active span {
 }
 
 @media screen and (min-width: 500px){
-  #file {
-    display: none;
-  }
 }
 
 @media screen and (max-width: 1275px) {
@@ -143,11 +137,6 @@ nav li:hover a, nav li.active a, nav li.active span {
       top: 0px;
       width: 100%;
       padding-top: 80px;
-    }
-   .version {
-       left: 1.5em;
-       top: 1em;
-       font-size: smaller;
     }
     #mylogo {
        width: 80px;
@@ -165,11 +154,14 @@ nav li:hover a, nav li.active a, nav li.active span {
     width: 23%;
     padding: 2em 1% 0 1%;
   }
-  #uploader {
-    width: 70%;
-  }
   .alert{
     width: 70%;
+  }
+  .printerlist {
+    position: relative;
+    float: left;
+    width: 23%;
+    padding: 2em 1% 0 1%;
   }
   nav {
       text-align: center !important;
@@ -208,6 +200,9 @@ nav li:hover a, nav li.active a, nav li.active span {
     padding-bottom: 1em;
     line-height: 2.5em;
   }
+  .printerlist .navbar-nav > li > a{
+    line-height: 0em;
+  }
   a.navbar-brand {
     position: relative;
     float: none;
@@ -222,11 +217,6 @@ nav li:hover a, nav li.active a, nav li.active span {
     display: inline;
     width: 100%;
     position: relative;
-  }
-  .version {
-      right: 20%;
-      top: -3.5em;
-      z-index: 2;
   }
   #mylogo {
       width: 55%;
@@ -244,18 +234,11 @@ nav li:hover a, nav li.active a, nav li.active span {
   #mylogo {
     width: 40%;
   }
-  .version {
-    font-size: 2em;
-    top: -2.5em;
-  }
 }
 
 @media screen and (min-width: 2500px){
   #mylogo{
     width: 35%;
-  }
-  .version{
-    top: -1.5em;
   }
 }
 /*footer*/
