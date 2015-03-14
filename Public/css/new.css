@@ -14,7 +14,7 @@ body{
 .carousel-control{
 	top: 45%;
 	font-size: 100px;
-	.left-bar{
+/*	.left-bar{
       	        left: 0;
       		right: auto;
 		}
@@ -22,9 +22,17 @@ body{
       		right: 0;
       		left: auto;
 		}
+*/
+}
+a.carousel-control.left-bar{
+		left: 0;
+      		right: auto;
 }
 
-
+a.carousel-control.right-bar{
+		right: 0;
+      		left: auto;
+}
 .thumbnail {
     border: 1px hidden !important;
     background-color: transparent;
