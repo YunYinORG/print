@@ -1,30 +1,20 @@
 <volist name="data" id="vo">
-<tr file_id="{$vo.id}">
-    <if condition="$vo.status eq 1">
-    <td><a target='_blank' class="set" fid='{$vo.id}' href="__UPLOAD__/{$vo.url}">{$vo.name}</a></td>
-    <else />
-    <td><a target='_blank' href="__UPLOAD__/{$vo.url}">[{$vo.id}]{$vo.name}</a></td>
-    </if>
-    <td>
-        <if condition="$vo.copies gt 0">
-        {$vo.copies}
-        <else/>
-        现打
-        </if>
-    </td>
-    <td>
-        <if condition="$vo.double_side gt 0">
-        双面
-        <else/>
-        单面
-        </if>
-    </td>
-                <td>
-                <if condition="$vo.color gt 0">
-                彩印
+            <tr file_id="{$vo.id}">
+                
+                <td><a target='_blank' class="set download" href="__URL__/download/?fid={$vo.id}">[{$vo.id}]{$vo.name}</a></td>                
+               
+         <if condition="$vo.copies eq 0">
+             <td>现打</td><td>-</td><td>-</td><td>-</td>    
+      <else/>
+            <td> {$vo.copies}</td><td>
+                <if condition="$vo.double_side gt 0">
+                双面
                 <else/>
-                黑白
+                单面
                 </if>
+                </td>
+                <td>
+                <if condition="$vo.color gt 0"> 彩印<else/>黑白</if>
                 </td>
                 <td>
                     <switch name="vo['ppt_layout']">
@@ -32,29 +22,39 @@
                     <case value="2">1X2</case>
                     <case value="3">2X2</case>
                     <case value="4">2X3</case>
-                    <default />不是ppt
+                    <default />-
                     </switch>
                 </td>
-    <td>{$vo.use_name}[{$vo.student_number}]</td>
-    <td>{$vo.time}</td>
-    <td id="{$vo.id}_status" data='{$vo.status}'>
-        <switch name="vo['status']">
-        <case value="1">尚未下载</case>
-        <case value="2">已下载</case>
-        <case value="3">正在打印</case>
-        <case value="4">已印待付款</case>
-        <case value="5">已付款</case>
-        <default />未知状态
-        </switch>
-    </td>
-    <td>
-        <switch name="vo['status']">
-        <case value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></case>
-        <case value="2" break="0"></case>
-        <case value="3"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button></case>
-        <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button></case>
-        <default />不可操作
-        </switch>
-    </td>
-</tr>
-</volist>
+            </if>
+                <td>
+                    <notempty name="vo['phone']">
+                    <a tabindex="0" role="button" id="{$vo['id']}_button" uid="{$vo['use_id']}" class="bind glyphicon glyphicon-phone" data-toggle="popover" data-trigger="focus" data-content="Loading..."></a>
+                    </notempty>
+                    {$vo.use_name}[{$vo.student_number}]
+                </td>
+                
+                <td>{$vo.time}</td>               
+                
+                <td id="{$vo['id']}_status" data="{$vo['status']}" copies="{$vo['copies']}">
+                    <switch name="vo['status']">
+                    <case value="1">尚未下载</case>
+                    <case value="2">已下载</case>
+                    <case value="3">正在打印</case>
+                    <case value="4">已印待付款</case>
+                    <case value="5">已付款</case>
+                    <default />未知状态
+                    </switch>
+                </td>
+                
+                
+                <td>                    
+                    <switch name="vo['status']">
+                    <case value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></case>
+                    <case value="2" break="0"></case>
+                    <case value="3"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button></case>
+                    <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button></case>
+                    <default />不可操作
+                    </switch>                   
+                </td>    
+            </tr>
+            </volist>

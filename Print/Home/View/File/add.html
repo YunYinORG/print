@@ -157,7 +157,10 @@ function priceChange(n){
                 $('#p_s').html(data.info.p_s);
                 $('#p_d').html(data.info.p_d);
             } else {
-                alert(data.info);
+                $('#p_c_s').html("未设置");
+                $('#p_c_d').html("未设置");
+                $('#p_s').html("未设置");
+                $('#p_d').html("未设置");
             }
         });
 }
