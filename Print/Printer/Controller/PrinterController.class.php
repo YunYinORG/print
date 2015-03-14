@@ -43,8 +43,9 @@ class PrinterController extends Controller
         if ($id) 
         {
             
-            $data       = M('Printer')->cache(true)->getById($id);
+            $data       = M('Printer')->getById($id);
             $this->data = $data;
+            $this->price = json_decode($data['price'],true); 
             $this->display();
         } else
         {
@@ -100,19 +101,25 @@ class PrinterController extends Controller
              $data['address'] = I('address');
              $data['profile'] = I('profile');
              $data['open_time'] = I('open_time');
-             $data['price_color'] = I('price_color');
-             $data['price_no_color'] = I('price_no_color');
-             $data['price_single'] = I('price_single');
-             $data['price_double'] = I('price_double');
-             $data['price_more'] = I('price_more');
+             
+             
+             $price['p_c_s'] = I('p_c_s',0,'float');//color single
+             $price['p_c_d'] = I('p_c_d',0,'float');//color double
+             $price['p_s'] = I('p_s',0,'float');//no color single
+             $price['p_d'] = I('p_d',0,'float');//no color double
+             
+             
+             $data['price'] = json_encode($price);
+             $data['price_more'] = I('price_more');//price more
+            
             $Printer      = D('Printer');
             $result       = $Printer->where('id='.$id)->save($data);
             if ($result) 
             {
-                $this->success('Successfully change your info!');
+                $this->success('改好了');
             } else
             {
-                $this->error('错误');
+                $this->error('出错了');
             }
         } else
         {

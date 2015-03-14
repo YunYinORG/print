@@ -69,7 +69,7 @@ class FileController extends Controller
             $this->lock = $user['phone'] ? 1 : 0;
             $condition['sch_id'] = $user['sch_id'];
             $condition['status'] = 1;
-            $this->data = $Printer->where($condition)->order('rank desc')->Field('id,name,open_time,address')->select();
+            $this->data = $Printer->where($condition)->order('rank desc')->Field('id,name,address')->select();
             $this->display();
         } 
         else
@@ -77,6 +77,8 @@ class FileController extends Controller
             $this->redirect('/Index/index');
         }
     }
+    
+
     
     /**
     *单文件上传
