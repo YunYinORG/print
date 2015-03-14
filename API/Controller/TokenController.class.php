@@ -75,7 +75,7 @@ class TokenController extends RestController
 				} else
 				{
 					S($key, $times + 1, 3600);
-					$info     = $Model->field('id,password,name')->find();
+					$info     = $Model->where($where)->field('id,password,name')->find();
 					$id       = $info['id'];
 					$password = $info['password'];
 					if ($password == encode($pwd, $account)) 
