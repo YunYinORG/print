@@ -158,10 +158,8 @@ class FileController extends Controller
         $pid    = pri_id(U('Index/index'));
         if($pid)
         {
-            $student_number = I('student_number');
-            $User = M('User');
-            $uid = $User->where('student_number='.$student_number)->getField('id');
-            $phone = get_phone_by_id($id);
+            $uid = I('uid');
+            $phone = get_phone_by_id($uid);
             if($phone)
             {
                 $this->success($phone);

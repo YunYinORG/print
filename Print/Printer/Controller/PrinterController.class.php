@@ -43,8 +43,9 @@ class PrinterController extends Controller
         if ($id) 
         {
             
-            $data       = M('Printer')->cache(true)->getById($id);
+            $data       = M('Printer')->getById($id);
             $this->data = $data;
+            $this->price = json_decode($data['price'],true); 
             $this->display();
         } else
         {
@@ -63,9 +64,14 @@ class PrinterController extends Controller
         $id           = pri_id(U('Index/index'));
         $old_password = I('deprecated_password');
         $password     = I('password');
-
+        $isMD5 = I('isMD5');
         if ($id && $old_password && $password) 
         {
+            if(!isMD5)
+            {
+                $old_password = md5($old_password);
+                $password = md5($password);
+            }
             $Printer      = M('Printer');
             $pri          = $Printer->field('account,password')->cache(true)->getById($id);
             if ($pri['password'] == encode($old_password, $pri['account'])) 
@@ -100,19 +106,25 @@ class PrinterController extends Controller
              $data['address'] = I('address');
              $data['profile'] = I('profile');
              $data['open_time'] = I('open_time');
-             $data['price_color'] = I('price_color');
-             $data['price_no_color'] = I('price_no_color');
-             $data['price_single'] = I('price_single');
-             $data['price_double'] = I('price_double');
-             $data['price_more'] = I('price_more');
-            $Printer      = M('Printer');
+             
+             
+             $price['p_c_s'] = I('p_c_s',0,'float');//color single
+             $price['p_c_d'] = I('p_c_d',0,'float');//color double
+             $price['p_s'] = I('p_s',0,'float');//no color single
+             $price['p_d'] = I('p_d',0,'float');//no color double
+             
+             
+             $data['price'] = json_encode($price);
+             $data['price_more'] = I('price_more');//price more
+            
+            $Printer      = D('Printer');
             $result       = $Printer->where('id='.$id)->save($data);
             if ($result) 
             {
-                $this->success('Successfully change your info!');
+                $this->success('改好了');
             } else
             {
-                $this->error('错误');
+                $this->error('出错了');
             }
         } else
         {
@@ -129,48 +141,7 @@ class PrinterController extends Controller
         cookie(null);
         $this->redirect('Printer/Index/index');
     }
-    
-    /**
-     *注册
-     */
-    public function signup() 
-    {
-        if (pri_id()) 
-        {
-            $this->redirect('index');
-        } else
-        {
-            $this->display();
-        }
-    }
-    
-    public function add() 
-    {
-        $Printer = D('Printer');
-        
-        $data['account']         = I('post.account');
-        $data['password']         = encode(md5(I('post.password')), I('post.account'));
-        $data['name']         = I('post.name');
-        $data['sch_id']         =1;
-        $data['address']         = I('post.address');
-        $data['phone']         = I('post.phone');
-        $data['qq']         = I('post.qq');
-        
-        if ($Printer->create($data)) 
-        {
-            $result  = $Printer->cache(true)->add();
-            if ($result) 
-            {
-                $this->redirect('logout', '', 1, '注册完成请登录');
-            } else
-            {
-                $this->error('数据插入失败' . $Printer->getError());
-            }
-        } else
-        {
-            $this->error('数据创建失败:' . $Printer->getError());
-        }
-    }
+
     
     public function auth() 
     {

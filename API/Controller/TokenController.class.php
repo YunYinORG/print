@@ -46,14 +46,14 @@ class TokenController extends RestController
 		{
 		case C('STUDENT'):
 		case C('STUDENT_API'):
-			$account     = I('post.account', 0, '/^(\d{7}|\d{10})$/');
+			$account     = I('post.account', 0, C('REGEX_NUMBER'));
 			$Model       = M('user');
 			$where['student_number']             = $account;
 			break;
 
 		case C('PRINTER'):
 		case C('PRINTER_WEB'):
-			$account = I('post.account', null, '/^\w{3,16}$/');
+			$account = I('post.account', null, C('REGEX_ACCOUNT'));
 			$Model   = M('printer');
 			$where['account']         = $account;
 			break;
@@ -114,7 +114,7 @@ class TokenController extends RestController
 	 */
 	public function token() 
 	{
-		$token = I('token', null, '/^\w{32,63}$/');
+		$token = I('token', null,C('REGEX_TOKEN'));
 		switch ($this->_method) 
 		{
 		case 'delete':

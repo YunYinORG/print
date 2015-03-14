@@ -2,20 +2,28 @@
 <html lang="zh-cmn-Hans">
 <head>
     <meta charset="UTF-8">
-    <title>云印南开-打印店注册</title>
+    <title>云印-打印店注册</title>
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css">
 </head>
 <body>
     <div id="carbonForm" style="margin-top: 107.5px; font-size: 20px;">
         <h1>打印店注册</h1>
-        <form action="__URL__/addPrinter" method="post" id="signupForm">
+        <form action="__URL__/addPrinter" onsubmit="return checkform(this);" method="post" id="signupForm">
             <div class="fieldContainer">
+                <div class="formRow">
+                    <div class="label">
+                        <label for="name">打印店名称:</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" name="name" id="name" required>
+                    </div>
+                </div>
                 <div class="formRow">
                     <div class="label">
                         <label for="name">账号:</label>
                     </div>
                     <div class="field">
-                        <input type="text" name="account" id="name" required>
+                        <input type="text" name="account" id="account" required>
                     </div>
                 </div>
                 <div class="formRow">
@@ -28,18 +36,18 @@
                 </div>
                 <div class="formRow">
                     <div class="label">
-                        <label for="name">打印店名称:</label>
+                        <label for="password">确认密码:</label>
                     </div>
                     <div class="field">
-                        <input type="text" name="name" id="name" required>
+                        <input type="password" id="password_repeat" required>
                     </div>
                 </div>
                 <div class="formRow">
                     <div class="label">
-                        <label for="name">地址:</label>
+                        <label for="name">简明地址:</label>
                     </div>
                     <div class="field">
-                        <input type="text" name="address" id="name">
+                        <input type="text" placeholder="最多10个字符" name="address" id="address" maxlength="10">
                     </div>
                 </div>
                 <div class="formRow">
@@ -47,22 +55,39 @@
                         <label for="name">手机号:</label>
                     </div>
                     <div class="field">
-                        <input type="text" name="phone" id="name" required>
+                        <input type="text" pattern="1[3458]\d{9}" name="phone" id="phone" required>
                     </div>
                 </div>
                 <div class="formRow">
                     <div class="label">
-                        <label for="name">QQ号:</label>
+                        <label for="name">所在学校:</label>
                     </div>
-                    <div class="field">
-                        <input type="text" name="qq" id="name">
+                    <div class="form-group">
+                        <select class="form-control" name="sch_id">
+                            <option value="1">南开大学</option>
+                            <option value="2">天津大学</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="signupButton">
-                <input type="submit" name="submit" id="submit" value="确认注册">
-                <input type="button" name="submit" id="submit" value="返回" onclick ="location.href='index'"/>
+                <input type="submit" value="确认注册">
+                <input type="button" value="返回" onclick ="location.href='index'"/>
             </div>
         </form>
     </div>
 </body>
+<script>
+function checkform(f){
+    if(f['password'].value!=f.password_repeat.value)
+    {
+        f.password.focus=true;
+        alert('两次密码不一致！');
+        return false;
+    }else{
+        //此处应该md5(password)
+        return true;
+    }
+}
+</script>
+</html>

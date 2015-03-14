@@ -18,115 +18,7 @@
 
 
 <div class="row">
-
-<p class="alert alert-warning">请务必提供真实、全面的信息，该页面所填内容将会作为同学们的参考。打印店名称、所在学校不可修改，如有错误请及时联系我们。</p>
-    <div class="col-sm-4">
-        
-    <table class="table">
-<tr>
-    <th style="width:45%">名称</th>
-    <td align="right">{$data['name']}</td>
-</tr>
-<tr>
-    <th>所在学校</th>
-    <td class="School" align="right"></td>
-</tr>
-<tr>
-    <th>手机</th>
-    <td align="right">{$data['phone']}</td>
-</tr>
-<tr>
-    <th>QQ</th>
-    <td align="right">{$data['qq']}</td>
-</tr>
-<tr>
-    <th>地址</th>
-    <td align="right">{$data['address']}</td>
-</tr>
-<tr>
-    <th>营业时间</th>
-    <td align="right">{$data['open_time']}</td>
-</tr>
-<tr>
-    <th>单面价格（黑白）</th>
-    <td align="right">{$data['price_single']}分每张</td>
-</tr>
-<tr>
-    <th>双面价格（黑白）</th>
-    <td align="right">{$data['price_double']}分每张</td>
-</tr>
-<tr>
-    <th>彩印价格（单面）</th>
-    <td align="right">{$data['price_color']}毛每张</td>
-</tr>
-<tr>
-    <th>优惠信息</th>
-    <td align="right">{$data['price_more']}</td>
-</tr>
-<tr>
-    <th>打印店简介</th>
-    <td align="right">{$data['profile']}</td>
-</tr>
-    </table>
-
-    </div>
-
-
-
-    <div class="col-sm-5 col-sm-offset-1">
-    
-    <section>
-        <h4><strong>信息修改</strong><i class='btn glyphicon glyphicon-pencil'></i></h4>
-        
-        <form  id="changeInfo" style="display:none;" role="form" method="post" action="">
-            <div class="input-group">
-                <label class="input-group-addon"  for="qq">QQ</label>
-                <input id="qq" class="form-control" value="{$data['qq']}" name="qq" type="text" id="qq">
-            </div>          
-            <div class="input-group">
-                <label class="input-group-addon"  for="phone">手机</label>
-                <input id="phone" class="form-control" value="{$data['phone']}" name="phone" type="text" id="phone" required>
-            </div>
-            <div class="input-group">
-                <label class="input-group-addon"  for="printaddress">地址</label>
-                <input id="address" class="form-control" value="{$data['address']}" placeholder="15字以内" name="address" type="text" id="printaddress" required>
-            </div>
-            <br/>
-
-            <div class="input-group">
-                <label class="input-group-addon"  for="open_time">营业时间</label>
-                <input id="open_time" class="form-control" value="{$data['open_time']}" placeholder="如：早七点到晚九点，15字以内" name="open_time" type="text" id="open_time" required>
-            </div>
-            <div class="input-group">
-                <label class="input-group-addon"  for="price_single">单面价格（黑白）</label>
-                <input id="price_single" type="number" min="0" class="form-control" value="{$data['price_single']}" placeholder="分/张" name="price_single" id="price_single" required>
-            </div>
-            <div class="input-group">
-                <label class="input-group-addon"  for="price_double">双面价格（黑白）</label>
-                <input id="price_double" type="number" min="0" class="form-control" value="{$data['price_double']}" placeholder="分/张" name="price_double" id="price_double" required>
-            </div>
-            <div class="input-group">
-                <label class="input-group-addon" for="price_color">彩印价格（单面）</label>
-                <input id="price_color" type="number" min="0" class="form-control" value="{$data['price_color']}" placeholder="角/张" name="price_color"  id="price_color" required>
-            </div>          
-            <br/>
-            <div class="form-group">
-                <label for="price_more">优惠信息</label>
-                <textarea id="price_more" class="form-control" rows="2" placeholder="如：单面黑白打印过百份7分一张，30字以内" name="price_more" id="price_more">{$data['price_more']}</textarea>
-            </div>
-            <div class="form-group">
-                <label for="profile">打印店简介</label>
-                <textarea required="required" id="profile" class="form-control" rows="4" placeholder="打印店自我介绍，50字以内" name="profile" id="profile">{$data['profile']}</textarea>
-            </div>
-             <div class="input-group text-center">
-                <button type="submit" class="btn btn-success">确定</button>
-                <span class='cancel btn btn-warning'>取消</span>
-             </div>
-        </form>
-    </section>
-    
-
-
+<div class="col-sm-8">
     <section>
         <h4><strong>重置密码</strong><i class='btn glyphicon glyphicon-pencil' id="changePwdCtrl"></i></h4>
         <form  id="changePwd" style="display:none;" role="form" method="post" action="__URL__/changePwd">
@@ -142,14 +34,71 @@
                     <label class="input-group-addon" for="re_password">确认密码</label>
                     <input  class="form-control" placeholder='重复刚设置的密码' name="re_password" type="password" id="re_password">
                 </div>
+                <br/>
                  <div class="input-group text-center">
-                <button type="submit" class="btn btn-success">确定</button>
+                <button type="submit" class="btn btn-success" id="changePwdButton">确定</button>
                 <span class='cancel btn btn-warning'>取消</span>
                 </div>
         </form>
     </section>
+    <section>
+        <h4><strong>信息修改</strong></h4>
+        
+        <form  id="changeInfo" role="form" method="post" action="/Printer/Printer/changeInfo">
+            <div class="input-group">
+                <label class="input-group-addon"  for="qq">QQ</label>
+                <input id="qq" class="form-control" value="{$data['qq']}" name="qq" type="text">
+            </div>          
+            <div class="input-group">
+                <label class="input-group-addon"  for="phone">手机</label>
+                <input id="phone" class="form-control" value="{$data['phone']}" name="phone" type="text" required>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon"  for="printaddress">地址</label>
+                <input id="address" class="form-control" value="{$data['address']}" placeholder="15字以内" name="address" type="text" required>
+            </div>
+            <br/>
+
+            <div class="input-group">
+                <label class="input-group-addon"  for="open_time">营业时间</label>
+                <input id="open_time" class="form-control" value="{$data['open_time']}" placeholder="如：早七点到晚九点，15字以内" name="open_time" type="text" required>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon"  for="p_s">单面价格（黑白）</label>
+                <input id="p_s" type="number" min="0" class="form-control" value="{$price['p_s']}" placeholder="分/张" name="p_s" required>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon"  for="p_d">双面价格（黑白）</label>
+                <input id="p_d" type="number" min="0" class="form-control" value="{$price['p_d']}" placeholder="分/张" name="p_d" required>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon" for="p_c_s">彩印价格（单面）</label>
+                <input id="p_c_s" type="number" min="0" class="form-control" value="{$price['p_c_s']}" placeholder="角/张" name="p_c_s" required>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon" for="p_c_d">彩印价格（双面）</label>
+                <input id="p_c_d" type="number" min="0" class="form-control" value="{$price['p_c_d']}" placeholder="角/张" name="p_c_d" required>
+            </div>          
+            <br/>
+            <div class="form-group">
+                <label for="price_more">优惠信息</label>
+                <textarea id="price_more" class="form-control" rows="2" placeholder="如：单面黑白打印过百份7分一张，30字以内" name="price_more">{$data['price_more']}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="profile">打印店简介</label>
+                <textarea required="required" id="profile" class="form-control" rows="4" placeholder="打印店自我介绍，50字以内" name="profile">{$data['profile']}</textarea>
+            </div>
+             <div class="input-group text-center">
+                <button type="submit" class="btn btn-success" id="changeInfoButton">确定</button>
+             </div>
+        </form>
+    </section>
     
-    </div>
+
+
+
+    
+</div>
     
 
 
@@ -165,7 +114,6 @@
     else{
         $('.School').append('天津大学');
     }
-
 $('.glyphicon-pencil').click(function() {
     var info = $(this).parent();
     info.next().show(100);
@@ -178,19 +126,19 @@ $('.cancel').click(function() {
 });
 
 
-$("#changePwd").on('submit',function(event) {
-    event.preventDefault();
-    
-    var URL = "/Printer/Printer/changePwd";
-
+$("#changePwd").bind('submit',function() {
+    $('#changePwdButton').attr('disabled',true);
+    var URL = "/Printer/Printer/changePwd"; 
     var deprecated_password = $('#deprecated_password').val();
     var password = $('#password').val();
     var re_password = $('#re_password').val();
+    
     if(re_password == password && re_password && password)
     {
         $.post(URL, {
             deprecated_password : md5(deprecated_password),
-            password: md5(password)
+            password: md5(password),
+            isMD5 : 1
         }, function(data) {
             if (data.status) {
                 alert(data.info);
@@ -205,14 +153,17 @@ $("#changePwd").on('submit',function(event) {
     {
         alert("Password dose not match with confirm password");
     }
-    
+    $('#changePwdButton').attr('disabled',false);
     $('#deprecated_password').val('');
     $('#password').val('');
     $('#re_password').val('');
+    return false;
 });
 
 
 $("#changeInfo").on('submit',function(event) {
+    $('#changeInfoButton').attr('disabled',true);
+    
     event.preventDefault();
     
     var URL = "/Printer/Printer/changeInfo";
@@ -222,10 +173,10 @@ $("#changeInfo").on('submit',function(event) {
     var address = $('#address').val();
     var profile = $('#profile').val();
     var open_time = $('#open_time').val();
-    var price_color = $('#price_color').val();
-    var price_no_color = $('#price_no_color').val();
-    var price_single = $('#price_single').val();
-    var price_double = $('#price_double').val();
+    var p_c_s = $('#p_c_s').val();
+    var p_c_d = $('#p_c_d').val();
+    var p_s = $('#p_s').val();
+    var p_d = $('#p_d').val();
     var price_more = $('#price_more').val();
     
         $.post(URL, {
@@ -234,17 +185,16 @@ $("#changeInfo").on('submit',function(event) {
             address  : address ,
             profile  : profile ,
             open_time  : open_time ,
-            price_color  : price_color ,
-            price_no_color  : price_no_color ,
-            price_single  : price_single ,
-            price_double  : price_double ,
+            p_c_s  : p_c_s ,
+            p_c_d  : p_c_d ,
+            p_s  : p_s ,
+            p_d  : p_d ,
             price_more  : price_more
         }, function(data) {
             if (data.status) {
                 alert(data.info);
-            } else {
-                alert(data.info);
             }
+            $('#changeInfoButton').attr('disabled',false);
         });
 });
 </script>

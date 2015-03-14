@@ -9,7 +9,7 @@
     <h2>{$title}</h2>
 </div>
 <div class="container">
-    <div class="row"><div class="col-lg-8">
+    <div class="row"><div class="col-lg-10">
     <div class="table-responsive">
     <table class="table">
         <thead>
@@ -28,7 +28,7 @@
             <tr file_id="{$vo.id}">
                     <td>[{$vo.id}]{$vo.name}</td>
     <if condition="$vo.copies eq 0">
-             <td>现打</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>    
+             <td>现打</td><td>-</td><td>-</td><td>-</td>   
       <else/>
             <td> {$vo.copies}</td><td>
                 <if condition="$vo.double_side gt 0">

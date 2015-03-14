@@ -15,6 +15,7 @@
     <div class="col-lg-8">
         <p class="text-info well">
         使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> <code>设置打印份数、格式</code> -> <code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
+        不绑定手机不能提前打印，不能设置打印参数，只能上传后到店打印；<br/>
         暂时仅支持<code>pdf</code>、<code>doc(x)</code>、<code>wps</code>、<code>ppt(x)</code>格式的文件上传；<br/>
         如上传文件名出现<code>乱码</code>，请更换浏览器。Chrome下效果最佳，手机建议使用UC浏览器；<br/>
         打印纸张统一为<code>A4</code>，<code>彩印</code>暂不支持<code>双面</code>，有特殊需求可上传后到店打印；<br/>无论打印店队列多长，到店可直接取货。若打印店没有提前打印，你可以在店直接打印；<br/>
@@ -35,11 +36,12 @@
             </div>
         </div>
         
-    <if condition="$lock eq 1">    
+
         <div class="row">
             <div class="col-lg-4">
                 <ul id="upload-list" class="list-group" style="margin-bottom:0px;margin-top:10px"></ul>
             </div>
+            <if condition="$lock eq 1">    
             <div class="col-lg-3">
                 <fieldset id='setting1'>
                     <div style="display:none;margin-top:10px;margin-bottom:0px" id="pptprint">
@@ -53,21 +55,27 @@
                     </div>
                 </fieldset>
             </div>
+            <else />
+            </if>
         </div>
         <br/>
-    <else />
-    </if>
     
     <div class="row">
         <div class="col-lg-4">
             <div class="form-group">
                 <select class="form-control" name="pri_id" onchange="priceChange(this)">
+                    <option value="">选择打印店</option>
                     <volist name="data" id="vo">
-                      <option value="{$vo.id}">{$vo.name}[{$vo.open_time}]({$vo.address})</option>
+                      <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
                     </volist>
                 </select>
             </div>
-            <div id='price' class='well help-block' style="font-size:13px">单面：<span id='single' class='text-danger'>少量1角每张，过百份7分每张</span><br/>双面：<span id='double' class='text-danger'>1角每张</span><br/>彩印：<span id='color_print' class='text-danger'>尚未确定</span></div>
+            <div id='price' class='well help-block' style="font-size:13px">
+                单面：<span id='p_s' class='text-danger'></span><br/>
+                双面：<span id='p_d' class='text-danger'></span><br/>
+                彩印单面：<span id='p_c_s' class='text-danger'></span><br/>
+                彩印双面：<span id='p_c_d' class='text-danger'></span>
+            </div>
         </div>
     <if condition="$lock eq 1">    
         <fieldset id="setting2">
@@ -87,6 +95,9 @@
             </div>
         </fieldset>      
     <else />
+    <div>
+        <a href="/User" style="text-decoration:none"><p>绑定手机后可进行高级设置提前打印</p></a>
+    </div>
     </if>
     </div>
     
@@ -137,12 +148,23 @@ function checkSuffix(n) {
     }
 }
 function priceChange(n){
-    var i = n.value;
-    var thePrice = [ [], ['1角每张','0.14元每张（7分每面）','尚未确定'],['少量1角每张，过百份7分每张','1角每张','尚未确定'],['少量1角每张，过百份8分每张','1角每张','尚未确定'],['少量1角每张，过百份8分每张','1角每张','尚未确定']
-        ];
-    $('#single').html(thePrice[i][0]);
-    $('#double').html(thePrice[i][1]);
-    $('#color_print').html(thePrice[i][2]);
+    var pid = n.value;
+    var URL = "/Printers/getPrice";
+    $.post(URL, {
+            pid : pid
+        }, function(data) {
+            if (data.status) {
+                $('#p_c_s').html(data.info.p_c_s+'角/张');
+                $('#p_c_d').html(data.info.p_c_d+'角/张');
+                $('#p_s').html(data.info.p_s+'分/张');
+                $('#p_d').html(data.info.p_d+'分/张');
+            } else {
+                $('#p_c_s').html("未设置");
+                $('#p_c_d').html("未设置");
+                $('#p_s').html("未设置");
+                $('#p_d').html("未设置");
+            }
+        });
 }
 $("#modaltrigger").on('submit', function() {
     $("#modaltrigger").attr('disabled', true);

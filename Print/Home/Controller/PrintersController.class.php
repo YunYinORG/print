@@ -17,6 +17,7 @@
  * Class and Function List:
  * Function list:
  * - index()
+ * - getPrice()
  * Classes list:
  * - PrintersController extends Controller
  */
@@ -41,6 +42,7 @@ class PrintersController extends Controller
 		    
 	}
 	
+	/*
 	public function detail()
 	{
 	    $id = I('detail');
@@ -58,5 +60,30 @@ class PrintersController extends Controller
 		    $this->error('Sorry,something wrong here'); 
 		}
 	}
+	*/
+	
+	public function getPrice()
+    {
+        $uid = use_id();
+        $pid = I('pid',0,'int');
+        if ($uid && $pid) 
+        {
+            $Printer = M('Printer');
+            $result = $Printer->where('id='.$pid)->getField('price');
+            if($result)
+            {
+                $result = json_decode($result);
+                $this->success($result);
+            }
+            else
+            {
+                $this->error('No price Info');
+            }
+        }
+        else
+        {
+            $this->error('SignIn or NO pid');
+        }
+    }
 	
 }
