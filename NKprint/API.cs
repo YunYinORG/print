@@ -7,9 +7,92 @@ namespace NKprint
 {
     class API
     {
+        public static string token = "";
         public static int myPage=1;
         private static string server_url = Program.serverUrl;
-        
+        public static string PutMethod(string metodUrl, string para, Encoding dataEncode)
+        {
+            string down = server_url + metodUrl;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(down);
+            request.Method = "PUT";
+            string s = "1";
+            //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            request.Accept = "Accept: application/json";
+            try
+            {
+                byte[] byteArray = dataEncode.GetBytes(para); //转化
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.Accept = "Accept: application/json";
+                request.ContentLength = byteArray.Length;
+                Stream newStream = request.GetRequestStream();
+                newStream.Write(byteArray, 0, byteArray.Length);//写入参数
+                newStream.Close();
+                request.Headers.Add("Token",token);
+                Console.WriteLine("\nThe HttpHeaders are \n\n\tName\t\tValue\n{0}", request.Headers);
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default);
+                s = sr.ReadToEnd();
+                sr.Close();
+                response.Close();
+                newStream.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return s;
+            
+        }
+
+        public static string DeleteMethod(string metodUrl)
+        {
+            string s = "1";
+
+            string url = server_url + metodUrl;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Accept = "Accept: Application/json";
+            request.Method = "delete";
+            HttpWebResponse response = null;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            catch (WebException e)
+            {
+                response = (HttpWebResponse)e.Response;
+                MessageBox.Show(e.Message + " - " + getRestErrorMessage(response));
+                return default(string);
+            }
+            return s;
+        }
+
+        //GetMEthod用来完成Accept: application/json
+        public static string GetMethod(string metodUrl)
+        {
+            string down = server_url  + metodUrl;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(down);
+            request.Method = "get";
+            request.Accept = "Accept: application/json";
+            request.Headers.Add("Token",token);//修改Headers,添加
+            //request.ContentType = "application/json;charset=UTF-8";
+            HttpWebResponse response = null;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            catch (WebException e)
+            {
+                response = (HttpWebResponse)e.Response;
+                MessageBox.Show(e.Message + " - " + getRestErrorMessage(response));
+                return default(string);
+            }
+            //
+            //Console.WriteLine("\nThe HttpHeaders are \n\n\tName\t\tValue\n{0}", request.Headers);
+            string json = getResponseString(response);
+            return json;
+        }
+
         // REST @GET 方法，根据泛型自动转换成实体，支持List<T>
         public static string doGetMethodToObj(string metodUrl)
         {
@@ -30,13 +113,13 @@ namespace NKprint
                 MessageBox.Show(e.Message + " - " + getRestErrorMessage(response));
                 return default(string);
             }
-            myPage = myPage + 1;
+            
             string json = getResponseString(response);
             return json;
         }
         
         //post方法来从服务器访问数据
-        public static string PostWebRequest(string postUrl, string paramData, Encoding dataEncode)
+        public static string PostMethod(string postUrl, string paramData, Encoding dataEncode)
         {
             postUrl = server_url + postUrl;
             string ret = string.Empty;
@@ -46,7 +129,7 @@ namespace NKprint
                 HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(new Uri(postUrl));
                 webReq.Method = "POST";
                 webReq.ContentType = "application/x-www-form-urlencoded";
-
+                webReq.Accept = "Accept: application/json";
                 webReq.ContentLength = byteArray.Length;
                 Stream newStream = webReq.GetRequestStream();
                 newStream.Write(byteArray, 0, byteArray.Length);//写入参数

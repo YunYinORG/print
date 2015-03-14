@@ -55,13 +55,18 @@
             this.测试jsonLINQToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.版本ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.刷新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.显示窗体ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.退出程序ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelShow.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.myData)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelControl
@@ -295,16 +300,45 @@
             this.版本ToolStripMenuItem.Text = "版本信息";
             this.版本ToolStripMenuItem.Click += new System.EventHandler(this.版本ToolStripMenuItem_Click);
             // 
-            // toolTip1
-            // 
-            this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
-            // 
             // 刷新ToolStripMenuItem
             // 
             this.刷新ToolStripMenuItem.Name = "刷新ToolStripMenuItem";
             this.刷新ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.刷新ToolStripMenuItem.Text = "刷新";
             this.刷新ToolStripMenuItem.Click += new System.EventHandler(this.刷新ToolStripMenuItem_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "云印南开";
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.显示窗体ToolStripMenuItem,
+            this.退出程序ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 48);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // 显示窗体ToolStripMenuItem
+            // 
+            this.显示窗体ToolStripMenuItem.Name = "显示窗体ToolStripMenuItem";
+            this.显示窗体ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.显示窗体ToolStripMenuItem.Text = "显示窗体";
+            this.显示窗体ToolStripMenuItem.Click += new System.EventHandler(this.显示窗体ToolStripMenuItem_Click);
+            // 
+            // 退出程序ToolStripMenuItem
+            // 
+            this.退出程序ToolStripMenuItem.Name = "退出程序ToolStripMenuItem";
+            this.退出程序ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.退出程序ToolStripMenuItem.Text = "退出程序";
             // 
             // NKprint_download
             // 
@@ -321,6 +355,7 @@
             this.Text = "云印南开打印管理";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.NKprint_download_FormClosed);
             this.Load += new System.EventHandler(this.NKprint_download_Load);
+            this.SizeChanged += new System.EventHandler(this.NKprint_download_SizeChanged);
             this.panelControl.ResumeLayout(false);
             this.panelControl.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -328,6 +363,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.myData)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -362,5 +398,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn doubleSides;
         private System.Windows.Forms.DataGridViewLinkColumn status;
         private System.Windows.Forms.ToolStripMenuItem 刷新ToolStripMenuItem;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 显示窗体ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 退出程序ToolStripMenuItem;
     }
 }

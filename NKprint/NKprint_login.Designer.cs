@@ -194,6 +194,7 @@
             this.Name = "NKprint_login";
             this.Text = "云印南开登录窗";
             this.Load += new System.EventHandler(this.NKprint_login_Load);
+            this.Enter += new System.EventHandler(this.buttonLogin_Click);
             this.panelLogin.ResumeLayout(false);
             this.panelLogin.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

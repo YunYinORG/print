@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json.Linq;//Jobject
 using System.Collections.Generic;
 using System.Threading;
+using System.Security.Cryptography;
 namespace NKprint
 {
     public partial class NKprint_login : Form
@@ -49,8 +50,17 @@ namespace NKprint
         {
             //执行登陆函数
             buttonLogin.Enabled = false;//点击之后将登陆按钮置为不能点击
-            Thread loginThread=new Thread(new ThreadStart(loginFrom));
+            Thread loginThread = new Thread(new ThreadStart(loginFrom));
             loginThread.Start();
+            //string s = API.GetMethod("/Index/get?data=testdata");
+            //Console.WriteLine(s);
+            //s = API.PostMethod("/Index/post", "data=testdata", new UTF8Encoding());
+            //Console.WriteLine(s);
+            //API.token = "agbnadfbnsdoijbhewg";
+            //s = API.PutMethod("/Index/put", "data332=testdata", new UTF8Encoding());
+            //Console.WriteLine(s);
+            //s = API.DeleteMethod("/Index/delete");
+            //Console.WriteLine(s);
         }
         //登陆到服务器，post方式验证，用到API类，和remember类
         public void loginFrom()
@@ -62,7 +72,10 @@ namespace NKprint
 
             string account = printerAccount.Text;
             string strPassword = printerPassword.Text;
-
+            byte[] password = Encoding.Default.GetBytes(strPassword.Trim());
+            System.Security.Cryptography.MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] out1 = md5.ComputeHash(password);
+            strPassword = BitConverter.ToString(out1).Replace("-", "");
             if (account.Length == 0 || strPassword.Length == 0)
             {
                 try
@@ -90,11 +103,14 @@ namespace NKprint
             }
             else
             {
+                strPassword = strPassword.ToLower();
                 string js = "type=" + type + "&account=" + account +
                 "&pwd=" + strPassword;
+                
                 //POST得到要数据//登陆得到token
-                string r = API.PostWebRequest("", js, new UTF8Encoding());
+                string r = API.PostMethod("/Token", js, new UTF8Encoding());
                 //从post得到的数据中得到token 
+                Console.WriteLine(r);
                 JObject toke = JObject.Parse(r);
                 ToMyToken my = new ToMyToken();
                 bool loginOk = r.Contains("token");
@@ -103,6 +119,7 @@ namespace NKprint
                     my.token = (string)toke["token"];//也能够得到token
                     my.name = (string)toke["name"];
                     my.id = (string)toke["id"];
+                    my.version=(float)toke["version"];
                     //判断是否保存用户名
                     if (checkRemember.Checked)
                     {
@@ -177,6 +194,7 @@ namespace NKprint
             nForm.downloadToken = my.token;
             nForm.printerName = my.name;
             nForm.printerId = my.id;
+            nForm.version = my.version;
             //窗体之间传值完成 ，显示下载窗体！
             nForm.ShowDialog();
             /*if (nForm.DialogResult == DialogResult.OK)

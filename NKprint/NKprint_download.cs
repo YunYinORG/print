@@ -24,6 +24,7 @@ namespace NKprint
         public string downloadToken;
         public string printerName;
         public string printerId;
+        public float version;
         //private string  stat;
         //public string Status 
         //}
@@ -41,7 +42,7 @@ namespace NKprint
             String  Date = (DateTime.Now.ToLongDateString());
             path = @"D:\云印南开\" + Date;
             //path = string.Empty;
-            labelWelcom.Text = "你好："+printerName+"\n欢迎登陆!";
+            labelWelcom.Text = "你好："+printerName+"\n欢迎登陆!\n"+"当前版本"+version;
             if(!File.Exists("json.sjc"))
             {
                 File.Create("json.sjc");
@@ -136,7 +137,8 @@ namespace NKprint
             //每次重新访问的时候要置为1；
             API.myPage = 1;
             //得到json格式的文件列表
-            string myJsFile = API.doGetMethodToObj(downloadToken);
+            API.token = downloadToken;
+            string myJsFile = API.GetMethod("/File");
 #if DEBUG
             Console.WriteLine(myJsFile);
 #endif
@@ -153,7 +155,8 @@ namespace NKprint
                 bool myAdd = (ja.Count == 10);
                 while (myAdd)
                 {
-                    myJsFile = API.doGetMethodToObj(downloadToken);
+                    API.token = downloadToken;
+                    myJsFile = API.GetMethod("/File");
                     jo = JObject.Parse(myJsFile);
                     ja = jo["files"] as JArray;
                     if (ja.Count != 0)
@@ -367,7 +370,7 @@ namespace NKprint
             //参数： status=>文件状态'uploud','download','printing','printed','payed', 返回操作结果
             string putUrl = @"/File/" + id + "?token=" + downloadToken;
             string putPara = "status=" + currentStatus;
-            string resualt = API.PostWebRequest(putUrl, putPara, new UTF8Encoding());
+            string resualt = API.PostMethod(putUrl, putPara, new UTF8Encoding());
             //Console.WriteLine(out1);
             //添加事件
            if (resualt.Contains("msg"))
@@ -578,6 +581,43 @@ namespace NKprint
         private void 刷新ToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
+            notifyIcon1.Visible = false;
+            this.ShowInTaskbar = true;
+            this.WindowState = FormWindowState.Normal;
+        }
+
+       
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void NKprint_download_MinimumSizeChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void 显示窗体ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NKprint_download_SizeChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Hide();
+                this.ShowInTaskbar = false;
+                notifyIcon1.Visible = true;
+            }
+            else
+                notifyIcon1.Visible = false;
         }
         ////本代码用于测试json写入.sjc，和重新读出
         //private void 写入jsonToolStripMenuItem_Click(object sender, EventArgs e)
