@@ -11,14 +11,14 @@
             <div class="col-lg-8 col-lg-offset-2">
                 <h1 class="text-danger text-center">找回密码</h1>
                 <div class='alert alert-warning'>
-                    为了防止你的账号信息滥用，你可以通过再次校验你校园账号（南开URP或者天大办公网）信息，找回你的密码。
-                    <br/>使用你的注册学号和校园认证密码密码并重设新的密码。
+                    为了防止你的账号信息滥用，你可以通过手机验证、邮箱验证、或校园账号验证（南开URP或者天大办公网），找回你的密码。
+                    <br/>使用你的注册学号和绑定的信息认证并设置新的密码。
                     <br/>如果账号尚未注册请前往<a title="云印南天" href="/">云印南天首页</a>直接注册。
                 </div>
             </div>
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="text-center text-info">
-                    <h2>验证并重设密码</h2>
+                    <h2>验证信息并重设密码</h2>
                 </div>
                 <form  role="form" method="post" action="__URL__/findPwdVerify" onsubmit="return checkform(this);">
                     <div class="input-group">
@@ -42,10 +42,65 @@
                         <button type="submit" class="btn btn-lg btn-success">提交</button>
                     </div>
                 </form>
+			</div>
+			
+			<div class="col-lg-8 col-lg-offset-2">
+                <div class="text-center text-info">
+                    <h2>验证手机并重设密码</h2>
+                </div>	
+				<form id='phone_form' role="form" method="post" onsubmit="return byPhone(this);" action="__URL__/findPwd">
+                    <div class="input-group">
+                        <label class="input-group-addon"  for="number">学号</label>
+                        <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
+                    </div>
+                    <div class="form-group input-group">
+                        <label class="input-group-addon"  for="phone">手机</label>
+                        <input  class="form-control" placeholder='绑定的手机号码' name="phone" type="text" pattern="1[3458]\d{9}" id="phone" required>
+					</div> 
+					  <input name="way" type="hidden" value="phone"/>
+					<div class="text-center">
+                        <button type="submit" class="btn btn-lg btn-success">提交</button>
+                    </div>	                                 
+                </form>
+			</div>
+			
+			<div class="col-lg-8 col-lg-offset-2">
+                <div class="text-center text-info">
+                    <h2>验证邮箱并重设密码</h2>
+                </div>
+				<form  role="form" method="post" action="__URL__/findPwd">
+                    <div class="input-group">
+                        <label class="input-group-addon"  for="number">学号</label>
+                        <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
+                    </div>
+                    <div class="form-group input-group">
+                        <label class="input-group-addon"  for="email">邮箱</label>
+                        <input  class="form-control" placeholder='绑定的邮箱地址' name="email" type="text" id="email" required>
+                    </div>
+						<input name="way" type="hidden" value="email"/>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-lg btn-success">提交</button>
+                    </div>
+                </form>
             </div>
         </div>
     </body>
+	
+	<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" id="ModalLabel">稍等……</h3>
+				</div>
+				<div class="modal-body">正在提交</div>
+			</div>
+		</div>
+	</div>
+	<script src="__CDNLIB__/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js" defer="defer"></script>
     <script>
+	M=$('#Modal');
 function checkform(f){
     if(f.password.value!=f.re_password.value)
     {
@@ -58,5 +113,91 @@ function checkform(f){
         return true;
     }
 }
+
+//验证手机
+function byPhone() {
+f=document.getElementById('phone_form');
+var phone=f['phone'].value;
+        var Mh = M.find('.modal-title');
+        var Mb = M.find('.modal-body');
+        Mh.html('稍等...');
+        Mb.html('正在给' + phone + '发送验证码...');
+        M.modal('show');
+        var url = '/User/findPwd';
+        var data = {
+            'phone': phone,
+			'number':f['number'].value,
+			'way':'phone'
+        }
+        f.disabled=true;
+        $.post(url, data, function(data, status) {
+            if (status) {
+                if (data.status) {
+                        Mh.html('发送成功 验证手机');
+                            Mb.html("<div class='input-group'><input id='code' name='code' type='text' class='form-control' placeholder='六位数字验证码' autocomplete='off' required/><span class='input-group-btn'><button class='btn btn-success' onclick='checkSMSCode(this);'>开始验证</button><button id='resend' class='btn' onclick='byPhone();' disabled>重发验证码</button></span></div><br>");
+                        count(document.getElementById("resend"), 60);
+                        M.modal('show');
+                    }else{
+                    Mh.html('发送失败');
+                    Mb.html(data.info);
+                }
+            } else {
+                Mh.html('异常');
+                Mb.html('服务器通讯异常！');
+            }
+        M.modal('show');
+      f.disabled=false;
+        });
+	return false;
+}
+//手机验证码
+function checkSMSCode(b) {
+    b.disabled = true;
+    var c = $('#code');
+    var code = c.val();
+    reg = /^\d{6}$/;
+    if (!reg.test(code)) {
+        alert('验证码是四到六位数字哦!');
+    } else {
+        var url = '/User/checkSMSCode';
+        var data = {
+            'code': code,
+        };
+        $.post(url, data, function(d, status) {
+            if (status) {
+                if (d.status) {
+                    M.find('.modal-title').html('验证成功');
+                    M.find('.modal-body').html(d.info);
+                    M.modal('show');
+					location.href=d.url;
+                    var pd = $('#phone_detail');
+                    var bp = $('#bind_phone');
+                    pd.children('.label').html(bp.children('input').val());
+                    bp.hide().prev().show(100);
+                } else if(d.url) {
+                    M.find('.modal-title').html('验证失败');
+                    M.find('.modal-body').html(d.info);
+                }else{
+                    alert('验证失败:' + d.info);
+                }
+            } else {
+                alert('服务器通讯异常！');
+            }
+        });
+    }
+    b.disabled = false;
+}
+//重发倒计时
+        function count(btn, c) {
+                if (c > 0) {
+                                btn.innerHTML = (c--) + 's可重发';
+                        setTimeout(function() {
+                        count(btn, c);
+                }, 1000);
+                } else {
+                    btn.removeAttribute("disabled");
+                        btn.innerHTML = "重发验证码";
+        }
+};
     </script>
 </html>
