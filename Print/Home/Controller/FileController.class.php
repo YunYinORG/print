@@ -111,7 +111,11 @@ class FileController extends Controller
                 else
                 {
                     $data['ppt_layout'] = 0;
-                }    
+                }  
+                if(pri_id==0)
+                {
+                    $this->error('请选择打印店！','/File/add');
+                }  
                 if (M('File')->add($data)) 
                 {
                     
