@@ -112,7 +112,7 @@ class FileController extends Controller
                 {
                     $data['ppt_layout'] = 0;
                 }  
-                if(pri_id==0)
+                if($data['pri_id']==0)
                 {
                     $this->error('请选择打印店！','/File/add');
                 }  

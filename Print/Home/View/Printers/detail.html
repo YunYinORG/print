@@ -28,11 +28,13 @@
             </button>
             <a class="navbar-brand" href="#"><img src="__PUBLIC__/images/logo.png" class="img-circle img-rounded" id="mylogo"></a>
         </div>
-        <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="" accesskey="1" title=""></a></li>
-            </ul>
-        </div>
+        <volist name="printerList" id="vo">
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/printers/detail/id/{$vo.id}" accesskey="1" title="">{$vo.name}</a></li>
+                </ul>
+            </div>
+        </volist>
     </nav>
 
 <main id='main'>

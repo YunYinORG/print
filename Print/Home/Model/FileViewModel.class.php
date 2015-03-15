@@ -15,6 +15,8 @@ class FileViewModel extends ViewModel
 			'status',
 			'copies',
 			'double_side',
+			'color',
+			'ppt_layout'
 		) ,
 		'printer'            => array(
 			'name'=>'pri_name',

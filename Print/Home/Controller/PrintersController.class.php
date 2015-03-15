@@ -45,10 +45,12 @@ class PrintersController extends Controller
 	{
 	    $Printer = M('Printer');
 	    $result = $Printer->where('id='.$id)->field('account,password',true)->find(); 
-	    
+	    $List = M('Printer');
+	    $list = $List->where('sch_id='.$result['sch_id'])->field('id,name')->select();
 	    if($result)
 	    {
 	        $this->data = $result;
+	        $this->printerList = $list;
             $this->display();
         }
 		else
