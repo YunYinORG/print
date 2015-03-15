@@ -43,15 +43,14 @@ class PrintersController extends Controller
 	
 	public function detail($id = 1)
 	{
-	    
 	    $Printer = M('Printer');
-	    $result = $Printer->where('id='.$id)->find(); 
+	    $result = $Printer->where('id='.$id)->field('account,password',true)->find(); 
 	    
 	    if($result)
 	    {
 	        $this->data = $result;
-		    $this->success($result);
-		}
+            $this->display();
+        }
 		else
 		{
 		    $this->error('不好意思，没找到数据'); 

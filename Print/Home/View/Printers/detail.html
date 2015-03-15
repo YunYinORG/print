@@ -70,19 +70,19 @@
 </tr>
 <tr>
     <th>单面黑白</th>
-    <td align="right">{$data.p_s}分每张</td>
+    <td id="p_s" align="right">{$data.p_s}分每张</td>
 </tr>
 <tr>
     <th>双面黑白</th>
-    <td align="right">{$data.p_d}分每张</td>
+    <td id="p_d" align="right">{$data.p_d}分每张</td>
 </tr>
 <tr>
     <th>单面彩印</th>
-    <td align="right">{$data.p_c_s}角每张</td>
+    <td id="p_c_s" align="right">{$data.p_c_s}角每张</td>
 </tr>
 <tr>
     <th>双面彩印</th>
-    <td align="right">{$data.p_c_d}角每张</td>
+    <td id="p_c_d" align="right">{$data.p_c_d}角每张</td>
 </tr>
 <tr>
     <th>优惠信息</th>
@@ -94,7 +94,11 @@
 
 <div class="col-sm-4 col-sm-offset-1">
     <div class="thumbnail">
-    <img src="__PUBLIC__/images/logo.png" style="width:70%"/>
+        <empty name="data.imageURL">
+            <img src="__PUBLIC__/images/logo.png" style="width:70%"/>
+        <else />
+            <img src="{$data['imageURL']}" style="width:70%"/>
+        </empty>
     </div>
     <label>简介</label>
     <p>{$data.profile}</p>
@@ -121,6 +125,21 @@ if({$data.sch_id} === 1)
     $('.School').append('南开大学');
 else
     $('.School').append('天津大学');
+
+if ({$data['price']}) {
+            var price = {$data['price']}; //JSON.parse({$data['price']});
+                $('#p_c_s').html(price.p_c_s+'角/张');
+                $('#p_c_d').html(price.p_c_d+'角/张');
+                $('#p_s').html(price.p_s+'分/张');
+                $('#p_d').html(price.p_d+'分/张');
+            } else {
+                $('#p_c_s').html("未设置");
+                $('#p_c_d').html("未设置");
+                $('#p_s').html("未设置");
+                $('#p_d').html("未设置");
+            }
+
+
 
 </script>
 
