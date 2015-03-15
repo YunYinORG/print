@@ -315,6 +315,179 @@ class UserController extends Controller
         }
     }
     
+	/**
+	*找回密码
+	*@param way 找回方式
+	*@param number 学号
+	*@param phone 手机号
+	*@param email 邮箱
+	*/
+    function findPwd()
+	{	
+		$number = I('number', false, C('REGEX_NUMBER'));
+		if (!$number)
+		{
+			$this->error('学号无效！');
+		}
+		switch (I('way'))
+		{
+		case 'phone':
+			$phone = I('post.phone', false, C('REGEX_PHONE'));
+			if (!$phone) 
+			{
+				$this->error('手机号无效！');
+			}
+			$user = M('User')->Field('id,phone')->getByStudentNumber($number);
+			if(!empty($user['phone']))
+			{
+				import('Common.Encrypt', COMMON_PATH, '.php');
+				decrypt_phone($user['phone'],$number,$user['id']);
+				if ($phone != $user['phone'])
+				{	
+					$this->error('学号与手机号不匹配！');
+				}
+			} else
+			{
+				$this->error('学号未注册或未绑定手机！');	
+			}
+			$result = send_sms_code($phone, 'findPwd');//发送短信
+			if ($result == true) 
+			{
+				session('find_pwd_number',$number);
+				session('find_pwd_phone', $phone);
+				$this->success('发送成功');
+			} elseif ($result === 0) 
+			{
+				$this->error('发送次数过多');
+			} else
+			{
+				$this->error('发送失败');
+			}
+			break;
+		case 'email':
+			$email = I('post.email', false, C('REGEX_EMAIL'));
+			if (!$email) 
+			{
+				$this->error('邮箱地址无效！');
+			}	
+			$user = M('User')->Field('id,email')->getByStudentNumber($number);
+			if(!empty($user['email']))
+			{
+				import('Common.Encrypt', COMMON_PATH, '.php');
+				decrypt_email($user['email']);
+				if ($email != $user['email'])
+				{
+					$this->error('学号与邮箱不匹配！');
+				}	
+			} else
+			{
+				$this->error('学号未注册或未绑定邮箱！');	
+			}
+			$data['use_id']      = $user['id'];
+			$data['type']      	 = 2; //密码找回类型为2
+			$Code = M('code');
+			$Code->where($data)->delete();      
+			$data['code']        = random(32);
+			$data['content']     = $number;
+			$cid = $Code->add($data);
+			if ($cid) 
+			{
+            $url = U('User/checkEmailCode', 'id=' . $cid . '&code=' . $data['code'], '', true);
+            if (send_mail($email, $url, 2)) 
+            {		
+                $this->success('验证邮件已发送到' . $email .'请及时到邮箱查收','Index/index');
+            } else
+            {
+                $this->error('验证邮件发送失败！');
+            }
+			} else
+			{
+				$this->error('信息生成失败！');
+			}
+        break;
+		default:
+			$this->error('类型未知！');
+		}
+	}
+					
+		
+	/**
+	*@param code
+	*/
+	function checkSMSCode()
+	{
+		$code   = I('post.code', false, '/^\d{6}$/');
+		$phone 	= session('find_pwd_phone');
+		if(check_sms_code($phone, $code, 'findPwd'))
+		{	
+			session('find_pwd_phone',null);
+			session('reset_pwd_flag',1);
+			$this->success('验证成功！','/User/resetPwd'); 
+		}
+	}
+	/**
+	*@param id 
+	*@param code
+	*/
+	function checkEmailCode()
+	{
+		$id   = I('id', false, 'int');
+		$code = I('code', false, '/^\w{32}/');
+		if ($id && $code) 
+		{
+			$map['id']      = $id;
+			$map['code']      = $code;
+			$map['type']      = 2;  //密码找回类型为2
+			if ($info = M('Code')->where($map)->Field('use_id,content')->find())
+			{
+				M('Code')->where('id=%d', $id)->delete();
+				session('find_pwd_number',$info['content']);
+				session('reset_pwd_flag',2);
+				$this->display('resetPwd');       
+			} else
+			{
+				$this->error('验证信息已失效,请重新获取！','/User/forget');
+			}
+		} else
+		{
+			$this->error('信息不完整！','/User/forget');
+		}
+	}
+	/**
+	*param password 
+	*isMD5
+	*/
+	function resetPwd()
+	{
+		$type = session('reset_pwd_flag');
+		switch($type)
+		{
+			case 1:
+			case 2:
+				$password     = I('post.password');	
+				if(!$password){
+				$this->display();
+				return;
+				}
+				$number = session('find_pwd_number');
+				if(!I('isMD5'))
+				{
+					$password = md5($password);
+				}				
+				if (false !== M('User')->where('student_number=' . $number)->setField('password', encode($password, $number))) 
+				{
+					session(null);
+					$this->success('密码重置成功！','Index/index');
+				} else
+				{
+					$this->error('重置失败！','/User/forget');
+				}
+			break;
+			default :
+				$this->error('验证失败！','/User/forget');		
+		}		
+	}
+	
     /**
      *修改密码
      */

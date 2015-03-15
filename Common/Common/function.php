@@ -267,15 +267,14 @@ function send_mail($toMail, $msg, $mailType)
 		break;
 
 	case 2:
-		$title = '密码找回';
-		
+		$title = '云印密码找回';
+		$content = '您正在yunyin.org使用密码找回功能<br>请点击以下链接重设密码：'." <a href='$msg'>$msg</a>";
 		//找回密码
 		break;
 
 	 case 3:
         $title = '校园卡认领通知';
 		$content=$msg;
-		//找回密码
 		break;
         
 	default:
@@ -347,11 +346,23 @@ function send_sms($toPhone, $content, $smsType)
 			} 
 			else
 			{
-				$msg = $content;
-				$tid = 1844;
+				$msg = 'yunyin.org,' . $content . ',5';
+				$tid = 3620;
 			}
 			break;
-
+		 case 2: 
+        	//找回密码
+       		if (C('SMS_SUPPORTER') == 'huyi') 
+			{
+				$msg = rawurlencode('您的验证码是：' . $content . '。请不要把验证码泄露给其他人。');
+				$tid = null;
+			} 
+       		else
+			{
+				$msg = 'yunyin.org,' . $content . ',5';
+				$tid = 4003;
+			}
+			break;
 		default:
 			
 			// code...
@@ -545,7 +556,17 @@ function send_sms_code($phone, $type)
 		$info['tries']      = 0;
 	}
 	S($type . $phone, $info, 600);
-	return send_sms($phone, $code, 1);
+	switch ($type)
+	{
+		case 'bind':
+			return send_sms($phone, $code, 1);
+			break;
+		case 'findPwd':
+			return send_sms($phone, $code, 2);
+			break;
+		default:
+			//code..
+	}
 }
 
 /**

@@ -15,6 +15,7 @@
     <div class="col-lg-8">
         <p class="text-info well">
         使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> <code>设置打印份数、格式</code> -> <code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
+        不绑定手机不能提前打印，不能设置打印参数，只能上传后到店打印；<br/>
         暂时仅支持<code>pdf</code>、<code>doc(x)</code>、<code>wps</code>、<code>ppt(x)</code>格式的文件上传；<br/>
         如上传文件名出现<code>乱码</code>，请更换浏览器。Chrome下效果最佳，手机建议使用UC浏览器；<br/>
         打印纸张统一为<code>A4</code>，<code>彩印</code>暂不支持<code>双面</code>，有特殊需求可上传后到店打印；<br/>无论打印店队列多长，到店可直接取货。若打印店没有提前打印，你可以在店直接打印；<br/>
@@ -153,10 +154,10 @@ function priceChange(n){
             pid : pid
         }, function(data) {
             if (data.status) {
-                $('#p_c_s').html(data.info.p_c_s);
-                $('#p_c_d').html(data.info.p_c_d);
-                $('#p_s').html(data.info.p_s);
-                $('#p_d').html(data.info.p_d);
+                $('#p_c_s').html(data.info.p_c_s+'角/张');
+                $('#p_c_d').html(data.info.p_c_d+'角/张');
+                $('#p_s').html(data.info.p_s+'分/张');
+                $('#p_d').html(data.info.p_d+'分/张');
             } else {
                 $('#p_c_s').html("未设置");
                 $('#p_c_d').html("未设置");
