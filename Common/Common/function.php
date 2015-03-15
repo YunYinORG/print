@@ -288,10 +288,23 @@ function send_mail($toMail, $msg, $mailType)
 	{
 	case 'sae':// sae mail
 		$mail = new SaeMail();
-		$ret = $mail->quickSend($toMail, $title , $content, C('VERIFY_EMAIL'), C('VERIFY_PWD'), C('MAIL_SMTP'));
-		if ($ret === false)
+		$opt = array(
+			'content_type' => 'HTML',
+			'from' => C('VERIFY_EMAIL'),
+			'to' => $toMail,
+			'content' => $content,
+			'subject' => $title,
+			'smtp_host' => C('MAIL_SMTP'),
+			'smtp_username' => C('VERIFY_EMAIL'),
+			'smtp_password' => C('VERIFY_PWD'),
+			);
+		//$ret = $mail->quickSend($toMail, $title , $content, C('VERIFY_EMAIL'), C('VERIFY_PWD'), C('MAIL_SMTP'));
+		$mail->setOpt($opt);
+		$ret = $mail->send();
+		if (!$ret)
 		{
 			\Think\Log::record("saemail error:".$mail->errno().":".$mail->errmsg(), 'WARN', true);
+			unset($mail);
 		} else{
 			break;
 		}
@@ -320,8 +333,8 @@ function send_mail($toMail, $msg, $mailType)
 			\Think\Log::record("phpmail error:".$e, 'WARN', true);
 			return 0;
 		}
-		return 1;
 	}
+	return 1;
 }
 
 
