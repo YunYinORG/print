@@ -6,7 +6,6 @@
 <block name='head'>
 </block>
 <block name='content'>
-<script src="/Public/js/md5.min.js" ></script>
 <div class="title" >
     <h2>{$data['name']}<small class="School" style="font-type:Arial;font-size:12px;color:#AAAAAA">&nbsp;{$data.account},来自</small></h2>
     <span class='label label-success'><a href="__URL__/logout" style="text-decoration: none; color: #FFFFFF">退出登录</a></span><span class="label label-danger"><a href="mailto:feedback@print.nkumstc.cn" style="text-decoration: none; color: #FFFFFF">认证有误</a></span>
@@ -44,7 +43,7 @@
     <section>
         <h4><strong>信息修改</strong></h4>
         
-        <form  id="changeInfo" role="form" method="post" action="/Printer/Printer/changeInfo">
+        <form  id="changeInfo" role="form" method="post" action="__URL__/changeInfo">
             <div class="input-group">
                 <label class="input-group-addon"  for="qq">QQ</label>
                 <input id="qq" class="form-control" value="{$data['qq']}" name="qq" type="text" pattern="\d{5,}">
@@ -98,21 +97,14 @@
         </form>
     </section>
     
-
-
-
-    
 </div>
-    
-
-
 </div>
 </div>
 </block>
 
 <BLOCK name='end'>
+<script src="__Public__/js/md5.min.js" ></script>
 <script>
-
 if({$data['sch_id']} === 1){
     $('.School').append('南开大学');
 }
@@ -135,7 +127,7 @@ $('.cancel').click(function() {
 
 $("#changePwd").bind('submit',function() {
     $('#changePwdButton').attr('disabled',true);
-    var URL = "/Printer/Printer/changePwd"; 
+    var URL = "__URL__/changePwd"; 
     var deprecated_password = $('#deprecated_password').val();
     var password = $('#password').val();
     var re_password = $('#re_password').val();
@@ -149,7 +141,7 @@ $("#changePwd").bind('submit',function() {
         }, function(data) {
             if (data.status) {
                 alert(data.info);
-                location.href="/Printer/Printer/logout";
+                location.href="__URL__/logout";
             } else {
                 alert(data.info);
             }
@@ -158,7 +150,7 @@ $("#changePwd").bind('submit',function() {
     
     else
     {
-        alert("Password dose not match with confirm password");
+        alert("两次密码不一致！");
     }
     $('#changePwdButton').attr('disabled',false);
     $('#deprecated_password').val('');
@@ -173,7 +165,7 @@ $("#changeInfo").on('submit',function(event) {
     
     event.preventDefault();
     
-    var URL = "/Printer/Printer/changeInfo";
+    var URL = "__URL__/changeInfo";
 
     var qq = $('#qq').val();
     var phone = $('#phone').val();
