@@ -100,7 +100,7 @@ class FileController extends RestController
 	 *		出错返回err
 	 *@author NewFuture
 	 */
-	public function id() 
+	public function id($id='') 
 	{
 		$info  = auth();
 		if (!$info) 
@@ -126,9 +126,12 @@ class FileController extends RestController
 				$data['err']      = 'unkown user type';
 			}
 			
-			$fid  = I('id', null, 'intval');
+			$fid  = $id?$id:I('path.1', null, 'int');
 			
-			if (!$data && $fid) 
+			if (!$fid) 
+			{
+				$data['err']='无效id';
+			}elseif(!$data)
 			{
 				$where['id']      = $fid;
 				$File = M('File');
