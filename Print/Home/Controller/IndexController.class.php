@@ -28,7 +28,15 @@ class IndexController extends Controller
     //首页
     public function index() 
     {
-        $this->islogin = use_id() != false;
+        if(use_id())
+        {
+            $this->status='login';
+        }elseif(session('authData'))
+        {
+            $this->status='register';
+        }else{
+            $this->status=null;
+        }
         $this->display();
     }
     
