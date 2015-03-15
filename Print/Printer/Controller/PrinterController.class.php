@@ -43,7 +43,7 @@ class PrinterController extends Controller
         if ($id) 
         {
             
-            $data       = M('Printer')->getById($id);
+            $data       = M('Printer')->field('account','password')->getById($id);
             $this->data = $data;
             $this->price = json_decode($data['price'],true); 
             $this->display();
@@ -106,7 +106,7 @@ class PrinterController extends Controller
              $data['address'] = I('address');
              $data['profile'] = I('profile');
              $data['open_time'] = I('open_time');
-             
+             $data['email'] = I('email');
              
              $price['p_c_s'] = I('p_c_s',0,'float');//color single
              $price['p_c_d'] = I('p_c_d',0,'float');//color double
