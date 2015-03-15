@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+    <head>
+        <title>云印南天</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
+    </head>
+	<body>
+        <div class="container">
+            <div class="col-lg-8 col-lg-offset-2">
+                <h1 class="text-danger text-center">验证成功</h1>
+            </div>
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="text-center text-info">
+                    <h2>请重设你的密码并牢记</h2>
+                </div>
+				<form  role="form" method="post" action="__URL__/resetPwd" onsubmit="return checkform(this);">           
+                    <div class="form-group input-group">
+                        <label class="input-group-addon"  for="password">新的密码</label>
+                        <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password" required>
+                    </div>
+                    <div class="form-group input-group">
+                        <label class="input-group-addon"  for="re_password">确认密码</label>
+                        <input  class="form-control" placeholder='重复刚才的密码' type="password" id="re_password" required>
+                    </div>
+                    <input type="hidden" name='isMD5' value="0"/>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-lg btn-success">提交</button>
+                    </div>
+                </form>
+			</div>
+        </div>
+    </body>
+    <script>
+function checkform(f){
+    if(f.password.value!=f.re_password.value)
+    {
+        f.password.focus=true;
+        alert('两次密码不一致！');
+        return false;
+    }else{
+        //此处应该md5(password)
+        //f['isMD5'].value=1;
+        return true;
+    }
+}
+    </script>
+</html>
