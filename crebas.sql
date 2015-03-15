@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/3/14 12:46:47                           */
+/* Created on:     2015/3/15 15:00:34                           */
 /*==============================================================*/
 
 
@@ -134,6 +134,7 @@ create table printer
    account              char(16) not null,
    password             char(32) not null,
    address              char(32),
+   email                char(64),
    phone                char(16),
    qq                   char(16),
    profile              text,
@@ -157,6 +158,10 @@ create table school
    address              varchar(128),
    primary key (id)
 );
+
+INSERT INTO `school` (`id`, `name`, `address`) VALUES
+(1, '南开大学', '天津市 南开区 卫津路94号'),
+(2, '天津大学', '天津市 南开区 卫津路92号');
 
 /*==============================================================*/
 /* Table: token                                                 */
