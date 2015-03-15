@@ -1,6 +1,6 @@
-云印南开
+云印南天
 =================
-更方便的校园打印 [print.nkumstc.cn](http://print.nkumstc.cn)
+(原云印南开)更方便的校园打印 [yunyin.org](http://yunyin.org)
 ----------------------------
 
 ## Bugs or Fault
