@@ -100,7 +100,6 @@ class PrinterController extends Controller
         $id           = pri_id(U('Index/index'));
         if ($id) 
         {
-            //$data = $_POST;
              $data['qq'] = I('qq');
              $data['phone'] = I('phone');
              $data['address'] = I('address');
@@ -116,7 +115,6 @@ class PrinterController extends Controller
              
              $data['price'] = json_encode($price);
              $data['price_more'] = I('price_more');//price more
-            
             $Printer      = D('Printer');
             $result       = $Printer->where('id='.$id)->save($data);
             if ($result) 

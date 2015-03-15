@@ -116,10 +116,11 @@
 if({$data['sch_id']} === 1){
     $('.School').append('南开大学');
 }
-
 else{
     $('.School').append('天津大学');
 }
+$('#changeInfoButton').attr('disabled',true);
+
 
 $('.glyphicon-pencil').click(function() {
     var info = $(this).parent();
@@ -179,6 +180,7 @@ $("#changeInfo").on('submit',function(event) {
     var address = $('#address').val();
     var profile = $('#profile').val();
     var open_time = $('#open_time').val();
+    var email = $('#email').val();
     var p_c_s = $('#p_c_s').val();
     var p_c_d = $('#p_c_d').val();
     var p_s = $('#p_s').val();
@@ -191,6 +193,7 @@ $("#changeInfo").on('submit',function(event) {
             address  : address ,
             profile  : profile ,
             open_time  : open_time ,
+            email : email ,
             p_c_s  : p_c_s ,
             p_c_d  : p_c_d ,
             p_s  : p_s ,
@@ -200,8 +203,18 @@ $("#changeInfo").on('submit',function(event) {
             if (data.status) {
                 alert(data.info);
             }
-            $('#changeInfoButton').attr('disabled',false);
+            else
+            {
+                $('#changeInfoButton').attr('disabled',false);
+            }
         });
+   });
+   
+$('input').change(function(){
+    $('#changeInfoButton').attr('disabled',false);
+});
+$('textarea').change(function(){
+    $('#changeInfoButton').attr('disabled',false);
 });
 </script>
 </BLOCK>
