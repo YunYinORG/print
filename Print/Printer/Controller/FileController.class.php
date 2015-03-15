@@ -138,13 +138,20 @@ class FileController extends Controller
         $map['id']        = $fid;
         $map['status']        = array('gt', 0);
         $File   = M('File');
-        $info    = $File->where($map)->field('url,status')->find();
+        $info    = $File->where($map)->field('url,status,copies')->find();
 
         if ($info) 
         {
         	if($info['status']==C('FILE_UPLOAD'))
         	{
-        		$File->where('id=%d',$fid)->setField('status',C('FILE_DOWNLOAD'));
+        		if($info['copies'])
+        		{
+        		    $File->where('id=%d',$fid)->setField('status',C('FILE_DOWNLOAD'));
+        	    }
+        	    else
+        	    {
+        	        $File->where('id=%d',$fid)->setField('status',C('FILE_PRINTED'));
+        	    }
         	}
             redirect(download($info['url']));
         } else
