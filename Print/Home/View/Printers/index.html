@@ -1,113 +1,40 @@
-﻿<!DOCTYPE HTML>
-<html>
-	<head>
-		<title>打印店信息页面</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="description" content="" />
-		<meta name="keywords" content="" />
-		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,700|Open+Sans+Condensed:300,700" rel="stylesheet" />
-		<script src="__PUBLIC__/info/js/jquery.min.js"></script>
-		<script src="__PUBLIC__/info/js/skel.min.js"></script>
-		<script src="__PUBLIC__/info/js/skel-panels.min.js"></script>
-		<script src="__PUBLIC__/info/js/init.js"></script>
-	<noscript>
-			<link rel="stylesheet" href="__PUBLIC__/info/css/skel-noscript.css" />
-			<link rel="stylesheet" href="__PUBLIC__/info/css/style.css" />
-			<link rel="stylesheet" href="__PUBLIC__/info/css/style-desktop.css" />
-			<link rel="stylesheet" href="__PUBLIC__/info/css/style-wide.css" />
-	</noscript>
-		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie9.css" /><![endif]-->
-		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
-		<!--[if lte IE 7]><link rel="stylesheet" href="css/ie7.css" /><![endif]-->
-	</head>
-	<!--
-		Note: Set the body element's class to "left-sidebar" to position the sidebar on the left.
-		Set it to "right-sidebar" to, you guessed it, position it on the right.
-	-->
-	<body class="left-sidebar">
-		<!-- Wrapper -->
-	<div id="wrapper">
-		<!-- Content -->
-		 <div id="content">
-			<div id="content-inner">
-					<!-- Post -->
-			    <article class="is-post is-post-excerpt">
-					 <header>
-						<h2><a href="#">Welcome to <strong>{$printer.name}</strong></a></h2>
-					 </header>
-                     <div>
-                        <div class=" \33 u">
-                        	<img src="{$printer.image_url}" class="image-left" /><!--Still to improve-->
-                        </div>
-                        <div class="inf">
-    						<p>地址：{$printer.address}</p>
-                            <p>营业时间：{$printer.open_time}</p>
-    						<p>联系电话：{$printer.phone}</p>
-   							<p>QQ：{$printer.qq}</p>
-                            <p>备注信息：{$printer.profile}</p>
-                            <h3>优惠信息：{$printer.price_more}</h3>
-    						<table>
-     							<caption>参考价格</caption>
-     							<thead>
-      								<tr>
-         								<th>打印类型</th>
-         								<th>单价（元）</th>
-      								</tr>
-  								</thead>
-   								<hr />
-   								<tbody>
-    								<tr>
-       									<td>price_color</td>
-        								<td>{$printer.price_color}</td>
-      								</tr>
-    								<tr>
-       									<td>price_no_color</td>
-        								<td>{$printer.price_no_color}</td>
-      								</tr>
-    								<tr>
-       									<td>price_single</td>
-        								<td>{$printer.price_single}</td>
-      								</tr>
-    								<tr>
-       									<td>price_double</td>
-        								<td>{$printer.price_double}</td>
-      								</tr>
-   								</tbody>
-    					    </table>
-    						
-    					</div><!-- Info -->
-					</div>
-				</article>
-			</div> <!-- Content Inner! -->
-		</div><!-- Content -->
-				<!-- Sidebar -->
-		<div id="sidebar">
-				<!-- Logo -->
-			<div>
-				<img src="__PUBLIC__/info/logo.jpg" id="mylogo" />
-			</div>
-				<!-- Nav -->
-			<nav id="nav">
-				<ul>
-				    <volist name="data" id="vo">
-				      <li class="current_page_item"><a href="/Info/detail/{$vo.id}">{$vo.name}</a></li>
-                    </volist>
-				</ul>
-			</nav>
-                 
-			<div id="copyright">
-    			<span>&copy;2014-2015<a href="/">云印南天</a>. | <a href="/Index/about">ABOUT 云印南天</a>. |云印南天<a href="https://github.com/nkumstc/print">开源项目</a>.|感谢<a href="http://nkumstc.cn">NKU MSTC</a>提供支持.
-                </span>
-			</div> <!-- Copyright -->
-		</div> <!-- SiderBar-->
-	</div> <!-- Wrapper-->
-	</body>
-	
-	
-	<script>
-	    
-	</script>
-	
-	
-	
-</html>
+﻿{//打印店列表页}
+<extend name="Public/template/base.html"/>
+<block name='head'></block>
+<block name='header'>
+<include file="./Public/template/nav.html" printers="active"/>
+</block>
+<block name='content'>
+<div class="title">
+	<h2>打印店列表</h2>
+</div>
+<br/>
+<div class="container" id="printersMain">
+
+<div class="row">
+
+<div class="col-lg-10 col-md-10">
+
+<div class="col-lg-offset-1 col-lg-3 col-xs-offset-1 col-sm-3 col-xs-10 thumbnail text-center printersBlock">
+	<div class="bg-info">
+	<br/>
+	<h2><a href="detail.html">{$data.name}</a></h2>
+	<br/>
+	</div>
+	<div>
+	<h4 class="School">南开大学</h4>
+	<hr/>
+	<p style="font-size:13px">{$data.address}</p>
+	</div>
+</div>
+
+
+</div>
+</div>
+</div>
+
+</block>
+
+<block name='end'>
+
+</block>
