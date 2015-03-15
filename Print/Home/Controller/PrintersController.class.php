@@ -28,7 +28,7 @@ class PrintersController extends Controller
 	public function index()
 	{
 	    $Printer = M('Printer');
-	    $list = $Printer->where('status<>0')->join('school ON printer.sch_id = school.id')->field('printer.name,printer.address,school.name as school')->select();
+	    $list = $Printer->where('status<>0')->join('school ON printer.sch_id = school.id')->field('printer.name,printer.id,printer.address,school.name as school')->select();
 	    if($list)
 	    {
 	        $this->data = $list;
@@ -40,8 +40,9 @@ class PrintersController extends Controller
 		}    
 	}
 	
-	public function detail($id = 1)
+	public function detail()
 	{
+		$id=I('id');
 	    $Printer = M('Printer');
 	    $result = $Printer->where('id='.$id)->field('account,password',true)->find(); 
 	    $List = M('Printer');
