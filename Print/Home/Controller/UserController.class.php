@@ -169,7 +169,7 @@ class UserController extends Controller
             } 
             else
             {
-                $school = M('school')->cache('school', 36000)->getFieldById($data['sch_id'], 'name');
+                $school = M('school')->getFieldById($data['sch_id'], 'name');
                 $this->error($data['sch_id'] . '学校账号实名认证失败！');
             }
         }
