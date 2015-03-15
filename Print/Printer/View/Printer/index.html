@@ -47,14 +47,18 @@
         <form  id="changeInfo" role="form" method="post" action="/Printer/Printer/changeInfo">
             <div class="input-group">
                 <label class="input-group-addon"  for="qq">QQ</label>
-                <input id="qq" class="form-control" value="{$data['qq']}" name="qq" type="text">
+                <input id="qq" class="form-control" value="{$data['qq']}" name="qq" type="text" pattern="\d{5,}">
             </div>          
             <div class="input-group">
                 <label class="input-group-addon"  for="phone">手机</label>
-                <input id="phone" class="form-control" value="{$data['phone']}" name="phone" type="text" required>
+                <input id="phone" class="form-control" value="{$data['phone']}" name="phone" type="text" pattern="1[3458]\d{9}" required>
             </div>
             <div class="input-group">
-                <label class="input-group-addon"  for="printaddress">地址</label>
+                <label class="input-group-addon"  for="email">邮箱</label>
+                <input id="email" class="form-control" value="{$data['email']}" name="email" type="email" required>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon"  for="address">地址</label>
                 <input id="address" class="form-control" value="{$data['address']}" placeholder="15字以内" name="address" type="text" required>
             </div>
             <br/>
@@ -108,15 +112,18 @@
 
 <BLOCK name='end'>
 <script>
-    if({$data['sch_id']} === 1){
-        $('.School').append('南开大学');
-    }
-    else{
-        $('.School').append('天津大学');
-    }
+
+if({$data['sch_id']} === 1){
+    $('.School').append('南开大学');
+}
+
+else{
+    $('.School').append('天津大学');
+}
+
 $('.glyphicon-pencil').click(function() {
     var info = $(this).parent();
-    info.next().show(100);
+    info.next().toggle(100);
 });
 
 $('.cancel').click(function() {
@@ -124,7 +131,6 @@ $('.cancel').click(function() {
     set.hide(100);
     set.prev().show(100);
 });
-
 
 $("#changePwd").bind('submit',function() {
     $('#changePwdButton').attr('disabled',true);

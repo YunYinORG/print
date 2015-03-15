@@ -29,7 +29,7 @@
             <volist name="data" id="vo">
             <tr file_id="{$vo.id}">
                 
-                <td><a target='_blank' class="set download" href="__URL__/download/?fid={$vo.id}">[{$vo.id}]{$vo.name}</a></td>                
+                <td><a target='_blank' fid="{$vo.id}" class="download" href="__URL__/download/?fid={$vo.id}">[{$vo.id}]{$vo.name}</a></td>                
                
          <if condition="$vo.copies eq 0">
              <td>现打</td><td>-</td><td>-</td><td>-</td>    
@@ -56,7 +56,7 @@
             </if>
                 <td>
                     <notempty name="vo['phone']">
-                    <a tabindex="0" role="button" id="{$vo['id']}_button" uid="{$vo['use_id']}" class="bind glyphicon glyphicon-phone" data-toggle="popover" data-trigger="focus" data-content="Loading..."></a>
+                    <a tabindex="0" role="button" id="{$vo['id']}_phone" uid="{$vo['use_id']}" class="bind glyphicon glyphicon-phone" data-toggle="popover" data-trigger="focus" data-content="Loading..."></a>
                     </notempty>
                     {$vo.use_name}[{$vo.student_number}]
                 </td>
@@ -96,6 +96,25 @@
 </block>
 <block name='end'>
 <script>
+$("table").on('click','.download',function(){
+    var btn = $(this);
+    var fid = btn.attr('fid');
+    var status = $('#' + fid + '_status');
+    var copies = status.attr('copies');
+    status.html('已下载');    
+    if(copies != 0 )
+    {
+        status.attr('data', 2);
+        $('#' + fid + '_button').html('通知已打印').removeClass("btn btn-primary").addClass("btn btn-success");
+    }
+    else
+    {
+        status.attr('data', 4);
+        $('#' + fid + '_button').html('确认已付款').removeClass("btn btn-success").addClass("btn btn-warning");
+    }
+});
+
+
 $("table").on('click', '.set', function() {
     var URL = "/Printer/File/set";
     var btn = $(this);

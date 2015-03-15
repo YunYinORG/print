@@ -25,7 +25,7 @@ namespace Home\Controller;
 use Think\Controller;
 class PrintersController extends Controller
 {
-	public function index($id = 1)
+	public function index()
 	{
 	    $Printer = M('Printer');
 	    $list = $Printer->select();
@@ -37,30 +37,25 @@ class PrintersController extends Controller
 		}
 		else
 		{
-		    $this->error('Sorry,something wrong here'); 
+		    $this->error('不好意思，没找到数据'); 
 		}    
-		    
 	}
 	
-	/*
-	public function detail()
+	public function detail($id = 1)
 	{
-	    $id = I('detail');
-	    
 	    $Printer = M('Printer');
-	    $result = $Printer->find(); 
+	    $result = $Printer->where('id='.$id)->field('account,password',true)->find(); 
 	    
 	    if($result)
 	    {
 	        $this->data = $result;
-		    $this->success($result);
-		}
+            $this->display();
+        }
 		else
 		{
-		    $this->error('Sorry,something wrong here'); 
+		    $this->error('不好意思，没找到数据'); 
 		}
 	}
-	*/
 	
 	public function getPrice()
     {
@@ -77,12 +72,12 @@ class PrintersController extends Controller
             }
             else
             {
-                $this->error('No price Info');
+                $this->error('打印店还没设置价钱');
             }
         }
         else
         {
-            $this->error('SignIn or NO pid');
+            $this->error('你可能还没登录或者没提供打印店编号');
         }
     }
 	
