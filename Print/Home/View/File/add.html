@@ -45,12 +45,11 @@
             <div class="col-lg-3">
                 <fieldset id='setting1'>
                     <div style="display:none;margin-top:10px;margin-bottom:0px" id="pptprint">
-                        <select class="form-control" name="ppt_layout" required>
+                        <select id="default" class="form-control" name="ppt_layout" required>
                             <option value="">PPT打印格式</option>
-                            <option value="1">1x1</option>
-                            <option value="2">1x2</option>
-                            <option value="3">2x2</option>
-                            <option value="4">2x3</option>
+                            <volist name="ppt" id="vo" offset="1">
+                                <option value="{$i}">{$vo}</option>
+                            </volist>
                         </select>
                     </div>
                 </fieldset>
@@ -119,6 +118,7 @@ function checkSuffix(n) {
     var other_suffix = ['ppt', 'pptx'];
     if (doc_suffix.indexOf(suffix) >= 0) {
         alert('打印小常识：将文档转成PDF格式，打印出来的格式基本不会发生变化！（任性就随意了(^▽^)）')
+        $('#default').removeAttr('required');
         $('#setting2').show();
         $('#pptprint').hide();
         $('#copies').attr('disabled', false);
@@ -135,6 +135,7 @@ function checkSuffix(n) {
         var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
         $("#upload-list").html('<li style="font-size: 13px;" class="list-group-item">当前文件：'+fname +'</li>');
     } else if(pdf_suffix.indexOf(suffix) >= 0){
+        $('#default').removeAttr('required');
         $('#pptprint').hide();
         $('#setting2').show();
         $('#copies').attr('disabled', false);

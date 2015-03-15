@@ -45,13 +45,7 @@
                 <if condition="$vo.color gt 0"> 彩印<else/>黑白</if>
                 </td>
                 <td>
-                    <switch name="vo['ppt_layout']">
-                    <case value="1">1X1</case>
-                    <case value="2">1X2</case>
-                    <case value="3">2X2</case>
-                    <case value="4">2X3</case>
-                    <default />-
-                    </switch>
+                    {$vo.ppt_layout}
                 </td>
             </if>
                 <td>
@@ -118,6 +112,7 @@ $("table").on('click','.download',function(){
 $("table").on('click', '.set', function() {
     var URL = "/Printer/File/set";
     var btn = $(this);
+    btn.attr('disabled','disabled');
     var fid = btn.attr('fid');
     var status = $('#' + fid + '_status');
     var copies = status.attr('copies');
@@ -148,6 +143,7 @@ $("table").on('click', '.set', function() {
             alert(data.info);
         }
     });
+    btn.removeAttr('disabled');
 });
 
 phoneIsLoad = 0;

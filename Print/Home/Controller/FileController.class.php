@@ -41,11 +41,16 @@ class FileController extends Controller
             $count      = $File->where($condition)->count();
             $Page       = new \Think\Page($count, 10);
             $show       = $Page->show();
-            
             //            $cache_key=cache_name('user',$uid);
-            $this->data = $File->where($condition)->order('file.id desc')->limit($Page->firstRow . ',' . $Page->listRows)->select();
-            
+            $ppt_layout = C('PPT_LAYOUT');
+            $result = $File->where($condition)->order('file.id desc')->limit($Page->firstRow . ',' . $Page->listRows)->select();
             //cache($cache_key)->select();
+            foreach($result as &$file)
+            {
+                $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
+            }
+            unset($file);
+            $this->data = $result;
             $this->assign('page', $show);
             $this->display();
         } 
@@ -70,6 +75,7 @@ class FileController extends Controller
             $condition['sch_id'] = $user['sch_id'];
             $condition['status'] = 1;
             $this->data = $Printer->where($condition)->order('rank desc')->Field('id,name,address')->select();
+            $this->ppt = C('PPT_LAYOUT');
             $this->display();
         } 
         else
@@ -88,7 +94,7 @@ class FileController extends Controller
         $uid  = use_id(U('/Index/index'));
         if ($uid) 
         {
-            $info = upload_file('QINIU');
+            //$info = upload_file('QINIU');
             $name = isset($info['file']['name']) ? $info['file']['name'] : false;
             if ($info && $name) 
             {                

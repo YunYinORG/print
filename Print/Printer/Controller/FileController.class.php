@@ -39,11 +39,18 @@ class FileController extends Controller
 		{
 			$condition['pri_id']        = $pid;
 //				$cache_key   = cache_name('printer', $pid);
-				$condition['status']             = array('between', '1,4');
-				$this->assign('history', false);
-				$this->title = '打印任务列表';
-				$File        = D('FileView');
-			$this->data  = $File->where($condition)->order('file.id desc')->select();//cache($cache_key, 10)->select();
+		    $condition['status']             = array('between', '1,4');
+			$this->assign('history', false);
+			$this->title = '打印任务列表';
+			$File        = D('FileView');
+			$ppt_layout = C('PPT_LAYOUT');
+			$result  = $File->where($condition)->order('file.id desc')->select();//cache($cache_key, 10)->select();
+			foreach($result as &$file)
+            {
+                $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
+            }
+            unset($file);
+            $this->data = $result;
 			$this->display();
 		} else
 		{
@@ -57,15 +64,22 @@ class FileController extends Controller
 		if ($pid) 
 		{
 			$condition['pri_id']        = $pid;
-				$status = 5;
-				$condition['status']        = $status;
-				$this->assign('history', true);
-				$this->title = '已打印文件历史记录';
+			$status = 5;
+			$condition['status']        = $status;
+			$this->assign('history', true);
+			$this->title = '已打印文件历史记录';
 			$File        = D('FileView');
 			$count      = $File->where($condition)->count();
             $Page       = new \Think\Page($count,10);
             $show       = $Page->show();
-			$this->data  = $File->where($condition)->order('file.id desc')->limit($Page->firstRow.','.$Page->listRows)->select();//cache($cache_key, 10)->select();
+            $ppt_layout = C('PPT_LAYOUT');
+            $result  = $File->where($condition)->order('file.id desc')->limit($Page->firstRow.','.$Page->listRows)->select();//cache($cache_key, 10)->select();
+            foreach($result as &$file)
+            {
+                $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
+            }
+            unset($file);
+            $this->data = $result;
             $this->assign('page',$show);
 			$this->display();
 		} else
@@ -85,7 +99,14 @@ class FileController extends Controller
 			$map['status']            = array('between', '1,4');
 			$File       = D('FileView');
 			// $cache_key  = cache_name('printer', $pid);
-			$this->data = $File->where($map)->order('file.id desc')->limit(10)->select();
+			$ppt_layout = C('PPT_LAYOUT');
+			$result  = $File->where($map)->order('file.id desc')->limit(10)->select();
+			foreach($result as &$file)
+            {
+                $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
+            }
+            unset($file);
+            $this->data = $result;
 			$this->display();
 		}
 	}

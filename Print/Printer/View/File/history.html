@@ -41,13 +41,7 @@
                 <if condition="$vo.color gt 0"> 彩印<else/>黑白</if>
                 </td>
                 <td>
-                    <switch name="vo['ppt_layout']">
-                    <case value="1">1X1</case>
-                    <case value="2">1X2</case>
-                    <case value="3">2X2</case>
-                    <case value="4">2X3</case>
-                    <default />-
-                    </switch>
+                    {$vo.ppt_layout}
                 </td>
             </if>
                 <td>{$vo.use_name}[{$vo.student_number}]</td>
