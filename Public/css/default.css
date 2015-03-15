@@ -45,6 +45,22 @@ nav li a , nav li span {
     color: rgba(255, 255, 255, 0.5);
 }
 
+
+
+.printersBlock a {
+  text-decoration: none;
+}
+
+.printersBlock h1,h2 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.printersBlock hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 nav li:hover a, nav li.active a, nav li.active span {
     color: rgba(214, 214, 214, 1);
 }
@@ -61,13 +77,6 @@ nav li:hover a, nav li.active a, nav li.active span {
     margin-top: -55px;
 }
 
-.version {
-    position: absolute;
-    font-weight: 900;
-    z-index: 2;
-    color: #0AFC50;
-}
-
 .upload-btn{
   border-style: solid;
   border-width: 2px;
@@ -80,14 +89,14 @@ nav li:hover a, nav li.active a, nav li.active span {
 
 .upload-area {
   text-align:center;
-  padding-top: 8px;
+  padding-top: 7px;
   font-size: 15px;
   font-weight: 800;
 }
 
 #upload-file {
-    width: 200px;
-    height: 40px;
+    /*width: 200px;
+    height: 40px;*/
     cursor: pointer;
     font-size: 30px;
     outline: medium none;
@@ -116,8 +125,6 @@ nav li:hover a, nav li.active a, nav li.active span {
     text-align: left;
 }
 
-
-
 @media screen and (max-width: 500px){
   #main {
     text-align: center;
@@ -128,7 +135,10 @@ nav li:hover a, nav li.active a, nav li.active span {
   }
 }
 
-@media screen and (min-width: 500px){
+@media screen and (min-width: 968px){
+  #printersMain {
+    margin-left: -25px;
+  }
 }
 
 @media screen and (max-width: 1275px) {
@@ -153,6 +163,9 @@ nav li:hover a, nav li.active a, nav li.active span {
     float: left;
     width: 23%;
     padding: 2em 1% 0 1%;
+  }
+  #printersMain {
+    margin-left: -50px;
   }
   .alert{
     width: 70%;
@@ -230,17 +243,6 @@ nav li:hover a, nav li.active a, nav li.active span {
   }
 }
 
-@media screen and (min-width: 2000px){
-  #mylogo {
-    width: 40%;
-  }
-}
-
-@media screen and (min-width: 2500px){
-  #mylogo{
-    width: 35%;
-  }
-}
 /*footer*/
 footer{
   overflow: hidden;
