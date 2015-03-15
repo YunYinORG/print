@@ -80,12 +80,10 @@ nav li:hover a, nav li.active a, nav li.active span {
 }
 
 .upload-btn{
+  height: 40px;
   border-style: solid;
   border-width: 2px;
-  float: left;
-  height: 40px;
   background: #FFFFFF;
-  width: 200px;
   position: relative;
 }
 
@@ -97,8 +95,6 @@ nav li:hover a, nav li.active a, nav li.active span {
 }
 
 #upload-file {
-    /*width: 200px;
-    height: 40px;*/
     cursor: pointer;
     font-size: 30px;
     outline: medium none;
