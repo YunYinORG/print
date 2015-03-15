@@ -288,20 +288,23 @@ token 读取成功时的返回结果（xml格式为例）
            "copies": "份数",
            "double_side": "是否双面",
            "use_name": "用户名",
-           "student_number": "学号"
+           "student_number": "学号",
+           "color":"是否彩印",
+           "ppt_layout":"PPT打印版式"
         },
         {
 
           "id": "123",
-          "pri_id": "1",
+          "use_id": "1",
           "name": "文件.pdf",
-          "url": "2015-02-05/54aa9abf29187.pdf",
           "time": "2015-02-05 22:08:00",
           "status": "1",
           "copies": "1",
           "double_side": "0",
           "use_name": "用户名",
-          "student_number": "学号"
+          "student_number": "学号",
+          "color":"1",
+          "ppt_layout":"0"
         }
     ]
   }
@@ -318,16 +321,20 @@ token 读取成功时的返回结果（xml格式为例）
         "time": "文件上传时间",
         "status": "文件状态码",
         "copies": "份数",
-        "double_side": "是否双面"
+        "double_side": "是否双面",
+        "color":"是否彩印",
+        "ppt_layout":"PPT打印版式"
     },
     {
         "id": "123",
         "pri_id": "1",
-        "name": "文件.pdf",
+        "name": "文件.ppt",
         "time": "2015-02-05 22:08:00",
         "status": "1",
         "copies": "1",
-        "double_side": "0"
+        "double_side": "0",
+        "color":"0",
+        "ppt_layout":"2"
     }
   ]
 }
@@ -359,7 +366,9 @@ token 读取成功时的返回结果（xml格式为例）
     "requirements": "文件备注说明",
     "copies": "份数",
     "double_side": "单双面",
-    "status": "状态码"
+    "status": "状态码",
+    "color":"是否彩印",
+    "ppt_layout": "1"
 }
 ````
 

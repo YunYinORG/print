@@ -52,14 +52,14 @@ class FileController extends RestController
 			{
 			case C('PRINTER'):
 			case C('PRINTER_WEB'):
-				$field           = 'id,use_id,name,time,status,copies,double_side,use_name,student_number';
+				$field           = 'use_id,use_name,student_number,';
 				$where['pri_id']                 = $info['id'];
 				$File            = D('FileView');
 				break;
 
 			case C('STUDENT'):
 			case C('STUDENT_API'):
-				$field = 'id,pri_id,name,time,status,copies,double_side';
+				$field = 'pri_id,';
 				$where['use_id']       = $info['id'];
 				$File  = M('File');
 				break;
@@ -78,7 +78,7 @@ class FileController extends RestController
 					$where['id']           = array('gt', $start_id);
 				}
 				$cache_key = false;
-				
+				$field.='id,color,ppt_layout,double_side,copies,status,name,time,';
 				// cache_name('printer', $info['id']);
 				$data['files']           = $File->field($field)->where($where)->page($page, 10)->cache($cache_key, 10)->select();
 			}

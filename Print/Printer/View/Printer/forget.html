@@ -4,53 +4,22 @@
         <title>云印南天——找回密码</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
+        <link href="__CDNLIB__/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
     </head>
     <body>
         <div class="container">
             <div class="col-lg-8 col-lg-offset-2">
                 <h1 class="text-danger text-center">找回密码</h1>
                 <div class='alert alert-warning'>
-                    为了防止你的账号信息滥用，你可以通过手机验证、邮箱验证、或校园账号验证（南开URP或者天大办公网），找回你的密码。
-                    <br/>如果账号尚未注册请前往<a title="云印南天" href="/">云印南天首页</a>直接注册。
+                    为了防止你的账号信息滥用，你可以通过手机验证、邮箱验证，找回你的密码。
+                    <br/>如果账号尚未注册请联系我们：contact@yunyin.org</br>返回：<a title="云印南天打印店" href="/Printer/Index/index">云印南天打印店首页</a>
                 </div>
             </div>
 		</div>	
 		<div class="text-center">
-				<button class="btn switch-btn" onclick="findWay(1)" id="phone_way">通过绑定手机找回</button>
-	
-				<button class="btn switch-btn" onclick="findWay(2)" id="email_way">通过绑定邮箱找回</button>
-
-				<button class="btn switch-btn" onclick="findWay(3)" id="account_way">通过校园账号找回</button>
-			</div>
-			
-            <div class="col-lg-8 col-lg-offset-2">            
-                <form style="display:none;" id="account_form" role="form" method="post" action="__URL__/findPwdVerify" onsubmit="return checkform(this);">
-                    <div class="text-center text-info">
-						<h2>验证信息并重设密码</h2>
-					</div>
-					<div class="input-group">
-                        <label class="input-group-addon"  for="number">学号</label>
-                        <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
-                    </div>
-                    <div class="form-group input-group">
-                        <label class="input-group-addon"  for="urp_password">密码</label>
-                        <input  class="form-control" placeholder='南开URP或天大办公网密码' name="urp_password" type="password" id="urp_password" required>
-                    </div>
-                    <div class="form-group input-group">
-                        <label class="input-group-addon"  for="password">新的密码</label>
-                        <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password" required>
-                    </div>
-                    <div class="form-group input-group">
-                        <label class="input-group-addon"  for="re_password">确认密码</label>
-                        <input  class="form-control" placeholder='重复刚才的密码' type="password" id="re_password" required>
-                    </div>
-                    <input type="hidden" name='isMD5' value="0"/>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-lg btn-success">提交</button>
-                    </div>
-                </form>
-			</div>
+			<button class="btn switch-btn" onclick="findWay(1)" id="phone_way">通过绑定手机找回</button>
+			<button class="btn switch-btn" onclick="findWay(2)" id="email_way">通过绑定邮箱找回</button>
+		</div>		
 			
 			<div class="col-lg-8 col-lg-offset-2">        
 				<form style="display:none;" id='phone_form' role="form" method="post" onsubmit="return byPhone(this);" action="__URL__/findPwd">
@@ -58,8 +27,8 @@
 						<h2>验证手机并重设密码</h2>
 					</div>	
 					<div class="input-group">
-                        <label class="input-group-addon"  for="number">学号</label>
-                        <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
+                        <label class="input-group-addon"  for="account">账号</label>
+                        <input  class="form-control" placeholder='注册的账号' name="account" type="text" pattern="\w{3,16}$" id="account" required>
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="phone">手机</label>
@@ -78,8 +47,8 @@
 						<h2>验证邮箱并重设密码</h2>
 					</div>
 				   <div class="input-group">
-                        <label class="input-group-addon"  for="number">学号</label>
-                        <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
+                        <label class="input-group-addon"  for="account">账号</label>
+                        <input  class="form-control" placeholder='注册的账号' name="account" type="text" pattern="\w{3,16}$" id="account" required>
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="email">邮箱</label>
@@ -124,17 +93,17 @@ function checkform(f){
 
 //验证手机
 function byPhone() {
-f=document.getElementById('phone_form');
-var phone=f['phone'].value;
+		f=document.getElementById('phone_form');
+		var phone=f['phone'].value;
         var Mh = M.find('.modal-title');
         var Mb = M.find('.modal-body');
         Mh.html('稍等...');
         Mb.html('正在给' + phone + '发送验证码...');
         M.modal('show');
-        var url = '/User/findPwd';
+        var url = '/Printer/Printer/findPwd';
         var data = {
             'phone': phone,
-			'number':f['number'].value,
+			'account':f['account'].value,
 			'way':'phone'
         }
         f.disabled=true;
@@ -167,7 +136,7 @@ function checkSMSCode(b) {
     if (!reg.test(code)) {
         alert('验证码是四到六位数字哦!');
     } else {
-        var url = '/User/checkSMSCode';
+        var url = '/Printer/Printer/checkSMSCode';
         var data = {
             'code': code,
         };
@@ -220,10 +189,6 @@ function findWay(w)
 	case 2:
 		$('#email_way').addClass('btn-success')
 		$('#email_form').show();
-		break;
-	case 3:
-		$('#account_way').addClass('btn-success')
-		$('#account_form').show();
 		break;
 	}
 }	

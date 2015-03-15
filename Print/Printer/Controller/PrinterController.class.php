@@ -52,6 +52,188 @@ class PrinterController extends Controller
             $this->error('请使用打印店管理账号登录！', U('Index/index'));
         }
     }
+	
+//密码找回页
+    public function forget() 
+    {
+        if (pri_id()) 
+        {
+            $this->redirect('index');
+        } 
+        else
+        {
+            $this->display();
+        }
+    }
+	/**
+	*找回密码
+	*@param way 找回方式
+	*@param account 打印店账号
+	*@param phone 手机号
+	*@param email 邮箱
+	*/
+    function findPwd()
+	{	
+		$account = I('account',false,C('REGEX_ACCOUNT'));
+		if (!$account)
+		{
+			$this->error('账号无效！');
+		}
+		switch (I('way'))
+		{
+		case 'phone':
+			$phone = I('post.phone', false, C('REGEX_PHONE'));
+			if (!$phone) 
+			{
+				$this->error('手机号无效！');
+			}
+			$printer_phone = M('Printer')->getFieldByAccount($account,'phone');
+			if(!empty($printer_phone))
+			{
+				if ($phone != $printer_phone)
+				{	
+					$this->error('账号与手机号不匹配！');
+				}
+			} else
+			{
+				$this->error('账号未注册或未绑定手机！');	
+			}
+			$result = send_sms_code($phone, 'findPwd');//发送短信
+			if ($result == true) 
+			{
+				session('find_pwd_account',$account);
+				session('find_pwd_phone', $phone);
+				$this->success('发送成功');
+			} elseif ($result === 0) 
+			{
+				$this->error('发送次数过多');
+			} else
+			{
+				$this->error('发送失败');
+			}
+			break;
+		case 'email':
+			$email = I('post.email', false, C('REGEX_EMAIL'));
+			if (!$email) 
+			{
+				$this->error('邮箱地址无效！');
+			}	
+			$printer = M('Printer')->Field('id,email')->getByAccount($account);
+			if(!empty($printer['email']))
+			{
+				if ($email != $printer['email'])
+				{
+					$this->error('账号与邮箱不匹配！');
+				}	
+			} else
+			{
+				$this->error('账号未注册或未绑定邮箱！');	
+			}
+			$data['use_id']      = $printer['id'];
+			$data['type']      	 = 2; //密码找回类型为2
+			$Code = M('code');
+			$Code->where($data)->delete();      
+			$data['code']        = random(32);
+			$data['content']     = $account;
+			$cid = $Code->add($data);
+			if ($cid) 
+			{
+            $url = U('Printer/checkEmailCode', 'id=' . $cid . '&code=' . $data['code'], '', true);
+            if (send_mail($email, $url, 2)) 
+            {		
+                $this->success('验证邮件已发送到' . $email .'请及时到邮箱查收');
+            } else
+            {
+                $this->error('验证邮件发送失败！');
+            }
+			} else
+			{
+				$this->error('信息生成失败！');
+			}
+        break;
+		default:
+			$this->error('类型未知！');
+		}
+	}
+					
+		
+	/**
+	*@param code
+	*/
+	function checkSMSCode()
+	{
+		$code   = I('post.code', false, '/^\d{6}$/');
+		$phone 	= session('find_pwd_phone');
+		if(check_sms_code($phone, $code, 'findPwd'))
+		{	
+			session('find_pwd_phone',null);
+			session('reset_pwd_flag',1);
+			$this->success('验证成功！','/Printer/Printer/resetPwd'); 
+		}
+	}
+	/**
+	*@param id 
+	*@param code
+	*/
+	function checkEmailCode()
+	{
+		$id   = I('id', false, 'int');
+		$code = I('code', false, '/^\w{32}/');
+		if ($id && $code) 
+		{
+			$map['id']      = $id;
+			$map['code']      = $code;
+			$map['type']      = 2;  //密码找回类型为2
+			if ($info = M('Code')->where($map)->Field('use_id,content')->find())
+			{
+				M('Code')->where('id=%d', $id)->delete();
+				session('find_pwd_account',$info['content']);
+				session('reset_pwd_flag',2);
+				$this->display('resetPwd');       
+			} else
+			{
+				$this->error('验证信息已失效,请重新获取！','/Printer/Printer/forget');
+			}
+		} else
+		{
+			$this->error('信息不完整！','/Printer/Printer/forget');
+		}
+	}
+	/**
+	*param password 
+	*isMD5
+	*/
+	function resetPwd()
+	{
+		$type = session('reset_pwd_flag');
+		switch($type)
+		{
+			case 1:
+			case 2:
+				$password     = I('post.password');	
+				if(!$password)
+				{
+					$this->display();
+					return;
+				}
+				$account = session('find_pwd_account');
+				if(!I('isMD5'))
+				{
+					$password = md5($password);
+				}				
+				if (false !== M('Printer')->where('account="%s"' ,$account)->setField('password', encode($password, $account))) 
+				{
+					session(null);
+					$this->success('密码重置成功！','/Printer/Index/index');
+				} else
+				{
+					$this->error('重置失败！','/Printer/Printer/forget');
+				}
+			break;
+			default :
+				$this->error('验证失败！','/Printer/Printer/forget');		
+		}		
+	}
     
     /**
      *changePwd()
@@ -100,6 +282,7 @@ class PrinterController extends Controller
         $id           = pri_id(U('Index/index'));
         if ($id) 
         {
+            //$data = $_POST;
              $data['qq'] = I('qq');
              $data['phone'] = I('phone');
              $data['address'] = I('address');
@@ -115,6 +298,7 @@ class PrinterController extends Controller
              
              $data['price'] = json_encode($price);
              $data['price_more'] = I('price_more');//price more
+            
             $Printer      = D('Printer');
             $result       = $Printer->where('id='.$id)->save($data);
             if ($result) 
