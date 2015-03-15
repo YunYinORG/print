@@ -28,11 +28,10 @@ class PrintersController extends Controller
 	public function index()
 	{
 	    $Printer = M('Printer');
-	    $list = $Printer->select();
+	    $list = $Printer->where('status<>0')->join('school ON printer.sch_id = school.id')->field('printer.name,printer.address,school.name as school')->select();
 	    if($list)
 	    {
 	        $this->data = $list;
-	        $this->printer = $list[$id-1];
 		    $this->display();
 		}
 		else
