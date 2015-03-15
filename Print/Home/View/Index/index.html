@@ -36,19 +36,21 @@
          </div>
             <SWITCH name="status">
                 <CASE value='login'>
-                    <div  class="col-md-4 col-md-offset-4">
+                    <div  class="col-md-4 col-md-offset-4 alert">
                     <div class="btn-group-justified">
-                        <div class="btn-group">
                         <a class="btn btn-lg btn-success" href="__ROOT__/File/add">GO,去打印！</a>
-                        </div>
                     </div>
                     </div>
                 </CASE>
               <CASE value='register'>
+              <div  class="col-md-4 col-md-offset-4 alert">
+                    <div class="btn-group-justified">
+                        <a class="btn btn-lg btn-success" href="__ROOT__/User/register">完成注册！</a>
+                    </div>
+                    </div>
               </CASE>
               <DEFAULT/>
-                <form class="col-lg-12" method="post" action="__ROOT__/User/auth" onsubmit="return checkForm();">
-                   
+                <form class="col-lg-12" method="post" action="__ROOT__/User/auth" onsubmit="return checkForm();">                   
                     <div class="row text-center">
                     <div class="col-lg-4 col-md-5 col-sm-8 col-lg-offset-1 ">
                         <div class="input-group">

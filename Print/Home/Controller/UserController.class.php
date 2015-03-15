@@ -86,7 +86,7 @@ class UserController extends Controller
         } 
         else
         {
-            $this->error('学号格式错误！');
+            $this->error('学号格式错误！','/');
         }
         
         $User     = M('User');
@@ -108,7 +108,7 @@ class UserController extends Controller
                 } 
                 else
                 {
-                    $this->error('密码或者账号错误！');
+                    $this->error('密码或者账号错误！','/');
                 }
             } 
             else
@@ -119,7 +119,7 @@ class UserController extends Controller
             
             if ($info['password'] != $password) 
             {
-                $this->error('密码验证错误！');
+                $this->error('密码验证错误！','/');
             } 
             elseif ($info['status'] < 1) 
             {
