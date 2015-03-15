@@ -395,7 +395,7 @@ class UserController extends Controller
             $url = U('User/checkEmailCode', 'id=' . $cid . '&code=' . $data['code'], '', true);
             if (send_mail($email, $url, 2)) 
             {		
-                $this->success('验证邮件已发送到' . $email .'请及时到邮箱查收');
+                $this->success('验证邮件已发送到' . $email .'请及时到邮箱查收!注意垃圾箱哦o(^▽^)o');
             } else
             {
                 $this->error('验证邮件发送失败！');
@@ -684,7 +684,7 @@ class UserController extends Controller
                     $url = U('User/verifyEmail', 'id=' . $cid . '&code=' . $data['code'], '', true);
                     if (send_mail($email, $url, 1)) 
                     {
-                        $this->success('验证邮件已发送到' . $email . '请及时到邮箱验证查收');
+                        $this->success('验证邮件已发送到' . $email . '请及时到邮箱验证查收!注意垃圾箱哦o(^▽^)o');
                     } 
                     else
                     {
