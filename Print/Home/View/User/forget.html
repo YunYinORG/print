@@ -16,12 +16,21 @@
                     <br/>如果账号尚未注册请前往<a title="云印南天" href="/">云印南天首页</a>直接注册。
                 </div>
             </div>
-            <div class="col-lg-8 col-lg-offset-2">
-                <div class="text-center text-info">
-                    <h2>验证信息并重设密码</h2>
-                </div>
-                <form  role="form" method="post" action="__URL__/findPwdVerify" onsubmit="return checkform(this);">
-                    <div class="input-group">
+		</div>	
+		<div class="text-center">
+				<button class="btn switch-btn" onclick="findWay(1)" id="phone_way">通过绑定手机找回</button>
+	
+				<button class="btn switch-btn" onclick="findWay(2)" id="email_way">通过绑定邮箱找回</button>
+
+				<button class="btn switch-btn" onclick="findWay(3)" id="account_way">通过校园账号找回</button>
+			</div>
+			
+            <div class="col-lg-8 col-lg-offset-2">            
+                <form style="display:none;" id="account_form" role="form" method="post" action="__URL__/findPwdVerify" onsubmit="return checkform(this);">
+                    <div class="text-center text-info">
+						<h2>验证信息并重设密码</h2>
+					</div>
+					<div class="input-group">
                         <label class="input-group-addon"  for="number">学号</label>
                         <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
                     </div>
@@ -44,12 +53,12 @@
                 </form>
 			</div>
 			
-			<div class="col-lg-8 col-lg-offset-2">
-                <div class="text-center text-info">
-                    <h2>验证手机并重设密码</h2>
-                </div>	
-				<form id='phone_form' role="form" method="post" onsubmit="return byPhone(this);" action="__URL__/findPwd">
-                    <div class="input-group">
+			<div class="col-lg-8 col-lg-offset-2">        
+				<form style="display:none;" id='phone_form' role="form" method="post" onsubmit="return byPhone(this);" action="__URL__/findPwd">
+                    <div class="text-center text-info">
+						<h2>验证手机并重设密码</h2>
+					</div>	
+					<div class="input-group">
                         <label class="input-group-addon"  for="number">学号</label>
                         <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
                     </div>
@@ -64,18 +73,18 @@
                 </form>
 			</div>
 			
-			<div class="col-lg-8 col-lg-offset-2">
-                <div class="text-center text-info">
-                    <h2>验证邮箱并重设密码</h2>
-                </div>
-				<form  role="form" method="post" action="__URL__/findPwd">
-                    <div class="input-group">
+			<div class="col-lg-8 col-lg-offset-2">              
+				<form style="display:none;" id="email_form" role="form" method="post" action="__URL__/findPwd">
+                    <div class="text-center text-info">
+						<h2>验证邮箱并重设密码</h2>
+					</div>
+				   <div class="input-group">
                         <label class="input-group-addon"  for="number">学号</label>
                         <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="email">邮箱</label>
-                        <input  class="form-control" placeholder='绑定的邮箱地址' name="email" type="email" id="email" required>
+                        <input  class="form-control" placeholder='绑定的邮箱地址' name="email" type="text" id="email" required>
                     </div>
 						<input name="way" type="hidden" value="email"/>
                     <div class="text-center">
@@ -199,5 +208,25 @@ function checkSMSCode(b) {
                         btn.innerHTML = "重发验证码";
         }
 };
-    </script>
+function findWay(w)
+{
+	$('.switch-btn').removeClass('btn-success');
+	$('form').hide();
+	switch (w)
+	{
+	case 1:
+		$('#phone_way').addClass('btn-success')
+		$('#phone_form').show();
+		break;
+	case 2:
+		$('#email_way').addClass('btn-success')
+		$('#email_form').show();
+		break;
+	case 3:
+		$('#account_way').addClass('btn-success')
+		$('#account_form').show();
+		break;
+	}
+}	
+</script>
 </html>
