@@ -47,7 +47,7 @@
         <form  id="changeInfo" role="form" method="post" action="/Printer/Printer/changeInfo">
             <div class="input-group">
                 <label class="input-group-addon"  for="qq">QQ</label>
-                <input id="qq" class="form-control" value="{$data['qq']}" name="qq" type="text" pattern="\d{5}">
+                <input id="qq" class="form-control" value="{$data['qq']}" name="qq" type="text" pattern="\d{5,}">
             </div>          
             <div class="input-group">
                 <label class="input-group-addon"  for="phone">手机</label>
