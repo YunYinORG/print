@@ -35,7 +35,8 @@ class UserModel extends Model
 	{
 		if(isset($result['sch_id']))
 		{
-			$result['school']=M('school')->cache('school',6000)->getFieldById($result['sch_id'],'name');
+			// $result['school']=M('school')->cache('school',6000)->getFieldById($result['sch_id'],'name');
+			 $result['school']=M('school')->getFieldById($result['sch_id'],'name');
 		}
 
 		if (!isset($result['email'])) 
