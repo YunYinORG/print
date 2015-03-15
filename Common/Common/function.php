@@ -292,8 +292,9 @@ function send_mail($toMail, $msg, $mailType)
 		if ($ret === false)
 		{
 			\Think\Log::record("saemail error:".$mail->errno().":".$mail->errmsg(), 'WARN', true);
+		} else{
+			break;
 		}
-		break;
 
 	case 'phpmailer':
 	default:
