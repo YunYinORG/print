@@ -1,20 +1,22 @@
 云印南天
 =================
 (原云印南开)更方便的校园打印 [yunyin.org](http://yunyin.org)
+
+官方宣传页[www.yunyin.org](http://www.yunyin.org)
 ----------------------------
 
 ## Bugs or Fault
-* 缓存导致管理列表刷新的问题
-* 文件删除无通知
-* 上传页面UI
 * 多文件不能一次
 * 提前判断文件大小
-* doc等格式提示转pdf
+* 打印店信息修改
 
 ## Features to add
-* 打印店文件到达通知
+* 打印店文件到达通知【doing】
+* PPT版式
+* 图片打印
+* 逾期提醒
 * 状态更新通知提醒
-* 打印店主页和自主管理
+* 打印店主页和自主管理【done]
 * 手机绑定 【done】
 * 邮箱绑定和验证 【done】
 * 神秘功能 【done】
@@ -24,10 +26,11 @@
 
 ##安全问题：
 * 输入字段严格过滤【doing】
-* https验证通道
-* xss(httponly，反馈和打印店介绍)
+* xss(反馈和打印店介绍)【doing】
+* xss(httponly) 【done】
 * 隐私数据加密（手机号和邮箱保存加密）【done】
 * API接口,token直接传递不够安全(防止劫持)
+* https验证通道
 
 ##框架目录
 
@@ -133,5 +136,3 @@ API相关说明:[API.md](https://github.com/nkumstc/print/blob/master/API.md)
 本项目由南开大学学生发起，免费开源，同时欢迎所有人贡献代码和想法
 
 项目源码遵循apache2 开源协议
-
-项目起步阶段由[南开大学微软技术俱乐部](http://nkumstc.cn)提供支持
