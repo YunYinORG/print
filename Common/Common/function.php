@@ -377,6 +377,18 @@ function send_sms($toPhone, $content, $smsType)
 				$tid = 4003;
 			}
 			break;
+		case 3:
+			//通知学子卡丢失
+			if (C('SMS_SUPPORTER') == 'huyi') 
+			{
+				$msg = null;
+				$tid = null;
+			}
+			else
+			{			
+				$msg = $content['recv_name'] . ',' . $content['send_name'] . ',' . $content['send_phone'];
+				$tid = 4134;
+			}
 		default:
 			
 			// code...
