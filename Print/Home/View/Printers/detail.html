@@ -1,15 +1,13 @@
-
 <!DOCTYPE html>
-
 <html lang="zh-cmn-Hans">
     <head>
         <meta charset="UTF-8">
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>云印南天-Beta</title>
-        <meta name="keywords" content="云印南天打印店" />
-        <meta name="description" content="云印南天打印店登录" />
+        <title>云印南天-Beta-{$data.name}</title>
+        <meta name="keywords" content="云印南天打" />
+        <meta name="description" content="云印南天打印店 {$data.name}" />
         <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
         <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css" media="all"/>
         <script src="__CDNLIB__/jquery/2.1.1/jquery.min.js"></script>
@@ -21,12 +19,12 @@
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
             data-target="#navbar-collapse">
-            <!--<span class="sr-only">切换导航</span>-->
+            <span class="sr-only">切换导航</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><img src="__PUBLIC__/images/logo.png" class="img-circle img-rounded" id="mylogo"></a>
+            <a class="navbar-brand" href="/"><img src="__PUBLIC__/images/logo.png" alt="logo" title="home" class="img-circle img-rounded" id="mylogo"></a>
         </div>
       
             <div class="collapse navbar-collapse" id="navbar-collapse">
@@ -125,13 +123,9 @@
 
 <script>
 
-if({$data.sch_id} === 1)
-    $('.School').append('南开大学');
-else
-    $('.School').append('天津大学');
-
-if ({$data['price']}) {
-            var price = {$data['price']}; //JSON.parse({$data['price']});
+var price={$data['price']|default=0};
+if (price) {
+           // var price = {$data['price']}; //JSON.parse({$data['price']});
                 $('#p_c_s').html(price.p_c_s+'角/张');
                 $('#p_c_d').html(price.p_c_d+'角/张');
                 $('#p_s').html(price.p_s+'分/张');
@@ -142,9 +136,6 @@ if ({$data['price']}) {
                 $('#p_s').html("未设置");
                 $('#p_d').html("未设置");
             }
-
-
-
 </script>
 
 </html>
