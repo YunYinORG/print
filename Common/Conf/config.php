@@ -38,8 +38,6 @@ return array(
         '__PUBLIC__'     =>   '/Public',
         '__CDNLIB__'     =>   '/Public/lib',
         '__UPLOAD__'   =>   '/Uploads',
-        '__JS__'                =>   '/Public/js',
-        '__CSS__'            =>   '/Public/css',
     ) ,
 
     //用户登录类型

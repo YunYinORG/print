@@ -262,24 +262,36 @@ function send_mail($toMail, $msg, $mailType)
 	case 1:
 		
 		//绑定验证邮箱
-		$title   = '云印验证邮件';
+		$title   = '云印邮箱绑定验证';
 		$content='欢迎加入云印的大家庭哦！<br/>云小印专注于为您提供最方便快捷的校园打印体验，让您随时打印，随手可取，无需“忧”盘！<br/>请点击以下链接绑定此的邮箱：('.$toMail.") <a href='$msg'>$msg</a>";
+		$email=C('VERIFY_EMAIL');
+		$password=C('VERIFY_PWD');
+		$name='云小印（验证）';
 		break;
 
 	case 2:
-		$title = '云印密码找回';
-		$content = '您正在yunyin.org使用密码找回功能<br>请点击以下链接重设密码：'." <a href='$msg'>$msg</a>";
-		//找回密码
+	//找回密码
+		$title = '云印找回密码邮件';
+		$content = '您正在云印南天使用密码找回,<br>请点击以下链接重设密码：'." <a href='$msg'>$msg</a>";
+		$email=C('VERIFY_EMAIL');
+		$password=C('VERIFY_PWD');
+		$name='云小印（验证）';
 		break;
 
 	 case 3:
-        $title = '校园卡认领通知';
+        $title = '云印校园卡认领通知';
 		$content=$msg;
+		$email=C('NOTIFY_EMAIL');
+		$password=C('NOTIFY_PWD');
+		$name='云小印（通知）';
 		break;
         
 	default:
 		$title = '来自云印的通知'; //无论如何都应该有一个标题
-	
+		$content=$msg;
+		$email=C('NOTIFY_EMAIL');
+		$password=C('NOTIFY_PWD');
+		$name='云小印（通知）';
 		//直接发送
 		break;
 	}
@@ -290,13 +302,14 @@ function send_mail($toMail, $msg, $mailType)
 		$mail = new SaeMail();
 		$opt = array(
 			'content_type' => 'HTML',
-			'from' => C('VERIFY_EMAIL'),
+			'from' => $email,
 			'to' => $toMail,
 			'content' => $content,
 			'subject' => $title,
 			'smtp_host' => C('MAIL_SMTP'),
-			'smtp_username' => C('VERIFY_EMAIL'),
-			'smtp_password' => C('VERIFY_PWD'),
+			'smtp_username' => $email,
+			'smtp_password' => $password,
+			'nickname'=>$name
 			);
 		//$ret = $mail->quickSend($toMail, $title , $content, C('VERIFY_EMAIL'), C('VERIFY_PWD'), C('MAIL_SMTP'));
 		$mail->setOpt($opt);
@@ -320,10 +333,10 @@ function send_mail($toMail, $msg, $mailType)
 		$mail->SMTPAuth = true;
 		$mail->CharSet  = 'UTF-8';
 		$mail->Host     = C('MAIL_SMTP');
-		$mail->From     = C('VERIFY_EMAIL');
-		$mail->Username = C('VERIFY_EMAIL');
-		$mail->Password = C('VERIFY_PWD');
-		$mail->FromName = '云小印';
+		$mail->From     =$email;
+		$mail->Username = $email;
+		$mail->Password = $password;
+		$mail->FromName = $name;
 		try
 		{
 			$mail->Send();
@@ -521,7 +534,7 @@ function get_user_by_email($email)
 	{
 		$q1        = '`email` LIKE "' . substr_replace($email, '%', 1, 0) . '"';
 		$q2        = 'length(`email`)<' . (strlen($email) + 23);
-		$condition = $q2 . ' AND ' . $q2;
+		$condition = $q1 . ' AND ' . $q2;
 		$id        = M('User')->where($condition)->getField('id');
 	} else
 	{
