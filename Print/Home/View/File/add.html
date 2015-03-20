@@ -37,7 +37,7 @@
 
         <div class="row">
             <div class="col-sm-5">
-                <ul id="upload-list" class="list-group" style="margin-bottom:0px;margin-top:10px"></ul>
+                <ul id="upload-list" class="list-group"></ul>
             </div>
             
         </div>
@@ -106,7 +106,7 @@
         </div>
         <div class="col-sm-6 col-lg-4 well">
             <h4 class="text-info">该店价格信息</h4>
-            <div id='price' class='help-block' style="font-size:13px">
+            <div id='price' class='help-block comments'>
                 黑白单面：<span id='p_s' class='text-danger'></span><br/>
                 黑白双面：<span id='p_d' class='text-danger'></span><br/>
                 彩印单面：<span id='p_c_s' class='text-danger'></span><br/>
@@ -143,7 +143,7 @@ function checkSuffix(n) {
         $('#double_side').attr('disabled', false);
         $("#fileUploadButton").attr('disabled', false);
         var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
-        $("#upload-list").html('<li style="font-size: 13px;" class="list-group-item">当前文件：'+ fname +'</li>'+'<li style="font-size: 13px;" class="list-group-item">支持的格式，但更推荐pdf。');
+        $("#upload-list").html('<li class="list-group-item">当前文件：'+ fname +'</li>'+'<li class="list-group-item">支持的格式，但更推荐pdf。');
     } else if (other_suffix.indexOf(suffix)>=0) {
         $('#pptprint').show();
         $('#setting').show();
@@ -151,7 +151,7 @@ function checkSuffix(n) {
         $('#double_side').attr('disabled', false);
         $("#fileUploadButton").attr('disabled', false);
         var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
-        $("#upload-list").html('<li style="font-size: 13px;" class="list-group-item">当前文件：'+fname +'</li>');
+        $("#upload-list").html('<li class="list-group-item">当前文件：'+fname +'</li>');
     } else if(pdf_suffix.indexOf(suffix) >= 0){
         $('#default').removeAttr('required');
         $('#setting').show();
@@ -160,9 +160,9 @@ function checkSuffix(n) {
         $('#double_side').attr('disabled', false);
         $("#fileUploadButton").attr('disabled', false);
         var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
-        $("#upload-list").html('<li style="font-size: 13px;" class="list-group-item" style="border-style:none">当前文件：'+fname +'</li>');
+        $("#upload-list").html('<li class="list-group-item">当前文件：'+fname +'</li>');
     } else {
-        $("#upload-list").html('<li style="font-size: 13px;" class="list-group-item">不支持'+ suffix + '格式文件。</li>');
+        $("#upload-list").html('<li class="list-group-item">不支持'+ suffix + '格式文件。</li>');
         $("#fileUploadButton").attr('disabled',true);
     }
 }
