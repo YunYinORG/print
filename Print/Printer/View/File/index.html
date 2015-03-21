@@ -146,6 +146,69 @@ $("table").on('click', '.set', function() {
     btn.removeAttr('disabled');
 });
 
+function insert(data)
+{
+    var trLast = $('tr:last').clone();
+    trLast.attr('file_id',data.id);
+    
+    var node = trLast.find('a').eq(0);
+    node.attr('fid',data.id);
+    node.attr('href',"/Printer/File/download/?fid="+data.id);
+    node.html('['+data.id+']'+data.name);
+    
+    node = trLast.find('td').eq(1);
+    if(data.copies==0)
+    {
+        node.html('现打');
+    }
+    else
+    {
+        node.html(data.copies);
+    }
+    var double_side = new Array("单面","双面"); 
+    node = trLast.find('td').eq(2);
+    node.html(double_side[data.double_side]);
+    var color = new Array("黑白","彩色");
+    node = trLast.find('td').eq(3);
+    node.html(color[data.color]);
+
+    node = trLast.find('td').eq(4);
+    node.html(data.ppt_layout);
+
+    node = trLast.find('a')[1];
+    if((typeof node === 'undefined')&&data.phone)
+    {
+        var html = '<a tabindex="0" role="button" id="'+data.id+'_phone" uid="'+data.use_id+'" class="bind glyphicon glyphicon-phone" data-toggle="popover" data-trigger="focus" data-content="Loading..."></a>';
+        trLast.find('td').eq(5).append(html);
+    }
+    else if((typeof data.phone === 'undefined')&&node)
+    {
+        node.remove();
+    }
+    node = trLast.find('td').eq(5);
+    node.html(data.use_name+'['+data.student_number+']');
+    
+    node = trLast.find('td').eq(6);
+    node.html(data.time);
+    
+    var f_status = new Array("未知状态","尚未下载","已下载","已下载","已印待付款");
+    node = trLast.find('td').eq(7);
+    node.attr('id',data.id+'_status');
+    node.attr('data',data.status);
+    node.attr('copies',data.copies);
+    node.html(f_status[data.status]);
+    
+    var b_class = new Array("btn btn-success","btn btn-primary","btn btn-success","btn btn-success","btn btn-danger");
+    var b_status = new Array("不可操作","通知已下载","通知已打印","通知已打印","确认已付款");
+    node = trLast.find('button');
+    node.attr('id',data.id+'_button');
+    node.attr('fid',data.id);
+    node.removeClass().addClass(b_class[data.status]);
+    node.html(b_status[data.status]);
+    $('tbody').prepend(trLast);
+}
+
+
 phoneIsLoad = 0;
 $("table").on('click', '.bind', function(e) {
     var URL = "/Printer/File/bind";
@@ -177,18 +240,22 @@ function refresh() {
     var file_id = $('tbody').children().attr('file_id');
     var url = "__URL__/refresh";
     $.post(url, {
-        file_id: file_id
+        file_id: 208
     }, function(data) {
-        if (data) {
-            $('tbody').prepend(data);
-           var html='<div class="alert alert-warning" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button><span class="text-danger">新文件到达</span></div>';
-           $('main').prepend(html);
+        if (data.status) {
+            for(var key in data.info)
+            {
+                insert(data.info[key]);
+            }
+            var html='<div class="alert alert-warning" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button><span class="text-danger">新文件到达</span></div>';
+            $('main').prepend(html);
         }
         isRefreshing = false;
     });
 }
 $(document).ready(function() {
-    setInterval(refresh, 15000);
+    //setInterval(refresh, 15000);
+    refresh();
 });
 </script>
 </block>

@@ -45,13 +45,20 @@ class FileController extends Controller
 			$File        = D('FileView');
 			$ppt_layout = C('PPT_LAYOUT');
 			$result  = $File->where($condition)->order('file.id desc')->select();//cache($cache_key, 10)->select();
-			foreach($result as &$file)
+			if($result)
             {
-                $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
-            }
-            unset($file);
-            $this->data = $result;
-			$this->display();
+			    foreach($result as &$file)
+                {
+                    $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
+                }
+                unset($file);
+                $this->data = $result;
+			    $this->display();
+			 }
+			 else
+			 {
+			    $this->error('no file');
+			 }
 		} else
 		{
 			$this->redirect('Printer/Index/index');
@@ -101,13 +108,22 @@ class FileController extends Controller
 			// $cache_key  = cache_name('printer', $pid);
 			$ppt_layout = C('PPT_LAYOUT');
 			$result  = $File->where($map)->order('file.id desc')->limit(10)->select();
-			foreach($result as &$file)
-            {
-                $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
+			//var_dump($result);
+			
+			if($result)
+			{
+			    foreach($result as &$file)
+                {
+                    $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
+                }
+                unset($file);
+                $this->success($result);
             }
-            unset($file);
-            $this->data = $result;
-			$this->display();
+            else
+            {
+                $this->error('error');
+            }
+            
 		}
 	}
 	
