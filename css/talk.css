@@ -1,0 +1,208 @@
+.talk1 {
+	position: absolute;
+	z-index: 999;
+	width: 2.2em;
+	height: 2.2em;
+	cursor: pointer;
+}
+
+/* Trigger item */
+
+.talk1-item {
+	width: 30px;
+	height: 30px;
+	left: 50%;
+	top: 50%;
+	margin: -15px 0 0 -15px;
+	position: absolute;
+	border-radius: 50%;
+	border: 2px solid #e35583;
+	-webkit-animation: pulse 0.6s infinite alternate;
+	animation: pulse 0.6s infinite alternate;
+}
+
+@-webkit-keyframes pulse {
+	from { -webkit-transform: scale3d(0.5,0.5,1); }
+	to { -webkit-transform: scale3d(1,1,1); }
+}
+
+@keyframes pulse {
+	from { -webkit-transform: scale3d(0.5,0.5,1); transform: scale3d(0.5,0.5,1); }
+	to { -webkit-transform: scale3d(1,1,1); transform: scale3d(1,1,1); }
+}
+
+ .active .talk1-item {
+	border-color: #fff;
+}
+
+
+.talk1-content {
+	position: absolute;
+	background: #e35583;
+	z-index: 9999;
+	width: 200px;
+	bottom: 50%;
+	margin-bottom: -1em;
+	padding: 20px;
+	border-radius: 20px;
+	font-size: 1.1em;
+	text-align: center;
+	color: #fff;
+	opacity: 0;
+	cursor: default;
+	pointer-events: none;
+	font-family: 'Gochi Hand', cursive;
+	-webkit-font-smoothing: antialiased;
+	-webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+	transition: opacity 0.3s, transform 0.3s;
+}
+
+.talk1-west .talk1-content {
+	left: 4em;
+	-webkit-transform-origin: -2em 50%;
+	transform-origin: -2em 50%;
+	-webkit-transform: translate3d(0,50%,0) rotate3d(1,1,1,30deg);
+	transform: translate3d(0,50%,0) rotate3d(1,1,1,30deg);
+}
+
+.talk1-east .talk1-content {
+	right: 4em;
+	-webkit-transform-origin: calc(100% + 2em) 50%;
+	transform-origin: calc(100% + 2em) 50%;
+	-webkit-transform: translate3d(0,50%,0) rotate3d(1,1,1,-30deg);
+	transform: translate3d(0,50%,0) rotate3d(1,1,1,-30deg);
+}
+
+ .active .talk1-content {
+	opacity: 1;
+	-webkit-transform: translate3d(0,50%,0) rotate3d(0,0,0,0);
+	transform: translate3d(0,50%,0) rotate3d(0,0,0,0);
+	pointer-events: auto;
+}
+
+/* Gap "bridge" and arrow */
+
+.talk1-content::before,
+.talk1-content::after {
+	content: '';
+	position: absolute;
+}
+
+.talk1-content::before {
+	height: 100%;
+	width: 3em;
+}
+
+.talk1-content::after {
+	width: 2em;
+	height: 2em;
+	top: 50%;
+	margin: -1em 0 0;
+	background: url(../image/svg/talk1.svg) no-repeat center center;
+	background-size: 100%;
+}
+
+.talk1-west .talk1-content::before,
+.talk1-west .talk1-content::after {
+	right: 99%; /* because of FF, otherwise we have a gap */
+}
+
+.talk1-east .talk1-content::before,
+.talk1-east .talk1-content::after {
+	left: 99%; /* because of FF, otherwise we have a gap */
+}
+
+.talk1-east .talk1-content::after {
+	-webkit-transform: scale3d(-1,1,1);
+	transform: scale3d(-1,1,1);
+}
+
+
+.talk2 {
+	position: relative;
+	z-index: 999;
+}
+
+/* Trigger text */
+
+.talk2-item {
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.talk2-content {
+	position: absolute;
+	font-size: 16px;
+	background: #fff;
+	z-index: 9999;
+	width: 280px;
+	bottom: 100%;
+	left: 50%;
+	margin: 0 0 105px -140px;
+	padding: 25px;
+	text-align: left;
+	border-radius: 10px/50%;
+	color: #dd5864;
+	opacity: 0;
+	cursor: default;
+	pointer-events: none;
+	-webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+	transition: opacity 0.3s, transform 0.3s;
+}
+
+.talk2-turnright .talk2-content {
+	-webkit-transform: translate3d(0,50px,0) rotate3d(1,1,1,6deg);
+	transform: translate3d(0,50px,0) rotate3d(1,1,1,6deg);
+}
+
+.talk2-turnleft .talk2-content {
+	-webkit-transform: translate3d(0,50px,0) rotate3d(1,1,1,-6deg);
+	transform: translate3d(0,50px,0) rotate3d(1,1,1,-6deg);
+}
+
+.active .talk2-content {
+	opacity: 1;
+	pointer-events: auto;
+	-webkit-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
+}
+
+/* Arrow */
+
+.talk2-content::after {
+	content: '';
+	position: absolute;
+	width: 60px;
+	height: 120px;
+	top: 100%;
+	background: url(../image/svg/talk2.svg) no-repeat center center;
+	background-size: 100%;
+	-webkit-transform-origin: 50% 0;
+	transform-origin: 50% 0;
+	-webkit-transition: -webkit-transform 0.3s;
+	transition: transform 0.3s;
+}
+
+.talk2-turnright .talk2-content::after {
+	left: 25%;
+	-webkit-transform: scale3d(-1,1,1) rotate3d(1,1,1,25deg) translate3d(0,-15px,0);
+	transform: scale3d(-1,1,1) rotate3d(1,1,1,25deg) translate3d(0,-15px,0);
+}
+
+.talk2-turnleft .talk2-content::after {
+	right: 25%;
+	-webkit-transform: rotate3d(1,1,1,25deg) translate3d(0,-15px,0);
+	transform: rotate3d(1,1,1,25deg) translate3d(0,-15px,0);
+}
+
+/*.active .talk2-content::after {
+	-webkit-transform: scale3d(-1,1,1) rotate3d(1,1,1,0) translate3d(0,-5px,0);
+	transform: scale3d(-1,1,1) rotate3d(1,1,1,0) translate3d(0,-5px,0);
+}
+*/
+/*.talk2-turnleft*/
+
+/* .active .talk2-content::after {
+	-webkit-transform: rotate3d(1,1,1,0) translate3d(0,-5px,0);
+	transform: rotate3d(1,1,1,0) translate3d(0,-5px,0);
+}*/
