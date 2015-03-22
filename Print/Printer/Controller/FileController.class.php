@@ -165,14 +165,7 @@ class FileController extends Controller
         {
         	if($info['status']==C('FILE_UPLOAD'))
         	{
-        		if($info['copies'])
-        		{
-        		    $File->where('id=%d',$fid)->setField('status',C('FILE_DOWNLOAD'));
-        	    }
-        	    else
-        	    {
-        	        $File->where('id=%d',$fid)->setField('status',C('FILE_PRINTED'));
-        	    }
+        	    $File->where('id=%d',$fid)->setField('status',C('FILE_DOWNLOAD'));
         	}
             redirect(download($info['url']));//,'attname='.$info['name']));
         } else
