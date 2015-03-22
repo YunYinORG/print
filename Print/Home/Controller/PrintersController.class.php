@@ -53,6 +53,7 @@ class PrintersController extends Controller
 	    	$list = $Printer->where($where)->field('id,name')->select();
 	        $this->data = $result;
 	        $this->printerList = $list;
+	        $this->price = json_decode($result['price'],true);
             $this->display();
         }
 		else
