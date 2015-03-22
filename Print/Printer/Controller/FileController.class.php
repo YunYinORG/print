@@ -159,7 +159,7 @@ class FileController extends Controller
         $map['id']        = $fid;
         $map['status']        = array('gt', 0);
         $File   = M('File');
-        $info    = $File->where($map)->field('url,status,copies')->find();
+        $info    = $File->where($map)->field('url,status,copies,name')->find();
 
         if ($info) 
         {
@@ -174,7 +174,7 @@ class FileController extends Controller
         	        $File->where('id=%d',$fid)->setField('status',C('FILE_PRINTED'));
         	    }
         	}
-            redirect(download($info['url']));
+            redirect(download($info['url']));//,'attname='.$info['name']));
         } else
         {
             $this->error('文件已删除，不能再下载！');

@@ -418,7 +418,7 @@ function random($n, $mode = '') {
 	return substr(str_shuffle($str), 0, $n);
 }
 
-function download($url) {
+function download($url,$param='') {
 	switch (C('FILE_UPLOAD_TYPE')) {
 		case 'QINIU':
 			$setting = C('UPLOAD_CONFIG_QINIU');
@@ -426,11 +426,11 @@ function download($url) {
 			$duetime = NOW_TIME + 86400;
 
 			//下载凭证有效时间
-			$DownloadUrl = $url . '?e=' . $duetime;
+			$DownloadUrl = $url . '?' . $param . '&e=' .$duetime ;
 			$Sign = hash_hmac('sha1', $DownloadUrl, $setting["secretKey"], true);
 			$EncodedSign = str_replace(array('+', '/'), array('-', '_'), base64_encode($Sign));
 			$Token = $setting["accessKey"] . ':' . $EncodedSign;
-			$RealDownloadUrl = $DownloadUrl . '&token=' . $Token;
+			$RealDownloadUrl = $DownloadUrl . '&token=' . $Token ;
 			return $RealDownloadUrl;
 			break;
 
