@@ -59,19 +59,34 @@
 |         └─config_sae.php     sae配置文件
 |
 |─Print            云印南开系统项目目录
+|    |-Admin
+|    |    |─Conf                  配置文件目录
+|    |    |─Common        公共函数目录
+|    |    |─Controller       控制器目录
+|    |    |    |─IndexController.class.php      默认控制器（管理登录）
+|    |    |    └─PrinterController.class.php          打印店注册管理控制器
+|    |    |─Model         模型目录
+|    |    └─View          模板视图目录
+|    |         |─Index       默认模板目录
+|    |         └─Printer         管理打印店模板目录
+|    | 
 |    |─Home            普通用户模块目录
 |    |    |─Conf                  配置文件目录
 |    |    |─Common        公共函数目录
 |    |    |─Controller       控制器目录
 |    |    |    |─IndexController.class.php      默认控制器（首页）
 |    |    |    |─UserController.class.php        用户控制器
+|    |    |    |─CardController.class.php        找回一卡通控制器
+|    |    |    |─EmptyController.class.php        404控制器
+|    |    |    |─PrintersController.class.php        打印店介绍控制器
 |    |    |    └─FileController.class.php          文件管理控制器
 |    |    |─Model         模型目录
-|    |    |    |─......                                                各种模型
-|    |    |    └─UserModel.class.php               用户模型
+|    |    |    └─......                                                各种模型
 |    |    └─View          模板视图目录
 |    |         |─Index       默认模板目录
 |    |         |─User        用户模板目录
+|    |         |─Printers   打印店介绍模板目录
+|    |         |─Card        找回一卡通模板目录
 |    |         └─File         文件模板目录
 |    |
 |    └─Printer     打印店管理模块目录
@@ -83,20 +98,31 @@
 |         |    └─FileController.class.php              文件管理控制器
 |         |─Model             模型目录
 |         └─View                视图目录
+|              |─Printer   打印店模板目录
+|              |─Index         登录模板目录
+|              └─File         文件模板目录
 |
 |─API                  云印南开API模块
 |    |─Conf                     配置文件目录
 |    |─Common           公共函数目录
+|    |-Model            公共模型目录
+|    |-Verify           公共认证函数目录
 |    |─Controller          控制器目录
 |    |    |─NotificationController.class.php    消息接口控制器
 |    |    |─FileController.class.php                    文件接口控制器
-|    |    └─IndexController.class.php               认证和令牌管理制器
+|    |    |-IndexController.class.php               认证和令牌管理制器
+|    |    |-PrinterController.class.php         打印店接口控制器
+|    |    |-TokenController.class.php           令牌接口控制器
+|    |    └─UserController.class.php            学生用户接口控制器
+|    |    
 |    └─Model                模型目录
 |
 |─Public             前端资源文件目录
 |    |─css                      css文件目录
-|    |─js                         javascript目录
-|    |─images              图片目录
+|    |─js                         自己写的javascript目录
+|    |─lib              引用的js以及css目录
+|    |─html              404目录
+|    |─fonts              字体目录
 |    └─template          模板文件目录    
 |
 |─Uploads       上传文件目录（可写，不同步）

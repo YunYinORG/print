@@ -174,10 +174,10 @@ function priceChange(n){
             pid : pid
         }, function(data) {
             if (data.status) {
-                $('#p_c_s').html(data.info.p_c_s+'角/张');
-                $('#p_c_d').html(data.info.p_c_d+'角/张');
-                $('#p_s').html(data.info.p_s+'分/张');
-                $('#p_d').html(data.info.p_d+'分/张');
+                $('#p_c_s').html(data.info.p_c_s+'元/张');
+                $('#p_c_d').html(data.info.p_c_d+'元/张');
+                $('#p_s').html(data.info.p_s+'元/张');
+                $('#p_d').html(data.info.p_d+'元/张');
             } else {
                 $('#p_c_s').html("未设置");
                 $('#p_c_d').html("未设置");
