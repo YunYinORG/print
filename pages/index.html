@@ -1,0 +1,62 @@
+---
+layout: master
+title: 云印南天文档
+description: 云印南天文档官方文档
+bloghome: true
+---
+      <div class="container-fluid">
+        <div class="row">
+          <div class="hidden-xs col-md-2 col-sm-3 orange sidebar">
+            {% include sidemenu.html %}
+          </div>
+          <div class="col-md-10 col-sm-9 col-md-offset-2 col-sm-offset-3">
+            <div class="row">
+              {% for post in paginator.posts %}
+              <article class="col-md-12 justified">
+                <h2 class="post-title">
+                  <a href="{{ post.url }}" class="orange-link">
+                    {{ post.title }}
+                  </a>
+                </h2>
+                <div class="publish-tag">
+                  <span class="fa fa-calendar"></span>&nbsp;发布于 {{ post.date | date: "%B %d, %Y" }}
+                </div>
+		              <div class="tags">
+                  {% if post.tags %}
+              		{% for tag in post.tags %}
+                			<a href="/tags/{{tag}}"><span class="label btn-orange">{{tag}}</span></a>
+              		{% endfor %}
+           		 {% else %}
+              		None
+            	 {% endif %}
+                </div>
+                <hr/>
+              </article>
+              {% endfor %}
+            </div>
+            <br/>
+
+            <div class="row">
+              <div class="col-sm-6 col-xs-6 text-left">
+                  {% if paginator.next_page %}
+                    <a class="btn btn-orange" href="{{paginator.next_page_path}}">← 下一篇</a>
+                  {% else %}
+                    <span class="btn btn-orange disabled">← 下一篇</span>
+                  {% endif %}
+              </div>
+              <div class="col-sm-6 col-xs-6 text-right">
+                  {% if paginator.previous_page %}
+                    {% if paginator.page == 2 %}
+                    <a class="btn btn-orange" href="/pages/">上一篇 →</a>
+                    {% else %}
+                    <a class="btn btn-orange" href="{{paginator.previous_page_path}}">上一篇 →</a>
+                    {% endif %}
+                  {% else %}
+                    <span class="btn btn-orange disabled">上一篇 →</span>
+                  {% endif %}
+              </div>
+            </div>
+            {% include footer.html %}
+          </div>
+        </div>
+      </div>

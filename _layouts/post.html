@@ -1,0 +1,46 @@
+---
+layout: master
+---
+<div class="container-fluid">
+  <div class="row">
+    <div class="hidden-xs col-md-2 col-sm-3 blue sidebar">
+      {% include sidemenu.html %}
+    </div> <!-- Side column -->
+    <div class="col-md-10 col-sm-9 col-md-offset-2 col-sm-offset-3">
+      <article class="col-md-12 col-xs-12 justified">
+        <h1 class="post-title">{{ page.title }}</h1>
+        <div class="publish-tag">
+          <span class="fa fa-calendar"></span>&nbsp;发布于 {{ page.date | date: "%B %d, %Y" }}
+        </div>
+        {{ content }}
+        <br/>
+        <span class="fa fa-tag"></span>Tags:
+        {% if page.tags %}
+          {% for tag in page.tags %}		
+            <a href="/tags/{{tag}}"><span class="label label-primary">{{tag}}</span></a>
+          {% endfor %}
+        {% else %}  
+          None
+        {% endif %}
+      </article> 
+      
+      <div class="row">
+        <div class="col-sm-6 col-xs-6 text-left">
+       	{% if page.previous.url %}
+        	<a class="btn btn-blue" href="{{page.previous.url}}">← 上一篇</a>
+        {% else %}
+        	<span class="btn btn-blue disabled">← 上一篇</span>
+        {% endif %}
+        </div>
+        <div class="col-sm-6 col-xs-6 text-right">
+        {% if page.next.url %}
+        	<a class="btn btn-blue" href="{{page.next.url}}">新的一篇 →</a>
+        {% else %}
+        	<span class="btn btn-blue disabled">新的一篇 →</span>
+        {% endif %} 
+        </div>
+      </div>
+      {% include footer.html %}  
+    </div> <!-- content area column -->
+  </div> <!-- row  -->
+</div> <!-- container -->

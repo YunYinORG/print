@@ -1,0 +1,70 @@
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta charset="UTF-8">
+  {% if page.description %}
+	<meta name="description" content="{{page.description}}">
+  {% else %}
+  <meta name="description" content="{{site.description}}">
+  {% endif %}
+	<meta name="author" content="{{site.author}}">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    {% if page.title == "Home" %}
+      {{ site.title }} &middot; {{ site.tagline }}
+    {% else %}
+      {{ page.title }} &middot; {{ site.title }}
+    {% endif %}
+  </title>
+
+  {% if page.path contains '_posts' %}
+  <!-- Twitter Card data -->
+  <!-- <meta name="twitter:card" value="summary"> -->
+  <!-- Open Graph data -->
+  <meta property="og:title" content="{{page.title}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{page.url}}" />
+  <meta property="og:description" content="{{page.description}}" />
+  {% endif %}
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{site.url}}/assets/css/app.css">
+  <link rel="stylesheet" href="{{site.url}}/assets/css/github.css">
+
+  <script src="/assets/js/all.js"></script>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/jekyll-search.js"></script>
+
+
+  {% if page.title == "Home" %}
+  <!-- Add background-image -->
+    <script>
+
+    var backgroundImage = [];
+
+    backgroundImage[0]='bcg1.jpg';
+    backgroundImage[1]='bcg2.jpg';
+    backgroundImage[2]='bcg3.jpg';
+    backgroundImage[3]='bcg4.jpg';
+
+    var random=Math.floor(Math.random()*4);
+    document.write("<style>body {background: url("+"/assets/images/"+backgroundImage[random]+") no-repeat center center fixed;-webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover;color:#fff;background-color:#333;}</style>")
+    
+    </script>
+  <link rel="stylesheet" href="{{site.url}}/assets/css/bcg.css">
+  <link rel="stylesheet" href="{{site.url}}/assets/css/MetroJs.min.css">
+  {% endif %}
+
+  {% if page.bloghome == true %}
+  <style type="text/css">
+        a,a:hover,a:focus {
+          color:#DC572E;
+        }
+  </style>
+  {% endif %}
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="128x128" href="{{site.url}}/assets/images/favicon-128.png">
+</head>

@@ -1,0 +1,69 @@
+# Configurations
+markdown: kramdown
+markdown_ext:  markdown,mkdown,mkdn,mkd,md
+highlighter: pygments
+
+# Permalinks
+permalink:        /pages/:title
+
+# Setup
+title:            '云印南天'
+tagline:          '云印南天'
+description:      '云印南天官网文档中心'
+url:              'http://www.yunyin.org'
+baseurl:          'http://www.yunyin.org'
+
+# Navigation
+navigation:
+- text: 文档
+  url: /pages/
+- text: 标签
+  url: /tags/
+- text: 历史
+  url : /archive/
+- text: 搜索
+  url : /search.html
+
+# Author Details
+author:         'New Future'
+name:         '云印南天'
+
+#Social Media links
+# linkedin:       'https://ae.linkedin.com/in/olakara/'
+# twitter:        'https://twitter.com/olakara'
+# facebook:       'https://www.facebook.com/olakara'
+# gplus:          'https://plus.google.com/100425464897246255887/'
+
+# Google Analytics
+# gahandler: 'UA-52149651-1'
+
+#if footer-links-visible is 'true' the svg-icons will be shown top on the copy right.
+#else the svg icons will not exist
+footersvg: 'true'
+
+footer-links:
+  dribbble:
+  email: contactATyunyin.org
+  weibo: cloudPrint
+  renren: http://page.renren.com/602117408
+  facebook:
+  flickr:
+  github: nkumstc/print
+  instagram:
+  linkedin:
+  pinterest:
+  rss: # just type anything here for a working RSS icon, make sure you set the "url" above!
+  google:
+  twitter:
+  stackoverflow: #users/4388898/peter-zhu # your stackoverflow profile, e.g. "users/50476/bart-kiers"
+
+# Disqus
+# disqushandler: 'testingblogo'
+
+# Blog Configurations
+paginate: 10 # Posts per page on the blog index
+paginate_path: '/pages/page:num'
+destination: ./_site
+
+# Custom vars
+version:          0.9
