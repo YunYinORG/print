@@ -262,7 +262,7 @@ function send_mail($toMail, $msg, $mailType) {
 			break;
 
 		default:
-			$title = '来自云印的通知'; 	//无论如何都应该有一个标题
+			$title = '来自云印的通知'; //无论如何都应该有一个标题
 			$content = $msg;
 			$mailConfig = C('MAIL_NOTIFY');
 			//直接发送
@@ -274,7 +274,7 @@ function send_mail($toMail, $msg, $mailType) {
 			$mail = new SaeMail();
 			$opt = array(
 				'content_type' => 'HTML',
-				'from' => $email,
+				'from' => $mailConfig['email'],
 				'to' => $toMail,
 				'content' => $content,
 				'subject' => $title,

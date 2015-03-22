@@ -68,28 +68,28 @@
             </div>
             <div class="input-group">
                 <label class="input-group-addon"  for="p_s">单面价格（黑白）</label>
-                <input id="p_s" type="number" min="0" class="form-control" value="{$price['p_s']}" name="p_s" required>
+                <input id="p_s" type="number" min="0.01" step="0.01" class="form-control" value="{$price['p_s']}" name="p_s" placeholder="如1角每张请填写0.10" required>
                 <span class="input-group-addon">元/张</span>
             </div>
             <div class="input-group">
-                <label class="input-group-addon"  for="p_d">双面价格（黑白）</label>
-                <input id="p_d" type="number" min="0" class="form-control" value="{$price['p_d']}" name="p_d" required>
+                <label class="input-group-addon" for="p_d">双面价格（黑白）</label>
+                <input id="p_d" type="number" min="0.01" step="0.01" class="form-control" value="{$price['p_d']}" name="p_d" placeholder="如1角每张请填写0.10" required>
                 <span class="input-group-addon">元/张</span>
             </div>
             <div class="input-group">
                 <label class="input-group-addon" for="p_c_s">彩印价格（单面）</label>
-                <input id="p_c_s" type="number" min="0" class="form-control" value="{$price['p_c_s']}" name="p_c_s" required>
+                <input id="p_c_s" type="number" min="0.1" step="0.01" class="form-control" value="{$price['p_c_s']}" placeholder="价格可以直接输入" name="p_c_s" required>
                 <span class="input-group-addon">元/张</span>
             </div>
             <div class="input-group">
                 <label class="input-group-addon" for="p_c_d">彩印价格（双面）</label>
-                <input id="p_c_d" type="number" min="0" class="form-control" value="{$price['p_c_d']}" placeholder="角/张" name="p_c_d" required>
+                <input id="p_c_d" type="number" min="0.1" step="0.01" class="form-control" value="{$price['p_c_d']}" placeholder="价格可以直接输入" name="p_c_d" required>
                 <span class="input-group-addon">元/张</span>
             </div>          
             <br/>
             <div class="form-group">
                 <label for="price_more">优惠信息</label>
-                <textarea id="price_more" class="form-control" rows="2" placeholder="如：单面黑白打印过百份7分一张，30字以内" name="price_more">{$data['price_more']}</textarea>
+                <textarea id="price_more" class="form-control" rows="2" placeholder="如：单面黑白打印过百份7分一张，50字以内" name="price_more">{$data['price_more']}</textarea>
             </div>
             <div class="form-group">
                 <label for="profile">打印店简介</label>
