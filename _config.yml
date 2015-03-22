@@ -4,7 +4,7 @@ markdown_ext:  markdown,mkdown,mkdn,mkd,md
 highlighter: pygments
 
 # Permalinks
-permalink:        /pages/:title
+permalink:        /pages/:title.html
 
 # Setup
 title:            '云印南天'
