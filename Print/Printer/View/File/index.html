@@ -29,35 +29,35 @@
             <volist name="data" id="vo">
             <tr file_id="{$vo.id}">
                 
-                <td><a target='_blank' fid="{$vo.id}" class="download" href="__URL__/download/?fid={$vo.id}">[{$vo.id}]{$vo.name}</a></td>                
+                <td><a fid="{$vo.id}" class="download" href="__URL__/download/?fid={$vo.id}">[{$vo.id}]{$vo.name}</a></td>                
                
          <if condition="$vo.copies eq 0">
              <td>现打</td><td>-</td><td>-</td><td>-</td>    
       <else/>
-            <td> {$vo.copies}</td><td>
+            <td class="copies"> {$vo.copies}</td><td>
                 <if condition="$vo.double_side gt 0">
                 双面
                 <else/>
                 单面
                 </if>
-                </td>
-                <td>
+            </td>
+            <td class="color">
                 <if condition="$vo.color gt 0"> 彩印<else/>黑白</if>
-                </td>
-                <td>
+            </td>
+                <td class="ppt_layout">
                     {$vo.ppt_layout}
                 </td>
             </if>
-                <td>
+                <td class="phone">
                     <notempty name="vo['phone']">
                     <a tabindex="0" role="button" id="{$vo['id']}_phone" uid="{$vo['use_id']}" class="bind glyphicon glyphicon-phone" data-toggle="popover" data-trigger="focus" data-content="Loading..."></a>
                     </notempty>
                     {$vo.use_name}[{$vo.student_number}]
                 </td>
                 
-                <td>{$vo.time}</td>               
+                <td class="time">{$vo.time}</td>               
                 
-                <td id="{$vo['id']}_status" data="{$vo['status']}" copies="{$vo['copies']}">
+                <td class="status" id="{$vo['id']}_status" data="{$vo['status']}" copies="{$vo['copies']}">
                     <switch name="vo['status']">
                     <case value="1">尚未下载</case>
                     <case value="2">已下载</case>
@@ -90,22 +90,81 @@
 </block>
 <block name='end'>
 <script>
-$("table").on('click','.download',function(){
-    var btn = $(this);
-    var fid = btn.attr('fid');
-    var status = $('#' + fid + '_status');
-    var copies = status.attr('copies');
-    status.html('已下载');    
-    if(copies != 0 )
+var double_side = new Array("单面","双面");
+var color = new Array("黑白","彩色");
+var f_status = new Array("未知状态","尚未下载","已下载","正在打印","已印待付款","已付款");
+var b_class = new Array("set btn btn-primary","set btn btn-primary","set btn btn-success","set btn btn-success","set btn btn-danger");
+var b_status = new Array("不可操作","通知已下载","通知已打印","通知已打印","确认已付款");
+
+function insert(data)
+{
+    var file = $('tr:last').clone();
+    file.attr('file_id',data.id);
+    
+    var link = file.find('.download');
+    link.attr('href',"/Printer/File/download/?fid="+data.id);
+    link.html('['+data.id+']'+data.name);
+    
+    var copies = file.find('.copies');
+    if(data.copies==0)
     {
-        status.attr('data', 2);
-        $('#' + fid + '_button').html('通知已打印').removeClass("btn btn-primary").addClass("btn btn-success");
+        copies.html('现打');
     }
     else
     {
-        status.attr('data', 4);
-        $('#' + fid + '_button').html('确认已付款').removeClass("btn btn-success").addClass("btn btn-warning");
+        copies.html(data.copies);
     }
+     
+    var double = file.find('.double_side');
+    double.html(double_side[data.double_side]);
+    
+    var color_node = file.find('.color');
+    color_node.html(color[data.color]);
+
+    var ppt_layout = file.find('.ppt_layout');
+    ppt_layout.html(data.ppt_layout);
+
+    var bind = file.find('.bind');
+    var phone = file.find('.phone');
+    bind.remove();
+    phone.html(data.use_name+'['+data.student_number+']');
+    if(data.phone)
+    {
+        var html = '<a tabindex="0" role="button" id="'+data.id+'_phone" uid="'+data.use_id+'" class="bind glyphicon glyphicon-phone" data-toggle="popover" data-trigger="focus" data-content="Loading..."></a>';
+        phone.prepend(html);
+    }
+    
+    var time = file.find('.time');
+    time.html(data.time);
+    
+    var status = file.find('.status');
+    status.html(f_status[data.status]);
+    
+    var btn = file.find('button');
+    btn.removeClass().addClass(b_class[data.status]);
+    btn.html(b_status[data.status]);
+    $('tbody').prepend(file);
+};
+
+$("table").on('click','.download',function(e){
+    e.preventDefault();
+    var link = $(this);
+    var file = link.parent().parent();
+    var fid = file.attr('file_id');
+    var URL = "/Printer/File/download";
+    $.post(URL, {
+        fid: fid
+    }, function(data) {
+        if (data.status) {
+            var btn =file.find('.button');
+            btn.removeClass().addClass(b_class[data.info.operation]);
+            btn.html(b_status[data.info.operation]);
+            file.find('.status').html(f_status[2]);
+            window.open(data.info.url);
+        } else {
+            alert(data.info);
+        }
+    });
 });
 
 
@@ -113,31 +172,18 @@ $("table").on('click', '.set', function() {
     var URL = "/Printer/File/set";
     var btn = $(this);
     btn.attr('disabled','disabled');
-    var fid = btn.attr('fid');
-    var status = $('#' + fid + '_status');
-    var copies = status.attr('copies');
-    var set_s = 1 + parseInt(status.attr('data'));
-    if (set_s == 3) {
-        set_s = 1 + set_s;
-    }
-    if (copies ==0 && set_s==2)
-    {
-        set_s = 4;
-    }
-    $.post(URL, {
-        fid: fid,
-        status: set_s
+    var file=btn.parent().parent();
+    var fid = file.attr('file_id');
+    $.get(URL, {
+        fid: fid
     }, function(data) {
         if (data.status) {
-            status.attr('data', set_s);
-            if (set_s == 4) {
-                btn.html('确认已付款').removeClass("btn btn-success").addClass("btn btn-warning");
-                status.html('已打印');
-            } else if (set_s == 2) {
-                $('#' + fid + '_button').html('通知已打印').removeClass("btn btn-primary").addClass("btn btn-success");
-                status.html('已下载');
+            if (data.info.status == 5) {
+                file.hide(1600);
             } else {
-                btn.parent().parent().hide(1600);
+                btn.removeClass().addClass(b_class[data.info.operation]);
+                btn.html(b_status[data.info.operation]);
+                file.find('.status').html(f_status[data.info.status]);
             }
         } else {
             alert(data.info);
@@ -145,68 +191,6 @@ $("table").on('click', '.set', function() {
         btn.removeAttr('disabled');
     });
 });
-
-function insert(data)
-{
-    var trLast = $('tr:last').clone();
-    trLast.attr('file_id',data.id);
-    
-    var node = trLast.find('a').eq(0);
-    node.attr('fid',data.id);
-    node.attr('href',"/Printer/File/download/?fid="+data.id);
-    node.html('['+data.id+']'+data.name);
-    
-    node = trLast.find('td').eq(1);
-    if(data.copies==0)
-    {
-        node.html('现打');
-    }
-    else
-    {
-        node.html(data.copies);
-    }
-    var double_side = new Array("单面","双面"); 
-    node = trLast.find('td').eq(2);
-    node.html(double_side[data.double_side]);
-    var color = new Array("黑白","彩色");
-    node = trLast.find('td').eq(3);
-    node.html(color[data.color]);
-
-    node = trLast.find('td').eq(4);
-    node.html(data.ppt_layout);
-
-    node = trLast.find('a')[1];
-    if((typeof node === 'undefined')&&data.phone)
-    {
-        var html = '<a tabindex="0" role="button" id="'+data.id+'_phone" uid="'+data.use_id+'" class="bind glyphicon glyphicon-phone" data-toggle="popover" data-trigger="focus" data-content="Loading..."></a>';
-        trLast.find('td').eq(5).append(html);
-    }
-    else if((typeof data.phone === 'undefined')&&node)
-    {
-        node.remove();
-    }
-    node = trLast.find('td').eq(5);
-    node.html(data.use_name+'['+data.student_number+']');
-    
-    node = trLast.find('td').eq(6);
-    node.html(data.time);
-    
-    var f_status = new Array("未知状态","尚未下载","已下载","已下载","已印待付款");
-    node = trLast.find('td').eq(7);
-    node.attr('id',data.id+'_status');
-    node.attr('data',data.status);
-    node.attr('copies',data.copies);
-    node.html(f_status[data.status]);
-    
-    var b_class = new Array("btn btn-success","btn btn-primary","btn btn-success","btn btn-success","btn btn-danger");
-    var b_status = new Array("不可操作","通知已下载","通知已打印","通知已打印","确认已付款");
-    node = trLast.find('button');
-    node.attr('id',data.id+'_button');
-    node.attr('fid',data.id);
-    node.removeClass().addClass(b_class[data.status]);
-    node.html(b_status[data.status]);
-    $('tbody').prepend(trLast);
-}
 
 var phoneIsLoad =new Array();
 
@@ -244,7 +228,7 @@ function refresh() {
     var file_id = $('tbody').children().attr('file_id');
     var url = "__URL__/refresh";
     $.post(url, {
-        file_id: 208
+        file_id: file_id
     }, function(data) {
         if (data.status) {
             for(var key in data.info)
@@ -258,9 +242,7 @@ function refresh() {
     });
 }
 $(document).ready(function() {
-    refresh();
     //setInterval(refresh, 15000);
-    //$('[data-toggle="popover"]').popover();
 });
 </script>
 </block>

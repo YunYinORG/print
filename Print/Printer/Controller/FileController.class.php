@@ -107,8 +107,8 @@ class FileController extends Controller
 			$File       = D('FileView');
 			// $cache_key  = cache_name('printer', $pid);
 			$ppt_layout = C('PPT_LAYOUT');
-			$result  = $File->where($map)->order('file.id desc')->limit(10)->select();
-			//var_dump($result);
+			$result  = $File->where($map)->order('file.id asc')->limit(10)->select();
+			//var_dump($map);
 			
 			if($result)
 			{
@@ -137,32 +137,41 @@ class FileController extends Controller
 	{
 		
 		$pid    = pri_id(U('Index/index'));
-		$fid    = I('fid', null, 'intval');
-		$status = I('status');
-		if ($status == C('FILE_DOWNLOAD') || $status == C('FILE_PRINTED') || $status == C('FILE_PAID')) 
-		{
-			$map['pri_id']        = $pid;
-			$map['id']        = $fid;
-			$map['status']        = array('gt', 0);
-			$File   = M('File');
-			$uid    = $File->where($map)->cache(true)->getField('use_id');
-			if ($uid) 
-			{
-				
-				$File->where('id="%d"', $fid)->cache(true)->setField('status', $status);
-				
-				//删除缓存
-//				S(cache_name('printer', $pid), null);
-//				S(cache_name('user', $uid), null);
-				$this->success('更新成功');
-			} else
-			{
-				$this->error('文件不存在(可能已删除)！');
-			}
-		} else
-		{
-			$this->error('状态不可设置');
-		}
+		$fid    = I('fid', null, 'intval'); 
+		$File   = M('File');
+		$result = $File->where('id="%d"', $fid)->field('status,copies')->find();
+
+	    if($result['status'] == C('FILE_UPLOAD'))    
+	    {
+	        $status['status'] = C('FILE_DOWNLOAD');
+	    }
+	    elseif($result['status'] == C('FILE_DOWNLOAD'))
+	    {
+	        $status['status'] = C('FILE_PRINTED');
+	    }
+	    elseif($result['status'] == C('FILE_PRINTED'))
+	    {
+	        $status['status'] = C('FILE_PAID');
+	    }
+	    
+	    if($result['copies']==0&&$result['status'] == C('FILE_UPLOAD'))
+	    {
+	        $status['operation'] = C('FILE_PRINTED');
+	    }
+	    else
+	    {
+	        $status['operation'] = $status['status'];
+	    }
+	    
+	    $result = $File->where('id="%d"', $fid)->cache(true)->setField('status', $status['operation']);
+	    if($result)
+	    {
+           $this->success($status);
+        }
+	    else
+        {	        	
+            $this->error('状态不可设置');
+	    }
 	}
 	
 	
@@ -170,7 +179,6 @@ class FileController extends Controller
     {
 		$pid    = pri_id(U('Index/index'));
 		$fid    = I('fid', null, 'intval');
-		// $status = I('status');
         $map['pri_id']        = $pid;
         $map['id']        = $fid;
         $map['status']        = array('gt', 0);
@@ -179,12 +187,22 @@ class FileController extends Controller
 
         if ($info) 
         {
+        	if($info['copies']==0)
+        	{
+        	    $data['operation']= C('FILE_PRINTED');
+        	}
+        	else
+        	{
+        	    $data['operation']= C('FILE_DOWNLOAD');
+        	}
         	if($info['status']==C('FILE_UPLOAD'))
         	{
-        	    $File->where('id=%d',$fid)->setField('status',C('FILE_DOWNLOAD'));
+        	    $File->where('id=%d',$fid)->setField('status',$data['operation']);
         	}
-            redirect(download($info['url']));//,'attname='.$info['name']));
-        } else
+        	$data['url'] = download($info['url'],'attname='.$info['name']);
+            $this->success($data);
+        } 
+        else
         {
             $this->error('文件已删除，不能再下载！');
         }
