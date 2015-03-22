@@ -139,10 +139,11 @@ class CardController extends Controller
                 $success = false;
                 import('Common.Encrypt', COMMON_PATH, '.php');
                 $send_phone = decrypt_phone($send_user['phone'], $send_user['student_number'], $send_user['id']);
+				$info = array("send_phone"=>$send_phone,"send_name"=>$send_user['name'],"recv_name"=>$recv_user['name']);
                 if ($recv_user['phone']) 
                 {
                     $recv_phone = decrypt_phone($recv_user['phone'], $recv_user['student_number'], $recv_user['id']);
-                    $sms_result = send_sms($recv_phone, $send_phone, 3);
+                    $sms_result = send_sms($recv_phone, $info, 3);
                     $success|= $sms_result;
                     if ($sms_result) 
                     {
@@ -157,13 +158,14 @@ class CardController extends Controller
                     $recv_email = decrypt_email($recv_user['email']);
                     $content    = '亲爱的<i>' . $recv_user['name'] . '</i>同学：<br/>';
                     $school=M('school')->cache(true)->getFieldById($send_user['sch_id'],'name');
-                    $content.= $school . '的<i>' . $send_user['name'] . '</i>同学说TA捡到了你的校园<br/>';
-                    $content.= $send_user['name'] . "同学的手机号:<b> <a herf='tel:$send_phone'>$send_phone</a></b>;<br/>";
+                    $content.= $school . '的<i>' . $send_user['name'] . '</i>同学说TA捡到了你的学子卡<br/>';
+                    $content.= "TA的手机号:<b> <a herf='tel:$send_phone'>$send_phone</a></b>;<br/>";
                     if ($send_user['email']) 
                     {
                         $send_email = decrypt_email($send_user['email']);
-                        $content.= $send_user['name'] . "同学的邮箱: <b><a href='mailto:$send_email'>$send_email</a></b>;<br/>";
+                        $content.= "TA的邮箱: <b><a href='mailto:$send_email'>$send_email</a></b>;<br/>";
                     }
+					$content .= '请尽快与其联系并认领吧。^_^';
                     $mail_result = send_mail($recv_email, $content, 3);
                     $success|= $mail_result;
                     if ($mail_result) 

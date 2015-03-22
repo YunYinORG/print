@@ -32,6 +32,7 @@
 			</div>
         </div>
     </body>
+	<script src="__JS__/md5.min.js" defer></script>
     <script>
 function checkform(f){
     if(f.password.value!=f.re_password.value)
@@ -40,8 +41,8 @@ function checkform(f){
         alert('两次密码不一致！');
         return false;
     }else{
-        //此处应该md5(password)
-        //f['isMD5'].value=1;
+        f.password.value=md5(f.password.value);
+        f['isMD5'].value=1;
         return true;
     }
 }

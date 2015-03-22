@@ -19,9 +19,9 @@
 // #### 截取用户名——>AES加密——>base64转码 ——>特殊字符替换——>字符拼接
 // +------------------------------------------------------------------
 // | author： NewFuture
-// | version： 1.0
+// | version： 1.1
 // +------------------------------------------------------------------
-// | Copyright (c) 2014 ~ 2015云印南开团队 All rights reserved.
+// | Copyright (c) 2014 ~ 2015云印南天团队 All rights reserved.
 // +------------------------------------------------------------------
 
 /**
@@ -50,7 +50,7 @@ function encrypt_phone($phone, $snum, $id)
 }
 
 /**
- *  encrypt_phone($phone, $snum, $id)
+ *  dncrypt_phone($phone, $snum, $id)
  *  手机号格式保留解密
  * @param $phone string 11位手机号
  * @param $snum string 用户编号
@@ -83,6 +83,7 @@ function encrypt_end($endNum)
 {
     $key = C('ENCRYPT_PHONE_END'); //获取配置密钥
     //对后四位进行AES加密
+    $endNum=(int)$endNum;
     $cipher = aes_encode($endNum, $key);
     //加密后内容查找密码表进行匹配
     $table = cipher_table($key);
@@ -114,14 +115,14 @@ function encrypt_mid($midNum, $snum, $id)
     $table = cipher_table($key);
     //拆成两部分进行解密
     $midNum += $id;
-    $mid2 = substr($midNum, 2, 4);
+    $mid2 = (int)substr($midNum, 2, 4);
     //后4位加密
     $mid2 = array_search(aes_encode($mid2, $key), $table);
-    $mid2 = sprintf('%04s', $mid2);
     if (false === $mid2) {
         //前密码表查找失败
         E('中间加密异常!');
     } else {
+        $mid2 = sprintf('%04s', $mid2);
         return substr_replace($midNum, $mid2, 2);
     }
 }
@@ -227,6 +228,7 @@ function aes_decode(&$cipher, $key)
     mcrypt_generic_init($td, $key, '0000000000000000');
     $cipher = mdecrypt_generic($td, $cipher);
     mcrypt_generic_deinit($td);
+    $cipher=trim($cipher);
     return $cipher;
 }
 

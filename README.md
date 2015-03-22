@@ -1,20 +1,25 @@
-云印南开
+云印南天
 =================
-更方便的校园打印 [print.nkumstc.cn](http://print.nkumstc.cn)
+(原云印南开)更方便的校园打印 [yunyin.org](http://yunyin.org)
+
+官方宣传页[www.yunyin.org](http://www.yunyin.org)
 ----------------------------
 
 ## Bugs or Fault
-* 缓存导致管理列表刷新的问题
-* 文件删除无通知
-* 上传页面UI
 * 多文件不能一次
 * 提前判断文件大小
-* doc等格式提示转pdf
+* 打印店信息修改
+* 邮箱用的不是SAE
+* 未登录查看打印店等信息
+* 七牛上传目录前缀
 
 ## Features to add
-* 打印店文件到达通知
+* 打印店文件到达通知【doing】
+* PPT版式
+* 图片打印
+* 逾期提醒
 * 状态更新通知提醒
-* 打印店主页和自主管理
+* 打印店主页和自主管理【done]
 * 手机绑定 【done】
 * 邮箱绑定和验证 【done】
 * 神秘功能 【done】
@@ -24,10 +29,11 @@
 
 ##安全问题：
 * 输入字段严格过滤【doing】
-* https验证通道
-* xss(httponly，反馈和打印店介绍)
+* xss(反馈和打印店介绍)【doing】
+* xss(httponly) 【done】
 * 隐私数据加密（手机号和邮箱保存加密）【done】
 * API接口,token直接传递不够安全(防止劫持)
+* https验证通道
 
 ##框架目录
 
@@ -53,19 +59,34 @@
 |         └─config_sae.php     sae配置文件
 |
 |─Print            云印南开系统项目目录
+|    |-Admin
+|    |    |─Conf                  配置文件目录
+|    |    |─Common        公共函数目录
+|    |    |─Controller       控制器目录
+|    |    |    |─IndexController.class.php      默认控制器（管理登录）
+|    |    |    └─PrinterController.class.php          打印店注册管理控制器
+|    |    |─Model         模型目录
+|    |    └─View          模板视图目录
+|    |         |─Index       默认模板目录
+|    |         └─Printer         管理打印店模板目录
+|    | 
 |    |─Home            普通用户模块目录
 |    |    |─Conf                  配置文件目录
 |    |    |─Common        公共函数目录
 |    |    |─Controller       控制器目录
 |    |    |    |─IndexController.class.php      默认控制器（首页）
 |    |    |    |─UserController.class.php        用户控制器
+|    |    |    |─CardController.class.php        找回一卡通控制器
+|    |    |    |─EmptyController.class.php        404控制器
+|    |    |    |─PrintersController.class.php        打印店介绍控制器
 |    |    |    └─FileController.class.php          文件管理控制器
 |    |    |─Model         模型目录
-|    |    |    |─......                                                各种模型
-|    |    |    └─UserModel.class.php               用户模型
+|    |    |    └─......                                                各种模型
 |    |    └─View          模板视图目录
 |    |         |─Index       默认模板目录
 |    |         |─User        用户模板目录
+|    |         |─Printers   打印店介绍模板目录
+|    |         |─Card        找回一卡通模板目录
 |    |         └─File         文件模板目录
 |    |
 |    └─Printer     打印店管理模块目录
@@ -77,20 +98,31 @@
 |         |    └─FileController.class.php              文件管理控制器
 |         |─Model             模型目录
 |         └─View                视图目录
+|              |─Printer   打印店模板目录
+|              |─Index         登录模板目录
+|              └─File         文件模板目录
 |
 |─API                  云印南开API模块
 |    |─Conf                     配置文件目录
 |    |─Common           公共函数目录
+|    |-Model            公共模型目录
+|    |-Verify           公共认证函数目录
 |    |─Controller          控制器目录
 |    |    |─NotificationController.class.php    消息接口控制器
 |    |    |─FileController.class.php                    文件接口控制器
-|    |    └─IndexController.class.php               认证和令牌管理制器
+|    |    |-IndexController.class.php               认证和令牌管理制器
+|    |    |-PrinterController.class.php         打印店接口控制器
+|    |    |-TokenController.class.php           令牌接口控制器
+|    |    └─UserController.class.php            学生用户接口控制器
+|    |    
 |    └─Model                模型目录
 |
 |─Public             前端资源文件目录
 |    |─css                      css文件目录
-|    |─js                         javascript目录
-|    |─images              图片目录
+|    |─js                         自己写的javascript目录
+|    |─lib              引用的js以及css目录
+|    |─html              404目录
+|    |─fonts              字体目录
 |    └─template          模板文件目录    
 |
 |─Uploads       上传文件目录（可写，不同步）
@@ -133,5 +165,3 @@ API相关说明:[API.md](https://github.com/nkumstc/print/blob/master/API.md)
 本项目由南开大学学生发起，免费开源，同时欢迎所有人贡献代码和想法
 
 项目源码遵循apache2 开源协议
-
-项目起步阶段由[南开大学微软技术俱乐部](http://nkumstc.cn)提供支持

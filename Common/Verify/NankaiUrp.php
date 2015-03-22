@@ -13,7 +13,6 @@
 */
 function getName($stu_number,$pwd) 
 {
-    return $stu_number;
 	//验证地址--urp密码验证页
 	$action_url      = 'http://urp.nankai.edu.cn/userPasswordValidate1.portal';
 	$snoopy          = new Snoopy;

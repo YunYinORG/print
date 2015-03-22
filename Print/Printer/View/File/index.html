@@ -142,8 +142,8 @@ $("table").on('click', '.set', function() {
         } else {
             alert(data.info);
         }
+        btn.removeAttr('disabled');
     });
-    btn.removeAttr('disabled');
 });
 
 function insert(data)
@@ -208,24 +208,28 @@ function insert(data)
     $('tbody').prepend(trLast);
 }
 
+var phoneIsLoad =new Array();
 
-phoneIsLoad = 0;
 $("table").on('click', '.bind', function(e) {
     var URL = "/Printer/File/bind";
     var btn = $(this);
     var uid = btn.attr('uid');
-    if(phoneIsLoad == 0)
+    if(phoneIsLoad[uid]===undefined)
     {
-        $('[data-toggle="popover"]').popover();
         $.get(URL, {
             uid : uid 
         }, function(data) {
             if (data.status) {
                 btn.attr('data-content',data.info);
                 btn.popover('show');
+                phoneIsLoad[uid]=data.info;
             }
         });
-        phoneIsLoad = 1;
+    }
+    else
+    {
+        btn.attr('data-content',phoneIsLoad[uid]);
+        btn.popover('show');
     }
 });
 
@@ -254,8 +258,9 @@ function refresh() {
     });
 }
 $(document).ready(function() {
-    //setInterval(refresh, 15000);
     refresh();
+    //setInterval(refresh, 15000);
+    //$('[data-toggle="popover"]').popover();
 });
 </script>
 </block>

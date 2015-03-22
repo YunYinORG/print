@@ -45,7 +45,9 @@ nav li a , nav li span {
     color: rgba(255, 255, 255, 0.5);
 }
 
-
+.comments{
+  font-size:13px;
+}
 
 .printersBlock a {
   text-decoration: none;
@@ -78,12 +80,10 @@ nav li:hover a, nav li.active a, nav li.active span {
 }
 
 .upload-btn{
+  height: 40px;
   border-style: solid;
   border-width: 2px;
-  float: left;
-  height: 40px;
   background: #FFFFFF;
-  width: 200px;
   position: relative;
 }
 
@@ -95,8 +95,6 @@ nav li:hover a, nav li.active a, nav li.active span {
 }
 
 #upload-file {
-    /*width: 200px;
-    height: 40px;*/
     cursor: pointer;
     font-size: 30px;
     outline: medium none;
@@ -106,6 +104,35 @@ nav li:hover a, nav li.active a, nav li.active span {
     opacity:0; 
     left: 0px;
     top: 0px;
+}
+
+#upload-list{
+  margin-bottom:0px;
+  margin-top:10px;
+}
+
+#upload-list li{
+  font-size: 13px;
+}
+
+#carbonForm{
+  margin-top: 107.5px;
+  font-size: 20px;
+}
+
+#moreSetting {
+  margin-top: 0px;
+}
+
+#info-title{
+  font-type:Arial;
+  font-size:12px;
+  color:#AAAAAA;
+}
+
+.info-label a {
+  text-decoration: none;
+  color: #FFFFFF;
 }
 
 #banner {
@@ -121,7 +148,7 @@ nav li:hover a, nav li.active a, nav li.active span {
     padding: 3em 2% 5em 3%;
     background: #FFF;
     border-top: 0px solid #2980b9;
-    min-height: 100%; /*height: 1200px;*/
+    min-height: 100%;
     text-align: left;
 }
 
@@ -177,24 +204,24 @@ nav li:hover a, nav li.active a, nav li.active span {
     padding: 2em 1% 0 1%;
   }
   nav {
-      text-align: center !important;
-      display: block !important;
+      text-align: center;
+      display: block;
   }
   .narbar {
-    min-height: 100% !important;
+    min-height: 100%;
   }
   .navbar-header{
     position: relative;
     width: 100%;
   }
   .navbar-collapse {
-    position: relative !important;
-    min-height: 100% !important;
-    max-height: 100% !important;
+    position: relative;
+    min-height: 100%;
+    max-height: 100%;
   }
   .navbar-fixed-top {
       position: static;
-      z-index: 1 !important;
+      z-index: 1;
       border-width: 0 0 0px;
       top: 0px;
   }
