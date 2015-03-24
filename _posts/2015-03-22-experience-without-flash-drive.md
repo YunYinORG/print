@@ -2,7 +2,7 @@
 layout: post
 title:  没有U盘是怎样的体验
 date:   2015-03-22 15:30:00
-categories: 云印宣传
+category: 云印宣传
 tags: U盘
 ---
 

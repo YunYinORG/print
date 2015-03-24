@@ -24,7 +24,7 @@ bloghome: true
 		              <div class="tags">
                   {% if post.tags %}
               		{% for tag in post.tags %}
-                			<a href="/tags#{{tag}}"><span class="label btn-orange">{{tag}}</span></a>
+                			<a href="/tags/#{{tag}}"><span class="label btn-orange">{{tag}}</span></a>
               		{% endfor %}
            		 {% else %}
               		None

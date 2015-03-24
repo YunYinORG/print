@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 云印南天——搜索
+title: 云印南天—搜索
 description: 云印文档搜索
 ---
 <form class="searh-form" role="form">
@@ -15,7 +15,7 @@ description: 云印文档搜索
 </div>
 <script>
 $(document).ready(function() {
-    var qry = GetURLParameter('q');
+    var qry = decodeURI(GetURLParameter('q'));
 		var data = [{% for post in site.posts %}{
 		"title"    : "{{ post.title | escape }}",
 		"category" : "{{ post.category }}",
@@ -24,7 +24,7 @@ $(document).ready(function() {
 		"date"     : "{{ post.date | date: "%B %d, %Y" }}"}{% if forloop.last %}{% else %},{% endif %}{% endfor %}];
 
     var x = $(".search").jekyllSearch({
-			      jsonData            : null,
+			jsonData            : null,
             template            : '<li><h4><a href="{url}" title="{title}">{title}</a></h4>发布于 {date}<br>Tags: {tags} </li>',
             searchResults       : '#results',
             searchResultsTitle  : '<h3>搜索结果</h3>',
