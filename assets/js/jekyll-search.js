@@ -40,13 +40,13 @@
         function registerEvent(){
             origThis.keyup(function(e){
                 if(e.which === 13){
-                    if(matches)
+                    if(matches&&matches.length)
                         window.location = matches[0].url;
                         
                     //follow the first link
                     // if(searchResults.children().length)
                 }
-                if($(this).val().length > 3){
+                if($(this).val().length >= 2){
                     writeMatches( performSearch($(this).val()) );
                 }else{
                     clearSearchResults();

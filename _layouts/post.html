@@ -17,7 +17,7 @@ layout: master
         <span class="fa fa-tag"></span>Tags:
         {% if page.tags %}
           {% for tag in page.tags %}		
-            <a href="/tags#/{{tag}}"><span class="label label-primary">{{tag}}</span></a>
+            <a href="/tags/#{{tag}}"><span class="label label-primary">{{tag}}</span></a>
           {% endfor %}
         {% else %}  
           None
