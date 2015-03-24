@@ -18,7 +18,7 @@ navigation:
 - text: 文档
   url: /pages/
 - text: 标签
-  url: /tags/
+  url: /tags
 - text: 历史
   url : /archive/
 - text: 搜索

@@ -13,5 +13,8 @@
         $('html, body').animate({scrollTop : 0},800);
         return false;
     });
+    $('article img').addClass("img-rounded img-responsive");
+   var mail=$('a[href="mailto:contactATyunyin.org"]');
+   mail.attr("href",mail.attr("href").replace('AT','@'));
 });
 </script>
