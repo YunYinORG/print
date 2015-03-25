@@ -94,7 +94,7 @@ class FileController extends Controller
         $uid  = use_id(U('/Index/index'));
         if ($uid) 
         {
-            $info = upload_file('QINIU');
+            $info = upload_file();
             $name = isset($info['file']['name']) ? $info['file']['name'] : false;
             if ($info && $name) 
             {                
