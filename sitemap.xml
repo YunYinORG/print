@@ -4,14 +4,16 @@ layout: none
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>{site.url}</loc>
+        <loc>{{site.url}}</loc>
         <changefreq>monthly</changefreq>
+        <priority>1.0</priority>
     </url>
     {% for post in site.posts %}
     <url>
         <loc>{{site.url}}{{ post.url | remove: 'index.html' }}</loc>
         <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
         <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
     </url>
     {% endfor %}
     {% for page in site.pages %}
@@ -19,6 +21,8 @@ layout: none
     {% if page.layout != 'feed' %}
     <url>
         <loc>{{site.url}}{{ page.url | remove: 'index.html' }}</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
     </url>
     {% endif %}
     {% endif %}
