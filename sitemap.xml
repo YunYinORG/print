@@ -22,8 +22,9 @@ layout: none
     {% if page.layout != 'feed' %}
     <url>
         <loc>{{site.url}}{{ page.url | remove: 'index.html' }}</loc>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
+        <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.5</priority>
     </url>
     {% endif %}
     {% endif %}

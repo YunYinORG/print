@@ -61,7 +61,7 @@
 .il { color: #009999 } /* Literal.Number.Integer.Long */
 
 /*Scroll-up-button*/
-.scrollToTop { width: 48px; height: 48px; text-decoration: none; position: fixed; top: 500px; right: 20px; display: none; background: url('/assets/images/scroll-up.png') no-repeat 0px 0px; }
+.scrollToTop { width: 48px; height: 48px; text-decoration: none; position: fixed; top: 500px; right: 20px; display: none; background: url('/assets/image/scroll-up.png') no-repeat 0px 0px; }
 .scrollToTop:hover { text-decoration: none; }
 /*Default*/
 .justified { text-align: justify; }
