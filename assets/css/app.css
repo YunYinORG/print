@@ -110,6 +110,6 @@ a.red-link, a.red-link:hover, a.red-link:focus { color: #AC193D; }
 a.green-link, a.green-link:hover, a.green-link:focus { color: #00A600; }
 a.blue-link, a.blue-link:hover, a.blue-link:focus { color: #007fff; }
 a.orange-link, a.orange-link:hover, a.orange-link:focus { color: #DC572E; }
-.icon { background-image: url("../images/icon.png"); background-repeat: no-repeat; list-style: none outside none; }
+.icon { background-image: url("../image/icon.png"); background-repeat: no-repeat; list-style: none outside none; }
 .icon-back { background-position: -966px -40px; width: 48px; height: 48px; display: inline-block; text-decoration: none }
 footer svg { width: 3.5em; height: 3.5em; }
