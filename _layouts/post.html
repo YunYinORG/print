@@ -23,20 +23,20 @@ layout: master
           None
         {% endif %}
       </article> 
-      <br/>
+      <iframe id="WBCommentFrame" src="http://widget.weibo.com/distribution/comments.php?width=0&url=http%3A%2F%2Fopen.weibo.com%2Fwidget%2Fcomments.php&dpc=1" scrolling="no" frameborder="0" style="width:100%"></iframe>
       <div class="row">
         <div class="col-sm-6 col-xs-6 text-left">
        	{% if page.previous.url %}
-        	<a class="btn btn-blue" href="{{page.previous.url}}">← 上一篇</a>
+        	<a class="btn btn-blue" href="{{page.previous.url}}">←上一篇</a>
         {% else %}
-        	<span class="btn btn-blue disabled">← 上一篇</span>
+        	<span class="btn btn-blue disabled">←上一篇</span>
         {% endif %}
         </div>
         <div class="col-sm-6 col-xs-6 text-right">
         {% if page.next.url %}
-        	<a class="btn btn-blue" href="{{page.next.url}}">新的一篇 →</a>
+        	<a class="btn btn-blue" href="{{page.next.url}}">新的一篇→</a>
         {% else %}
-        	<span class="btn btn-blue disabled">新的一篇 →</span>
+        	<span class="btn btn-blue disabled">新的一篇→</span>
         {% endif %} 
         </div>
       </div>
@@ -44,3 +44,9 @@ layout: master
     </div> <!-- content area column -->
   </div> <!-- row  -->
 </div> <!-- container -->
+<script src="http://tjs.sjs.sinajs.cn/open/widget/js/widget/comment.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+window.WBComment.init({
+    "id": "WBCommentFrame"
+});
+</script>
