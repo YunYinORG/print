@@ -171,7 +171,9 @@ function upload_file($storage = '', $config = array()) {
 	$config = array_merge(C('FILE_UPLAOD_CONFIG'), $config);
 	//驱动配置
 	$driverConfig = '';
-
+    if(!$storage){
+        $storage=C('FILE_UPLOAD_TYPE');
+    }
 	switch (strtoupper($storage)) {
 		case 'QINIU':
 			$driver = 'QINIU';
@@ -418,8 +420,11 @@ function random($n, $mode = '') {
 	return substr(str_shuffle($str), 0, $n);
 }
 
-function download($url,$param='') {
-	switch (C('FILE_UPLOAD_TYPE')) {
+function download($url,$param='',$storage='') {
+    if(!$storage){
+        $storage=C('FILE_UPLOAD_TYPE');
+    }
+	switch ($storage) {
 		case 'QINIU':
 			$setting = C('UPLOAD_CONFIG_QINIU');
 			$url = 'http://' . $setting['domain'] . str_replace('/', '_', $url);

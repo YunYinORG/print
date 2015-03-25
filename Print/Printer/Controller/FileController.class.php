@@ -163,7 +163,7 @@ class FileController extends Controller
 	        $status['operation'] = $status['status'];
 	    }
 	    
-	    $result = $File->where('id="%d"', $fid)->cache(true)->setField('status', $status['operation']);
+	    $result = $File->where('id="%d"', $fid)->setField('status', $status['operation']);
 	    if($result)
 	    {
            $this->success($status);
@@ -183,23 +183,30 @@ class FileController extends Controller
         $map['id']        = $fid;
         $map['status']        = array('gt', 0);
         $File   = M('File');
-        $info    = $File->where($map)->field('url,status,copies,name')->find();
-
+        $info    = $File->where($map)->field('url,status,copies,color,double_side,name')->find();
         if ($info) 
         {
-        	if($info['copies']==0)
-        	{
-        	    $data['operation']= C('FILE_PRINTED');
-        	}
-        	else
-        	{
-        	    $data['operation']= C('FILE_DOWNLOAD');
-        	}
+        	// if($info['copies']==0)
+        	// {
+        	//     $data['operation']= C('FILE_PRINTED');
+        	// }
+        	// else
+        	// {
+        	//     $data['operation']= C('FILE_DOWNLOAD');
+        	// }
         	if($info['status']==C('FILE_UPLOAD'))
         	{
+                $data['operation']= C('FILE_DOWNLOAD');
         	    $File->where('id=%d',$fid)->setField('status',$data['operation']);
         	}
-        	$data['url'] = download($info['url'],'attname='.$info['name']);
+            if($info['copies'])
+            {
+                $file_name=$info['copies'].'份_'.($info['double_side']?'单面_':'双面_').($info['color']?'黑白':'彩印');
+             }else{
+                $file_name='到店打印';
+             }
+            $file_name=$file_name."[$fid]".$info['name'];
+        	$data['url'] = download($info['url'],'attname='.urlencode($file_name));
             $this->success($data);
         } 
         else
