@@ -29,12 +29,12 @@
             <volist name="data" id="vo">
             <tr file_id="{$vo.id}">
                 
-                <td><a fid="{$vo.id}" class="download" href="__URL__/download/?fid={$vo.id}">[{$vo.id}]{$vo.name}</a></td>                
+                <td><a fid="{$vo.id}" class="download" href="__URL__/download/?fid={$vo.id}" target="_blank">[{$vo.id}]{$vo.name}</a></td>                
                
          <if condition="$vo.copies eq 0">
-             <td>现打</td><td>-</td><td>-</td><td>-</td>    
+             <td class="copies">现打</td><td class="double_side">-</td><td class="color">-</td><td class="ppt_layout">-</td>    
       <else/>
-            <td class="copies"> {$vo.copies}</td><td>
+            <td class="copies"> {$vo.copies}</td><td class="double_side">
                 <if condition="$vo.double_side gt 0">
                 双面
                 <else/>
@@ -62,7 +62,7 @@
                     <case value="1">尚未下载</case>
                     <case value="2">已下载</case>
                     <case value="3">正在打印</case>
-                    <case value="4">已印待付款</case>
+                    <case value="4"><if condition="$vo.copies eq 0">已下载<else/>已印待付款</if></case>
                     <case value="5">已付款</case>
                     <default />未知状态
                     </switch>
@@ -74,7 +74,7 @@
                     <case value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></case>
                     <case value="2" break="0"></case>
                     <case value="3"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button></case>
-                    <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button></case>
+                    <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button><!--<notempty name="vo['phone']"><a role="button" class="send glyphicon glyphicon-phone"></a></notempty>--></case>
                     <default />不可操作
                     </switch>                   
                 </td>
@@ -93,7 +93,7 @@
 var double_side = new Array("单面","双面");
 var color = new Array("黑白","彩色");
 var f_status = new Array("未知状态","尚未下载","已下载","正在打印","已印待付款","已付款");
-var b_class = new Array("set btn btn-primary","set btn btn-primary","set btn btn-success","set btn btn-success","set btn btn-danger");
+var b_class = new Array("set btn btn-primary","set btn btn-primary","set btn btn-success","set btn btn-success","set btn btn-warning");
 var b_status = new Array("不可操作","通知已下载","通知已打印","通知已打印","确认已付款");
 
 function insert(data)
@@ -147,20 +147,19 @@ function insert(data)
 };
 
 $("table").on('click','.download',function(e){
-    e.preventDefault();
     var link = $(this);
     var file = link.parent().parent();
     var fid = file.attr('file_id');
-    var URL = "/Printer/File/download";
+    var URL = "/Printer/File/set";
     $.post(URL, {
-        fid: fid
+        fid: fid,
+        download: 1
     }, function(data) {
         if (data.status) {
-            var btn =file.find('.button');
+            var btn =file.find('button');
             btn.removeClass().addClass(b_class[data.info.operation]);
             btn.html(b_status[data.info.operation]);
             file.find('.status').html(f_status[2]);
-            window.open(data.info.url);
         } else {
             alert(data.info);
         }
@@ -184,6 +183,11 @@ $("table").on('click', '.set', function() {
                 btn.removeClass().addClass(b_class[data.info.operation]);
                 btn.html(b_status[data.info.operation]);
                 file.find('.status').html(f_status[data.info.status]);
+                /*var phone = file.find('.phone');
+                if (data.info.status == 4 && data.info.copies!=0 &&phone) {
+                    var html = '<a role="button" class="send glyphicon glyphicon-phone"></a>';
+                    btn.after(html);
+                }*/
             }
         } else {
             alert(data.info);
@@ -242,7 +246,7 @@ function refresh() {
     });
 }
 $(document).ready(function() {
-    //setInterval(refresh, 15000);
+    setInterval(refresh, 15000);
 });
 </script>
 </block>

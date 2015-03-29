@@ -138,20 +138,25 @@ class FileController extends Controller
 		
 		$pid    = pri_id(U('Index/index'));
 		$fid    = I('fid', null, 'intval'); 
+		$download = I('download',0,'intval');
 		$File   = M('File');
 		$result = $File->where('id="%d"', $fid)->field('status,copies')->find();
-
+        $status['copies'] = $result['copies'];
 	    if($result['status'] == C('FILE_UPLOAD'))    
 	    {
 	        $status['status'] = C('FILE_DOWNLOAD');
 	    }
-	    elseif($result['status'] == C('FILE_DOWNLOAD'))
+	    elseif(($result['status'] == C('FILE_DOWNLOAD'))&&($download!=1))
 	    {
 	        $status['status'] = C('FILE_PRINTED');
 	    }
-	    elseif($result['status'] == C('FILE_PRINTED'))
+	    elseif(($result['status'] == C('FILE_PRINTED'))&&($download!=1))
 	    {
 	        $status['status'] = C('FILE_PAID');
+	    }
+	    else
+	    {
+	        $status['status'] = $result['status'];
 	    }
 	    
 	    if($result['copies']==0&&$result['status'] == C('FILE_UPLOAD'))
@@ -162,15 +167,22 @@ class FileController extends Controller
 	    {
 	        $status['operation'] = $status['status'];
 	    }
-	    
-	    $result = $File->where('id="%d"', $fid)->cache(true)->setField('status', $status['operation']);
-	    if($result)
+	    if($status['status'] != $result['status'])
 	    {
-           $this->success($status);
-        }
+	        $result = $File->where('id="%d"', $fid)->cache(true)->setField('status', $status['operation']);
+	        
+	        if($result)
+	        {
+                $this->success($status);
+            }
+	        else
+            {	        	
+                $this->error('状态不可设置');
+	        }
+	    }
 	    else
         {	        	
-            $this->error('状态不可设置');
+           $this->success($status);
 	    }
 	}
 	
@@ -187,20 +199,7 @@ class FileController extends Controller
 
         if ($info) 
         {
-        	if($info['copies']==0)
-        	{
-        	    $data['operation']= C('FILE_PRINTED');
-        	}
-        	else
-        	{
-        	    $data['operation']= C('FILE_DOWNLOAD');
-        	}
-        	if($info['status']==C('FILE_UPLOAD'))
-        	{
-        	    $File->where('id=%d',$fid)->setField('status',$data['operation']);
-        	}
-        	$data['url'] = download($info['url'],'attname='.$info['name']);
-            $this->success($data);
+            redirect(download($info['url'],'attname='.$info['name']));
         } 
         else
         {
@@ -213,7 +212,7 @@ class FileController extends Controller
         $pid    = pri_id(U('Index/index'));
         if($pid)
         {
-            $uid = I('uid');
+            $uid = I('uid',null,'intval');
             $phone = get_phone_by_id($uid);
             if($phone)
             {
@@ -229,6 +228,42 @@ class FileController extends Controller
             $this->error('Not validate');
         }
     }
+    
+    /*
+    public function send()
+    {
+        $pid    = pri_id(U('Index/index'));
+        if($pid)
+        {
+            $fid = I('fid',null,'intval');
+            $map['pri_id']        = $pid;
+            $map['id']        = $fid;
+            $map['status']        = array('eq', C('FILE_PRINTED'));
+            $File   = M('FileView');
+            $result    = $File->where($map)->field('use_id,phone')->find();
+            if($result['phone'])
+            {
+                $File   = M('File');
+                $map['use_id']        = $result['use_id'];
+                $map['status']        = array('eq', C('FILE_PRINTED'));
+                $map['pri_id']        = $pid;
+                $file_id = $File->where($map)->field('id')->select();
+                if($file_id)
+                {
+                    $this->success($phone);
+                }
+                else
+                {
+                    $this->error('Unknown error');
+                }
+            }
+        }
+        else
+        {
+            $this->error('Not validate');
+        }
+    }
+    */
     
 	/**
 	 *404页
