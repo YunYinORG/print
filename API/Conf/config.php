@@ -14,16 +14,17 @@ return array(
 	'URL_ROUTER_ON' => true,
 	
 	'URL_ROUTE_RULES' => array(
-		array('File/:id','File/read','',array('method'=>'get')),
-		array('File/:id','File/set','',array('method'=>'put')),
-		array('File/:id','File/del','',array('method'=>'delete')),
-		// array('File/:id','File/upload','',array('method'=>'post')),
+		array('File/:id','File/read','',array('method'=>'GET')),
+		array('File/:id','File/set','',array('method'=>'PUT')),
+		array('File/:id','File/del','',array('method'=>'DELETE')),
+		array('File','File/upload','',array('method'=>'POST')),
+		
 		'Notification/:id' => 'Notification/id',
 		'User/:id' => 'User/id',
 		'Printer/:id' => 'Printer/id',
 		'Token/:token'=>'Token/token',
 	) ,
 
-	'API_VERSION'=>1.51,
+	'API_VERSION'=>1.52,
 );
 

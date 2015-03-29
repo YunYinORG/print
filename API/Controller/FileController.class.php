@@ -111,10 +111,10 @@ class FileController extends RestController
 	 *		出错返回err
 	 *@author NewFuture
 	 */
-	public function read($id) 
+	public function read($id='') 
 	{
 		$info = auth();
-		$fid  = I('path.1', null, 'int');
+		$fid  = $id?:I('get.id', null, 'int');
 		if (!$info) 
 		{
 			$data['err']      = 'unauthored';
@@ -171,10 +171,10 @@ class FileController extends RestController
 	 *		出错返回err
 	 *@author NewFuture
 	 */
-	public function set() 
+	public function set($id='') 
 	{
 		$info        = auth();
-		$fid         = I('path.1', null, 'int');
+		$fid  = $id?:I('get.id', null, 'int');
 		if (!$info) 
 		{
 			$data['err']             = 'unauthored';
@@ -262,10 +262,10 @@ class FileController extends RestController
 	 *		出错返回err
 	 *@author NewFuture
 	 */
-	public function del() 
+	public function del($id='') 
 	{
 		$info = auth();
-		$fid  = I('path.1', null, 'int');
+		$fid  = $id?:I('get.id', null, 'int');
 		if (!$info) 
 		{
 			$data['err']      = 'unauthored';
@@ -316,9 +316,8 @@ class FileController extends RestController
 	 */
 	public function upload() 
 	{
-		
-		// code...
-		
-		
+		$data['err']='上传文件暂未开放';
+		$type = ($this->_type == 'xml') ? 'xml' : 'json';
+		$this->response($data, $type);
 	}
 }
