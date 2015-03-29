@@ -5,7 +5,7 @@
 // +------------------------------------------------------------------
 // | 云印南开
 // +------------------------------------------------------------------
-// | Copyright (c) 2014 云印南开团队 All rights reserved.
+// | Copyright (c) 2014-2015 云印南天团队 All rights reserved.
 // +------------------------------------------------------------------
 
 return array(
@@ -14,13 +14,16 @@ return array(
 	'URL_ROUTER_ON' => true,
 	
 	'URL_ROUTE_RULES' => array(
-		'File/:id' => 'File/id',
+		array('File/:id','File/read','',array('method'=>'get')),
+		array('File/:id','File/set','',array('method'=>'put')),
+		array('File/:id','File/del','',array('method'=>'delete')),
+		// array('File/:id','File/upload','',array('method'=>'post')),
 		'Notification/:id' => 'Notification/id',
 		'User/:id' => 'User/id',
 		'Printer/:id' => 'Printer/id',
 		'Token/:token'=>'Token/token',
 	) ,
 
-	'API_VERSION'=>1.3,
+	'API_VERSION'=>1.5,
 );
 
