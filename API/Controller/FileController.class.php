@@ -54,7 +54,7 @@ class FileController extends RestController
 			{
 				case C('PRINTER'):
 				case C('PRINTER_WEB'):
-					$field           = 'use_id,use_name,student_number,phone';
+					$field           = 'use_id,use_name,student_number,phone,';
 					$where['pri_id']                 = $info['id'];
 					$File            = D('FileView');
 					break;
@@ -81,7 +81,17 @@ class FileController extends RestController
 				}
 				$cache_key = false;
 				$field.= 'id,color,ppt_layout,double_side,copies,status,name,time,';
-				$data['files']      = $File->field($field)->where($where)->page($page, 10)->cache($cache_key, 10)->select();
+				$files= $File->field($field)->where($where)->page($page, 10)->cache($cache_key, 10)->select();
+				if($info['type'])
+				{
+					foreach ($files as $file) {
+						if($file['phone'])
+						{
+							$file['phone']=substr_replace($file['phone'], '********', -8);
+						}
+					}
+				}
+				$data['files'] =$files;
 			}
 		} 
 		else
