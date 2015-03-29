@@ -5,9 +5,9 @@
 </block>
 <block name='content'>
 
-<div class="container">
- <section class="container">
- <div class="text-center row col-md-6 col-md-offset-1">
+<div class="container col-xs-12">
+ <section class="center-block">
+ <div class="text-center row col-md-8 col-md-offset-2">
  <div class="well-lg">
      <h2>{$data['name']}<small>的个人信息</small></h2>
     <a href="__URL__/logout" class="btn btn-default">退出登录</a>
@@ -15,52 +15,50 @@
  </div>
 </div>
  </section>
-
- <section class="container center-block">
- <div class="row col-md-6 col-md-offset-1">
+ <section class="center-block">
+ <div class="row col-md-8 col-md-offset-2">
      <div class="panel panel-info">
          <div class="panel-heading">
              <h3 class="panel-title">认证信息</h3>
          </div>
          <div class="panel-body text-left">
          <ul>
-            <li class="row"><span class='col-sm-2 col-xs-offset-1 label label-success'><i class="glyphicon glyphicon-user"></i>姓名</span><u class='col-sm-4 col-sm-offset-1 text-success'>{$data['name']}</u></li>
-            <li class="row"><span class='col-sm-2 col-xs-offset-1 label label-success'><i class="glyphicon glyphicon-credit-card"></i>学号</span><u class='col-sm-4 col-sm-offset-1 text-success'>{$data['student_number']}</u></li>
-            <li class="row"><span class='col-sm-2 col-xs-offset-1 label label-success'><i class="glyphicon glyphicon-map-marker"></i>学校</span><u class='col-sm-4 col-sm-offset-1 text-success'>{$data['school']}</u></li>
+            <li class="row"><span class='col-sm-2 col-xs-offset-1 label label-success'><i class="glyphicon glyphicon-user"></i>姓名</span><b class='col-sm-4 col-sm-offset-1 text-success'>{$data['name']}</b></li>
+            <li class="row"><span class='col-sm-2 col-xs-offset-1 label label-success'><i class="glyphicon glyphicon-credit-card"></i>学号</span><b class='col-sm-4 col-sm-offset-1 text-success'>{$data['student_number']}</b></li>
+            <li class="row"><span class='col-sm-2 col-xs-offset-1 label label-success'><i class="glyphicon glyphicon-map-marker"></i>学校</span><b class='col-sm-4 col-sm-offset-1 text-success'>{$data['school']}</b></li>
          </ul>
         </div>
     </div>
 </div>
  </section>
-  <section class="container center-block">
-    <div class="row col-md-6 col-md-offset-1">
+  <section class="center-block">
+    <div class="row col-md-8 col-md-offset-2">
     <div class="panel panel-primary">
      <div class="panel-heading">
      <h3 class="panel-title">绑定信息</h3>
     </div>
-      <div class="panel-body text-left">
-        <div class="row">
-            <span class="col-sm-3 col-xs-offset-1"><i class="glyphicon glyphicon-phone"></i>手机</span>
-            <span id='phone_detail' class='info col-sm-4'><i class='btn glyphicon glyphicon-eye-open' id='getPhone'></i><u class='text-danger'>{$data['mask_phone']|default='绑定手机'}</u></span><span class='btn col-sm-1 glyphicon glyphicon-pencil'></span>
+      <div class="panel-body bg-info text-left">
+        <div class="detail row">
+         <div class="col-sm-3 col-sm-offset-1"><i class="glyphicon glyphicon-phone"></i>手机</div>
+         <span id='phone_detail' class='info col-sm-7 text-nowrap'><i class='btn glyphicon glyphicon-eye-open' id='getPhone'></i><u class='text-danger'>{$data['mask_phone']|default='<a class="bind">绑定手机</a>'}</u></span><span class='btn col-sm-1 glyphicon glyphicon-pencil'></span>
         </div>
         <div id='bind_phone' class='row input-group col-sm-offset-1 col-sm-10' style='display:none'> <label class="input-group-addon">+86</label><input id='phone' type="text" url='__URL__/bindPhone' name="phone" placeholder='你的手机号' class="form-control"/><span class="input-group-btn"><button onclick="bindPhone()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
-
-        <div class="row">
-            <span class='col-sm-3 col-xs-offset-1'><i class="glyphicon glyphicon-envelope"></i>邮箱</span>
-            <span id='email_detail' class='info col-sm-4'><i id='getEmail' class='btn glyphicon glyphicon-eye-open'></i><u class='text-danger'>{$data['mask_email']|default='绑定邮箱'}</u></span><span class='btn col-sm-1 glyphicon glyphicon-pencil'></span>
+        <div class="detail row">
+        	<div class='col-sm-3 col-sm-offset-1 text-nowrap'><i class="glyphicon glyphicon-envelope"></i>邮箱</div>
+            <span id='email_detail' class='info col-sm-7'><i id='getEmail' class='btn glyphicon glyphicon-eye-open'></i><u class='text-danger'>{$data['mask_email']|default='<a class="bind">绑定邮箱</a>'}</u></span><span class='btn col-sm-1 glyphicon glyphicon-pencil'></span>
         </div>
         <div id='bind_email' class='row col-sm-offset-1 input-group col-sm-10' style='display:none'><input id="email" type="email" name="email" placeholder='你的常用邮箱' url='__URL__/bindEmail' class="form-control"/> <span class="input-group-btn"><button onclick="bindEmail()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
      </div>
 </div>
 </div>
 </section>
-    <section class='container'>
-        <div class="row col-md-6 col-md-offset-1">
-         <div class="panel panel-warning">
+    <section>
+        <div class="row col-md-8 col-md-offset-2">
+         <div class="panel panel-danger">
          <div class="panel-heading">
              <h3 class="panel-title">密码管理</h3>
          </div>
-         <div class="panel-body text-left">
+         <div class="panel-body bg-warning text-left">
          <div>修改密码<i class='btn glyphicon glyphicon-pencil'></i></div>
         <form style='display:none' class="form-horizontal col-sm-offset-1" onsubmit="return changePwd(this);" role="form" method="post" action="__URL__/changePwd">
           <br/>
@@ -86,7 +84,7 @@
 </div>
 </div>
 </div>
-    </section>
+</section>
 </div>
 <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -106,6 +104,11 @@
 M = $('#Modal');
 $('.glyphicon-pencil').click(function() {
     var info = $(this).parent();
+    info.hide(50);
+    info.next().show(100);
+});
+$('.bind').click(function(b){
+	var info = $(this).parents('.detail');
     info.hide(50);
     info.next().show(100);
 });
@@ -141,7 +144,7 @@ function bindEmail() {
                 Mb.html(data.info);
                 if (data.status) {
                     Mh.html('发送成功');
-                    $('#email_detail').children('.label').html(email + '(等待验证)');
+                    $('#email_detail').html(email + '(等待验证)');
                     $('#bind_email').hide(100).prev().show(100);
                 } else {
                     Mh.html('发送失败');
@@ -216,7 +219,7 @@ function verifySMSCode(b) {
                     M.modal('show');
                     var pd = $('#phone_detail');
                     var bp = $('#bind_phone');
-                    pd.children('.label').html(bp.children('input').val());
+                    pd.html(bp.children('input').val());
                     bp.hide().prev().show(100);
                 } else if(d.url) {
                     M.find('.modal-title').html('验证失败');
@@ -283,7 +286,6 @@ $('#getPhone').click(function(gp){
         }
     });
 });
-
 function changePwd(f) {
     var URL = f.action;
 

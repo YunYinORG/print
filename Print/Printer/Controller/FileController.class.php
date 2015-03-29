@@ -168,8 +168,8 @@ class FileController extends Controller
 	        $status['operation'] = $status['status'];
 	    }
 	    if($status['status'] != $result['status'])
-	    {
-	        $result = $File->where('id="%d"', $fid)->cache(true)->setField('status', $status['operation']);
+        {
+	        $result = $File->where('id="%d"', $fid)->setField('status', $status['operation']);
 	        
 	        if($result)
 	        {
@@ -195,11 +195,17 @@ class FileController extends Controller
         $map['id']        = $fid;
         $map['status']        = array('gt', 0);
         $File   = M('File');
-        $info    = $File->where($map)->field('url,status,copies,name')->find();
-
+        $info    = $File->where($map)->field('url,status,copies,color,double_side,name')->find();
         if ($info) 
         {
-            redirect(download($info['url'],'attname='.$info['name']));
+            if($info['copies'])
+            {
+                $file_name=$info['copies'].'份_'.($info['double_side']?'单面_':'双面_').($info['color']?'黑白':'彩印');
+             }else{
+                $file_name='到店打印';
+             }
+            $file_name=$file_name."[$fid]".$info['name'];
+            redirect(download($info['url'],'attname='.urlencode($file_name)));
         } 
         else
         {
