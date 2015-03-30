@@ -57,7 +57,7 @@ class FileController extends Controller
 			 }
 			 else
 			 {
-			    $this->error('no file');
+			    $this->error('没有文件');
 			 }
 		} else
 		{
@@ -121,7 +121,7 @@ class FileController extends Controller
             }
             else
             {
-                $this->error('error');
+                $this->error('未成功刷新');
             }
             
 		}
@@ -226,16 +226,16 @@ class FileController extends Controller
             }
             else
             {
-                $this->error('Unknown error');
+                $this->error('未知错误');
             }
         }
         else
         {
-            $this->error('Not validate');
+            $this->error('请先登录');
         }
     }
     
-    /*
+    
     public function send()
     {
         $pid    = pri_id(U('Index/index'));
@@ -245,31 +245,41 @@ class FileController extends Controller
             $map['pri_id']        = $pid;
             $map['id']        = $fid;
             $map['status']        = array('eq', C('FILE_PRINTED'));
-            $File   = M('FileView');
-            $result    = $File->where($map)->field('use_id,phone')->find();
-            if($result['phone'])
-            {
-                $File   = M('File');
-                $map['use_id']        = $result['use_id'];
-                $map['status']        = array('eq', C('FILE_PRINTED'));
-                $map['pri_id']        = $pid;
-                $file_id = $File->where($map)->field('id')->select();
-                if($file_id)
+            $map['sended'] = 0;
+            $File   = D('FileView');
+            $result    = $File->where($map)->field('use_id,phone,name')->find();
+            if($phone = $result['phone'])
+            {   
+                $name = $result['name'];
+                if (mb_strlen($name) > 18) 
                 {
-                    $this->success($phone);
+                    $name = mb_substr($name, 0, 18);
+                }
+                $content = 'Your file '.$name.' is ready';
+                $sended = send_sms($phone,$content,4);
+                if($sended)
+                {
+                    $File   = M('File');
+                    $map['id']        = $fid;
+                    $result = $File->where($map)->setField('sended',1);
+                    $this->success('提醒信息已发送');
                 }
                 else
                 {
-                    $this->error('Unknown error');
+                    $this->error('发送不成功');
                 }
+            }       
+            else
+            {
+                $this->success('已发送');
             }
         }
         else
         {
-            $this->error('Not validate');
+            $this->error('请先登录');
         }
     }
-    */
+    
     
 	/**
 	 *404页

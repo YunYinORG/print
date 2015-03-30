@@ -361,6 +361,15 @@ function send_sms($toPhone, $content, $smsType) {
 				$msg = $content['recv_name'] . ',' . $content['send_name'] . ',' . $content['send_phone'];
 				$tid = 4134;
 			}
+		case 4:
+			//发送文件打印提示
+			if (C('SMS_SUPPORTER') == 'huyi') {
+				$msg = null;
+				$tid = null;
+			} else {
+				$msg = $content['recv_name'] . ',' . $content['send_name'] . ',' . $content['send_phone'];
+				$tid = 4134;
+			}
 		default:
 
 			// code...

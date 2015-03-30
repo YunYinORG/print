@@ -74,7 +74,7 @@
                     <case value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></case>
                     <case value="2" break="0"></case>
                     <case value="3"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button></case>
-                    <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button><!--<notempty name="vo['phone']"><a role="button" class="send glyphicon glyphicon-phone"></a></notempty>--></case>
+                    <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button><notempty name="vo['phone']"><if condition="$vo.sended eq 0"><button class="send glyphicon glyphicon-phone"></button><else/></if></notempty></case>
                     <default />不可操作
                     </switch>                   
                 </td>
@@ -183,11 +183,11 @@ $("table").on('click', '.set', function() {
                 btn.removeClass().addClass(b_class[data.info.operation]);
                 btn.html(b_status[data.info.operation]);
                 file.find('.status').html(f_status[data.info.status]);
-                /*var phone = file.find('.phone');
+                var phone = file.find('.phone');
                 if (data.info.status == 4 && data.info.copies!=0 &&phone) {
-                    var html = '<a role="button" class="send glyphicon glyphicon-phone"></a>';
+                    var html = '<button class="send glyphicon glyphicon-phone"></button>';
                     btn.after(html);
-                }*/
+                }
             }
         } else {
             alert(data.info);
@@ -221,6 +221,23 @@ $("table").on('click', '.bind', function(e) {
     }
 });
 
+$("table").on('click', '.send', function(e) {
+    var link = $(this);
+    link.attr('disabled','disabled');
+    var file = link.parent().parent();
+    var fid = file.attr('file_id');
+    var URL = "/Printer/File/send";
+    $.post(URL, {
+        fid: fid,
+    }, function(data) {
+        if (data.status) {
+            alert(data.info);
+        } else {
+            link.removeAttr('disabled');
+            alert(data.info);
+        }
+    });
+});
 isRefreshing = false;
 
 function refresh() {
