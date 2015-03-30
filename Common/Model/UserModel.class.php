@@ -9,61 +9,51 @@
 namespace Common\Model;
 use Think\Model;
 
-class UserModel extends Model
-{
-	
+class UserModel extends Model {
+
 	//字段
 	protected $fields = array(
-		'id', 'student_number', 'password', 'name', 'gender', 'phone', 'email', 'status',
-		 '_pk'        => 'id',
-		  '_type'        => array(
-		  	'id'        => 'bigint', 
-		  	'student_number'        => 'char(10)', 
-		  	'password'        => 'char(32)',
-		  	'name'        => 'char(8)', 
-		  	'gender'        => 'char(2)', 
-		  	'phone'        => 'char(16)', 
-		  	'email'        => 'char(64)', 
-		  	'status'        => 'tinyint',
-		  	));
-	
+		'id', 'student_number', 'sch_id', 'password', 'name', 'gender', 'phone', 'email', 'status',
+		'_pk' => 'id',
+		'_type' => array(
+			'id' => 'bigint',
+			'student_number' => 'char(10)',
+			'password' => 'char(32)',
+			'name' => 'char(8)',
+			'gender' => 'char(2)',
+			'phone' => 'char(16)',
+			'email' => 'char(64)',
+			'status' => 'tinyint',
+		));
+
 	/**
 	 *查询成功的回调方法
 	 *自动对邮箱和手机号进行打码处理
 	 */
-	protected function _after_find(&$result, $options) 
-	{
-		if(isset($result['sch_id']))
-		{
-			// $result['school']=M('school')->cache('school',6000)->getFieldById($result['sch_id'],'name');
-			 $result['school']=M('school')->getFieldById($result['sch_id'],'name');
+	protected function _after_find(&$result, $options) {
+		if (isset($result['sch_id'])) {
+			$result['school'] = M('school')->getFieldById($result['sch_id'], 'name');
 		}
 
-		if (!isset($result['email'])) 
-		{
-			
+		if (!isset($result['email'])) {
+
 			//未读取email
-			
-		} elseif ($result['email']) 
-		{
-			$at     = strpos($result['email'], '@');
-			$result['mask_email']        = substr_replace($result['email'], '***', 1, $at - 1);
-		} else
-		{
-			$result['mask_email']        = null;
+
+		} elseif ($result['email']) {
+			$at = strpos($result['email'], '@');
+			$result['mask_email'] = substr_replace($result['email'], '***', 1, $at - 1);
+		} else {
+			$result['mask_email'] = null;
 		}
-		
-		if (!isset($result['phone'])) 
-		{
-			
+
+		if (!isset($result['phone'])) {
+
 			//未读取phone
-			
-		} elseif ($result['phone']) 
-		{
-			$result['mask_phone']        = substr_replace($result['phone'], '********', -8);
-		} else
-		{
-			$result['mask_phone']        = null;
+
+		} elseif ($result['phone']) {
+			$result['mask_phone'] = substr_replace($result['phone'], '********', -8);
+		} else {
+			$result['mask_phone'] = null;
 		}
 		return $result;
 	}

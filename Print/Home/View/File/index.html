@@ -80,9 +80,7 @@
 <block name='end'>
 <script>
         $(".delete").on('click',function(){
-            $(".delete").attr('disabled',true);
-            var con=confirm("确认删除?删除后无法找回");
-            if(con)
+            if(confirm("确认删除?删除后无法找回"))
             {
             var URL = "__ROOT__/File/delete";
             var btn=$(this).attr('disabled','true').html('正在删除');
@@ -96,7 +94,6 @@
                 }else{
                     btn.attr('disabled','false').html('删除');
                     alert('操作失败：'+data.info);
-                    $(".delete").attr('disabled',false);
                 }
             });
             }
