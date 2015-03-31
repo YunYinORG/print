@@ -200,7 +200,7 @@ class FileController extends Controller
         {
             if($info['copies'])
             {
-                $file_name=$info['copies'].'份_'.($info['double_side']?'单面_':'双面_').($info['color']?'黑白':'彩印');
+                $file_name=$info['copies'].'份_'.($info['double_side']?'双面_':'单面_').($info['color']?'彩印':'黑白');
              }else{
                 $file_name='到店打印';
              }
@@ -247,20 +247,21 @@ class FileController extends Controller
             $map['status']        = array('eq', C('FILE_PRINTED'));
             $map['sended'] = 0;
             $File   = D('FileView');
-            $result    = $File->where($map)->field('use_id,phone,name')->find();
+            $info    = $File->where($map)->field('use_id,phone,name')->find();
             $Printer = M('Printer');
-            $pri_name = $Printer->where('id='.$pid)->field('name')->find();
-            if($result['phone']&&$printer['name'])
+            $info['pri_name'] =M('Printer')->getFieldById($pid,'name');
+            if($info['phone']&&$info['name'])
             {   
-                $name = $result['name'];
-                if (mb_strlen($name) > 18) 
+                unset($info['phone']);
+                if (mb_strlen($info['name']) > 18) 
                 {
-                    $name = mb_substr($name, 0, 18);
+                    $info['name'] = mb_substr($info['name'], 0, 18);
                 }
-                $info = array("pri_name"=>$pri_name,"fid"=>$fid,"name"=>$result['name']);
-                $phone = get_phone_by_id($result['use_id']);
-                $sended = send_sms($phone,$info,4);
-                if($sended)
+                $phone = get_phone_by_id($info['use_id']);
+                unset($info['use_id']);
+                $info['fid']=$fid;
+                
+                if(send_sms($phone,$info,4))
                 {
                     $File   = M('File');
                     $map['id']        = $fid;
