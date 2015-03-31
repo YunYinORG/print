@@ -257,6 +257,7 @@ class FileController extends Controller
                 {
                     $name = mb_substr($name, 0, 18);
                 }
+                $info = array("pri_name"=>$pri_name,"fid"=>$fid,"name"=>$result['name']);
                 $phone = get_phone_by_id($result['use_id']);
                 $sended = send_sms($phone,$info,4);
                 if($sended)
