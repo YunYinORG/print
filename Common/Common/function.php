@@ -367,8 +367,8 @@ function send_sms($toPhone, $content, $smsType) {
 				$msg = null;
 				$tid = null;
 			} else {
-				$msg = $content['recv_name'] . ',' . $content['send_name'] . ',' . $content['send_phone'];
-				$tid = 4134;
+				$msg = $content['pri_name'] . ',' . $content['fid'] . ',' . $content['name'];
+				$tid = 4698;
 			}
 		default:
 

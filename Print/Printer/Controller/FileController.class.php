@@ -249,7 +249,7 @@ class FileController extends Controller
             $File   = D('FileView');
             $result    = $File->where($map)->field('use_id,phone,name')->find();
             $Printer = M('Printer');
-            $printer = $Printer->where('id='.$pid)->field('name')->find();
+            $pri_name = $Printer->where('id='.$pid)->field('name')->find();
             if($result['phone']&&$printer['name'])
             {   
                 $name = $result['name'];
@@ -257,9 +257,8 @@ class FileController extends Controller
                 {
                     $name = mb_substr($name, 0, 18);
                 }
-                $content = '您的 '.$name.' 在 '.$printer['name'].' 准备好了';
                 $phone = get_phone_by_id($result['use_id']);
-                $sended = send_sms($phone,$content,4);
+                $sended = send_sms($phone,$info,4);
                 if($sended)
                 {
                     $File   = M('File');
