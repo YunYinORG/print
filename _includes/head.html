@@ -1,6 +1,7 @@
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <link href="http://gmpg.org/xfn/11" rel="profile">
   <title>
   {% if page.title == "Home" %}
@@ -20,14 +21,14 @@
   <meta name="description" content="{{site.description}}">
   {% endif %}
 	<meta name="author" content="{{site.author}}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link rel='canonical' href='http://www.yunyin.org'/>
   {% if page.path contains '_posts' %}
   <meta property="og:title" content="{{page.title}}" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="{{page.url}}" />
+  <meta property="og:url" content="{{site.url}}{{page.url}}" />
   <meta property="og:description" content="{{page.description}}" />
   {% endif %}
-  <link rel='canonical' href='{{page.url}}'/>
+  <link rel='canonical' href='{{site.url}}{{page.url}}'/>
   <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="{{site.url}}/assets/css/app.css">
   {% if page.bloghome == true %}
