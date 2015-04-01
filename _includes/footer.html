@@ -1,13 +1,1 @@
-<footer class="row">
-      <div class="col-ms-12 text-center">
-            <hr/>
-            {% if site.footersvg == 'true' %}
-                  <div>{% include svg-icons.html %}</div>
-            {% endif %}
-            <ul class="list-inline">
-            	<li>&copy;<a href="{{site.url}}"> 2014-{{ site.time | date: '%Y' }}{{site.name}}</a>. All rights reserved</li>|
-            	<li><a href="http://yunyin.org/" title="进入云印南天">立即使用云印</a></li>
-            </ul>            
-      </div>
-</footer>
-<script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js" defer="defer"></script>
+<footer class="row"><div class="col-ms-12 text-center"><hr/>{% if site.footersvg == 'true' %}<div>{% include svg-icons.html %}</div>{% endif %}<ul class="list-inline"><li>&copy;<a href="{{site.url}}">2014-{{ site.time | date: '%Y' }}{{site.name}}</a>. All rights reserved</li>|<li><a href="http://yunyin.org/" title="进入云印南天">立即使用云印</a></li></ul></div></footer><script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js" defer="defer"></script>
