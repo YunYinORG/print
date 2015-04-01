@@ -11,7 +11,6 @@
 + **人人主页**：@[云印南天](http://page.renren.com/602117408)
 + **联系邮箱**：contact#yunyin.org; join#yunyin.org(你懂的:smile:)
 
-
 ## Bugs or Fault
 * 多文件不能一次
 * 提前判断文件大小
@@ -160,29 +159,24 @@
 
 
 ## 团队主要人员及分工
-
-#### 1.项目发起人
-[李旭昇](https://github.com/jeffli678)
-#### 2.总设计和负责人
-[NewFuture](https://github.com/New-Future)
-#### 3.数据库设计
-[牛亮](https://github.com/wangxiaodiu) [梁崇军](https://github.com/inankai)
-#### 4.后端实现
-[孙卓豪](https://github.com/605527108) [牛亮](https://github.com/wangxiaodiu) [NewFuture](https://github.com/New-Future)
-#### 5.前端实现
-[王博](https://github.com/LimitW) [孙卓豪](https://github.com/605527108)
-#### 6.打印店客户端
-[宋剑超](https://github.com/NKsjc)
-#### 7.图形设计
-[陈超](#)
-#### 8.运营推广
-[崔梦焱](#) [王雨晴](#)
+* 项目发起人： [李旭昇](https://github.com/jeffli678)
+* 总设计和负责人： [NewFuture](https://github.com/New-Future)
+* 数据库设计： [牛亮](https://github.com/wangxiaodiu) [梁崇军](https://github.com/inankai)
+* 后端实现： [孙卓豪](https://github.com/605527108) [牛亮](https://github.com/wangxiaodiu) [NewFuture](https://github.com/New-Future)
+* 前端实现： [王博](https://github.com/LimitW)  [杜晓唐](https://github.com/acDante) [孙卓豪](https://github.com/605527108) [NewFuture](https://github.com/New-Future)
+* 打印店客户端： [宋剑超](https://github.com/NKsjc)
+* 图形设计： [陈超](#)
+* 运营推广：[崔梦焱](#) [王雨晴](#)
 
 ## 支持和协议
 
 云印项目由南开大学学生发起，收到南开和北洋两所学校共同支持，项目和平台免费开源，同时欢迎所有人贡献代码和想法
 
 由南开微软俱乐部，天大微软俱乐部，南开机器人所，等组织和单位提高核心资源支持。由合作服务商提供重要服务资源支持。
+
+由于对github稳定性的担忧和大家访问的便捷性，我们同时在国内两个平台不定期推送最新代码镜像
+* 开源中国oschina托管地址：[http://git.oschina.net/newfuture/print](http://git.oschina.net/newfuture/print)
+* gitcafe代码托管地址：[https://gitcafe.com/NewFuture/print](https://gitcafe.com/NewFuture/print)
 
 本项目源码遵循apache2 开源协议，同时尊重每一位贡献者的权益。
 
