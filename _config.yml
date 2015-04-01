@@ -23,6 +23,8 @@ navigation:
   url : /archive/
 - text: 搜索
   url : /search/
+- text: 云印
+  url : http://yunyin.org
 
 # Author Details
 author:         'New Future'
