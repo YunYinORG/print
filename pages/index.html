@@ -38,20 +38,20 @@ bloghome: true
             <div class="row">
               <div class="col-sm-6 col-xs-6 text-left">
                   {% if paginator.next_page %}
-                    <a class="btn btn-orange" href="{{paginator.next_page_path}}">← 下一篇</a>
+                    <a class="btn btn-orange" href="{{paginator.next_page_path}}">←下一页</a>
                   {% else %}
-                    <span class="btn btn-orange disabled">← 下一篇</span>
+                    <span class="btn btn-orange disabled">←下一页</span>
                   {% endif %}
               </div>
               <div class="col-sm-6 col-xs-6 text-right">
                   {% if paginator.previous_page %}
                     {% if paginator.page == 2 %}
-                    <a class="btn btn-orange" href="/pages/">上一篇 →</a>
+                    <a class="btn btn-orange" href="/pages/">上一页→</a>
                     {% else %}
-                    <a class="btn btn-orange" href="{{paginator.previous_page_path}}">上一篇 →</a>
+                    <a class="btn btn-orange" href="{{paginator.previous_page_path}}">上一页→</a>
                     {% endif %}
                   {% else %}
-                    <span class="btn btn-orange disabled">上一篇 →</span>
+                    <span class="btn btn-orange disabled">上一页→</span>
                   {% endif %}
               </div>
             </div>

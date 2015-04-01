@@ -10,6 +10,8 @@
       {{ page.title }} &middot; {{ site.title }}
     {% endif %}
   </title>
+  <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{site.url}}/assets/css/app.css">
   {% if page.title %}
   <meta name="keywords" content="{{page.title}}">
   {% else %}
@@ -21,22 +23,18 @@
   <meta name="description" content="{{site.description}}">
   {% endif %}
 	<meta name="author" content="{{site.author}}">
-  <link rel='canonical' href='http://www.yunyin.org'/>
   {% if page.path contains '_posts' %}
   <meta property="og:title" content="{{page.title}}" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="{{site.url}}{{page.url}}" />
+  <meta property="og:url" content="{{site.url}}{{ page.url | remove: 'index.html' }}" />
   <meta property="og:description" content="{{page.description}}" />
   {% endif %}
-  <link rel='canonical' href='{{site.url}}{{page.url}}'/>
-  <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{{site.url}}/assets/css/app.css">
+  <link rel="canonical" href="{{site.url}}{{ page.url | remove: 'index.html' }}"/>
   {% if page.bloghome == true %}
   <style type="text/css">
         a,a:hover,a:focus {color:#DC572E;}
   </style>
   {% endif %}
-  <!-- Icons -->
   <link rel="apple-touch-icon-precomposed" sizes="128x128" href="{{site.url}}/assets/image/logo.png">
   <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
