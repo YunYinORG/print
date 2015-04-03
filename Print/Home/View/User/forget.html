@@ -14,8 +14,7 @@
                     为了防止你的账号信息滥用，你可以通过手机验证、邮箱验证、或校园账号验证（南开URP或者天大办公网），找回你的密码。
                     <br/>如果账号尚未注册请前往<a title="云印南天" href="/">云印南天首页</a>直接注册。
                 </div>
-            </div>
-		</div>	
+            </div>	
 		<div class="text-center">
 				<button class="btn switch-btn" onclick="findWay(1)" id="phone_way">通过绑定手机找回</button>
 	
@@ -92,19 +91,20 @@
                 </form>
             </div>
         </div>
+
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" data-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" id="ModalLabel">稍等……</h3>
+                </div>
+                <div class="modal-body">正在提交</div>
+            </div>
+        </div>
+    </div>
+    
     </body>
-	
-	<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3 class="modal-title" id="ModalLabel">稍等……</h3>
-				</div>
-				<div class="modal-body">正在提交</div>
-			</div>
-		</div>
-	</div>
 	<script src="__CDNLIB__/jquery/2.1.1/jquery.min.js"></script>
 	<script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap.min.js" defer="defer"></script>
     <script>

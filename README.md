@@ -3,22 +3,22 @@
 更方便的校园打印 [yunyin.org](http://yunyin.org)
 -------------------------
 
-## 官方媒体
+### 官方媒体
 
 + **微信公众号**：云印南天(`yunyinnantian`) ![云印南天](http://www.yunyin.org/assets/image/weixin_qrcode.png)
 + **官方网站**：[www.yunyin.org](http://www.yunyin.org) :heart:
-+ **官方微博**：[云印南天](http://weibo.com/cloudPrint)
++ **官方微博**：[云印南天](http://weibo.com/cloudPrint) (`cloudPrint`)
 + **人人主页**：@[云印南天](http://page.renren.com/602117408)
 + **联系邮箱**：contact#yunyin.org; join#yunyin.org(你懂的:smile:)
 
-## Bugs or Fault
+### Bugs or Fault
 * 多文件不能一次
 * 提前判断文件大小
 * 邮箱用的不是SAE
 * 未登录查看打印店等信息
 * 七牛上传目录前缀
 
-## Features to add
+### Features to add
 * 打印店文件到达通知【doing】
 * 图片打印支持
 * 上传进度显示
@@ -35,7 +35,7 @@
 * ...
 * 打印店客户端自动打印
 
-##安全问题：
+### 安全问题：
 * 输入字段严格过滤【always doing】
 * xss(反馈和打印店介绍)【doing】
 * https验证通道【doing】
@@ -44,7 +44,7 @@
 * xss(httponly) 【done】
 * 隐私数据加密（手机号和邮箱保存加密）【done】
 
-## API相关说明:
+### API相关说明:
 采用`REST`风格的接口设计，所有接口文档和源码均对外开放
 
 此处查看最新API文档[API.md](https://github.com/nkumstc/print/blob/master/API.md)
@@ -148,7 +148,7 @@
 >>
 
 
-## 仓库分支说明
+### 仓库分支说明
 
 包含`服务器端`，`打印店客户端`，`数据库`，和`官方宣传页` 四个稳定分支
 
@@ -158,7 +158,7 @@
 4. [gh-pages](https://github.com/nkumstc/print/tree/gh-pages)官方文档网站www.yunyin.org源码
 
 
-## 团队主要人员及分工
+### 团队主要人员
 * 项目发起人： [李旭昇](https://github.com/jeffli678)
 * 总设计和负责人： [NewFuture](https://github.com/New-Future)
 * 数据库设计： [牛亮](https://github.com/wangxiaodiu) [梁崇军](https://github.com/inankai)
@@ -168,13 +168,15 @@
 * 图形设计： [陈超](#)
 * 运营推广：[崔梦焱](#) [王雨晴](#)
 
-## 支持和协议
+### 支持和协议
 
 云印项目由南开大学学生发起，收到南开和北洋两所学校共同支持，项目和平台免费开源，同时欢迎所有人贡献代码和想法
 
 由南开微软俱乐部，天大微软俱乐部，南开机器人所，等组织和单位提高核心资源支持。由合作服务商提供重要服务资源支持。
 
 由于对github稳定性的担忧和大家访问的便捷性，我们同时在国内两个平台不定期推送最新代码镜像
+
+* GitHub托管地址【主站,处理pull request和issues】[https://github.com/nkumstc/print](https://github.com/nkumstc/print)
 * 开源中国oschina托管地址：[http://git.oschina.net/newfuture/print](http://git.oschina.net/newfuture/print)
 * gitcafe代码托管地址：[https://gitcafe.com/NewFuture/print](https://gitcafe.com/NewFuture/print)
 

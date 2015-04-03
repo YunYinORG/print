@@ -8,7 +8,7 @@
     <body>
         <div id="carbonForm">
             <h1>打印店登录</h1>
-            <form action="__ROOT__/Printer/Printer/auth" method="post" id="signupForm">
+            <form action="__MODULE__/Printer/auth" method="post" id="signupForm">
                 <div class="fieldContainer">
                     <div class="formRow">
                         <div class="label">
@@ -28,8 +28,9 @@
                     </div>
                 </div>
                 <div class="signupButton">
-                    <input type="submit" name="submit" id="submit" value="登陆">
+                    <button type="submit" id="submit">登陆</button>
                 </div>
+                 <a rel="nofollow" href="__MODULE__/Printer/forget">忘记密码？</a>
             </form>
         </div>
     </body>
