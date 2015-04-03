@@ -52,13 +52,9 @@ class FileController extends Controller
                     $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
                 }
                 unset($file);
-                $this->data = $result;
+			 }
+   				$this->data = $result;
 			    $this->display();
-			 }
-			 else
-			 {
-			    $this->error('没有文件');
-			 }
 		} else
 		{
 			$this->redirect('Printer/Index/index');

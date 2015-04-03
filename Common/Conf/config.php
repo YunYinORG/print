@@ -84,10 +84,4 @@ return array(
 		'exts' => array('pdf', 'doc', 'docx', 'wps', 'ppt', 'pptx'),
 		'saveName' => array('uniqid', ''),
 	),
-	
-	//短信模板
-	'BIND_PHONE' => '3620',
-	'FIND_PWD' => '4003',
-	'FIND_ECARD' => '4134',
-	'PRINTED' => '4698',
 );

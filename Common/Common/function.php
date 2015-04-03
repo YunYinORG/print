@@ -336,26 +336,26 @@ function send_sms($toPhone, $content, $smsType)
 		case 1:
 		//绑定手机
 			$msg = 'yunyin.org,' . $content . ',5';
-			$tid = C('BIND_PHONE');
+			$tid = C('SMSID_BIND');
 			break;
 		case 2: 
         //找回密码
 			$msg = 'yunyin.org,' . $content . ',5';
-			$tid = C('FIND_PWD');
+			$tid = C('SMSID_PWD');
 			break;
 		case 3:	
 		//找回一卡通
 			$msg = $content['recv_name'] . ',' . $content['send_name'] . ',' . $content['send_phone'];
-			$tid = C('FIND_ECARD');
+			$tid = C('SMSID_CARD');
 			break;
 		case 4:
 		//发送文件打印提示
 			$msg = $content['pri_name'] . ',' . $content['fid'] . ',' . $content['name'];
-			$tid = C('PRINTED');
+			$tid = C('SMSID_PRINTED');
 			break;
 		default:
 			
-			// code...
+			E('未知短信类型');
 			break;
 	}
 	
