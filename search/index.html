@@ -7,6 +7,7 @@ description: 云印文档搜索
 <div id="search-form">
 	<input class="search form-control" name="q" placeholder="搜索" type="text">
 </div>
+<div><a href="http://search.yunyin.org/">试试百度站内搜索</a></div>
 </form>
 <div class="search-message"></div>
 <div id="results">
@@ -30,9 +31,8 @@ $(document).ready(function() {
             searchResults       : '#results',
             searchResultsTitle  : '<h3>搜索结果</h3>',
             limit               : '10',
-            noResults           : '<h3>没有找到匹配文档</h3>Suggestions:<ul><li>Make sure that all words are spelled correctly.</li><li>Try different keywords.</li><li>Try more general keywords.</li><li>Try fewer keywords.</li></ul>'
+            noResults           : '<h3>没有找到匹配文档</h3>Suggestions:<ul><li>检查关键词</li><li>试试其他词</li><li>试试百度站内<a href="http://search.yunyin.org/cse/search?s=9310778374886739847&q='+qry+'">搜索</a></li></ul>'
      });
-
      if(qry) {
 			$(".search").val(qry).trigger('keyup').focus();
      }

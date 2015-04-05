@@ -11,7 +11,7 @@ title:            '云印南天'
 tagline:          '云印南天'
 description:      '云印南天官网文档中心'
 url:              'http://www.yunyin.org'
-baseurl:          'http://www.yunyin.org'
+editurl:          'https://github.com/nkumstc/print/blob/gh-pages/'
 
 # Navigation
 navigation:

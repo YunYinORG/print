@@ -2,6 +2,7 @@
 layout: post
 title:  没有U盘是怎样的体验
 date:   2015-03-22 15:30:00
+description: U盘的发展历史和优缺点，以及云印的作用。
 category: 云印宣传
 tags: U盘
 ---
