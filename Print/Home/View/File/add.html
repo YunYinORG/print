@@ -1,15 +1,14 @@
 ﻿{//文件上传页}
 <extend name="Public/template/base.html"/>
-<block name='head'></block>
 <block name='header'>
 <include file="./Public/template/nav.html" add="active"/>
 </block>
 <block name='content'>
 <div class="title">
-     <h2>设置打印信息<button class="btn btn-success" id="helpView">打印帮助</button></h2>
+     <h1>设置打印信息<button class="btn btn-success" id="helpView">打印帮助</button></h1>
 </div>
 <div id="featured" class="container">
-        <div class="row" style="display:none;" id="helpBlock"> 
+    <div class="row" style="display:none;" id="helpBlock"> 
     <div class="col-lg-8">
         <p class="text-info well">
         使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> <code>设置打印份数、格式</code> -> <code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
@@ -33,13 +32,10 @@
                 </div>
             </div>
         </div>
-        
-
         <div class="row">
             <div class="col-sm-5">
                 <ul id="upload-list" class="list-group"></ul>
             </div>
-            
         </div>
         <br/>
     
@@ -96,11 +92,12 @@
                     </label>
                 </div>
                 </div>
-            </div>                
+            </div>  
+        </div>              
         </fieldset>
         <else/>
         <div>
-            <a href="/User" style="text-decoration:none"><p>绑定手机后可进行高级设置提前打印</p></a>
+            <a href="/User" style="text-decoration:none"><b>绑定手机后可进行高级设置和提前打印</b></a>
         </div>
         </if>
         </div>
