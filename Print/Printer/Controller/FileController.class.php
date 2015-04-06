@@ -191,12 +191,16 @@ class FileController extends Controller
         $map['id']        = $fid;
         $map['status']        = array('gt', 0);
         $File   = M('File');
-        $info    = $File->where($map)->field('url,status,copies,color,double_side,name')->find();
+        $info    = $File->where($map)->field('url,status,copies,ppt_layout,color,double_side,name')->find();
         if ($info) 
         {
             if($info['copies'])
             {
                 $file_name=$info['copies'].'份_'.($info['double_side']?'双面_':'单面_').($info['color']?'彩印':'黑白');
+             	if($ppt_layout$info['ppt_layout'])
+             	{
+             		$file_name.=C('PPT_LAYOUT')[$ppt_layout].'版式_';
+             	}
              }else{
                 $file_name='到店打印';
              }
