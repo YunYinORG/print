@@ -196,13 +196,13 @@ class FileController extends Controller
         {
             if($info['copies'])
             {
-                $file_name=$info['copies'].'份_'.($info['double_side']?'双面_':'单面_').($info['color']?'彩印':'黑白');
+                $file_name=$info['copies'].'份_'.($info['double_side']?'双面_':'单面_').($info['color']?'彩印_':'黑白_');
              	if($ppt_layout=$info['ppt_layout'])
              	{
-             		$file_name.=C('PPT_LAYOUT')[$ppt_layout].'版式_';
+             		$file_name.=C('PPT_LAYOUT')[$ppt_layout].'版_';
              	}
              }else{
-                $file_name='到店打印';
+                $file_name='到店打印_';
              }
             $file_name=$file_name."[$fid]".$info['name'];
             redirect(download($info['url'],'attname='.urlencode($file_name)));
