@@ -107,6 +107,7 @@ create table file
    status               tinyint,
    color                bool,
    ppt_layout           tinyint default 0,
+   sended               tinyint default 0,
    primary key (id)
 );
 
