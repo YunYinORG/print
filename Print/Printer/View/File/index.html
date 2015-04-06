@@ -232,6 +232,7 @@ $("table").on('click', '.send', function(e) {
     }, function(data) {
         if (data.status) {
             alert(data.info);
+            link.remove();
         } else {
             link.removeAttr('disabled');
             alert(data.info);

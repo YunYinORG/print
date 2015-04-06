@@ -335,12 +335,12 @@ function send_sms($toPhone, $content, $smsType)
 	{
 		case 1:
 		//绑定手机
-			$msg = 'yunyin.org,' . $content . ',5';
+			$msg = $content . ',5';
 			$tid = C('SMSID_BIND');
 			break;
 		case 2: 
         //找回密码
-			$msg = 'yunyin.org,' . $content . ',5';
+			$msg = $content . ',5';
 			$tid = C('SMSID_PWD');
 			break;
 		case 3:	
