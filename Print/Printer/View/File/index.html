@@ -62,6 +62,7 @@
                     <case value="1">尚未下载</case>
                     <case value="2">已下载</case>
                     <case value="3">正在打印</case>
+                    {//此处逻辑有问题！,到店打应该是是2->然后跳到->5 ，不存在4}
                     <case value="4"><if condition="$vo.copies eq 0">已下载<else/>已印待付款</if></case>
                     <case value="5">已付款</case>
                     <default />未知状态

@@ -5,7 +5,7 @@
 
 ### 官方媒体
 
-+ **微信公众号**：云印南天(`yunyinnantian`) ![云印南天](http://www.yunyin.org/assets/image/weixin_qrcode.png)
++ **微信公众号**：云印南天(`yunyinnantian`) [点击查看](http://www.yunyin.org/assets/image/weixin_qrcode.png)
 + **官方网站**：[www.yunyin.org](http://www.yunyin.org) :heart:
 + **官方微博**：[云印南天](http://weibo.com/cloudPrint) (`cloudPrint`)
 + **人人主页**：@[云印南天](http://page.renren.com/602117408)
@@ -17,6 +17,7 @@
 * 邮箱用的不是SAE
 * 未登录查看打印店等信息
 * 七牛上传目录前缀
+* 到店打印，下载后状态跃迁问题
 
 ### Features to add
 * 打印店文件到达通知【doing】
