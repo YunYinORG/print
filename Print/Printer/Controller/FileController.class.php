@@ -52,13 +52,9 @@ class FileController extends Controller
                     $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
                 }
                 unset($file);
-                $this->data = $result;
+			 }
+   				$this->data = $result;
 			    $this->display();
-			 }
-			 else
-			 {
-			    $this->error('没有文件');
-			 }
 		} else
 		{
 			$this->redirect('Printer/Index/index');
@@ -203,14 +199,18 @@ class FileController extends Controller
         $map['id']        = $fid;
         $map['status']        = array('gt', 0);
         $File   = M('File');
-        $info    = $File->where($map)->field('url,status,copies,color,double_side,name')->find();
+        $info    = $File->where($map)->field('url,status,copies,ppt_layout,color,double_side,name')->find();
         if ($info) 
         {
             if($info['copies'])
             {
-                $file_name=$info['copies'].'份_'.($info['double_side']?'单面_':'双面_').($info['color']?'黑白':'彩印');
+                $file_name=$info['copies'].'份_'.($info['double_side']?'双面_':'单面_').($info['color']?'彩印_':'黑白_');
+             	if($ppt_layout=$info['ppt_layout'])
+             	{
+             		$file_name.=C('PPT_LAYOUT')[$ppt_layout].'版_';
+             	}
              }else{
-                $file_name='到店打印';
+                $file_name='到店打印_';
              }
             $file_name=$file_name."[$fid]".$info['name'];
             redirect(download($info['url'],'attname='.urlencode($file_name)));
@@ -255,20 +255,21 @@ class FileController extends Controller
             $map['status']        = array('eq', C('FILE_PRINTED'));
             $map['sended'] = 0;
             $File   = D('FileView');
-            $result    = $File->where($map)->field('use_id,phone,name')->find();
+            $info    = $File->where($map)->field('use_id,phone,name')->find();
             $Printer = M('Printer');
-            $printer = $Printer->where('id='.$pid)->field('name')->find();
-            if($result['phone']&&$printer['name'])
+            $info['pri_name'] =M('Printer')->getFieldById($pid,'name');
+            if($info['phone']&&$info['name'])
             {   
-                $name = $result['name'];
-                if (mb_strlen($name) > 18) 
+                unset($info['phone']);
+                if (mb_strlen($info['name']) > 18) 
                 {
-                    $name = mb_substr($name, 0, 18);
+                    $info['name'] = mb_substr($info['name'], 0, 18);
                 }
-                $content = '您的 '.$name.' 在 '.$printer['name'].' 准备好了';
-                $phone = get_phone_by_id($result['use_id']);
-                $sended = send_sms($phone,$content,4);
-                if($sended)
+                $phone = get_phone_by_id($info['use_id']);
+                unset($info['use_id']);
+                $info['fid']=$fid;
+                
+                if(send_sms($phone,$info,4))
                 {
                     $File   = M('File');
                     $map['id']        = $fid;

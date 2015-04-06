@@ -1,32 +1,32 @@
-<!DOCTYPE html>
-{//用户基础模板}
+<!DOCTYPE html>{//基础模板}
 <html lang="zh-cmn-Hans">
     <head>
         <meta charset="UTF-8">
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title><block name="title">云印南天-Beta</block></title>
-        <meta name="keywords" content="云印南天" />
-        <meta name="description" content="南开大学天津大学云打印平台" />
+        <title><BLOCK name="title">云印南天-Beta</BLOCK></title>
+        <meta name="keywords" content="云印南天,云印南开,云印北洋" />
+        <meta name="description" content="南开大学和天津大学校园云打印平台,包含云印南开,云印北洋" />
         <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
         <script src="__CDNLIB__/jquery/2.1.1/jquery.min.js"></script>
-        <block name="head">{//头部添加}</block>
+        <BLOCK name="head">{//头部添加}
+          <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
+        </BLOCK>
     </head>
     <body>
-        <block name="header">{//导航栏}
+        <BLOCK name="header">{//导航栏}
         <include file="./Public/template/nav.html"/>
-        </block>
-        <block name='main'>
+        </BLOCK>
+        <BLOCK name='main'>
         <main id='main'>
-            <block name="content">{//主要区域}</block>
-            <block name="footer">{//页脚内容}
+            <BLOCK name="content">{//主要区域}</BLOCK>
+            <BLOCK name="footer">{//页脚内容}
             <include file="./Public/template/footer.html"/>
-            </block>
+            </BLOCK>
         </main>
-        </block>
+        </BLOCK>
+        <script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap.min.js" defer="defer"></script>
+        <BLOCK name="end">{//尾部js等}</BLOCK>
     </body>
-         <script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap.min.js" defer="defer"></script>
-     <block name="end">{//尾部js等}</block>
 </html>

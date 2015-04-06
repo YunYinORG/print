@@ -329,54 +329,37 @@ function send_mail($toMail, $msg, $mailType) {
  *@param $smsType 短信类型
  *@return bool 是否发送成功
  */
-function send_sms($toPhone, $content, $smsType) {
-	switch ($smsType) {
+function send_sms($toPhone, $content, $smsType) 
+{
+	switch ($smsType) 
+	{
 		case 1:
-
-			//验证码
-			if (C('SMS_SUPPORTER') == 'huyi') {
-				$msg = rawurlencode('您的验证码是：' . $content . '。请不要把验证码泄露给其他人。');
-				$tid = null;
-			} else {
-				$msg = 'yunyin.org,' . $content . ',5';
-				$tid = 3620;
-			}
+		//绑定手机
+			$msg = $content . ',5';
+			$tid = C('SMSID_BIND');
 			break;
-		case 2:
-			//找回密码
-			if (C('SMS_SUPPORTER') == 'huyi') {
-				$msg = rawurlencode('您的验证码是：' . $content . '。请不要把验证码泄露给其他人。');
-				$tid = null;
-			} else {
-				$msg = 'yunyin.org,' . $content . ',5';
-				$tid = 4003;
-			}
+		case 2: 
+        //找回密码
+			$msg = $content . ',5';
+			$tid = C('SMSID_PWD');
 			break;
-		case 3:
-			//通知学子卡丢失
-			if (C('SMS_SUPPORTER') == 'huyi') {
-				$msg = null;
-				$tid = null;
-			} else {
-				$msg = $content['recv_name'] . ',' . $content['send_name'] . ',' . $content['send_phone'];
-				$tid = 4134;
-			}
+		case 3:	
+		//找回一卡通
+			$msg = $content['recv_name'] . ',' . $content['send_name'] . ',' . $content['send_phone'];
+			$tid = C('SMSID_CARD');
+			break;
 		case 4:
-			//发送文件打印提示
-			if (C('SMS_SUPPORTER') == 'huyi') {
-				$msg = null;
-				$tid = null;
-			} else {
-				$msg = $content['recv_name'] . ',' . $content['send_name'] . ',' . $content['send_phone'];
-				$tid = 4134;
-			}
+		//发送文件打印提示
+			$msg = $content['pri_name'] . ',' . $content['fid'] . ',' . $content['name'];
+			$tid = C('SMSID_PRINTED');
+			break;
 		default:
-
-			// code...
+			
+			E('未知短信类型');
 			break;
 	}
-
-	$SMS = new Common\Common\Sms();
+	
+	$SMS = new \Vendor\Sms();
 	return $SMS->sendSms($toPhone, $msg, $tid);
 }
 

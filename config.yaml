@@ -11,6 +11,7 @@ handle:
 - hostaccess: if (%{REQUEST_URI} ~*"/API/")  allow "0.0"
 - hostaccess: if (%{REQUEST_URI} ~*"/Print/")  allow "0.0"
 - hostaccess: if (%{REQUEST_URI} ~*"/ThinkPHP/")  allow "0.0"
+- hostaccess: if (path ~*"/.htacesss")  allow "0.0"
 - expire:  if( path ~ "Public" ) time 2592000
 - expire:  if( path ~ "favicon.ico" ) time 360000
 cron:

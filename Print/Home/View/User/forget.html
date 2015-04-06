@@ -1,114 +1,104 @@
-﻿<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-    <head>
-        <title>云印南天——找回密码</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
-    </head>
-    <body>
-        <div class="container">
-            <div class="col-lg-8 col-lg-offset-2">
-                <h1 class="text-danger text-center">找回密码</h1>
-                <div class='alert alert-warning'>
-                    为了防止你的账号信息滥用，你可以通过手机验证、邮箱验证、或校园账号验证（南开URP或者天大办公网），找回你的密码。
-                    <br/>如果账号尚未注册请前往<a title="云印南天" href="/">云印南天首页</a>直接注册。
-                </div>
-            </div>
-		</div>	
-		<div class="text-center">
-				<button class="btn switch-btn" onclick="findWay(1)" id="phone_way">通过绑定手机找回</button>
-	
-				<button class="btn switch-btn" onclick="findWay(2)" id="email_way">通过绑定邮箱找回</button>
+﻿<EXTEND name="Public/template/base.html"/>
+<BLOCK name="title">云印南天——找回密码</BLOCK>
+<BLOCK name="head"></BLOCK>
 
-				<button class="btn switch-btn" onclick="findWay(3)" id="account_way">通过校园账号找回</button>
-			</div>
-			
-            <div class="col-lg-8 col-lg-offset-2">            
-                <form style="display:none;" id="account_form" role="form" method="post" action="__URL__/findPwdVerify" onsubmit="return checkform(this);">
-                    <div class="text-center text-info">
-						<h2>验证信息并重设密码</h2>
-					</div>
-					<div class="input-group">
-                        <label class="input-group-addon"  for="number">学号</label>
-                        <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
-                    </div>
-                    <div class="form-group input-group">
-                        <label class="input-group-addon"  for="urp_password">密码</label>
-                        <input  class="form-control" placeholder='南开URP或天大办公网密码' name="urp_password" type="password" id="urp_password" required>
-                    </div>
-                    <div class="form-group input-group">
-                        <label class="input-group-addon"  for="password">新的密码</label>
-                        <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password" required>
-                    </div>
-                    <div class="form-group input-group">
-                        <label class="input-group-addon"  for="re_password">确认密码</label>
-                        <input  class="form-control" placeholder='重复刚才的密码' type="password" id="re_password" required>
-                    </div>
-                    <input type="hidden" name='isMD5' value="0"/>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-lg btn-success">提交</button>
-                    </div>
-                </form>
-			</div>
-			
-			<div class="col-lg-8 col-lg-offset-2">        
-				<form style="display:none;" id='phone_form' role="form" method="post" onsubmit="return byPhone(this);" action="__URL__/findPwd">
-                    <div class="text-center text-info">
-						<h2>验证手机并重设密码</h2>
-					</div>	
-					<div class="input-group">
-                        <label class="input-group-addon"  for="number">学号</label>
-                        <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
-                    </div>
-                    <div class="form-group input-group">
-                        <label class="input-group-addon"  for="phone">手机</label>
-                        <input  class="form-control" placeholder='绑定的手机号码' name="phone" type="text" pattern="1[3458]\d{9}" id="phone" required>
-					</div> 
-					  <input name="way" type="hidden" value="phone"/>
-					<div class="text-center">
-                        <button type="submit" class="btn btn-lg btn-success">提交</button>
-                    </div>	                                 
-                </form>
-			</div>
-			
-			<div class="col-lg-8 col-lg-offset-2">              
-				<form style="display:none;" id="email_form" role="form" method="post" action="__URL__/findPwd">
-                    <div class="text-center text-info">
-						<h2>验证邮箱并重设密码</h2>
-					</div>
-				   <div class="input-group">
-                        <label class="input-group-addon"  for="number">学号</label>
-                        <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
-                    </div>
-                    <div class="form-group input-group">
-                        <label class="input-group-addon"  for="email">邮箱</label>
-                        <input  class="form-control" placeholder='绑定的邮箱地址' name="email" type="text" id="email" required>
-                    </div>
-						<input name="way" type="hidden" value="email"/>
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-lg btn-success">提交</button>
-                    </div>
-                </form>
+<BLOCK name="header">
+<h1 class=" text-center">找回密码</h1>
+<div class="container">
+<div class="row col-lg-8 col-lg-offset-2">
+    <div class='alert alert-warning'>
+        为了防止你的账号信息滥用，你可以通过手机验证、邮箱验证、或校园账号验证（南开URP或者天大办公网），找回你的密码。
+        <br/>如果账号尚未注册请前往<a title="云印南天" href="/">云印南天首页</a>直接注册。
+    </div>
+</div>
+</div>
+<div  class="text-center">
+    <button class="btn switch-btn btn-success" onclick="findWay(1)" id="phone_way">通过绑定手机找回</button>
+    <button class="btn switch-btn" onclick="findWay(2)" id="email_way">通过绑定邮箱找回</button>
+    <button class="btn switch-btn" onclick="findWay(3)" id="account_way">通过校园账号找回</button>
+</div>
+</BLOCK>
+
+<BLOCK name='content'>
+<div class="container">
+    <div class="col-lg-8 col-lg-offset-2 alert">
+        <form id='phone_form' role="form" method="post" onsubmit="return byPhone(this);" action="__URL__/findPwd">
+            <div class="text-center text-info">
+                <h2>验证手机，并重设密码</h2>
             </div>
+            <div class="input-group">
+                <label class="input-group-addon"  for="number">学号</label>
+                <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
+            </div>
+            <div class="form-group input-group">
+                <label class="input-group-addon"  for="phone">手机</label>
+                <input  class="form-control" placeholder='绑定的手机号码' name="phone" type="text" pattern="1[3458]\d{9}" id="phone" required>
+            </div>
+            <input name="way" type="hidden" value="phone"/>
+            <div class="text-center">
+                <button type="submit" class="btn btn-lg btn-success">提交</button>
+            </div>
+        </form>
+        <form style="display:none;" id="email_form" role="form" method="post" action="__URL__/findPwd">
+            <div class="text-center text-info">
+                <h2>发送验证邮件重设密码</h2>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon"  for="number">学号</label>
+                <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
+            </div>
+            <div class="form-group input-group">
+                <label class="input-group-addon"  for="email">邮箱</label>
+                <input  class="form-control" placeholder='绑定的邮箱地址' name="email" type="text" id="email" required>
+            </div>
+            <input name="way" type="hidden" value="email"/>
+            <div class="text-center">
+                <button type="submit" class="btn btn-lg btn-success">提交</button>
+            </div>
+        </form>
+        <form style="display:none;" id="account_form" role="form" method="post" action="__URL__/findPwdVerify" onsubmit="return checkform(this);">
+            <div class="text-center text-info">
+                <h2>重新验证校园账号，并设置密码</h2>
+            </div>
+            <div class="input-group">
+                <label class="input-group-addon"  for="number">学号</label>
+                <input  class="form-control" placeholder='注册的学号' name="number" type="text" pattern="(\d{7}|\d{10})" id="number" required>
+            </div>
+            <div class="form-group input-group">
+                <label class="input-group-addon"  for="urp_password">密码</label>
+                <input  class="form-control" placeholder='南开URP或天大办公网密码' name="urp_password" type="password" id="urp_password" required>
+            </div>
+            <div class="form-group input-group">
+                <label class="input-group-addon"  for="password">新的密码</label>
+                <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password" required>
+            </div>
+            <div class="form-group input-group">
+                <label class="input-group-addon"  for="re_password">确认密码</label>
+                <input  class="form-control" placeholder='重复刚才的密码' type="password" id="re_password" required>
+            </div>
+            <input type="hidden" name='isMD5' value="0"/>
+            <div class="text-center">
+                <button type="submit" class="btn btn-lg btn-success">提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+</BLOCK>
+
+<BLOCK name="end">
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" data-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title" id="ModalLabel">稍等……</h3>
+            </div>
+            <div class="modal-body">正在提交</div>
         </div>
-    </body>
-	
-	<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3 class="modal-title" id="ModalLabel">稍等……</h3>
-				</div>
-				<div class="modal-body">正在提交</div>
-			</div>
-		</div>
-	</div>
-	<script src="__CDNLIB__/jquery/2.1.1/jquery.min.js"></script>
-	<script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap.min.js" defer="defer"></script>
-    <script>
-	M=$('#Modal');
+    </div>
+</div>
+<script>
+M=$('#Modal');
 function checkform(f){
     if(f.password.value!=f.re_password.value)
     {
@@ -121,7 +111,6 @@ function checkform(f){
         return true;
     }
 }
-
 //验证手机
 function byPhone() {
 f=document.getElementById('phone_form');
@@ -132,11 +121,7 @@ var phone=f['phone'].value;
         Mb.html('正在给' + phone + '发送验证码...');
         M.modal('show');
         var url = '/User/findPwd';
-        var data = {
-            'phone': phone,
-			'number':f['number'].value,
-			'way':'phone'
-        }
+        var data = {  'phone': phone,'number':f['number'].value,'way':'phone'}
         f.disabled=true;
         $.post(url, data, function(data, status) {
             if (status) {
@@ -154,9 +139,9 @@ var phone=f['phone'].value;
                 Mb.html('服务器通讯异常！');
             }
         M.modal('show');
-      f.disabled=false;
+    f.disabled=false;
         });
-	return false;
+return false;
 }
 //手机验证码
 function checkSMSCode(b) {
@@ -177,7 +162,7 @@ function checkSMSCode(b) {
                     M.find('.modal-title').html('验证成功');
                     M.find('.modal-body').html(d.info);
                     M.modal('show');
-					location.href=d.url;
+location.href=d.url;
                     var pd = $('#phone_detail');
                     var bp = $('#bind_phone');
                     pd.children('.label').html(bp.children('input').val());
@@ -209,23 +194,23 @@ function checkSMSCode(b) {
 };
 function findWay(w)
 {
-	$('.switch-btn').removeClass('btn-success');
-	$('form').hide();
-	switch (w)
-	{
-	case 1:
-		$('#phone_way').addClass('btn-success')
-		$('#phone_form').show();
-		break;
-	case 2:
-		$('#email_way').addClass('btn-success')
-		$('#email_form').show();
-		break;
-	case 3:
-		$('#account_way').addClass('btn-success')
-		$('#account_form').show();
-		break;
-	}
-}	
+$('.switch-btn').removeClass('btn-success');
+$('form').hide();
+switch (w)
+{
+case 1:
+$('#phone_way').addClass('btn-success')
+$('#phone_form').show();
+break;
+case 2:
+$('#email_way').addClass('btn-success')
+$('#email_form').show();
+break;
+case 3:
+$('#account_way').addClass('btn-success')
+$('#account_form').show();
+break;
+}
+}
 </script>
-</html>
+</BLOCK>

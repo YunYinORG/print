@@ -1,24 +1,20 @@
-﻿<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-    <head>
-        <meta charset="utf-8">
-        <meta name="renderer" content="webkit">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>云印南天</title>
-        <meta name="keywords" content="云印南天" />
-        <meta name="description" content="云印南天,云印北洋,南开大学天津大学校园云打印平台" />
-        <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <link href="__PUBLIC__/css/new.css" rel="stylesheet" type="text/css" />
-		<script src="__CDNLIB__/jquery/2.1.1/jquery.min.js"></script>
-    </head>
-    <body>
-    <div class="text-center">
-        <h1 class="text-primary">南开北洋云打印平台</h1>
-        <p><span class="label label-danger">无需“忧”盘</span> <span class="label label-info">提前打印</span> <span class="label label-warning">随时随地</span> <span class="label label-success">状态可知</span></p>
-        </div>
-        <main class="container">          
-        <div class="col-lg-12">
+<EXTEND name="Public/template/base.html"/>
+
+<BLOCK name="head">
+<link href="__PUBLIC__/css/new.css" rel="stylesheet" type="text/css"/>
+</BLOCK>
+
+<BLOCK name="header">
+<h1 class=" text-center text-primary">
+<strong class="hidden-xs">南开大学 天津大学 校园云打印平台</strong>
+<span class="visible-xs">南开北洋云打印平台</span>
+</h1>
+<div class="text-center"><span class="label label-danger">无需“忧”盘</span> <span class="label label-info">提前打印</span> <span class="label label-warning">随时随地</span> <span class="label label-success">状态可知</span></div>
+</BLOCK>
+
+<BLOCK name='main'>
+<main class="container">
+<div class="col-lg-12">
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
    <!-- 轮播（Carousel）项目 -->
             <div class="carousel-inner">
@@ -26,7 +22,7 @@
                 <img src="__PUBLIC__/images/map_nku.png" class="index-img" alt="云印南天——云印南天南开大学地图">
              </div>
             <div class="item">
-                <img src="__PUBLIC__/images/map_tju.png" class="index-img" alt="云印北洋——云印南天天津大学地图">
+                <img src="__PUBLIC__/images/map_tju.png" class="index-img" id="map-tju" alt="云印北洋——云印南天天津大学地图">
             </div>
             </div>
    <!-- 轮播（Carousel）导航 -->
@@ -34,24 +30,24 @@
             <a class="carousel-control right-bar" href="#myCarousel" data-slide="next">&rsaquo;</a>
             </div>       
          </div>
-            <SWITCH name="status">
+         <SWITCH name="status">
                 <CASE value='login'>
                     <div  class="col-md-4 col-md-offset-4 alert">
                     <div class="btn-group-justified">
-                        <a class="btn btn-lg btn-success" href="__ROOT__/File/add">GO,去打印！</a>
+                    <a class="btn btn-lg btn-success" href="__ROOT__/File/add">GO,去打印！</a>
                     </div>
                     </div>
                 </CASE>
               <CASE value='register'>
               <div  class="col-md-4 col-md-offset-4 alert">
                     <div class="btn-group-justified">
-                        <a class="btn btn-lg btn-success" href="__ROOT__/User/register">继续完成注册！</a>
+                    <a class="btn btn-lg btn-success" href="__ROOT__/User/register">继续完成注册！</a>
                     </div>
                     </div>
               </CASE>
               <DEFAULT/>
-                <form class="col-lg-12" method="post" action="__ROOT__/User/auth" onsubmit="return checkForm();">                   
-                    <div class="row text-center">
+                 <form class="col-lg-12" method="post" action="__ROOT__/User/auth" onsubmit="return checkForm();">                   
+                   <div class="row text-center">
                     <div class="col-lg-4 col-md-5 col-sm-8 col-lg-offset-1 ">
                         <div class="input-group">
                             <span class="input-group-addon">账号</span>
@@ -71,28 +67,30 @@
                         </button >
                         </div>
                     </div>
-                </div>
+                 </div>
                  <div class="col-sm-8 col-sm-offset-2 alert alert-info">
-                        <p id="info" class="text-center"><strong>南开大学</strong>同学首次登录时使,使用<code>ＵＲＰ系统</code>账号密码登录即可完成注册！<br>
-                        <strong>天津大学</strong>同学首次登录时使,使用<code>天大办公网</code>账号密码登录即可完成注册！
+                        <p id="info" class="text-center">
+                        <strong>天津大学</strong>同学首次登录时使,使用<code>天大办公网</code>账号密码登录即可完成注册！<br><strong>南开大学</strong>同学首次登录时使,使用<code>ＵＲＰ系统</code>账号密码登录即可完成注册！
                         </p>
                  </div>
-            </form>
-            
-    </SWITCH> 
-        </main>
-        <footer class='copyright text-center'>
-            <ul class="list-inline">
-                <li> <a href="__URL__/privacy">隐私声明</a></li>
-                <li> <a href="__ROOT__/User/forget">找回密码</a></li>
-                <li><a href="__ROOT__/Printer/">打印店</a></li>
-                <li><a href="https://github.com/nkumstc/print">开源项目</a></li>
-                <li><a href="mailto:contactATyunyin.org" onclick="this.href=this.href.replace(/AT/,'&#64;')">联系我们</a></li>
-            </ul>
-        </footer>
-    </body>
-    <script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap.min.js" defer></script>
-    <script>
+             </form>            
+    	</SWITCH> 
+    </main>
+	<footer class='copyright text-center'>
+	<ul class="list-inline">
+		<li><a href="http://www.yunyin.org/">&copy;云印南天</a></li>
+        <li><a rel="nofollow" href="__ROOT__/User/forget">找回密码</a></li>
+        <li><a rel="nofollow" href="__ROOT__/Printer/">打印店</a></li>
+        <li><a href="__URL__/privacy">隐私声明</a></li>
+        <li><a rel="nofollow" href="https://github.com/nkumstc/print">开源项目</a></li>
+        <li><a href="http://www.yunyin.org/pages/">文档中心</a></li>
+        <li><a href="mailto:contactATyunyin.org" onclick="this.href=this.href.replace(/AT/,'&#64;')">联系我们</a></li>
+	</ul>
+	</footer>
+</BLOCK>
+
+<BLOCK name="end">
+<script>
     function checkForm()
     {
         var name = document.getElementById("name").value;
@@ -112,9 +110,15 @@
     }
 	//控制图片轮播时间
 	$(function(){
-		$('#myCarousel').carousel({
-			 interval: 1600
-			});
+		var tju_map=document.getElementById('map-tju');
+		var carousel=function(){
+			setTimeout(function(){$('#myCarousel').carousel('next').carousel({interval: 5000});},500);};
+		if(tju_map.complete)
+		{
+			carousel();
+		}else{
+			tju_map.onload=carousel;
+		}
 	});
     </script>
-</html>
+</BLOCK>

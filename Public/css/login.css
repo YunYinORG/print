@@ -11,7 +11,7 @@ html{
 body{
 	/* Setting default text color, background and a font stack */
 	font-size:0.825em;
-	background:url("../images/bg.png") repeat-x #222222;
+	background:repeat-x #222222;
 	color:#eee;
 	font-family:Arial, Helvetica, sans-serif,'微软雅黑';
 }
@@ -117,7 +117,6 @@ label{
 
 #submit.active{
 	/* Marking the submit button as active adds the preloader gif as background */
-	background-image:url("img/preloader.gif");
 }
 
 #submit:hover{
@@ -146,3 +145,4 @@ input:focus{
 	width:200px;
 	right:-130px;
 }
+a{color: wheat;}

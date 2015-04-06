@@ -1,25 +1,34 @@
 云印南天
 =================
-(原云印南开)更方便的校园打印 [yunyin.org](http://yunyin.org)
+更方便的校园打印 [yunyin.org](http://yunyin.org)
+-------------------------
 
-官方宣传页[www.yunyin.org](http://www.yunyin.org)
-----------------------------
+### 官方媒体
 
-## Bugs or Fault
++ **微信公众号**：云印南天(`yunyinnantian`) [点击查看](http://www.yunyin.org/assets/image/weixin_qrcode.png)
++ **官方网站**：[www.yunyin.org](http://www.yunyin.org) :heart:
++ **官方微博**：[云印南天](http://weibo.com/cloudPrint) (`cloudPrint`)
++ **人人主页**：@[云印南天](http://page.renren.com/602117408)
++ **联系邮箱**：contact#yunyin.org; join#yunyin.org(你懂的:smile:)
+
+### Bugs or Fault
 * 多文件不能一次
 * 提前判断文件大小
-* 打印店信息修改
 * 邮箱用的不是SAE
 * 未登录查看打印店等信息
 * 七牛上传目录前缀
+* 到店打印，下载后状态跃迁问题
 
-## Features to add
+### Features to add
 * 打印店文件到达通知【doing】
-* PPT版式
-* 图片打印
+* 图片打印支持
+* 上传进度显示
 * 逾期提醒
+* 文件直传
+* 打印店信息修改
 * 状态更新通知提醒
-* 打印店主页和自主管理【done]
+* 文件分享
+* 打印店主页和自主管理【done】
 * 手机绑定 【done】
 * 邮箱绑定和验证 【done】
 * 神秘功能 【done】
@@ -27,13 +36,20 @@
 * ...
 * 打印店客户端自动打印
 
-##安全问题：
-* 输入字段严格过滤【doing】
+### 安全问题：
+* 输入字段严格过滤【always doing】
 * xss(反馈和打印店介绍)【doing】
+* https验证通道【doing】
+* API接口,token直接传递不够安全,时间戳加密(防止劫持)
+* 涉及到修改密码的操作前端md5之后再传递【done】
 * xss(httponly) 【done】
 * 隐私数据加密（手机号和邮箱保存加密）【done】
-* API接口,token直接传递不够安全(防止劫持)
-* https验证通道
+
+### API相关说明:
+采用`REST`风格的接口设计，所有接口文档和源码均对外开放
+
+此处查看最新API文档[API.md](https://github.com/nkumstc/print/blob/master/API.md)
+
 
 ##框架目录
 
@@ -41,127 +57,130 @@
 
 >
 ```
-|─index.php    入口文件-->Print
-|─api.php        api接口入口文件-->API
+|─index.php    应用入口文件-->Print
+|─api.php      api接口入口文件-->API
 |
-|─Common     后端公共模块目录
-|    |─Common       公共库目录
-|    |    |─Encrypt.php        加密函数库
-|    |    └─function.php        公共函数文件
-|    |─Model       公用模型
-|    |    └─UserModel.class.php       用户模型
-|    |─Verify       验证库
-|    |    |─Urp.class.php        urp验证
-|    |    └─EduOnline.class.php       教育在线验证
-|    └─Conf                公共配置目录
-|         |─config.php             公共配置文件
-|         |─secret.php             安全配置文件
-|         └─config_sae.php     sae配置文件
+|─Common       后端公共模块目录
+|    |─Common        公共库目录
+|    |    |─Encrypt.php           加密函数库
+|    |    └─function.php          公共函数文件
+|    |─Model         公用模型
+|    |    └─UserModel.class.php   用户模型（API和应用公用）
+|    |─Verify        验证库
+|    |    |─NankaiUrp.class.php   南开URP验证
+|    |    └─TjuE.class.php        天大办公网验证
+|    └─Conf          公共配置目录
+|         |─config.php            公共配置文件
+|         |─config_sae.php        SAE配置文件
+|         └─secret.php            安全配置文件（不同步，根据secret.php.sample修改）
 |
-|─Print            云印南开系统项目目录
-|    |-Admin
+|─Print        云印南开系统项目目录
+|    |-Admin         后台管理模块
 |    |    |─Conf                  配置文件目录
-|    |    |─Common        公共函数目录
-|    |    |─Controller       控制器目录
-|    |    |    |─IndexController.class.php      默认控制器（管理登录）
-|    |    |    └─PrinterController.class.php          打印店注册管理控制器
-|    |    |─Model         模型目录
-|    |    └─View          模板视图目录
-|    |         |─Index       默认模板目录
-|    |         └─Printer         管理打印店模板目录
+|    |    |─Common                公共函数目录
+|    |    |─Controller            后台控制器目录
+|    |    |    |─IndexController.class.php      管理登录控制器
+|    |    |    └─PrinterController.class.php    打印店注册管理控制器
+|    |    |─Model                 模型目录
+|    |    └─View                  模板视图目录
+|    |         |─Index                          登录模板目录
+|    |         └─Printer                        管理打印店模板目录
 |    | 
-|    |─Home            普通用户模块目录
+|    |─Home          学生用户模块目录
 |    |    |─Conf                  配置文件目录
-|    |    |─Common        公共函数目录
-|    |    |─Controller       控制器目录
-|    |    |    |─IndexController.class.php      默认控制器（首页）
+|    |    |─Common                公共函数目录
+|    |    |─Controller            用户控制器目录
+|    |    |    |─IndexController.class.php       默认控制器（首页）
 |    |    |    |─UserController.class.php        用户控制器
 |    |    |    |─CardController.class.php        找回一卡通控制器
-|    |    |    |─EmptyController.class.php        404控制器
-|    |    |    |─PrintersController.class.php        打印店介绍控制器
-|    |    |    └─FileController.class.php          文件管理控制器
-|    |    |─Model         模型目录
-|    |    |    └─......                                                各种模型
-|    |    └─View          模板视图目录
-|    |         |─Index       默认模板目录
-|    |         |─User        用户模板目录
-|    |         |─Printers   打印店介绍模板目录
-|    |         |─Card        找回一卡通模板目录
-|    |         └─File         文件模板目录
+|    |    |    |─EmptyController.class.php       404控制器
+|    |    |    |─PrintersController.class.php    打印店介绍控制器
+|    |    |    └─FileController.class.php        文件操作控制器
+|    |    |─Model                 模型目录
+|    |    |    └─......                          各种模型
+|    |    └─View                  用户模版目录
+|    |         |─Index                           默认模板目录
+|    |         |─User                            用户模板目录
+|    |         |─Printers                        打印店介绍模板目录
+|    |         |─Card                            找回一卡通模板目录
+|    |         └─File                            文件模板目录
 |    |
-|    └─Printer     打印店管理模块目录
-|         |─Conf           配置文件目录
-|         |─Common        公共函数目录
-|         |─Controller       控制器目录
-|         |    |─IndexController.class.php         打印店控制器
-|         |    |─PrinterController.class.php       打印店控制器
-|         |    └─FileController.class.php              文件管理控制器
-|         |─Model             模型目录
-|         └─View                视图目录
-|              |─Printer   打印店模板目录
-|              |─Index         登录模板目录
-|              └─File         文件模板目录
+|    └─Printer       打印店管理模块
+|         |─Conf                  配置文件目录
+|         |─Common                公共函数目录
+|         |─Controller            打印店控制器目录
+|         |    |─IndexController.class.php       默认店控制器
+|         |    |─PrinterController.class.php     打印店控制器
+|         |    └─FileController.class.php        文件管理控制器
+|         |─Model                 打印店模型目录
+|         └─View                  打印店模版
+|              |─Printer                         打印店模板目录
+|              |─Index                           登录模板目录
+|              └─File                            文件模板目录
 |
-|─API                  云印南开API模块
-|    |─Conf                     配置文件目录
-|    |─Common           公共函数目录
-|    |-Model            公共模型目录
-|    |-Verify           公共认证函数目录
-|    |─Controller          控制器目录
-|    |    |─NotificationController.class.php    消息接口控制器
-|    |    |─FileController.class.php                    文件接口控制器
-|    |    |-IndexController.class.php               认证和令牌管理制器
-|    |    |-PrinterController.class.php         打印店接口控制器
-|    |    |-TokenController.class.php           令牌接口控制器
-|    |    └─UserController.class.php            学生用户接口控制器
+|─API          云印南开API
+|    |─Conf          配置文件目录
+|    |─Common        公共函数目录
+|    |-Model         公共模型目录
+|    |-Verify        公共认证函数目录
+|    |─Controller    控制器目录
+|    |    |─NotificationController.class.php     消息接口控制器
+|    |    |─FileController.class.php             文件接口控制器
+|    |    |-IndexController.class.php            默认和连接测试制器
+|    |    |-PrinterController.class.php          打印店接口控制器
+|    |    |-TokenController.class.php            令牌接口控制器
+|    |    └─UserController.class.php             学生用户接口控制器
 |    |    
-|    └─Model                模型目录
+|    └─Model         模型目录
 |
-|─Public             前端资源文件目录
-|    |─css                      css文件目录
-|    |─js                         自己写的javascript目录
-|    |─lib              引用的js以及css目录
-|    |─html              404目录
-|    |─fonts              字体目录
-|    └─template          模板文件目录    
+|─Public       前端资源文件目录[此目录对外开放]
+|    |─css           css文件目录
+|    |─js            javascript目录
+|    |-images        图片资源目录
+|    |─lib           引用的js以及css第三方通用库
+|    |─fonts         字体目录
+|    |─html          404等静态目录【待迁移】
+|    └─template      模板文件目录【待迁移】 
 |
-|─Uploads       上传文件目录（可写，不同步）
-|─Runtime       运行时缓存目录（可写，不同步）
-└─ThinkPHP    框架目录(框架核心资源不用修改)
+|─Uploads      上传文件目录（可写，不同步，sae上不用）
+|─Runtime      运行时缓存目录（可写，不同步，sae上不用）
+└─ThinkPHP     框架目录(框架核心资源不用修改)
 ```
 >>
 
 
-## 仓库分支说明
-    包含web端，客户端，数据 三个稳定分支
+### 仓库分支说明
+
+包含`服务器端`，`打印店客户端`，`数据库`，和`官方宣传页` 四个稳定分支
 
 1. [master](https://github.com/nkumstc/print/tree/master) web端源码仓库分支
 2. [DB](https://github.com/nkumstc/print/tree/DB)     数据库设计源码仓库分支
 3. [printer](https://github.com/nkumstc/print/tree/printer) 打印店客户端和源码仓库分支
+4. [gh-pages](https://github.com/nkumstc/print/tree/gh-pages)官方文档网站www.yunyin.org源码
 
 
-## 团队主要人员及分工
-#### 1.项目发起人
-[李旭昇](https://github.com/jeffli678)
-#### 2.指导和系统设计
-[NewFuture](https://github.com/New-Future)
-#### 3.数据库设计
-[牛亮](https://github.com/wangxiaodiu) [梁崇军]()
-#### 4.后端实现
-[孙卓豪]() [牛亮](https://github.com/wangxiaodiu) [NewFuture](https://github.com/New-Future)
-#### 5.前端实现
-[王博]() [孙卓豪]()
-#### 6.打印店客户端
-[宋剑超]()
-#### 7.测试维护
-[王雨晴]() [梁崇军]()
-#### 8.图形设计
-[陈超]()
+### 团队主要人员
+* 项目发起人： [李旭昇](https://github.com/jeffli678)
+* 总设计和负责人： [NewFuture](https://github.com/New-Future)
+* 数据库设计： [牛亮](https://github.com/wangxiaodiu) [梁崇军](https://github.com/inankai)
+* 后端实现： [孙卓豪](https://github.com/605527108) [牛亮](https://github.com/wangxiaodiu) [NewFuture](https://github.com/New-Future)
+* 前端实现： [王博](https://github.com/LimitW)  [杜晓唐](https://github.com/acDante) [孙卓豪](https://github.com/605527108) [NewFuture](https://github.com/New-Future)
+* 打印店客户端： [宋剑超](https://github.com/NKsjc)
+* 图形设计： [陈超](#)
+* 运营推广：[崔梦焱](#) [王雨晴](#)
 
-##其他
+### 支持和协议
 
-API相关说明:[API.md](https://github.com/nkumstc/print/blob/master/API.md)
+云印项目由南开大学学生发起，收到南开和北洋两所学校共同支持，项目和平台免费开源，同时欢迎所有人贡献代码和想法
 
-本项目由南开大学学生发起，免费开源，同时欢迎所有人贡献代码和想法
+由南开微软俱乐部，天大微软俱乐部，南开机器人所，等组织和单位提高核心资源支持。由合作服务商提供重要服务资源支持。
 
-项目源码遵循apache2 开源协议
+由于对github稳定性的担忧和大家访问的便捷性，我们同时在国内两个平台不定期推送最新代码镜像
+
+* GitHub托管地址【主站,处理pull request和issues】[https://github.com/nkumstc/print](https://github.com/nkumstc/print)
+* 开源中国oschina托管地址：[http://git.oschina.net/newfuture/print](http://git.oschina.net/newfuture/print)
+* gitcafe代码托管地址：[https://gitcafe.com/NewFuture/print](https://gitcafe.com/NewFuture/print)
+
+本项目源码遵循apache2 开源协议，同时尊重每一位贡献者的权益。
+
+更多信息查看[www.yunyin.org](http://yunyin.org)

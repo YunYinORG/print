@@ -8,17 +8,17 @@
 <div class="title" >
     <h2>{$title}</h2>
 </div>
-<div class="container">
-    <div class="row"><div class="col-lg-10">
+<div class="container-fulid">
+    <div class="row"><div class="col-lg-12">
     <div class="table-responsive">
     <table class="table">
         <thead>
             <tr>
-                <th style="width:15%">待打印文件</th>
+                <th>待打印文件</th>
                 <th>份数</th>
                 <th>单双</th>
                 <th>彩印</th>
-                <th>PPT格式</th>
+                <th>PPT</th>
                 <th>上传者</th>
                 <th>上传时间</th>               
                 <th>打印状态</th>
@@ -62,19 +62,27 @@
                     <case value="1">尚未下载</case>
                     <case value="2">已下载</case>
                     <case value="3">正在打印</case>
+<<<<<<< HEAD
                     <case value="4">已印待付款</case>
+=======
+                    {//此处逻辑有问题！,到店打应该是是2->然后跳到->5 ，不存在4}
+                    <case value="4"><if condition="$vo.copies eq 0">已下载<else/>已印待付款</if></case>
+>>>>>>> a0e28bfe17db61e03269492de1eaee44051b4dad
                     <case value="5">已付款</case>
                     <default />未知状态
                     </switch>
                 </td>
-                
-                
                 <td>                    
                     <switch name="vo['status']">
                     <case value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></case>
                     <case value="2" break="0"></case>
+<<<<<<< HEAD
                     <case value="3"><if condition="$vo.copies eq 0"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button><notempty name="vo['phone']"><if condition="$vo.sended eq 0"><button class="send glyphicon glyphicon-phone"></button><else/></if></notempty><else/><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button></if></case>
                     <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button><notempty name="vo['phone']"><if condition="$vo.sended eq 0"><button class="send glyphicon glyphicon-phone"></button><else/></if></notempty></case>
+=======
+                    <case value="3"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button></case>
+                    <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-sm btn-danger">确认付款</button><notempty name="vo['phone']"><if condition="$vo.sended eq 0"><button class="send btn btn-sm btn-warning glyphicon glyphicon-comment">发短信</button><else/></if></notempty></case>
+>>>>>>> a0e28bfe17db61e03269492de1eaee44051b4dad
                     <default />不可操作
                     </switch>                   
                 </td>
@@ -93,8 +101,8 @@
 var double_side = new Array("单面","双面");
 var color = new Array("黑白","彩色");
 var f_status = new Array("未知状态","尚未下载","已下载","正在打印","已印待付款","已付款");
-var b_class = new Array("set btn btn-primary","set btn btn-primary","set btn btn-success","set btn btn-success","set btn btn-warning");
-var b_status = new Array("不可操作","通知已下载","通知已打印","通知已打印","确认已付款");
+var b_class = new Array("set btn btn-primary","set btn btn-primary","set btn btn-success","set btn btn-success","set btn-small btn btn-danger");
+var b_status = new Array("不可操作","通知已下载","通知已打印","通知已打印","确认付款");
 
 function insert(data)
 {
@@ -186,7 +194,7 @@ $("table").on('click', '.set', function() {
                 file.find('.status').html(f_status[data.info.status]);
                 var phone = file.find('.phone');
                 if (data.info.status == 4 && data.info.copies!=0 &&phone) {
-                    var html = '<button class="send glyphicon glyphicon-phone"></button>';
+                    var html = '<button class="send btn btn-sm btn-warning glyphicon glyphicon-comment">发短信</button>';
                     btn.after(html);
                 }
             }
@@ -233,6 +241,7 @@ $("table").on('click', '.send', function(e) {
     }, function(data) {
         if (data.status) {
             alert(data.info);
+            link.remove();
         } else {
             link.removeAttr('disabled');
             alert(data.info);
