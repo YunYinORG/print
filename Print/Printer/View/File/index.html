@@ -62,7 +62,7 @@
                     <case value="1">尚未下载</case>
                     <case value="2">已下载</case>
                     <case value="3">正在打印</case>
-                    <case value="4"><if condition="$vo.copies eq 0">已下载<else/>已印待付款</if></case>
+                    <case value="4">已印待付款</case>
                     <case value="5">已付款</case>
                     <default />未知状态
                     </switch>
@@ -73,7 +73,7 @@
                     <switch name="vo['status']">
                     <case value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></case>
                     <case value="2" break="0"></case>
-                    <case value="3"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button></case>
+                    <case value="3"><if condition="$vo.copies eq 0"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button><notempty name="vo['phone']"><if condition="$vo.sended eq 0"><button class="send glyphicon glyphicon-phone"></button><else/></if></notempty><else/><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button></if></case>
                     <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-warning">确认已付款</button><notempty name="vo['phone']"><if condition="$vo.sended eq 0"><button class="send glyphicon glyphicon-phone"></button><else/></if></notempty></case>
                     <default />不可操作
                     </switch>                   
@@ -106,21 +106,22 @@ function insert(data)
     link.html('['+data.id+']'+data.name);
     
     var copies = file.find('.copies');
+    var double = file.find('.double_side');
+    var color_node = file.find('.color');
     if(data.copies==0)
     {
         copies.html('现打');
+        double.html('-');
+        color_node.html('-');
+    
     }
     else
     {
         copies.html(data.copies);
+        double.html(double_side[data.double_side]);
+        color_node.html(color[data.color]);
     }
      
-    var double = file.find('.double_side');
-    double.html(double_side[data.double_side]);
-    
-    var color_node = file.find('.color');
-    color_node.html(color[data.color]);
-
     var ppt_layout = file.find('.ppt_layout');
     ppt_layout.html(data.ppt_layout);
 
@@ -141,8 +142,8 @@ function insert(data)
     status.html(f_status[data.status]);
     
     var btn = file.find('button');
-    btn.removeClass().addClass(b_class[data.status]);
-    btn.html(b_status[data.status]);
+    btn.removeClass().addClass(b_class[data.operation]);
+    btn.html(b_status[data.operation]);
     $('tbody').prepend(file);
 };
 

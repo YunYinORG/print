@@ -108,13 +108,20 @@ class FileController extends Controller
 			// $cache_key  = cache_name('printer', $pid);
 			$ppt_layout = C('PPT_LAYOUT');
 			$result  = $File->where($map)->order('file.id asc')->limit(10)->select();
-			//var_dump($map);
 			
 			if($result)
 			{
 			    foreach($result as &$file)
                 {
                     $file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
+                    if($file['copies']==0&&$file['status']==C('FILE_DOWNLOAD'))
+                    {
+                        $file['operation'] = C('FILE_PRINTED');
+                    }
+                    else
+                    {
+                        $file['operation'] = $file['status'];
+                    }
                 }
                 unset($file);
                 $this->success($result);
@@ -159,7 +166,7 @@ class FileController extends Controller
 	        $status['status'] = $result['status'];
 	    }
 	    
-	    if($result['copies']==0&&$result['status'] == C('FILE_UPLOAD'))
+	    if($result['copies']==0&&$status['status'] == C('FILE_DOWNLOAD'))
 	    {
 	        $status['operation'] = C('FILE_PRINTED');
 	    }
@@ -167,9 +174,10 @@ class FileController extends Controller
 	    {
 	        $status['operation'] = $status['status'];
 	    }
+	    
 	    if($status['status'] != $result['status'])
         {
-	        $result = $File->where('id="%d"', $fid)->setField('status', $status['operation']);
+	        $result = $File->where('id="%d"', $fid)->setField('status', $status['status']);
 	        
 	        if($result)
 	        {
