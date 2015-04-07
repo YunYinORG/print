@@ -148,28 +148,38 @@ class FileController extends Controller
 	    if($result['status'] == C('FILE_UPLOAD'))    
 	    {
 	        $status['status'] = C('FILE_DOWNLOAD');
+	        if($result['copies']==0)
+	        {
+	        	$status['operation'] = C('FILE_PRINTED');
+	        }
+	        else
+	        {
+	            $status['operation'] = $status['status'];
+	        }
 	    }
 	    elseif(($result['status'] == C('FILE_DOWNLOAD'))&&($download!=1))
 	    {
-	        $status['status'] = C('FILE_PRINTED');
+	        if($result['copies']==0)
+	        {
+	            $status['status'] = C('FILE_PAID');
+	        }
+	        else
+	        {
+	            $status['status'] = C('FILE_PRINTED');   
+	        }
+	        $status['operation'] = $status['status'];
 	    }
 	    elseif(($result['status'] == C('FILE_PRINTED'))&&($download!=1))
 	    {
 	        $status['status'] = C('FILE_PAID');
+	        $status['operation'] = $status['status'];
 	    }
 	    else
 	    {
 	        $status['status'] = $result['status'];
-	    }
-	    
-	    if($result['copies']==0&&$status['status'] == C('FILE_DOWNLOAD'))
-	    {
-	        $status['operation'] = C('FILE_PRINTED');
-	    }
-	    else
-	    {
 	        $status['operation'] = $status['status'];
 	    }
+	    
 	    
 	    if($status['status'] != $result['status'])
         {

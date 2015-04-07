@@ -190,7 +190,7 @@ $("table").on('click', '.set', function() {
                 file.find('.status').html(f_status[data.info.status]);
                 var phone = file.find('.phone');
                 if (data.info.status == 4 && data.info.copies!=0 &&phone) {
-                    var html = '<button class="send btn btn-sm btn-danger glyphicon glyphicon-comment">发短信</button>';
+                    var html = '<button class="send btn btn-sm btn-warning glyphicon glyphicon-comment">发短信</button>';
                     btn.after(html);
                 }
             }
