@@ -1,7 +1,11 @@
 # Configurations
-markdown: kramdown
-markdown_ext:  markdown,mkdown,mkdn,mkd,md
+markdown_ext:  md
+pygments: true
 highlighter: pygments
+
+markdown: kramdown
+redcarpet:
+    extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]
 
 # Permalinks
 permalink:        /pages/:title.html
