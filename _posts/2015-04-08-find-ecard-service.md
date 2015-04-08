@@ -30,14 +30,14 @@ tags: 失物招领 找回服务 一卡通
 ### 1.找回中心
 
 进入找回中心
-![找回中心](../assets/image/2015-04-09/find_card.png) 
+![找回中心](../assets/image/2015-04-09/find_card.jpg) 
 
 
 
 ### 2.通知失主
 
 在找回界面输入`卡号`和`姓名`
-![找回中心](../assets/image/2015-04-09/find_success.png)
+![找回中心](../assets/image/2015-04-09/find_success.jpg)
 
 平台会根据云印的数据库进行匹配和验证
 
@@ -45,20 +45,20 @@ tags: 失物招领 找回服务 一卡通
 
 ### 3.失主会收到短信通知
 
-![短信通知](../assets/image/2015-04-09/find_phone.png)
+![短信通知](../assets/image/2015-04-09/find_phone.jpg)
 短信通知失主丢卡信息，同时告诉TA`施主`的信息。
 
 ### 4.如果绑定了邮箱当然还有邮件
-![邮件通知](../assets/image/2015-04-09/find_email.png)
+![邮件通知](../assets/image/2015-04-09/find_email.jpg)
 万一手机没电了或者手机也惨遭不幸，还有完整的邮件
-![邮件内容](../assets/image/2015-04-09/find_emailmsg.png)
+![邮件内容](../assets/image/2015-04-09/find_emailmsg.jpg)
 把`施主`的完整的联系方式发送到`失主`的邮箱
 
 ### 5.失主可查看记录
-![查看记录](../assets/image/2015-04-09/find_log.png)
+![查看记录](../assets/image/2015-04-09/find_log.jpg)
 
 ### 6.目前数据还不够大，万一匹配失败了！
-![查找失败](../assets/image/2015-04-09/find_error.png)
+![查找失败](../assets/image/2015-04-09/find_error.jpg)
 通过第三方失物招领平台（人人和微博）**立即**广播（如果你愿意）
 
 -----
