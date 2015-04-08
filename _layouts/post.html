@@ -9,7 +9,6 @@ layout: master
     <div class="col-md-10 col-sm-9 col-md-offset-2 col-sm-offset-3">
       <article class="col-md-12 col-xs-12 justified">
         <h1 class="post-title">{{ page.title }}</h1>
-        <a class="glyphicon glyphicon-edit" href="{{site:editurl}}{{page.path}}">修改此页内容(任何人都可以提交修改)</a>
         <div>
           <span class="publish-tag glyphicon glyphicon-calendar">发布于 {{ page.date | date: "%B %d, %Y" }}</span><span class="glyphicon glyphicon-tag">Tags:</span>
         {% if page.tags %}
@@ -23,6 +22,9 @@ layout: master
         {{ content }}
         <br/>
       </article> 
+      <div>
+      <a class="glyphicon glyphicon-edit" href="{{site:editurl}}{{page.path}}">修改此页内容(任何人都可以提交修改)</a>
+      </div>
       <div class="row">
         <div class="col-sm-6 col-xs-6 text-left">
        	{% if page.previous.url %}
@@ -46,7 +48,5 @@ layout: master
 </div> <!-- container -->
 <script src="http://tjs.sjs.sinajs.cn/open/widget/js/widget/comment.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-window.WBComment.init({
-    "id": "WBCommentFrame"
-});
+window.WBComment.init({"id": "WBCommentFrame"});
 </script>
