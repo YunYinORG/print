@@ -10,21 +10,19 @@ layout: master
       <article class="col-md-12 col-xs-12 justified">
         <h1 class="post-title">{{ page.title }}</h1>
         <a class="glyphicon glyphicon-edit" href="{{site:editurl}}{{page.path}}">修改此页内容(任何人都可以提交修改)</a>
-        <div class="publish-tag">
-          <span class="glyphicon glyphicon-calendar"></span>&nbsp;发布于 {{ page.date | date: "%B %d, %Y" }}
-        </div>
-        {{ content }}
-        <br/>
-        <span class="glyphicon glyphicon-tag">Tags:</span>
+        <div>
+          <span class="publish-tag glyphicon glyphicon-calendar">发布于 {{ page.date | date: "%B %d, %Y" }}</span><span class="glyphicon glyphicon-tag">Tags:</span>
         {% if page.tags %}
-          {% for tag in page.tags %}		
+          {% for tag in page.tags %}    
             <a href="/tags/#{{tag}}"><span class="label label-primary">{{tag}}</span></a>
           {% endfor %}
         {% else %}  
           None
         {% endif %}
+        </div>
+        {{ content }}
+        <br/>
       </article> 
-      <iframe id="WBCommentFrame" src="http://widget.weibo.com/distribution/comments.php?width=0&url={{site.url}}{{page.url}}&ralateuid=5477691175&appkey=2681865267" scrolling="no" frameborder="0" style="width:100%"></iframe>
       <div class="row">
         <div class="col-sm-6 col-xs-6 text-left">
        	{% if page.previous.url %}
@@ -41,6 +39,7 @@ layout: master
         {% endif %} 
         </div>
       </div>
+       <iframe id="WBCommentFrame" src="http://widget.weibo.com/distribution/comments.php?width=0&url={{site.url}}{{page.url}}&ralateuid=5477691175&appkey=2681865267" scrolling="no" frameborder="0" style="width:100%"></iframe>
       {% include footer.html %}  
     </div> <!-- content area column -->
   </div> <!-- row  -->
