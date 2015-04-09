@@ -729,14 +729,25 @@ class UserController extends Controller
                 {
                     $this->error('此邮箱已经绑定过账号！');
                 } 
-                elseif (M('User')->where('id=%d', $info['use_id'])->setField('email', encrypt_email($email))) 
-                {
-                    $this->success('绑定成功！', '/');
-                } 
                 else
                 {
-                    $this->error('邮箱绑定失败！');
-                }
+                 $User=M('User');
+                 $user=$User->field('name,email')->getById($info['use_id']);
+                    if($User->where('id=%d', $info['use_id'])->setField('email', encrypt_email($email)))
+                    {
+                        //首次绑定邮件
+                        if(!$user['email'])
+                        {
+                            send_mail($email,$user['name'],4);
+                        }
+                      $this->success('绑定成功！', '/');
+                    }                
+                    else
+                    {
+                        $this->error('邮箱绑定失败！');
+                    }
+                } 
+               
             } 
             else
             {

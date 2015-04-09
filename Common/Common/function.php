@@ -263,6 +263,13 @@ function send_mail($toMail, $msg, $mailType) {
 			$mailConfig = C('MAIL_NOTIFY');
 			break;
 
+		case 4:
+			$email_data=L('FISRT_MAIL',array('name'=>$msg));
+			$title=$email_data['title'];
+			$content=$email_data['content'];
+			$mailConfig=C('MAIL_NOTIFY');
+			break;
+
 		default:
 			$title = '来自云印的通知'; //无论如何都应该有一个标题
 			$content = $msg;
