@@ -23,6 +23,7 @@ namespace NKprint
             if (hide==true)
             {
                 form.Hide();
+                form.ShowInTaskbar = false;
             }
             
         }
@@ -57,7 +58,8 @@ namespace NKprint
             //s = API.PostMethod("/Index/post", "data=testdata", new UTF8Encoding());
             //Console.WriteLine(s);
             //API.token = "agbnadfbnsdoijbhewg";
-            //s = API.PutMethod("/Index/put", "data332=testdata", new UTF8Encoding());
+            //API.token = "qLvF6BEhMHX0kNGTyxKQef6PjRNDS0dvz5xaKsTwyIDd5H0";
+            //string s = API.PutMethod("/Index/put", "status=downloaded", new UTF8Encoding());
             //Console.WriteLine(s);
             //s = API.DeleteMethod("/Index/delete");
             //Console.WriteLine(s);
@@ -184,6 +186,7 @@ namespace NKprint
                 else
                 {
                     this.Hide();
+                    this.ShowInTaskbar = false;
                 }
             }
             catch(Exception ex)

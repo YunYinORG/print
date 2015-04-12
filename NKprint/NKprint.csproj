@@ -63,6 +63,7 @@
     <Compile Include="NKprint_login.Designer.cs">
       <DependentUpon>NKprint_login.cs</DependentUpon>
     </Compile>
+    <Compile Include="notifyIcons.cs" />
     <Compile Include="openFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

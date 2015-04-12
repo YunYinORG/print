@@ -17,7 +17,7 @@ namespace NKprint
         List<ToJsonMy> jsonList = new List<ToJsonMy>();  //json文件列表
         List<ToJsonMy> tempList = new List<ToJsonMy>();  //json文件列表
         //下载文件的url
-        private static string download_url =Program.downloadUrl;
+        private static string download_url = Program.serverUrl;
         public static string studentNum;
         
         //定义接收从NKprint_login窗体传值的参数
@@ -25,9 +25,7 @@ namespace NKprint
         public string printerName;
         public string printerId;
         public float version;
-        //private string  stat;
-        //public string Status 
-        //}
+
         //窗体类的构造函数
         public NKprint_download()
         {
@@ -37,8 +35,6 @@ namespace NKprint
         }
         private void NKprint_download_Load(object sender, EventArgs e)
         {
-           
-            
             String  Date = (DateTime.Now.ToLongDateString());
             path = @"D:\云印南开\" + Date;
             //path = string.Empty;
@@ -51,47 +47,11 @@ namespace NKprint
             myRefresh();
             refreshDataGrid();
             threadDownload();
-        }
-        private void labelWelcom_Click(object sender, EventArgs e)
-        {
+            
+
         }
         
-        //手动刷新下载列表刷新下载列表
-        private void buttonRefresh_Click(object sender, EventArgs e)
-        {
-            if (textDownload.Text == string.Empty)
-            {
-                MessageBox.Show("请输入查询id");
-            }
-            else
-            {
-                bool flag=false ;
-                string filename ;
-                for (int i = 0; i < jsonList.Count;i++ )
-                {
-                    if (jsonList[i].id == textDownload.Text)
-                    {
-                        flag = true;
-                        filename = path+"\\"+jsonList[i].id + "_" + jsonList[i].copies + "份" + "_" + (jsonList[i].double_side == "0" ? "单面" : "双面") + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
-                        if (File.Exists(@filename))
-                        {
-                            //filename = path + filename;
-                            System.Diagnostics.Process.Start( filename);
-                            break;
-                        }
-                        else
-                        {
-                            filename = jsonList[i].id + "_" + jsonList[i].copies + "份" + "_" + (jsonList[i].double_side == "0" ? "单面" : "双面") + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
-                            fileDownload(jsonList[i].url, filename, jsonList[i].id);
-                            MessageBox.Show("正在下载输入id对应的文件！\n等待会儿再打开");
-                        }
-                        break;
-                    }
-                }
-                if (flag == false)
-                    MessageBox.Show("未查询到" + textDownload.Text+"\n确认输入正确？");
-            }
-        }
+        
         //jsonList中添加数据
         public void addJson(JArray ja)
         {
@@ -116,8 +76,8 @@ namespace NKprint
                     myJs.id = ja[i]["id"].ToString();
                     myJs.name = ja[i]["name"].ToString();
                     myJs.use_id = ja[i]["use_id"].ToString();
-                    myJs.pri_id = ja[i]["pri_id"].ToString();
-                    myJs.url = ja[i]["url"].ToString();
+                    //myJs.pri_id = ja[i]["pri_id"].ToString();
+                    //myJs.url = ja[i]["url"].ToString();
                     myJs.time = ja[i]["time"].ToString();
                     myJs.name = ja[i]["name"].ToString();
                     myJs.status = ja[i]["status"].ToString();
@@ -127,7 +87,6 @@ namespace NKprint
                     myJs.student_number = ja[i]["student_number"].ToString();
                     jsonList.Add(myJs);
                 }
-                            
              }
         }
         //刷新下载列表函数
@@ -138,7 +97,8 @@ namespace NKprint
             API.myPage = 1;
             //得到json格式的文件列表
             API.token = downloadToken;
-            string myJsFile = API.GetMethod("/File");
+            string myJsFile = API.GetMethod("/File/?page=" + API.myPage);
+            API.myPage += 1;
 #if DEBUG
             Console.WriteLine(myJsFile);
 #endif
@@ -156,7 +116,8 @@ namespace NKprint
                 while (myAdd)
                 {
                     API.token = downloadToken;
-                    myJsFile = API.GetMethod("/File");
+                    myJsFile = API.GetMethod("/File/?page="+ API.myPage);
+                    API.myPage += 1;
                     jo = JObject.Parse(myJsFile);
                     ja = jo["files"] as JArray;
                     if (ja.Count != 0)
@@ -169,65 +130,31 @@ namespace NKprint
                         myAdd = true;
                 }
             }
-            
             //每次json获取完成，  
             //已经将得到的文件列表保存到类型（list<yoJsonMy>）jsonList中
             //显示所得到的的文件列表，而且要显示的是状态
             //定义文件的初始状态
-            
         }
-        //
+
+        //用来刷新DataGrid的数据，不显示已付款的信息
         public void refreshDataGrid()
         {
-            string id1, userName1, fileName1, copies1, doubleSides1, statues1 = null;
-            int i = 0;//用于遍历的
-            for (i = 0; i < jsonList.Count; i++)
+            string  userName1;
+            for (int i = 0; i < jsonList.Count; i++)
             {
-                if (jsonList[i].status != "5")
+                if (jsonList[i].status != "已付款")
                 {
-                    id1 = jsonList[i].id;
+                    //拼接一下username是学号加上姓名
                     userName1 = jsonList[i].student_number + jsonList[i].use_name;
-                    fileName1 = jsonList[i].name;
-                    copies1 = jsonList[i].copies + "份";
-                    if (jsonList[i].copies == "0")//判断如果是0份，提示到现场打印
-                    {
-                        copies1 = "现场打印";
-                    }
-                    if (jsonList[i].double_side == "0")
-                    {
-                        doubleSides1 = "单面";
-                    }
-                    else
-                    {
-                        doubleSides1 = "双面";
-                    }
-                    switch (jsonList[i].status)
-                    {
-                        case "1":
-                            statues1 = "未下载";
-                            break;
-                        case "2":
-                            statues1 = "已下载";
-                            break;
-                        case "3":
-                            statues1 = "正打印";
-                            break;
-                        case "4":
-                            statues1 = "已打印";
-                            break;
-                        case "5":
-                            statues1 = "已付款";
-                            break;
-                    }
-                    this.myData.Rows.Add(id1, userName1, fileName1, copies1, doubleSides1, statues1);
+                    this.myData.Rows.Add(jsonList[i].id, userName1, jsonList[i].name, jsonList[i].copies, jsonList[i].double_side, jsonList[i].status);
                 }
-                //
             }             
         }
         //开启下载线程，自动下载status=1的文件
         public void threadDownload()
         {
-            string downurl = null;
+            string s = null;
+            
             string filename = null;
             //定义线程执行下载程序
             string sides = null;
@@ -237,17 +164,15 @@ namespace NKprint
                 //在list中使用jsonList，遍历下载
                 for (i = 0; i < jsonList.Count; i++)
                 {
-                    if (jsonList[i].status == "1")
+                    if (jsonList[i].status == "未下载")
                     {
-                        downurl = jsonList[i].url;
-                        if (jsonList[i].double_side == "0")
-                        {
-                            sides = "单面";
-                        }
-                        else
-                            sides = "双面";
-                        filename = jsonList[i].id + "_" + jsonList[i].copies + "份" + "_" + sides + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
-                        fileDownload(downurl, filename, jsonList[i].id);
+                        s = API.GetMethod("/File/"+jsonList[i].id);
+                        JObject os = JObject.Parse(s);
+                        ToJsonMy my = new ToJsonMy();
+                        my.url = os["url"].ToString();
+                        sides = jsonList[i].double_side;
+                        filename = jsonList[i].id + "_" + jsonList[i].copies  + "_" + sides + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
+                        fileDownload(my.url, filename, jsonList[i].id);
                     }
                 }
             });
@@ -272,37 +197,33 @@ namespace NKprint
                 {
                     case "已下载":
                         changeStatusById(id, "printing");
-                        myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "正打印";
+                        myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "已打印";
                         //myPrinting.Add(myData.Rows[e.RowIndex].Cells[0].Value);
                         
                         break;
-                    case "正打印":
-                        changeStatusById(id, "printed");
-                        myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "已打印";
+                    //case "正打印":
+                    //    changeStatusById(id, "printed");
+                    //    myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "已打印";
                         //myPrinted.Add(myData.Rows[e.RowIndex].Cells[0].Value);
                         
-                        break;
+                        //break;
                     case "已打印":
                         //要不要加判断用来确认是否post成功
                         changeStatusById(id, "payed");
                         myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = "已支付";
                         //myData.Rows[e.RowIndex].Visible = false;
                         //myPay.Add(myData.Rows[e.RowIndex].Cells[0].Value);
-                        
                         break;
                     default:
                         break;
-
                 }
             }            
-            //MessageBox.Show("您单击的是第" + (e.RowIndex + 1) + "行第" + (e.ColumnIndex + 1) + "列！");
-            //MessageBox.Show("单元格的内容是：" + myData.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
         }
         //下载从服务器得到的json数据中的用户打印文件
         public bool fileDownload(string url, string fileName, string id)
         {
             //下载文件地址等于服务器地址加上文件地址
-            url = download_url + url;
+            
             //String Date = (DateTime.Now.ToLongTimeString());
             //path = @"D:\云印南开\" + Date;
             //使用Directory要用到System.IO
@@ -346,7 +267,13 @@ namespace NKprint
             }
             else
             {
-                changeStatusById(id, "download");
+                foreach (var item in jsonList)
+                {
+                    if ((item.id == id)&&(item.status=="未下载"))
+                    {
+                        changeStatusById(id, "download");
+                    }
+                }
             }
         }
     
@@ -363,56 +290,30 @@ namespace NKprint
                     break;
                 }
             }
-            if (myData.Rows[i].Cells[5].Value.ToString()=="未下载")
-            {
-                myData.Rows[i].Cells[5].Value = "已下载";
-            }
+            
             //参数： status=>文件状态'uploud','download','printing','printed','payed', 返回操作结果
-            string putUrl = @"/File/" + id + "?token=" + downloadToken;
+            string putUrl = @"/File/" + id ;
             string putPara = "status=" + currentStatus;
-            string resualt = API.PostMethod(putUrl, putPara, new UTF8Encoding());
+            string resualt = API.PutMethod(putUrl, putPara, new UTF8Encoding());
             //Console.WriteLine(out1);
             //添加事件
-           if (resualt.Contains("msg"))
+            if (!resualt.Contains("err")&&resualt.Contains("status"))
             {
                 for (int j = 0; j < jsonList.Count; j++)
                 {
                     if(jsonList[j].id==myData.Rows[i].Cells[0].Value.ToString())
                     {
-                        jsonList[j].status = getStatus(currentStatus);
+                        jsonList[j].status = currentStatus;
                         //remember.WriteJsonToTextFile(jsonList, "json.sjc");
                         break;
                     }
                 }
+                if (myData.Rows[i].Cells[5].Value.ToString() == "未下载")
+                {
+                    myData.Rows[i].Cells[5].Value = "已下载";
+                }
             }
         }
-        public string getStatus(string stat)
-        {
-            switch (stat)
-            {
-                case "1":
-                    return "1";
-                case "download":
-                case "2":
-                    return "2";
-
-                case "printing":
-                case "3":
-                    return "3";
-
-                case "printed":
-                case "4":
-                    return "4";
-
-                case "payed":
-                case "5":
-                    return "5";
-
-                default:
-                    return "0";
-            }
-        }
-
         private void emputyData()
         {
             while (this.myData.Rows.Count != 0)
@@ -445,8 +346,6 @@ namespace NKprint
                 if (flag == false)
                     MessageBox.Show("未找到" + studentNum1);
             }
-            
-
         }
         //打开文件下载地址
         private void 打开下载ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -458,49 +357,15 @@ namespace NKprint
         {
             this.Close();
             this.DialogResult = DialogResult.OK;
-            Application.Exit();
+            //Application.Exit();
         }
         //显示版本信息
         private void 版本ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("云因南开打印店客户端：\n     made by NKsjc 2015.01.08。\n    欢迎交流，qq：2634329276");
         }
-        ////查询打印信息
-        //private void 查询打印ToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    fileDownload(@"http://bt.nankai.edu.cn/", "my.doc", 1);
-        //    /*studentNum = string.Empty;
-        //    NKprint_search formSearch = new NKprint_search();
-        //    formSearch.Show();
-        //    if(formSearch.DialogResult==DialogResult.OK)
-        //    {
-        //        MessageBox.Show(studentNum);
-        //    }*/
-        //    //string path = @"http://music.nankai.edu.cn/download.php?id=98130";// ~/文件夹/文件名
-        //    //MessageBox.Show(System.IO.File.Exists(path).ToString()); 
-        //    //
-        //}
-        //刷新datagridview的文件
-        private void 刷新下载ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if(!File.Exists("json.sjc"))
-            {
-                File.Create("json.sjc");
-            }
-            ////把最新的jsonList写入到txt中
-            //remember.WriteJsonToTextFile(jsonList, "json.sjc");
-            //每次运行的时候清空datagridview中的数据
-            emputyData();
-            //将之前的jsonList数组清空
-            //jsonList.Clear();
-            //刷新一次数据
-            myRefresh();
-            refreshDataGrid();
-            //运行下载线程
-            threadDownload();
-            
-            //把jsonList写入到txt中
-        }
+      
+       
 
         private void toolTip1_Popup(object sender, PopupEventArgs e)
         {
@@ -543,18 +408,18 @@ namespace NKprint
         {
             //if (((e.ColumnIndex + 1)==6)&&(e.RowIndex>-1))
             string id = string.Empty;
-            if (e.RowIndex > -1)
+            if (((e.ColumnIndex) == 2)||((e.ColumnIndex) == 3) || ((e.ColumnIndex) == 4) && (e.RowIndex > -1))
             {
                 id = myData.Rows[e.RowIndex].Cells[0].Value.ToString();
                 myData.Rows[e.RowIndex].Selected = true;
-                
+
                 string filename;
                 for (int i = 0; i < jsonList.Count; i++)
                 {
                     if (jsonList[i].id == id)
                     {
-                        
-                        filename = path + "\\" + jsonList[i].id + "_" + jsonList[i].copies + "份" + "_" + (jsonList[i].double_side == "0" ? "单面" : "双面") + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
+
+                        filename = path + "\\" + jsonList[i].id + "_" + jsonList[i].copies  + "_" + jsonList[i].double_side  + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
                         if (File.Exists(@filename))
                         {
                             //filename = path + filename;
@@ -563,77 +428,108 @@ namespace NKprint
                         }
                         else
                         {
-                            filename = jsonList[i].id + "_" + jsonList[i].copies + "份" + "_" + (jsonList[i].double_side == "0" ? "单面" : "双面") + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
-                            fileDownload(jsonList[i].url, filename, jsonList[i].id);
+                            filename = jsonList[i].id + "_" + jsonList[i].copies  + "_" + jsonList[i].double_side + "_" + jsonList[i].student_number + "_" + jsonList[i].name;
+                            //get 文件详细信息 URI操作示意: GET /File/1234
+                            string jsonUrl = API.GetMethod("/File/" + jsonList[i].id);
+                            JObject jo = JObject.Parse(jsonUrl);
+                            ToJsonMy thisOne = new ToJsonMy();
+                            thisOne.url = (jo)["url"].ToString();
+
+                            fileDownload(thisOne.url, filename, jsonList[i].id);
                             MessageBox.Show("正在下载输入id对应的文件！\n等待会儿再打开");
                         }
                         break;
                     }
                 }
             }
-            else
+            if (((e.ColumnIndex) == 0) || ((e.ColumnIndex) == 1) && (e.RowIndex > -1))
             {
+                id = myData.Rows[e.RowIndex].Cells[0].Value.ToString();
+                foreach (var item in jsonList)
+                {
+                    if (item.id == id)
+                    {
+                        string jsonUrl = API.GetMethod("/User/" + item.use_id);
+                        JObject jo = JObject.Parse(jsonUrl);
+                        userInfo user = new userInfo();
+                        user.name = jo["name"].ToString();
+                        user.phone = jo["phone"].ToString();
+                        user.email=jo["email"].ToString();
+                        MessageBox.Show("用户："+user.name+"  手机号："+user.phone);
+                    }
+                }
+                
             }
-            
-            
         }
-
+        //重新请求服务器的数据，刷新datagridview的数据
         private void 刷新ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            //refreshAll();
         }
-
-        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void refreshAll()
         {
-            this.Show();
-            notifyIcon1.Visible = false;
-            this.ShowInTaskbar = true;
-            this.WindowState = FormWindowState.Normal;
-        }
-
-       
-
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-
-        }
-
-        private void NKprint_download_MinimumSizeChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void 显示窗体ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void NKprint_download_SizeChanged(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
+            if (!File.Exists("json.sjc"))
             {
-                this.Hide();
-                this.ShowInTaskbar = false;
-                notifyIcon1.Visible = true;
+                File.Create("json.sjc");
             }
-            else
-                notifyIcon1.Visible = false;
+            ////把最新的jsonList写入到txt中
+            //remember.WriteJsonToTextFile(jsonList, "json.sjc");
+            //每次运行的时候清空datagridview中的数据
+            emputyData();
+            //将之前的jsonList数组清空
+            //jsonList.Clear();
+            //刷新一次数据
+            myRefresh();
+            refreshDataGrid();
+            //运行下载线程
+            threadDownload();
+            //把jsonList写入到txt中
         }
-        ////本代码用于测试json写入.sjc，和重新读出
-        //private void 写入jsonToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    remember.WriteJsonToTextFile(jsonList,"json.sjc");
-        //    //jsonList.
-        //}
-        ////
-        //private void 读出jsonToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    List<ToJsonMy> newJson = new List<ToJsonMy>();
-        //    newJson=remember.ReadJsonFileToList("json.sjc");
-        //    MessageBox.Show(newJson[5].id+newJson[9].name);
-        //}
+        private void contextMenuStrip1_SizeChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState==FormWindowState.Minimized)
+            {
+                this.ShowInTaskbar = false;
+                this.Visible = false;
+            }
+        }
+
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if(this.WindowState==FormWindowState.Minimized)
+            {
+                this.Visible = true;
+                this.ShowInTaskbar = true;
+                this.WindowState = FormWindowState.Normal;
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            refreshAll();
+        }
+
+        private void 分钟ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            timer1.Interval=1*60*1000;
+        }
+
+        private void 分钟ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            timer1.Interval = 10 * 60 * 1000;
+        }
+
+        private void 手动刷新ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            refreshAll();
+        }
+
+        private void 刷新速度ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
 
         
-
+       
     }
 }

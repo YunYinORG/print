@@ -14,6 +14,10 @@ namespace NKprint
         {
             string down = server_url + metodUrl;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(down);
+            if (token != "")
+            {
+                request.Headers.Add("Token", token);
+            }
             request.Method = "PUT";
             string s = "1";
             //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -21,21 +25,35 @@ namespace NKprint
             request.Accept = "Accept: application/json";
             try
             {
-                byte[] byteArray = dataEncode.GetBytes(para); //转化
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.Accept = "Accept: application/json";
-                request.ContentLength = byteArray.Length;
-                Stream newStream = request.GetRequestStream();
-                newStream.Write(byteArray, 0, byteArray.Length);//写入参数
-                newStream.Close();
-                request.Headers.Add("Token",token);
-                Console.WriteLine("\nThe HttpHeaders are \n\n\tName\t\tValue\n{0}", request.Headers);
+                //byte[] byteArray = dataEncode.GetBytes(para); //转化
+                //request.ContentType = "application/x-www-form-urlencoded";
+                //request.Accept = "Accept: application/json";
+                //request.ContentLength = byteArray.Length;
+                //Stream newStream = request.GetRequestStream();
+                //newStream.Write(byteArray, 0, byteArray.Length);//写入参数
+                //newStream.Close();
+
+                //Console.WriteLine("\nThe HttpHeaders are \n\n\tName\t\tValue\n{0}", request.Headers);
+                //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                //StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default);
+                //s = sr.ReadToEnd();
+                //sr.Close();
+                //response.Close();
+                //newStream.Close();
+                using (StreamWriter writer = new StreamWriter(request.GetRequestStream()))
+                {
+                    writer.Write(para);
+                }
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default);
-                s = sr.ReadToEnd();
-                sr.Close();
-                response.Close();
-                newStream.Close();
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    //while (reader.Peek() != -1)
+                    //{
+                    //    Console.WriteLine(reader.ReadLine());
+                    //}
+                    s = reader.ReadToEnd();
+                    reader.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -72,9 +90,12 @@ namespace NKprint
         {
             string down = server_url  + metodUrl;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(down);
+            if (token!="")
+            {
+                request.Headers.Add("Token", token);//修改Headers,添加
+            }
             request.Method = "get";
             request.Accept = "Accept: application/json";
-            request.Headers.Add("Token",token);//修改Headers,添加
             //request.ContentType = "application/json;charset=UTF-8";
             HttpWebResponse response = null;
             try
@@ -97,10 +118,11 @@ namespace NKprint
         public static string doGetMethodToObj(string metodUrl)
         {
             //get获取。/api.php/File/?page=2&token=....
-            string down = server_url + @"/File/?page="+myPage.ToString()+"&token=" + metodUrl;
+            string down = server_url + metodUrl;
             //string down = server_url + @"/File/?token=" + metodUrl;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(down);
             request.Method = "get";
+            request.Accept = "Accept:application/json";
             request.ContentType = "application/json;charset=UTF-8";
             HttpWebResponse response = null;
             try
