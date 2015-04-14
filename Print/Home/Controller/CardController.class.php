@@ -153,7 +153,8 @@ class CardController extends Controller {
 				if ($recv_user['phone'])
 				{
 					$recv_phone = decrypt_phone($recv_user['phone'], $recv_user['student_number'], $recv_user['id']);
-					$sms_result = send_sms($recv_phone, $info, 3);
+					$SMS = new \Vendor\Sms();
+					$sms_result = $SMS->findCard($recv_phone, $info);
 					$success |= $sms_result;
 					if ($sms_result)
 					{

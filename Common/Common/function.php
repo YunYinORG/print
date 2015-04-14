@@ -510,13 +510,14 @@ function send_sms_code($phone, $type)
 		$info['tries'] = 0;
 	}
 	S($type.$phone, $info, 600);
+	$SMS = new \Vendor\Sms();
 	switch ($type)
 	{
 		case 'bind':
-			return send_sms($phone, $code, 1);
+			return $SMS->bindPhone($phone, $code);
 			break;
 		case 'findPwd':
-			return send_sms($phone, $code, 2);
+			return $SMS->findPwd($phone, $code);
 			break;
 		default:
 			E('unknow sms type ');

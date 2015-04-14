@@ -278,8 +278,8 @@ class FileController extends Controller {
 				$phone = get_phone_by_id($info['use_id']);
 				unset($info['use_id']);
 				$info['fid'] = $fid;
-
-				if (send_sms($phone, $info, 4))
+				$SMS = new \Vendor\Sms();
+				if ($SMS->printed($phone, $info))
 				{
 					$File = M('File');
 					$map['id'] = $fid;
