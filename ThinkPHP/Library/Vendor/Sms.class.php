@@ -13,7 +13,6 @@ class Sms
 {
     private $_supporter       = '';
     private $_header          = false;
-	private $appId			  = '';
     
     public function __construct($supporter        = '') 
     {
@@ -28,7 +27,6 @@ class Sms
         $this->_url    = $baseUrl . $softVersion . '/Accounts/' . $accountSid . '/Messages/templateSMS?sig=' . $sig;       
         $auth          = trim(base64_encode($accountSid . ":" . $timestamp));
         $this->_header = array('Content-Type:application/json;charset=utf-8', 'Authorization:' . $auth,);
-		$this->appId   = C('SMS_APPID');
     }
     
     /**
@@ -90,7 +88,7 @@ class Sms
 	{
 		$body_json  = array(
             'templateSMS'   	   => array(
-                'appId'            => $appId, 
+                'appId'            => C('SMS_APPID'),
                 'templateId'       => $templateId, 
                 'to'               => $phone, 
                 'param'            => $msg));
