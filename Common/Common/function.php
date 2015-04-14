@@ -20,12 +20,11 @@
  * - upload_file()
  * - delete_file()
  * - download_file()
- * - send_mail()
- * - send_sms()
- * - random()
  * - get_user_by_phone()
  * - get_user_by_email()
  * - get_phone_by_id()
+ * - random()
+ * - send_mail()
  * - send_sms_code()
  * - check_sms_code()
  * Classes list:
@@ -280,129 +279,6 @@ function download_file($url, $param = '', $storage = '')
 }
 
 /**
- * 发送邮件
- * 如果sae环境会先尝试sae发送然后调用phpmailer
- * @method send_mail
- * @version 2.0
- *
- * @author NewFutre[newfuture@yunyin.org]
- *
- * @param  [string] $toMail           [收件人邮箱]
- * @param  [array]  $mailInfo         [邮箱信息'title'标题,'content'内容]
- * @param  [array]  $mailConfig       [邮件发送配置]
- * @return [bool]   [发送结果]
- */
-function send_mail($toMail, $mailInfo, $mailConfig)
-{
-
-	switch (C('MAIL_WAY'))
-	{
-		case 'sae':	// sae mail
-			$mail = new SaeMail();
-			$opt = array(
-				'content_type'  => 'HTML',
-				'from'          => $mailConfig['email'],
-				'to'            => $toMail,
-				'content'       => $mailInfo['content'],
-				'subject'       => $mailInfo['title'],
-				'smtp_host'     => C('MAIL_SMTP'),
-				'smtp_username' => $mailConfig['email'],
-				'smtp_password' => $mailConfig['pwd'],
-				'nickname'      => $mailConfig['name']);
-			$mail->setOpt($opt);
-			$ret = $mail->send();
-			if ( ! $ret)
-		{
-				\Think\Log::record('saemail error:'.$mail->errno().':'.$mail->errmsg(), 'WARN', true);
-				unset($mail);
-			}
-		else
-		{
-				break;
-			}
-		case 'phpmailer':
-		default:
-			$mail = new \Vendor\PHPMailer();
-			$mail->AddAddress($toMail);
-			$mail->Subject = $mailInfo['title'];
-			$mail->Body = $mailInfo['content'];
-			$mail->IsSMTP();
-			$mail->IsHTML(true);
-			$mail->SMTPAuth = true;
-			$mail->CharSet = 'UTF-8';
-			$mail->Host = C('MAIL_SMTP');
-			$mail->From = $mailConfig['email'];
-			$mail->Username = $mailConfig['email'];
-			$mail->Password = $mailConfig['pwd'];
-			$mail->FromName = $mailConfig['name'];
-			try
-			{
-				//no use
-				$mail->Send();
-			}
-		catch (phpmailerException $e)
-		{
-				\Think\Log::record('phpmail error:'.$e, 'WARN', true);
-				return 0;
-			}
-	}
-	return 1;
-}
-
-/**
- * 生成n位随机字符串
- * 				''默认快速生成不重复字符串
- * 				包含'N':Number数字，
- * 				包含'W':Word包含所有字母（=L+U）,
- * 				包含'L':Low小写字母，
- * 				包含'U':Up大写字母
- * @method random($n,$mode='')
- *
- * @author NewFuture
- *
- * @param  int    $n                     字符个数
- * @param  string $mode=''               生成方式
- * @return string n位随机字符串
- */
-function random($n, $mode = '')
-{
-	//10位一下的数字使用随机数快速生成
-	if ($n < 10 && $mode == 'N')
-	{
-		$max = pow(10, $n);
-		return substr($max + rand(1, $max), -$n);
-	}
-
-	$str = '';
-	//是否含有数字
-	if (strstr($mode, 'N') != null)
-	{
-		$str .= '1234567890';
-	}
-	//是否含由字母或者大小写
-	if (strstr($mode, 'W') != null)
-	{
-		$str .= 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	}
-	elseif (strstr($mode, 'L') != null)
-	{
-		$str .= 'abcdefghijklmnopqrstuvwxyz';
-	}
-	elseif (strstr($mode, 'U') != null)
-	{
-		$str .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	}
-	//默认全部使用
-	if ( ! $str)
-	{
-		$str .= 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	}
-
-	$str = str_repeat($str, $n * 10 / strlen($str) + 1);
-	return substr(str_shuffle($str), 0, $n);
-}
-
-/**
  * 根据手机号查找用户
  * @method get_user_by_phone($phone)
  * @param  $phone 电话号码
@@ -475,6 +351,129 @@ function get_phone_by_id($id)
 		return decrypt_phone($user['phone'], $user['student_number'], $id);
 	}
 	return false;
+}
+
+/**
+ * 生成n位随机字符串
+ * 				''默认快速生成不重复字符串
+ * 				包含'N':Number数字，
+ * 				包含'W':Word包含所有字母（=L+U）,
+ * 				包含'L':Low小写字母，
+ * 				包含'U':Up大写字母
+ * @method random($n,$mode='')
+ *
+ * @author NewFuture
+ *
+ * @param  int    $n                     字符个数
+ * @param  string $mode=''               生成方式
+ * @return string n位随机字符串
+ */
+function random($n, $mode = '')
+{
+	//10位一下的数字使用随机数快速生成
+	if ($n < 10 && $mode == 'N')
+	{
+		$max = pow(10, $n);
+		return substr($max + rand(1, $max), -$n);
+	}
+
+	$str = '';
+	//是否含有数字
+	if (strstr($mode, 'N') != null)
+	{
+		$str .= '1234567890';
+	}
+	//是否含由字母或者大小写
+	if (strstr($mode, 'W') != null)
+	{
+		$str .= 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	}
+	elseif (strstr($mode, 'L') != null)
+	{
+		$str .= 'abcdefghijklmnopqrstuvwxyz';
+	}
+	elseif (strstr($mode, 'U') != null)
+	{
+		$str .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	}
+	//默认全部使用
+	if ( ! $str)
+	{
+		$str .= 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	}
+
+	$str = str_repeat($str, $n * 10 / strlen($str) + 1);
+	return substr(str_shuffle($str), 0, $n);
+}
+
+/**
+ * 发送邮件
+ * 如果sae环境会先尝试sae发送然后调用phpmailer
+ * @method send_mail
+ * @version 2.0
+ *
+ * @author NewFutre[newfuture@yunyin.org]
+ *
+ * @param  [string] $toMail           [收件人邮箱]
+ * @param  [array]  $mailInfo         [邮箱信息'title'标题,'content'内容]
+ * @param  [array]  $mailConfig       [邮件发送配置]
+ * @return [bool]   [发送结果]
+ */
+function send_mail($toMail, $mailInfo, $mailConfig)
+{
+
+	switch (C('MAIL_WAY'))
+	{
+		case 'sae':	// sae mail
+			$mail = new SaeMail();
+			$opt = array(
+				'content_type'  => 'HTML',
+				'from'          => $mailConfig['email'],
+				'to'            => $toMail,
+				'content'       => $mailInfo['content'],
+				'subject'       => $mailInfo['title'],
+				'smtp_host'     => C('MAIL_SMTP'),
+				'smtp_username' => $mailConfig['email'],
+				'smtp_password' => $mailConfig['pwd'],
+				'nickname'      => $mailConfig['name']);
+			$mail->setOpt($opt);
+			$ret = $mail->send();
+			if ( ! $ret)
+		{
+				\Think\Log::record('saemail error:'.$mail->errno().':'.$mail->errmsg(), 'WARN', true);
+				unset($mail);
+			}
+		else
+		{
+				break;
+			}
+		case 'phpmailer':
+		default:
+			$mail = new \Vendor\PHPMailer();
+			$mail->AddAddress($toMail);
+			$mail->Subject = $mailInfo['title'];
+			$mail->Body = $mailInfo['content'];
+			$mail->IsSMTP();
+			$mail->IsHTML(true);
+			$mail->SMTPAuth = true;
+			$mail->CharSet = 'UTF-8';
+			$mail->Host = C('MAIL_SMTP');
+			$mail->From = $mailConfig['email'];
+			$mail->Username = $mailConfig['email'];
+			$mail->Password = $mailConfig['pwd'];
+			$mail->FromName = $mailConfig['name'];
+			try
+			{
+				//no use
+				$mail->Send();
+			}
+		catch (phpmailerException $e)
+		{
+				\Think\Log::record('phpmail error:'.$e, 'WARN', true);
+				return 0;
+			}
+	}
+	return 1;
 }
 
 /**
