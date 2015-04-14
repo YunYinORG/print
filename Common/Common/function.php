@@ -1,7 +1,6 @@
 <?php
-
 // ===================================================================
-// | FileName: 	/Common/Common.function.php 公共函数库
+// | FileName: 	/Common/Common/function.php 公共函数库
 // ===================================================================
 // +------------------------------------------------------------------
 // | 云印南开
@@ -18,11 +17,12 @@
  * - auth_token()
  * - encode_old()
  * - encode()
+ * - upload_file()
  * - delete_file()
+ * - download_file()
  * - send_mail()
  * - send_sms()
  * - random()
- * - download()
  * - get_user_by_phone()
  * - get_user_by_email()
  * - get_phone_by_id()
@@ -30,32 +30,32 @@
  * - check_sms_code()
  * Classes list:
  */
-
 /**
- * token($id)
- *生成唯一的token令牌
- *@param 验证对象id
- *@return 字符串
- *@author NewFuture
+ * 生成唯一的token令牌
+ * @method token
+ * @param  [int/string] $id                [对象id]
+ * @return [string]     [token字符串]
  */
-function token($id) {
-	return $id . random(1, 'W') . random(30) . random(1, 'W') . time();
+function token($id)
+{
+	return $id.random(1, 'W').random(30).random(1, 'W').time();
 }
 
 /**
- *update_token($info, $type=null)
- *生成和更新token
- *@param  mixed $info 用户id或者token值
- *@param  int $type用户类型，读取配置
- *@return mixed
- *			stinrg  生成或者更新的token字符串
- *			bool flase 生成失败
- *@version 1.1
- *@author NewFuture
+ * 生成和更新token 并保持到数据库
+ * @method update_token
+ *
+ * @author 云小印[xxx@yunyin.org]
+ *
+ * @param  mixed $info                        用户id或者token值
+ * @param  int   $type                        	用户类型，读取配置
+ * @return mixed 操作成功返回token值
  */
-function update_token($info, $type = null) {
+function update_token($info, $type = null)
+{
 	$Token = M('token');
-	switch ($type) {
+	switch ($type)
+	{
 		case C('ADMIN'):
 		case C('STUDENT'):
 		case C('PRINTER'):
@@ -63,25 +63,27 @@ function update_token($info, $type = null) {
 		case C('STUDENT_API'):
 			$data['to_id'] = $info;
 			$data['type'] = $type;
-
 			//删除之前token；再更新token
-			$Token->where($data)->delete();
+			$Token
+				->where($data)->delete();
 			$token = token($info);
 			$data['token'] = md5($token);
-			if (!$Token->add($data)) {
+			if ( ! $Token->add($data))
+		{
 				return false;
 			}
 			break;
-
 		default:
-			if (!preg_match('/^\d+/', $info, $result)) {
+			if ( ! preg_match('/^\d+/', $info, $result))
+		{
 				return false;
 			}
 			$id = $result[0];
 			$data['to_id'] = $id;
 			$data['token'] = md5($info);
 			$token = token($id);
-			if (!$Token->where($data)->save(array('token' => md5($token)))) {
+			if ( ! $Token->where($data)->save(array('token' => md5($token))))
+		{
 				return false;
 			}
 			break;
@@ -91,24 +93,27 @@ function update_token($info, $type = null) {
 }
 
 /**
- *delete_token($id, $type)
- *删除token
- *@param  mixed 用户id 或者token值
- *@param  int $type=null用户类型，读取配置
- *						缺省，直接删除token
- *@return int/false  删除失败返回false
- *@version 1.0
- *@author NewFuture
+ * 删除token
+ * @method delete_token
+ *
+ * @author NewFuture[NewFuture@yunyin.org]
+ *
+ * @param  mixed 用户id         或者token值
+ * @param  int   $type            用户类型，读取配置
+ * @return [int] [删除结果]
  */
-function delete_token($info, $type = null) {
-
-	switch ($type) {
+function delete_token($info, $type = null)
+{
+	switch ($type)
+	{
 		case C('STUDENT'):
 		case C('PRINTER'):
+		case C('STUDENT_API'):
+		case C('PRINTER_WEB'):
+
 			$data['to_id'] = $info;
 			$data['type'] = $type;
 			break;
-
 		default:
 			$data['token'] = md5($info);
 			break;
@@ -117,74 +122,74 @@ function delete_token($info, $type = null) {
 }
 
 /**
- *auth_token($token)
- *验证token信息
- *@param  string $token token值
- *@return array  $info 验证失败返回空值null
- *					$info['id']用户id
- *					$info['type']用户类型
- *@version 2.0
- *@author NewFuture
+ * 验证token信息
+ * @method auth_token
+ *
+ * @author NewFuture[NewFuture@yunyin.org]
+ *
+ * @param  [string] $token
+ * @return [array]  [验证信息包含用户id，和type]
  */
-function auth_token($token) {
+function auth_token($token)
+{
 	return M('token')->field(array('type', 'to_id' => 'id'))->getByToken(md5($token));
 }
 
 /**
- *encode_old($pwd, $id)
- *原始密码加密
- *过渡使用，全部更新后，去掉此函数
- *@param $pwd 原始密码
- *@param $id验证对象账号
- *@return 字符串
- *@author NewFuture
+ * 旧的加密函数
+ * 过渡使用，全部更新后，去掉此函数
+ * @method encode_old
+ * @param  string      $pwd                    原始密码
+ * @param  string      $id验证对象账号
+ * @return 字符串
  */
-function encode_old($pwd, $id) {
+function encode_old($pwd, $id)
+{
 	return crypt($pwd, $id);
 }
 
 /**
- *encode($pwd, $id)
- *密码加密
+ * 密码加密
  * 新密码加密过程 md5(pwd)—>crypt()->md5()
- *@param $pwd 原始密码
- *@param $id验证对象账号
- *@return 字符串
- *@author NewFuture
+ * @method  encode
+ * @param  string $pwd                    md5之后的密码
+ * @param  int    $id                     验证对象账号
+ * @return string 加密之后的密码
  */
-function encode($pwd, $id) {
+function encode($pwd, $id)
+{
 	return md5(crypt($pwd, $id));
 }
 
 /**
- *upload_file($storage='')
- *上传文件
- *@param $storage=''存储服务商 默认读取FILE_UPLOAD_TYPE
- *@param $config=array() 自定义配置，可以覆盖默认配置
- *@return mixed 上传信息
+ * 上传文件
+ * upload_file($storage='')
+ * @param  $storage=''存储服务商 默认读取FILE_UPLOAD_TYPE
+ * @param  $config=array()            自定义配置，可以覆盖默认配置
+ * @return mixed                      上传信息
  */
-function upload_file($storage = '', $config = array()) {
-	if (empty($_FILES)) {
+function upload_file($storage = '', $config = array())
+{
+	if (empty($_FILES))
+	{
 		return false;
 	}
-	//基本设置
-	$config = array_merge(C('FILE_UPLAOD_CONFIG'), $config);
-	//驱动配置
-	$driverConfig = '';
-    if(!$storage){
-        $storage=C('FILE_UPLOAD_TYPE');
-    }
-	switch (strtoupper($storage)) {
+	$config = array_merge(C('FILE_UPLAOD_CONFIG'), $config); //基本设置
+	$driverConfig = ''; //驱动配置
+	if ( ! $storage)
+	{
+		$storage = C('FILE_UPLOAD_TYPE');
+	}
+	switch (strtoupper($storage))
+	{
 		case 'QINIU':
 			$driver = 'QINIU';
 			//上传驱动的配置
 			$driverConfig = C('UPLOAD_CONFIG_QINIU');
 			break;
-
 		case 'SAE':
 			$driver = 'SAE';
 			break;
-
 		case 'LOCAL':
 			$driver = 'LOCAL';
 			break;
@@ -199,114 +204,128 @@ function upload_file($storage = '', $config = array()) {
 }
 
 /**
- *delete_file($path)
- *删除上传文件
- *@param $path 文件路径
- *@param $storage='' 存储服务商
- *@author NewFuture
+ *  删除上传文件
+ * @method delete_file($path)
+ *
+ * @author NewFuture
+ *
+ * @param $path       文件路径(url)
+ * @param $storage='' 存储驱动        LOCAL QINIU SAE 等
  */
-function delete_file($path, $storage = '') {
-	if (!$storage) {
+function delete_file($path, $storage = '')
+{
+	if ( ! $storage)
+	{
 		$storage = C('FILE_UPLOAD_TYPE');
 	}
-	switch ($storage) {
+	switch ($storage)
+	{
 		case 'Sae':
-			$arr = explode('/', ltrim($path, './'));
-			$domain = array_shift($arr);
+			$arr      = explode('/', ltrim($path, './'));
+			$domain   = array_shift($arr);
 			$filePath = implode('/', $arr);
-			$s = Think\Think::instance('SaeStorage');
+			$s        = Think\Think::instance('SaeStorage');
 			return $s->delete($domain, $filePath);
 			break;
-
 		case 'QINIU':
 			$setting = C('UPLOAD_CONFIG_QINIU');
 			$setting['timeout'] = 300;
-			$url = str_replace('/', '_', $path);
-			$qiniu = new Think\Upload\Driver\Qiniu\QiniuStorage($setting);
+			$url    = str_replace('/', '_', $path);
+			$qiniu  = new Think\Upload\Driver\Qiniu\QiniuStorage($setting);
 			$result = $qiniu->del($url);
 			return true;
 			break;
-
 		default:
-			return @unlink("./Uploads/" . $path);
+			return @unlink('./Uploads/'.$path);
 			break;
 	}
 }
 
 /**
- *send_mail($toMail,$msg,$mailType)
- *发送邮件
- *@param $toMail 收件人邮箱
- *@param $msg string 邮件主要内容
- *@param $mailType 邮件类型
- *@return bool 是否发送成功
+ * 下载文件
+ * @method download_file
+ *
+ * @param  string $url                         [保存的URL]
+ * @param  string $param                       [额外参数，可为空]
+ * @param  string $storage                     [指定存储驱动存储空间 LOCAL QINIU SAE]
+ * @return string [用于下载文件的URL]
  */
-function send_mail($toMail, $msg, $mailType) {
-	switch ($mailType) {
-		case 1:
-			//绑定验证邮箱
-			$title = '云印邮箱绑定验证';
-			$content = '欢迎加入云印的大家庭哦！<br/>云小印专注于为您提供最方便快捷的校园打印体验，让您随时打印，随手可取，无需“忧”盘！<br/>请点击以下链接绑定此的邮箱：(' . $toMail . ") <a href='$msg'>$msg</a>";
-			$mailConfig = C('MAIL_VERIFY');
+function download_file($url, $param = '', $storage = '')
+{
+	if ( ! $storage)
+	{
+		$storage = C('FILE_UPLOAD_TYPE');
+	}
+	switch ($storage)
+	{
+		case 'QINIU':
+			$setting = C('UPLOAD_CONFIG_QINIU');
+			$url = 'http://'.$setting['domain'].str_replace('/', '_', $url);
+			$duetime = NOW_TIME + 86400;
+			//下载凭证有效时间
+			$DownloadUrl = $url.'?'.$param.'&e='.$duetime;
+			$Sign  = hash_hmac('sha1', $DownloadUrl, $setting['secretKey'], true);
+			$EncodedSign = str_replace(array('+', '/'), array('-', '_'), base64_encode($Sign));
+			$Token = $setting['accessKey'].':'.$EncodedSign;
+			$RealDownloadUrl = $DownloadUrl.'&token='.$Token;
+			return $RealDownloadUrl;
 			break;
-
-		case 2:
-			//找回密码
-			$title = '云印找回密码邮件';
-			$content = '您正在云印南天使用密码找回,<br>请点击以下链接重设密码：' . " <a href='$msg'>$msg</a>";
-			$mailConfig = C('MAIL_VERIFY');
+		case 'LOCAL':
+			return '/Uploads/'.$url;
 			break;
-
-		case 3:
-			$title = '云印校园卡认领通知';
-			$content = $msg;
-			$mailConfig = C('MAIL_NOTIFY');
-			break;
-
-		case 4:
-			$email_data=L('FISRT_MAIL',array('name'=>$msg));
-			$title=$email_data['title'];
-			$content=$email_data['content'];
-			$mailConfig=C('MAIL_NOTIFY');
-			break;
-
 		default:
-			$title = '来自云印的通知'; //无论如何都应该有一个标题
-			$content = $msg;
-			$mailConfig = C('MAIL_NOTIFY');
-			//直接发送
+			return '/Uploads/'.$url;
 			break;
 	}
+}
 
-	switch (C('MAIL_WAY')) {
+/**
+ * 发送邮件
+ * 如果sae环境会先尝试sae发送然后调用phpmailer
+ * @method send_mail
+ * @version 2.0
+ *
+ * @author NewFutre[newfuture@yunyin.org]
+ *
+ * @param  [string] $toMail           [收件人邮箱]
+ * @param  [array]  $mailInfo         [邮箱信息'title'标题,'content'内容]
+ * @param  [array]  $mailConfig       [邮件发送配置]
+ * @return [bool]   [发送结果]
+ */
+function send_mail($toMail, $mailInfo, $mailConfig)
+{
+
+	switch (C('MAIL_WAY'))
+	{
 		case 'sae':	// sae mail
 			$mail = new SaeMail();
 			$opt = array(
-				'content_type' => 'HTML',
-				'from' => $mailConfig['email'],
-				'to' => $toMail,
-				'content' => $content,
-				'subject' => $title,
-				'smtp_host' => C('MAIL_SMTP'),
+				'content_type'  => 'HTML',
+				'from'          => $mailConfig['email'],
+				'to'            => $toMail,
+				'content'       => $mailInfo['content'],
+				'subject'       => $mailInfo['title'],
+				'smtp_host'     => C('MAIL_SMTP'),
 				'smtp_username' => $mailConfig['email'],
 				'smtp_password' => $mailConfig['pwd'],
-				'nickname' => $mailConfig['name'],
-			);
+				'nickname'      => $mailConfig['name']);
 			$mail->setOpt($opt);
 			$ret = $mail->send();
-			if (!$ret) {
-				\Think\Log::record("saemail error:" . $mail->errno() . ":" . $mail->errmsg(), 'WARN', true);
+			if ( ! $ret)
+		{
+				\Think\Log::record('saemail error:'.$mail->errno().':'.$mail->errmsg(), 'WARN', true);
 				unset($mail);
-			} else {
+			}
+		else
+		{
 				break;
 			}
-
 		case 'phpmailer':
 		default:
 			$mail = new \Vendor\PHPMailer();
 			$mail->AddAddress($toMail);
-			$mail->Subject = $title;
-			$mail->Body = $content;
+			$mail->Subject = $mailInfo['title'];
+			$mail->Body = $mailInfo['content'];
 			$mail->IsSMTP();
 			$mail->IsHTML(true);
 			$mail->SMTPAuth = true;
@@ -320,8 +339,10 @@ function send_mail($toMail, $msg, $mailType) {
 			{
 				//no use
 				$mail->Send();
-			} catch (phpmailerException $e) {
-				\Think\Log::record("phpmail error:" . $e, 'WARN', true);
+			}
+		catch (phpmailerException $e)
+		{
+				\Think\Log::record('phpmail error:'.$e, 'WARN', true);
 				return 0;
 			}
 	}
@@ -329,89 +350,51 @@ function send_mail($toMail, $msg, $mailType) {
 }
 
 /**
- *send_sms($toPhone,$content,$smsType)
- *发送短信
- *@param $toPhone 接收手机号
- *@param $content mixed 信息主要内容
- *@param $smsType 短信类型
- *@return bool 是否发送成功
- */
-function send_sms($toPhone, $content, $smsType) 
-{
-	switch ($smsType) 
-	{
-		case 1:
-		//绑定手机
-			$msg = $content . ',5';
-			$tid = C('SMSID_BIND');
-			break;
-		case 2: 
-        //找回密码
-			$msg = $content . ',5';
-			$tid = C('SMSID_PWD');
-			break;
-		case 3:	
-		//找回一卡通
-			$msg = $content['recv_name'] . ',' . $content['send_name'] . ',' . $content['send_phone'];
-			$tid = C('SMSID_CARD');
-			break;
-		case 4:
-		//发送文件打印提示
-			$msg = $content['pri_name'] . ',' . $content['fid'] . ',' . $content['name'];
-			$tid = C('SMSID_PRINTED');
-			break;
-		default:
-			
-			E('未知短信类型');
-			break;
-	}
-	
-	$SMS = new \Vendor\Sms();
-	return $SMS->sendSms($toPhone, $msg, $tid);
-}
-
-/**
- *random($n,$mode='')
- *生成n位随机字符串
- *@param int $n 字符个数
- *@param string $mode='' 生成方式
- *				''默认快速生成不重复字符串
- *				包含'N':Number数字，
- *				包含'W':Word包含所有字母（=L+U）,
- *				包含'L':Low小写字母，
- *				包含'U':Up大写字母
- *@return string n位随机字符串
+ * 生成n位随机字符串
+ * 				''默认快速生成不重复字符串
+ * 				包含'N':Number数字，
+ * 				包含'W':Word包含所有字母（=L+U）,
+ * 				包含'L':Low小写字母，
+ * 				包含'U':Up大写字母
+ * @method random($n,$mode='')
  *
- *@example  $str=random(4，'N');快速生成4位随机数字
- *			$str=random(16,'NU');生成由数字和大写字母组成的16位字符串
- *			$str=random(32);生成32位任意随机字符串
+ * @author NewFuture
+ *
+ * @param  int    $n                     字符个数
+ * @param  string $mode=''               生成方式
+ * @return string n位随机字符串
  */
-function random($n, $mode = '') {
-
+function random($n, $mode = '')
+{
 	//10位一下的数字使用随机数快速生成
-	if ($n < 10 && $mode == 'N') {
+	if ($n < 10 && $mode == 'N')
+	{
 		$max = pow(10, $n);
 		return substr($max + rand(1, $max), -$n);
 	}
 
 	$str = '';
-
 	//是否含有数字
-	if (strstr($mode, 'N') != null) {
+	if (strstr($mode, 'N') != null)
+	{
 		$str .= '1234567890';
 	}
-
 	//是否含由字母或者大小写
-	if (strstr($mode, 'W') != null) {
+	if (strstr($mode, 'W') != null)
+	{
 		$str .= 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	} elseif (strstr($mode, 'L') != null) {
+	}
+	elseif (strstr($mode, 'L') != null)
+	{
 		$str .= 'abcdefghijklmnopqrstuvwxyz';
-	} elseif (strstr($mode, 'U') != null) {
+	}
+	elseif (strstr($mode, 'U') != null)
+	{
 		$str .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	}
-
 	//默认全部使用
-	if (!$str) {
+	if ( ! $str)
+	{
 		$str .= 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	}
 
@@ -419,51 +402,29 @@ function random($n, $mode = '') {
 	return substr(str_shuffle($str), 0, $n);
 }
 
-function download($url,$param='',$storage='') {
-    if(!$storage){
-        $storage=C('FILE_UPLOAD_TYPE');
-    }
-	switch ($storage) {
-		case 'QINIU':
-			$setting = C('UPLOAD_CONFIG_QINIU');
-			$url = 'http://' . $setting['domain'] . str_replace('/', '_', $url);
-			$duetime = NOW_TIME + 86400;
-
-			//下载凭证有效时间
-			$DownloadUrl = $url . '?' . $param . '&e=' .$duetime ;
-			$Sign = hash_hmac('sha1', $DownloadUrl, $setting["secretKey"], true);
-			$EncodedSign = str_replace(array('+', '/'), array('-', '_'), base64_encode($Sign));
-			$Token = $setting["accessKey"] . ':' . $EncodedSign;
-			$RealDownloadUrl = $DownloadUrl . '&token=' . $Token ;
-			return $RealDownloadUrl;
-			break;
-
-		case 'LOCAL':
-			return "/Uploads/" . $url;
-			break;
-
-		default:
-			return "/Uploads/" . $url;
-			break;
-	}
-}
-
 /**
- *get_user_by_phone($phone)
- *根据手机号查找用户
- *@param $phone 电话号码
- *@return array 返回一个或者全部查找结果
+ * 根据手机号查找用户
+ * @method get_user_by_phone($phone)
+ * @param  $phone 电话号码
+ * @return array  返回一个或者全部查找结果
  */
-function get_user_by_phone($phone) {
+function get_user_by_phone($phone)
+{
 	import('Common.Encrypt', COMMON_PATH, '.php');
 	$tail = encrypt_end(substr($phone, -4));
-	$where['phone'] = array('LIKE', '%%' . $tail);
-	$info = M('User')->where($where)->field('id,student_number,phone')->select();
-	if (!$info) {
+	$where['phone'] = array('LIKE', '%%'.$tail);
+	$info = M('User')
+		->where($where)
+		->field('id,student_number,phone')
+		->select();
+	if ( ! $info)
+	{
 		return false;
 	}
-	foreach ($info as $user) {
-		if ($phone == decrypt_phone($user['phone'], $user['student_number'], $user['id'])) {
+	foreach ($info as $user)
+	{
+		if ($phone == decrypt_phone($user['phone'], $user['student_number'], $user['id']))
+		{
 			return $user;
 		}
 	}
@@ -471,18 +432,23 @@ function get_user_by_phone($phone) {
 }
 
 /**
- *get_user_by_email($email)
- *根据邮箱查找用户
- *@param $email 邮箱
- *@return int 返回对应用户的id
+ * 根据邮箱查找用户
+ * @method get_user_by_email($email)
+ * @param  $email 邮箱
+ * @return int    返回对应用户的id
  */
-function get_user_by_email($email) {
-	if (strpos($email, '@') == 1) {
-		$q1 = '`email` LIKE "' . substr_replace($email, '%', 1, 0) . '"';
-		$q2 = 'length(`email`)<' . (strlen($email) + 23);
-		$condition = $q1 . ' AND ' . $q2;
-		$id = M('User')->where($condition)->getField('id');
-	} else {
+function get_user_by_email($email)
+{
+	if (strpos($email, '@') == 1)
+	{
+		$q1 = '`email` LIKE "'.substr_replace($email, '%', 1, 0).'"';
+		$q2 = 'length(`email`)<'.(strlen($email) + 23);
+		$condition = $q1.' AND '.$q2;
+		$id = M('User')
+			->where($condition)->getField('id');
+	}
+	else
+	{
 		import('Common.Encrypt', COMMON_PATH, '.php');
 		$en_email = encrypt_email($email);
 		$id = M('User')->getFieldByEmail($en_email, 'id');
@@ -491,17 +457,20 @@ function get_user_by_email($email) {
 }
 
 /**
- *get_phone_by_id($id)
- *根据id查找用户
- *@param $id  电话号码
- *@return string 返回号码
+ * 根据id查找用户
+ * @method get_phone_by_id($id)
+ * @param  $id    电话号码
+ * @return string 返回号码
  */
-function get_phone_by_id($id) {
-	if (!$id) {
+function get_phone_by_id($id)
+{
+	if ( ! $id)
+	{
 		return false;
 	}
 	$user = M('User')->field('student_number,phone')->getById($id);
-	if ($user) {
+	if ($user)
+	{
 		import('Common.Encrypt', COMMON_PATH, '.php');
 		return decrypt_phone($user['phone'], $user['student_number'], $id);
 	}
@@ -509,30 +478,41 @@ function get_phone_by_id($id) {
 }
 
 /**
- *send_sms_code($phone,$type)
- *给用户发送验证码
- *@param $phone  手机码
- *@param $type   类型
- *@return string 返回号码
+ * 给用户发送验证码
+ * @method send_sms_code($phone,$code,$type)
+ *
+ * @author NewFuture
+ *
+ * @param  $phone 手机码
+ * @param  $type  类型
+ * @return string 返回号码
  */
-function send_sms_code($phone, $type) {
-	$info = S($type . $phone);
-	if ($info) {
-		if ($info['times'] > 5) {
-			\Think\Log::record('手机号验证发送失败：ip:' . get_client_ip() . ',phone:' . $phone);
+function send_sms_code($phone, $type)
+{
+	$info = S($type.$phone);
+	if ($info)
+	{
+		if ($info['times'] > 5)
+		{
+			\Think\Log::record('手机号验证发送失败：ip:'.get_client_ip().',phone:'.$phone);
 			return 0;
-		} else {
+		}
+		else
+		{
 			$code = $info['code'];
 			$info['times'] = $info['times'] + 1;
 		}
-	} else {
+	}
+	else
+	{
 		$code = random(6, 'N');
 		$info['code'] = $code;
 		$info['times'] = 0;
 		$info['tries'] = 0;
 	}
-	S($type . $phone, $info, 600);
-	switch ($type) {
+	S($type.$phone, $info, 600);
+	switch ($type)
+	{
 		case 'bind':
 			return send_sms($phone, $code, 1);
 			break;
@@ -540,37 +520,48 @@ function send_sms_code($phone, $type) {
 			return send_sms($phone, $code, 2);
 			break;
 		default:
-			//code..
+			E('unknow sms type ');
+
 	}
 }
 
 /**
- *check_sms_code($phone,$code,$type)
- *验证手机验证码
- *@param $phone  手机码
- *@param $code 	验证码
- *@param $type   类型
- *@return bool true 验证成功
- *			  false 验证失败
- *			  0 尝试次数达到限制
- *			  null 验证信息不存在
+ * 验证手机验证码
+ * @method check_sms_code
+ *
+ * @author NewFuture
+ *
+ * @param  $phone 手机码
+ * @param  $code  	验证码
+ * @param  $type  类型
+ * @return bool   true 验证成功	 false 验证失败	 尝试次数达到限制	 null 验证信息不存在
  */
-function check_sms_code($phone, $code, $type) {
-	$info = S($type . $phone);
-	if ($info) {
-		if ($info['code'] == $code) {
-			S($type . $phone, null);
+function check_sms_code($phone, $code, $type)
+{
+	$info = S($type.$phone);
+	if ($info)
+	{
+		if ($info['code'] == $code)
+		{
+			S($type.$phone, null);
 			return true;
-		} elseif ($info['tries'] >= 5) {
-			S($type . $phone, null);
+		}
+		elseif ($info['tries'] >= 5)
+		{
+			S($type.$phone, null);
 			return 0;
-		} else {
+		}
+		else
+		{
 			$info['tries'] = $info['tries'] + 1;
-			S($type . $phone, $info, 600);
+			S($type.$phone, $info, 600);
 			return false;
 		}
-	} else {
+	}
+	else
+	{
 		return null;
 	}
 }
+
 ?>
