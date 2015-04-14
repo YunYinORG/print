@@ -13,6 +13,7 @@ class Sms
 {
     private $_supporter       = '';
     private $_header          = false;
+	private $appId			  = '';
     
     public function __construct($supporter        = '') 
     {
@@ -27,6 +28,7 @@ class Sms
         $this->_url    = $baseUrl . $softVersion . '/Accounts/' . $accountSid . '/Messages/templateSMS?sig=' . $sig;       
         $auth          = trim(base64_encode($accountSid . ":" . $timestamp));
         $this->_header = array('Content-Type:application/json;charset=utf-8', 'Authorization:' . $auth,);
+		$this->appId   = C('SMS_APPID');
     }
     
     /**
@@ -79,19 +81,66 @@ class Sms
         return $result;
     }
     
-    /*发送短信
-    **/
-    public function sendSms($toPhone, $msg, $templateId = '') 
-    { 
-        $body_json  = array(
-            'templateSMS'            => array(
-                'appId'            => C('SMS_APPID'), 
-                'templateId'            => $templateId, 
-                'to'            => $toPhone, 
+	/*发送短信
+	* @param $phone 到达手机号
+	* @param $msg 短信参数
+	* @param $templateId 短信模板ID
+	*/
+	private function _sendSMS($phone,$msg,$templateId)
+	{
+		$body_json  = array(
+            'templateSMS'   	   => array(
+                'appId'            => $appId, 
+                'templateId'       => $templateId, 
+                'to'               => $phone, 
                 'param'            => $msg));
         $data       = json_encode($body_json);
         $return_str = $this->_connection($data, 'json');
         $result     = json_decode($return_str);
         return isset($result->resp->respCode) ? ($result->resp->respCode == 0) : false;
-    }
+	}
+	
+	/*绑定手机
+	* @param $msgInfo 短信信息['code' 验证码]
+	*/
+	public function bindPhone($toPhone,$msgInfo)
+	{
+		$phone = $toPhone;
+		$msg = $msgInfo . ',5';
+		$templateId = C('SMSID_BIND');
+		$this->_sendSMS($phone,$msg,$templateId);
+	}
+	
+	/*找回密码
+	* @param $msgInfo 短信信息['code' 验证码]
+	*/
+	public function findPwd($toPhone,$msgInfo)
+	{
+		$phone = $toPhone;
+		$msg = $msgInfo . ',5';
+		$templateId = C('SMSID_PWD');
+		$this->_sendSMS($phone,$msg,$templateId);
+	}
+	
+	/*找回一卡通
+	* @param $msgInfo 短信信息['recv_name' 失主姓名	, 'send_name' 拾主姓名 , 'send_phone' 拾主手机号]
+	*/
+	public function findCard($toPhone,$msgInfo)
+	{
+		$phone = $toPhone;
+		$msg = $msgInfo['recv_name'] . ',' . $msgInfo['send_name'] . ',' . $msgInfo['send_phone'];
+		$templateId = C('SMSID_CARD');
+		$this->_sendSMS($phone,$msg,$templateId);
+	}
+	
+	/*文件已打印通知
+	* @param $msgInfo 短信信息['pri_name' 打印店 , 'fid' 文件名 , 'name' 打印的同学]
+	*/
+	public function printed($toPhone,$msgInfo)
+	{
+		$phone = $toPhone;
+		$msg = $msgInfo['pri_name'] . ',' . $msgInfo['fid'] . ',' . $msgInfo['name'];
+		$templateId = C('SMSID_PRINTED');
+		$this->_sendSMS($phone,$msg,$templateId);	
+	}		
 }
