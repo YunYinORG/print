@@ -20,14 +20,12 @@ layout: none
     {% for page in site.pages %}
     {% if page.layout != nil %}
     {% if page.index != 'noindex' %}
-    {% if page.url != '/index.html' %}
     <url>
         <loc>{{site.url}}{{ page.url | remove: 'index.html' }}</loc>
         <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
     </url>
-    {% endif %}
     {% endif %}
     {% endif %}
     {% endfor %}
