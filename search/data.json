@@ -1,5 +1,6 @@
 ---
 layout: none
+index: noindex
 ---
 [{% for post in site.posts %}{
 "title"    : "{{ post.title | escape }}",

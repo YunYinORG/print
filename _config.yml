@@ -3,7 +3,7 @@ markdown_ext:  md
 pygments: true
 highlighter: pygments
 
-markdown: redcarpet
+# markdown: redcarpet
 redcarpet:
     extensions: ["fenced_code_blocks", "autolink", "tables", "strikethrough"]
 

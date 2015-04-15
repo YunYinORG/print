@@ -19,7 +19,7 @@ layout: none
     {% endfor %}
     {% for page in site.pages %}
     {% if page.layout != nil %}
-    {% if page.layout != 'feed' %}
+    {% if page.index != 'noindex' %}
     {% if page.url != '/index.html' %}
     <url>
         <loc>{{site.url}}{{ page.url | remove: 'index.html' }}</loc>

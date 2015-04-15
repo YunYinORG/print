@@ -5,7 +5,6 @@
 --------------------
 
 南开大学 天津大学 校园云打印平台入口[yunyin.org](http://yunyin.org)
-（原云印南开）
 
 此官方宣传网站（www.yunyin.org）使用github pages采用的jekyll引擎自动编译成静态网站
 
