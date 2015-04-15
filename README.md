@@ -10,6 +10,6 @@
 
 所有文档的使用markdown格式书写,并允许任何人提出修改请求。
 
-主要文档模板（不是主页）根据Abdel Raoof Olakara所做的jekyllMetro修改而成。[其license：LICENSE.JekyllMetro.md]
+主要文档模板（不包括主页）根据Abdel Raoof Olakara所做的jekyllMetro修改而成。[其license：LICENSE.JekyllMetro.md]
 
-本宣传网站源码及其模板遵循apache2.0协议发布，并允许修改和使用（抄袭也是可以的）
+本宣传网站源码及其模板遵循apache2.0协议发布，并允许修改和使用（抄袭也是可以的(●'◡'●)）
