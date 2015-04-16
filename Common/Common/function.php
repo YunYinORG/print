@@ -68,13 +68,13 @@ function update_token($info, $type = null)
 			$token = token($info);
 			$data['token'] = md5($token);
 			if ( ! $Token->add($data))
-		{
+			{
 				return false;
 			}
 			break;
 		default:
 			if ( ! preg_match('/^\d+/', $info, $result))
-		{
+			{
 				return false;
 			}
 			$id = $result[0];
@@ -82,7 +82,7 @@ function update_token($info, $type = null)
 			$data['token'] = md5($info);
 			$token = token($id);
 			if ( ! $Token->where($data)->save(array('token' => md5($token))))
-		{
+			{
 				return false;
 			}
 			break;
@@ -415,65 +415,19 @@ function random($n, $mode = '')
  * @author NewFutre[newfuture@yunyin.org]
  *
  * @param  [string] $toMail           [收件人邮箱]
- * @param  [array]  $mailInfo         [邮箱信息'title'标题,'content'内容]
- * @param  [array]  $mailConfig       [邮件发送配置]
+ * @param  [array]  $info             [邮箱信息'title'标题,'content'内容]
+ * @param  [array]  $config           [邮件发送配置]
  * @return [bool]   [发送结果]
  */
-function send_mail($toMail, $mailInfo, $mailConfig)
+function send_mail($toMail, $info, $config)
 {
-
-	switch (C('MAIL_WAY'))
-	{
-		case 'sae':	// sae mail
-			$mail = new SaeMail();
-			$opt = array(
-				'content_type'  => 'HTML',
-				'from'          => $mailConfig['email'],
-				'to'            => $toMail,
-				'content'       => $mailInfo['content'],
-				'subject'       => $mailInfo['title'],
-				'smtp_host'     => C('MAIL_SMTP'),
-				'smtp_username' => $mailConfig['email'],
-				'smtp_password' => $mailConfig['pwd'],
-				'nickname'      => $mailConfig['name']);
-			$mail->setOpt($opt);
-			$ret = $mail->send();
-			if ( ! $ret)
-		{
-				\Think\Log::record('saemail error:'.$mail->errno().':'.$mail->errmsg(), 'WARN', true);
-				unset($mail);
-			}
-		else
-		{
-				break;
-			}
-		case 'phpmailer':
-		default:
-			$mail = new \Vendor\PHPMailer();
-			$mail->AddAddress($toMail);
-			$mail->Subject = $mailInfo['title'];
-			$mail->Body = $mailInfo['content'];
-			$mail->IsSMTP();
-			$mail->IsHTML(true);
-			$mail->SMTPAuth = true;
-			$mail->CharSet = 'UTF-8';
-			$mail->Host = C('MAIL_SMTP');
-			$mail->From = $mailConfig['email'];
-			$mail->Username = $mailConfig['email'];
-			$mail->Password = $mailConfig['pwd'];
-			$mail->FromName = $mailConfig['name'];
-			try
-			{
-				//no use
-				$mail->Send();
-			}
-		catch (phpmailerException $e)
-		{
-				\Think\Log::record('phpmail error:'.$e, 'WARN', true);
-				return 0;
-			}
-	}
-	return 1;
+	$Mail = new \Vendor\Mail(C('MAIL_SMTP'));
+	$Mail->addTo($toMail)
+	     ->setLogin($config['email'], $config['pwd'])
+	     ->setFrom($config['email'], $config['name'])
+	     ->setSubject($info['title'])
+	     ->setMessage($info['content'].L('MAIL_SIGN'), true);
+	return $Mail->send();
 }
 
 /**
@@ -537,29 +491,29 @@ function send_sms_code($phone, $type)
  * @return bool   true 验证成功	 false 验证失败	 尝试次数达到限制	 null 验证信息不存在
  */
 function check_sms_code($phone, $code, $type)
-{
+	{
 	$info = S($type.$phone);
 	if ($info)
-	{
-		if ($info['code'] == $code)
 		{
+		if ($info['code'] == $code)
+			{
 			S($type.$phone, null);
 			return true;
 		}
-		elseif ($info['tries'] >= 5)
-		{
+			elseif ($info['tries'] >= 5)
+			{
 			S($type.$phone, null);
 			return 0;
 		}
-		else
-		{
+			else
+			{
 			$info['tries'] = $info['tries'] + 1;
 			S($type.$phone, $info, 600);
 			return false;
 		}
 	}
-	else
-	{
+		else
+		{
 		return null;
 	}
 }
