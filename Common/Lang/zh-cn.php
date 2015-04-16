@@ -21,7 +21,7 @@ return array(
 		'content' => '亲爱的<i>{$name}</i>同学：<br/>{$sender["school"]}的<i>{$sender}</i>同学说TA捡到了你的学子卡<br/>TA的手机号:<b><a herf="tel:{$sender["phone"]}">{$sender["phone"]}</a></b>;<br/>,TA的邮箱: <b><a href="mailto:{$sender["email"]}">{$sender["phone"]|default="无"}</a></b>;<br/>请尽快与其联系并认领吧。^_^',
 	),
 	//邮件签名落款
-	'MAIL_SIGN' => '<p align="right" style="margin-right: 3em;"><strong>云印南天团队</strong></p><div style="color:gray"><hr><div align="left" style="margin:0;max-width:75%;line-height:1.66;font-size:14px;display:inline-block"><div>官方主页：<a href="http://www.yunyin.org">www.yunyin.org</a></div><div>官方微博：<a href="http://weibo.com/cloudPrint">@云印南天</a>（CloudPrint）</div><div>人人主页：<a href="http://page.renren.com/602117408">@云印南天</a></div><div>微信账号：云印南天（YunYinNanTian）</div></div><img style="margin:0;padding:5px;max-width:25%;display:inline-block;height:80px" src="http://www.yunyin.org/assets/image/weixin_qrcode.png"></div>',
+	'MAIL_SIGN' => '<p align="right" style="margin-right:3em;"><strong>云印南天团队</strong></p><div style="color:gray;"><hr><div style="padding-left:1em;"><div align="left" style="line-height:1.66;font-size:0.9em;display:inline-block"><div>官方主页：<a href="http://www.yunyin.org">www.yunyin.org</a></div><div>官方微博：<a href="http://weibo.com/cloudPrint">@云印南天</a>（CloudPrint）</div><div>人人主页：<a href="http://page.renren.com/602117408">@云印南天</a></div><div>微信账号：云印南天（YunYinNanTian）</div></div><img style="display:inline-block;height:6em" src="http://www.yunyin.org/assets/image/weixin_qrcode.png"></div></div>',
 
 	'CARD_ACCOUNT_IS_DISABLE'   => '已封号',
 	'CARD_PLEASE_BIND_PHONE'    => '使用此功能必须绑定手机号！',
