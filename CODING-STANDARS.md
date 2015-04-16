@@ -50,3 +50,6 @@ function(param)
 * ...
 */
 ```
+
+推荐编辑器`sublime text 3`
+插件 `phpfmt` ,`DocBlockr`
