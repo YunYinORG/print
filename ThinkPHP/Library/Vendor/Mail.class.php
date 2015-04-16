@@ -53,7 +53,7 @@ class Mail {
 	protected $subject;
 	protected $message;
 	protected $log;
-	protected $is_html;
+	// protected $is_html;
 	protected $tls = false;
 	protected $protocol;
 
@@ -78,11 +78,12 @@ class Mail {
 		$this->bcc = array();
 		$this->log = array();
 		$this->reply_to = array();
-		$this->is_html = false;
+		// $this->is_html = false;
 		$this->protocol = '';
 		$this->charset = 'utf-8';
 		$this->headers['MIME-Version'] = '1.0';
-		$this->headers['Content-type'] = 'text/plain; charset='.$this->charset;
+		$this->content_type = 'text/plain;';
+		// $this->headers['Content-type'] = 'text/plain; charset='.$this->charset;
 	}
 
 	/**
@@ -184,6 +185,7 @@ class Mail {
 	 */
 	public function setSubject($subject)
 	{
+
 		$this->subject = $subject;
 		return $this;
 	}
@@ -198,7 +200,7 @@ class Mail {
 		$this->message = $message;
 		if ($html)
 		{
-			$this->headers['Content-type'] = 'text/html; charset='.$this->charset;
+			$this->content_type = 'text/html';
 		}
 		return $this;
 	}
@@ -248,10 +250,12 @@ class Mail {
 		}
 
 		$this->log['DATA'][1] = $this->sendCMD('DATA');
-		if ( ! empty($this->content_type))
-		{
-			$this->headers['Content-type'] = $this->content_type;
-		}
+		// if ( ! empty($this->content_type))
+		// {
+		// 	$this->headers['Content-type'] = $this->content_type;
+		// }
+
+		$this->headers['Content-type'] = $this->content_type.'; charset='.$this->charset;
 
 		$this->headers['From'] = $this->formatAddress($this->from);
 		$this->headers['To'] = $this->formatAddressList($this->to);
@@ -270,7 +274,7 @@ class Mail {
 			$this->headers['Reply-To'] = $this->formatAddressList($this->reply_to);
 		}
 
-		$this->headers['Subject'] = $this->subject;
+		$this->headers['Subject'] = $this->encodeHeader($this->subject);
 		$this->headers['Date'] = date('r');
 		$headers = '';
 		foreach ($this->headers as $key => $val)
@@ -326,13 +330,31 @@ class Mail {
 	}
 
 	/**
+	 * 头部字符编码
+	 * @param  $str
+	 * @return string
+	 */
+	protected function encodeHeader($str)
+	{
+		return '=?'.strtoupper($this->charset).'?B?'.base64_encode($str).'?=';
+	}
+
+	/**
 	 * Format email address (with name)
 	 * @param  $address
 	 * @return string
 	 */
 	protected function formatAddress($address)
 	{
-		return ($address[1] == '') ? $address[0] : '"'.$address[1].'" <'.$address[0].'>';
+		if ($address[1])
+		{
+			return $this->encodeHeader($address[1]).' <'.$address[0].'>';
+		}
+		else
+		{
+			return $address[0];
+		}
+
 	}
 
 	/**
