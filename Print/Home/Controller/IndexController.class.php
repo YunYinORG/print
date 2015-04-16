@@ -57,7 +57,7 @@ class IndexController extends Controller
             $result = $Form->add();
             if ($result) 
             {
-                $this->success('提交成功！');
+                $this->success('操作成功！');
             } else
             {
                 $this->error('操作错误！');

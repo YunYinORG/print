@@ -54,7 +54,7 @@ class UserController extends Controller
         } 
         else
         {
-            $this->redirect('Index/index', null, 0, '未登录！');
+            $this->redirect('Index/index', null, 0, '请登录！');
         }
     }
     
