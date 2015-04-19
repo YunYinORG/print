@@ -23,7 +23,24 @@ return array(
 	//邮件签名落款
 	'MAIL_SIGN' => '<p align="right" style="margin-right:3em;"><strong>云印南天团队</strong></p><div style="color:gray;"><hr><div style="padding-left:1em;"><div align="left" style="line-height:1.66;font-size:0.9em;display:inline-block"><div>官方主页：<a href="http://www.yunyin.org">www.yunyin.org</a></div><div>官方微博：<a href="http://weibo.com/cloudPrint">@云印南天</a>（CloudPrint）</div><div>人人主页：<a href="http://page.renren.com/602117408">@云印南天</a></div><div>微信账号：云印南天（YunYinNanTian）</div></div><img style="display:inline-block;height:6em" src="http://www.yunyin.org/assets/image/weixin_qrcode.png"></div></div>',
 
-	'CARD_ACCOUNT_IS_DISABLE'   => '已封号',
+	/*登录验证*/
+	'NOT_HTTPS_ERROR'      => '必须通过https安全信道进行登录或注册操作!', //不是使用的https通道
+	'TRIES_LIMIT '         => '尝试次数太多，已被临时锁定',
+	'WRONG_FORMAT'         => '格式错误',
+	'LOGIN_FAIL'           => '登录失败,学号或者密码错误',
+	'USER_BAN'             => '此用户已被封禁',
+	'VERIFY_FAIL'          => '学校账号实名信息验证失败',
+	'AUTH_NKU_CLOSE'       => '对不起，由于南开内网原因，目前注册暂时关闭，请您谅解！如果有问题请及时联系我们！',
+	'ACCOUNT_FORMAT_ERROR' => '账号格式错误',
+	'UNLOGIN'              => '未登录',
+	'PASSWORD_EMPTY'       => '密码不可为空！',
+	'PASSWORD_RESET_SUCC'  => '密码重置成功!',
+	'PASSWORD_RESET_ERROR' => '密码重置失败!',
+
+	'REG_INVALID' => '注册信息失效',
+	'REG_ERROR'   => '注册失败！',
+	'REG_SUCC'=>'注册成功！',
+
 	'CARD_PLEASE_BIND_PHONE'    => '使用此功能必须绑定手机号！',
 	'CARD_NOT_SEND_TO_SELF'     => '不要用自己的做实验哦！',
 	'CARD_ACCOUNT_BEEN_DISABLE' => '由于恶意使用,您的此功能已被禁用',

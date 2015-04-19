@@ -28,14 +28,16 @@ class IndexController extends Controller
     //首页
     public function index() 
     {
+        $status='';
         if(use_id())
         {
             $this->status='login';
         }elseif(session('authData'))
         {
             $this->status='register';
-        }else{
-            $this->status=null;
+        }elseif(C('HTTPS_ON'))
+        {
+            $this->status=C('SAFE_URL');
         }
         $this->display();
     }

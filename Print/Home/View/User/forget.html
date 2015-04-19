@@ -22,7 +22,7 @@
 <BLOCK name='content'>
 <div class="container">
     <div class="col-lg-8 col-lg-offset-2 alert">
-        <form id='phone_form' role="form" method="post" onsubmit="return byPhone(this);" action="__URL__/findPwd">
+        <form id='phone_form' role="form" method="post" onsubmit="return byPhone(this);" action="findPwd">
             <div class="text-center text-info">
                 <h2>验证手机，并重设密码</h2>
             </div>
@@ -39,7 +39,7 @@
                 <button type="submit" class="btn btn-lg btn-success">提交</button>
             </div>
         </form>
-        <form style="display:none;" id="email_form" role="form" method="post" action="__URL__/findPwd">
+        <form style="display:none;" id="email_form" role="form" method="post" action="findPwd">
             <div class="text-center text-info">
                 <h2>发送验证邮件重设密码</h2>
             </div>
@@ -56,7 +56,7 @@
                 <button type="submit" class="btn btn-lg btn-success">提交</button>
             </div>
         </form>
-        <form style="display:none;" id="account_form" role="form" method="post" action="__URL__/findPwdVerify" onsubmit="return checkform(this);">
+        <form style="display:none;" id="account_form" role="form" method="post" action="{$baseurl}__ROOT__/Auth/findPwdVerify" onsubmit="return checkform(this);">
             <div class="text-center text-info">
                 <h2>重新验证校园账号，并设置密码</h2>
             </div>

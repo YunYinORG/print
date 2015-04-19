@@ -10,7 +10,7 @@
  <div class="text-center row col-md-8 col-md-offset-2">
  <div class="well-lg">
      <h2>{$data['name']}<small>的个人信息</small></h2>
-    <a href="__URL__/logout" class="btn btn-default">退出登录</a>
+    <a href="__ROOT__/Auth/logout" class="btn btn-default">退出登录</a>
     <a href="mailto:feedback@print.nkumstc.cn" class="btn btn-default">信息有误?</a>
  </div>
 </div>
@@ -42,12 +42,12 @@
          <div class="col-sm-3 col-sm-offset-1"><i class="glyphicon glyphicon-phone"></i>手机</div>
          <span id='phone_detail' class='info col-sm-7 text-nowrap'><i class='btn glyphicon glyphicon-eye-open' id='getPhone'></i><u class='text-danger'>{$data['mask_phone']|default='<a class="bind">绑定手机</a>'}</u></span><span class='btn col-sm-1 glyphicon glyphicon-pencil'></span>
         </div>
-        <div id='bind_phone' class='row input-group col-sm-offset-1 col-sm-10' style='display:none'> <label class="input-group-addon">+86</label><input id='phone' type="text" url='__URL__/bindPhone' name="phone" placeholder='你的手机号' class="form-control"/><span class="input-group-btn"><button onclick="bindPhone()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
+        <div id='bind_phone' class='row input-group col-sm-offset-1 col-sm-10' style='display:none'> <label class="input-group-addon">+86</label><input id='phone' type="text" url='bindPhone' name="phone" placeholder='你的手机号' class="form-control"/><span class="input-group-btn"><button onclick="bindPhone()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
         <div class="detail row">
         	<div class='col-sm-3 col-sm-offset-1 text-nowrap'><i class="glyphicon glyphicon-envelope"></i>邮箱</div>
             <span id='email_detail' class='info col-sm-7'><i id='getEmail' class='btn glyphicon glyphicon-eye-open'></i><u class='text-danger'>{$data['mask_email']|default='<a class="bind">绑定邮箱</a>'}</u></span><span class='btn col-sm-1 glyphicon glyphicon-pencil'></span>
         </div>
-        <div id='bind_email' class='row col-sm-offset-1 input-group col-sm-10' style='display:none'><input id="email" type="email" name="email" placeholder='你的常用邮箱' url='__URL__/bindEmail' class="form-control"/> <span class="input-group-btn"><button onclick="bindEmail()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
+        <div id='bind_email' class='row col-sm-offset-1 input-group col-sm-10' style='display:none'><input id="email" type="email" name="email" placeholder='你的常用邮箱' url='bindEmail' class="form-control"/> <span class="input-group-btn"><button onclick="bindEmail()" class='btn btn-success glyphicon glyphicon-check'>验证</button><span class='cancel btn btn-warning glyphicon glyphicon-remove'></span></span></div>
      </div>
 </div>
 </div>
@@ -60,7 +60,7 @@
          </div>
          <div class="panel-body bg-warning text-left">
          <div>修改密码<i class='btn glyphicon glyphicon-pencil'></i></div>
-        <form style='display:none' class="form-horizontal col-sm-offset-1" onsubmit="return changePwd(this);" role="form" method="post" action="__URL__/changePwd">
+        <form style='display:none' class="form-horizontal col-sm-offset-1" onsubmit="return changePwd(this);" role="form" method="post" action="changePwd">
           <br/>
             <div class="input-group col-sm-10">
                 <span class="input-group-addon" for="deprecated_password">当前密码</span>
@@ -99,7 +99,7 @@
 </div>
 </block>
 <BLOCK name='end'>
-<script src="__PUBLIC__/js/md5.min.js" defer></script>
+<script src="__ROOT____PUBLIC__/js/md5.min.js" defer></script>
 <script>
 M = $('#Modal');
 $('.glyphicon-pencil').click(function() {
