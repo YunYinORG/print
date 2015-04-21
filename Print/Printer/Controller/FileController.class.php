@@ -16,8 +16,10 @@
  * Class and Function List:
  * Function list:
  * - index()
+ * - history()
  * - refresh()
  * - set()
+ * - download()
  * - _empty()
  * Classes list:
  * - FileController extends Controller
@@ -62,7 +64,12 @@ class FileController extends Controller {
 		}
 	}
 
-	public function history()
+    /**
+	 * history()
+	 * 打印店历史文件列表
+	 * @param $pri_id
+     */
+    public function history()
 	{
 		$pid = pri_id(U('Index/index'));
 		if ($pid)
@@ -93,6 +100,11 @@ class FileController extends Controller {
 		}
 	}
 
+    /**
+	 * refresh()
+	 * 文件列表刷新
+	 * @param $file_id UI上最近一次更新最新的文件ID
+     */ 
 	public function refresh()
 	{
 		$pid = pri_id(U('Index/index'));
@@ -200,6 +212,12 @@ class FileController extends Controller {
 		}
 	}
 
+/**
+ * @method download 
+ * @author 云小印[yunyin.org]
+ * @param  $pid,$fid
+ * @return $download_url
+ */
 	public function download()
 	{
 		$pid = pri_id(U('Index/index'));
@@ -229,76 +247,6 @@ class FileController extends Controller {
 		else
 		{
 			$this->error('文件已删除，不能再下载！');
-		}
-	}
-
-	public function bind()
-	{
-		$pid = pri_id(U('Index/index'));
-		if ($pid)
-		{
-			$uid   = I('uid', null, 'intval');
-			$phone = get_phone_by_id($uid);
-			if ($phone)
-			{
-				$this->success($phone);
-			}
-			else
-			{
-				$this->error('未知错误');
-			}
-		}
-		else
-		{
-			$this->error('请先登录');
-		}
-	}
-
-	public function send()
-	{
-		$pid = pri_id(U('Index/index'));
-		if ($pid)
-		{
-			$fid = I('fid', null, 'intval');
-			$map['pri_id'] = $pid;
-			$map['id'] = $fid;
-			$map['status'] = array('eq', C('FILE_PRINTED'));
-			$map['sended'] = 0;
-			$File    = D('FileView');
-			$info    = $File->where($map)->field('use_id,phone,name')->find();
-			$Printer = M('Printer');
-			$info['pri_name'] = M('Printer')->getFieldById($pid, 'name');
-			if ($info['phone'] && $info['name'])
-			{
-				unset($info['phone']);
-				if (mb_strlen($info['name']) > 18)
-				{
-					$info['name'] = mb_substr($info['name'], 0, 18);
-				}
-				$phone = get_phone_by_id($info['use_id']);
-				unset($info['use_id']);
-				$info['fid'] = $fid;
-				$SMS = new \Vendor\Sms();
-				if ($SMS->printed($phone, $info))
-				{
-					$File = M('File');
-					$map['id'] = $fid;
-					$result = $File->where($map)->setField('sended', 1);
-					$this->success('提醒信息已发送');
-				}
-				else
-				{
-					$this->error('发送不成功');
-				}
-			}
-			else
-			{
-				$this->success('已发送');
-			}
-		}
-		else
-		{
-			$this->error('请先登录');
 		}
 	}
 
