@@ -164,7 +164,7 @@ $("table").on('click','.download',function(e){
             var btn =file.find('button');
             btn.removeClass().addClass(b_class[data.info.operation]);
             btn.html(b_status[data.info.operation]);
-            file.find('.status').html(f_status[2]);
+            file.find('.status').html(f_status[data.info.operation]);
         } else {
             alert(data.info);
         }
@@ -204,7 +204,7 @@ $("table").on('click', '.set', function() {
 var phoneIsLoad =new Array();
 
 $("table").on('click', '.bind', function(e) {
-    var URL = "/Printer/File/bind";
+    var URL = "/Printer/User/getPhone";
     var btn = $(this);
     var uid = btn.attr('uid');
     if(phoneIsLoad[uid]===undefined)
@@ -231,7 +231,7 @@ $("table").on('click', '.send', function(e) {
     link.attr('disabled','disabled');
     var file = link.parent().parent();
     var fid = file.attr('file_id');
-    var URL = "/Printer/File/send";
+    var URL = "/Printer/User/send";
     $.post(URL, {
         fid: fid,
     }, function(data) {

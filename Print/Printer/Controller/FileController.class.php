@@ -64,12 +64,12 @@ class FileController extends Controller {
 		}
 	}
 
-    /**
+	/**
 	 * history()
 	 * 打印店历史文件列表
 	 * @param $pri_id
-     */
-    public function history()
+	 */
+	public function history()
 	{
 		$pid = pri_id(U('Index/index'));
 		if ($pid)
@@ -100,11 +100,11 @@ class FileController extends Controller {
 		}
 	}
 
-    /**
+	/**
 	 * refresh()
 	 * 文件列表刷新
 	 * @param $file_id UI上最近一次更新最新的文件ID
-     */ 
+	 */
 	public function refresh()
 	{
 		$pid = pri_id(U('Index/index'));
@@ -190,7 +190,14 @@ class FileController extends Controller {
 		else
 		{
 			$status['status'] = $result['status'];
-			$status['operation'] = $status['status'];
+			if ($download == 1)
+			{
+				$status['operation'] = C('FILE_PRINTED');
+			}
+			else
+			{
+				$status['operation'] = $status['status'];
+			}
 		}
 
 		if ($status['status'] != $result['status'])
@@ -213,8 +220,10 @@ class FileController extends Controller {
 	}
 
 /**
- * @method download 
+ * @method download
+ *
  * @author 云小印[yunyin.org]
+ *
  * @param  $pid,$fid
  * @return $download_url
  */

@@ -28,7 +28,9 @@ class UserController extends Controller {
 
 /**
  * @method getPhone
+ *
  * @author 云小印[yunyin.org]
+ *
  * @param  $pid
  * @param  $uid
  * @return $phone 用户手机号
@@ -57,8 +59,10 @@ class UserController extends Controller {
 
 /**
  * @method send
+ *
  * @author 云小印[yunyin.org]
- * @param  $pid,$fid
+ *
+ * @param $pid,$fid
  */
 	public function send()
 	{
