@@ -367,6 +367,6 @@ class AuthController extends Controller {
 	 */
 	public function _empty()
 	{
-		$this->redirect(C('BASE_URL'));
+		redirect(C('BASE_URL'));
 	}
 }
