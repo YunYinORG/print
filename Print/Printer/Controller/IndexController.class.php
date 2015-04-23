@@ -22,59 +22,64 @@
  */
 namespace Printer\Controller;
 use Think\Controller;
-class IndexController extends Controller
-{
-	
+
+class IndexController extends Controller {
+
 	/**
 	 * index()
 	 * 打印店管理入口页（包含登录界面）
 	 */
-	public function index() 
+	public function index()
 	{
-		if (pri_id()) 
+		if (pri_id())
 		{
-			
+
 			//已经登陆直接跳转
 			$this->redirect('Printer/Printer/index');
-		} else
+		}
+		else
 		{
-			
+
 			$this->display();
 		}
 	}
-	
-	public function feedback() 
+
+	public function feedback()
 	{
-		$Form   = D('Home/Feedback');
-		$_POST['message']        = $_POST['message'] . '##FromPrinterID:' . pri_id('index');
-		if ($Form->create()) 
+		$Form = D('Home/Feedback');
+		$_POST['message'] = $_POST['message'].'##FromPrinterID:'.pri_id('index');
+		if ($Form->create())
 		{
 			$result = $Form->add();
-			if ($result) 
+			if ($result)
 			{
 				$this->success('操作成功！');
-			} else
+			}
+			else
 			{
 				$this->error('写入错误！');
 			}
-		} else
+		}
+		else
 		{
 			$this->error($Form->getError());
 		}
 	}
-	
+
 	public function contact()
-    {
-        $this->display();
-    }
-    public function about()
-    {
-        $this->display();
-    }
+	{
+		$this->display();
+	}
+
+	public function about()
+	{
+		$this->display();
+	}
+
 	/**
-	 *404页
+	 * 404页
 	 */
-	public function _empty() 
+	public function _empty()
 	{
 		$this->redirect('index');
 	}

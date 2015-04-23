@@ -170,6 +170,7 @@ class PrinterController extends Controller {
 /**
  * 验证短信
  * @method checkSMSCode
+ *
  * @author 云小印[yunyin.org]
  *
  * @param phone
@@ -262,7 +263,6 @@ class PrinterController extends Controller {
 	 */
 	public function changePwd()
 		{
-
 		$id = pri_id(U('Index/index'));
 		$old_password = I('deprecated_password');
 		$password = I('password');
@@ -301,6 +301,7 @@ class PrinterController extends Controller {
 /**
  * 修改信息
  * @method changeInfo
+ *
  * @author 云小印[yunyin.org]
  *
  * @param pri_id
@@ -357,6 +358,7 @@ class PrinterController extends Controller {
 /**
  * 登录验证
  * @method auth()
+ *
  * @author 云小印[yunyin.org]
  *
  * @param pri_id

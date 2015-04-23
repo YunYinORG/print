@@ -23,67 +23,67 @@
  */
 namespace Home\Controller;
 use Think\Controller;
-class PrintersController extends Controller
-{
+
+class PrintersController extends Controller {
 	public function index()
 	{
-	    $Printer = M('Printer');
-	    $list = $Printer->where('status<>0')->join('school ON printer.sch_id = school.id')->field('printer.name,printer.id,printer.address,school.name as school')->select();
-	    if($list)
-	    {
-	        $this->data = $list;
-		    $this->display();
+		$Printer = M('Printer');
+		$list    = $Printer->where('status<>0')->join('school ON printer.sch_id       = school.id')->field('printer.name,printer.id,printer.address,school.name as school')->select();
+		if ($list)
+		{
+			$this->data = $list;
+			$this->display();
 		}
 		else
 		{
-		    $this->error('不好意思，没找到数据'); 
-		}    
+			$this->error('不好意思，没找到数据');
+		}
 	}
-	
+
 	public function detail()
 	{
-		$id=I('id');
-	    $Printer = M('Printer');
-	    $result = $Printer->where('id='.$id)->field('account,password',true)->find(); 
-	    if($result)
-	    {
-	    	$result['school']= M('school')->getFieldById($result['sch_id'], 'name');
-	    	$where['sch_id']=$result['sch_id'];
-	    	$where['status']=array('gt',0);
-	    	$list = $Printer->where($where)->field('id,name')->select();
-	        $this->data = $result;
-	        $this->printerList = $list;
-	        $this->price = json_decode($result['price'],true);
-            $this->display();
-        }
+		$id = I('id');
+		$Printer = M('Printer');
+		$result = $Printer->where('id='.$id)->field('account,password', true)->find();
+		if ($result)
+		{
+			$result['school'] = M('school')->getFieldById($result['sch_id'], 'name');
+			$where['sch_id'] = $result['sch_id'];
+			$where['status'] = array('gt', 0);
+			$list = $Printer->where($where)->field('id,name')->select();
+			$this->data = $result;
+			$this->printerList = $list;
+			$this->price = json_decode($result['price'], true);
+			$this->display();
+		}
 		else
 		{
-		    $this->error('不好意思，没找到数据'); 
+			$this->error('不好意思，没找到数据');
 		}
 	}
-	
+
 	public function getPrice()
-    {
-        $uid = use_id();
-        $pid = I('pid',0,'int');
-        if ($uid && $pid) 
-        {
-            $Printer = M('Printer');
-            $result = $Printer->where('id='.$pid)->getField('price');
-            if($result)
-            {
-                $result = json_decode($result);
-                $this->success($result);
-            }
-            else
-            {
-                $this->error('打印店还没设置价钱');
-            }
-        }
-        else
-        {
-            $this->error('你可能还没登录或者没提供打印店编号');
-        }
-    }
-	
+	{
+		$uid = use_id();
+		$pid = I('pid', 0, 'int');
+		if ($uid && $pid)
+		{
+			$Printer = M('Printer');
+			$result  = $Printer->where('id='.$pid)->getField('price');
+			if ($result)
+			{
+				$result = json_decode($result);
+				$this->success($result);
+			}
+			else
+			{
+				$this->error('打印店还没设置价钱');
+			}
+		}
+		else
+		{
+			$this->error('你可能还没登录或者没提供打印店编号');
+		}
+	}
+
 }
