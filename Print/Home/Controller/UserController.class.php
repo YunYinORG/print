@@ -64,8 +64,9 @@ class UserController extends Controller
      */
     public function register() 
     {
-        if (session('authData')) 
+        if ($data=session('authData')) 
         {
+            $this->data=$data;
             $this->display();
         } 
         else

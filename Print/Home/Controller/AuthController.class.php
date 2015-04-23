@@ -91,7 +91,7 @@ class AuthController extends Controller {
 				S($key, null);
 				$token = md5($number.token($number));
 				S('REG_'.$token, $data, 300);
-				redirect(C('BASE_URL').'/Auth/token?type=register?key='.$token);
+				redirect(C('BASE_URL').'/Auth/token?type=register&key='.$token);
 			}
 		}
 	}
