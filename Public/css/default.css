@@ -1,4 +1,5 @@
-﻿html, body {
+﻿/*basic*/
+html, body {
   height: 100%;
 }
 
@@ -26,6 +27,10 @@ ul {
     list-style: none;
 }
 
+a {
+  text-decoration: none;
+}
+
 nav {
     text-align: center;
     overflow: hidden;
@@ -45,40 +50,45 @@ nav li a , nav li span {
     color: rgba(255, 255, 255, 0.5);
 }
 
-.comments{
-  font-size:13px;
-}
-
-.printersBlock a {
-  text-decoration: none;
-}
-
-.printersBlock h1,h2 {
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
-.printersBlock hr {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
 nav li:hover a, nav li.active a, nav li.active span {
     color: rgba(214, 214, 214, 1);
 }
 
-/*brand高度*/
+#main {
+    overflow: hidden;
+    float: right;
+    width: 77%;
+    padding: 3em 2% 5em 3%;
+    background: #FFF;
+    border-top: 0px solid #2980b9;
+    min-height: 100%;
+    text-align: left;
+}
 
+
+#moreSetting {
+  margin-top: 0px;
+}
+
+#banner {
+    margin-bottom: 4em;
+}
+
+.comments{
+  font-size:13px;
+}
+
+/*nav-top*/
 .navbar-brand {
     padding-top: 4.5px;
 }
-/*导航标题描点偏移*/
 
 .nav-title: target {
     padding-top: 60px;
     margin-top: -55px;
 }
 
+/*upload*/
 .upload-btn{
   height: 40px;
   border-style: solid;
@@ -115,14 +125,7 @@ nav li:hover a, nav li.active a, nav li.active span {
   font-size: 13px;
 }
 
-#carbonForm{
-  margin-top: 107.5px;
-  font-size: 20px;
-}
-
-#moreSetting {
-  margin-top: 0px;
-}
+/*user-info*/
 
 #info-title{
   font-type:Arial;
@@ -135,30 +138,31 @@ nav li:hover a, nav li.active a, nav li.active span {
   color: #FFFFFF;
 }
 
-#banner {
-    margin-bottom: 4em;
+#carbonForm{
+  margin-top: 107.5px;
+  font-size: 20px;
 }
 
-#header {}
-
-#main {
-    overflow: hidden;
-    float: right;
-    width: 77%;
-    padding: 3em 2% 5em 3%;
-    background: #FFF;
-    border-top: 0px solid #2980b9;
-    min-height: 100%;
-    text-align: left;
+/*Printers*/
+.printersBlock a {
+  text-decoration: none;
 }
+
+.printersBlock h1,h2 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.printersBlock hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/*media*/
 
 @media screen and (max-width: 500px){
   #main {
     text-align: center;
-  }
-  .text-center {
-    display: block;
-    margin: auto;
   }
 }
 
@@ -169,21 +173,23 @@ nav li:hover a, nav li.active a, nav li.active span {
 }
 
 @media screen and (max-width: 1275px) {
-    #main {
-      position: absolute;
-      top: 0px;
-      width: 100%;
-      padding-top: 80px;
-    }
-    #mylogo {
-       width: 80px;
-       height: 40px;
-    }
+  /*nav-top*/
+  #main {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    padding-top: 80px;
+  }
+  #top-logo {
+    width: 80px;
+    height: 40px;
+  }
 }
 
 @media screen and (min-width: 1275px) {
+  /* 23% left-nav , 77% main */
   #main {
-      width: 77%;
+    width: 77%;
   }
   #header {
     position: relative;
@@ -194,15 +200,16 @@ nav li:hover a, nav li.active a, nav li.active span {
   #printersMain {
     margin-left: -50px;
   }
-  .alert{
-    width: 70%;
-  }
   .printerlist {
     position: relative;
     float: left;
     width: 23%;
     padding: 2em 1% 0 1%;
   }
+  .printerlist .navbar-nav > li > a{
+    line-height: 0em;
+  }
+  /*bootstrap-nav*/
   nav {
       text-align: center;
       display: block;
@@ -240,9 +247,7 @@ nav li:hover a, nav li.active a, nav li.active span {
     padding-bottom: 1em;
     line-height: 2.5em;
   }
-  .printerlist .navbar-nav > li > a{
-    line-height: 0em;
-  }
+  /*logo*/
   a.navbar-brand {
     position: relative;
     float: none;
@@ -258,7 +263,7 @@ nav li:hover a, nav li.active a, nav li.active span {
     width: 100%;
     position: relative;
   }
-  #mylogo {
+  #top-logo {
       width: 55%;
       border-radius: 50%;
       margin-bottom: 2em;
