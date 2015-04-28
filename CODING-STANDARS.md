@@ -1,6 +1,7 @@
 ## 代码规范
 
 ### 命名
+* 类文件：首字母大写驼峰，并以‘.class.php’为后缀
 * 类名：首字母大写驼峰(CodingStandars)
 * 类变量：首字母小写驼峰(codingStandars)
 * 类方法：首字母小写驼峰
@@ -19,11 +20,13 @@ function(param)
 {
     if(condition)
     {
-        while(condition)
-        {
-            ...
-        }
-    } else
+        ...
+    } 
+    else
+    {
+        ...
+    }
+    while(condition)
     {
         ...
     }
@@ -31,10 +34,10 @@ function(param)
 ```
 
 ### 注释
-* 单行代码：//
+* 单行注释：//位于代码的上方独占一行
 * 函数库、控制器文件头部列出所有函数列表：
 ```
-/*
+/**
 * function()
 * function()
 * ...

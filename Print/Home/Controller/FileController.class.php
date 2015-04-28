@@ -108,6 +108,10 @@ class FileController extends Controller {
 				$data['double_side'] = I('post.double_side', 0, 'int');
 				$data['status'] = 1;
 				$data['color'] = I('post.color', 0, 'int');
+				if ($data['pri_id'] == 0)
+				{
+					$this->error('请选择打印店！', '/File/add');
+				}
 				if ($info['file']['ext'] == 'ppt' || $info['file']['ext'] == 'pptx')
 				{
 					$data['ppt_layout'] = I('post.ppt_layout', 0, 'int');
@@ -115,10 +119,6 @@ class FileController extends Controller {
 				else
 				{
 					$data['ppt_layout'] = 0;
-				}
-				if ($data['pri_id'] == 0)
-				{
-					$this->error('请选择打印店！', '/File/add');
 				}
 				if (M('File')->add($data))
 				{
