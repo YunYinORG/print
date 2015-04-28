@@ -44,7 +44,8 @@ function(param)
 ```
 /**
 * 函数用途  
-* @member 成员
+* @method functionname
+* @author 作者[联系邮箱]
 * @param  参数
 * @return 返回值
 * ...
