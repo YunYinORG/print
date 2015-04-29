@@ -1,10 +1,10 @@
 ﻿{//打印管理界面}
 <extend name="Print/Template/printerbase.html"/>
-<block name='title'>{$title}</block>
-<block name='header'>
-<include file="Print/Template/printernav.html" manage="active"/>
-</block>
-<block name='content'>
+<BLOCK name='title'>{$title}</BLOCK>
+<BLOCK name='header'>
+<INCLUDE file="Print/Template/printernav.html" manage="active"/>
+</BLOCK>
+<BLOCK name='content'>
 <div>
     <h2>{$title}</h2>
 </div>
@@ -31,56 +31,56 @@
                 
                 <td><a fid="{$vo.id}" class="download" href="__URL__/download/?fid={$vo.id}" target="_blank">[{$vo.id}]{$vo.name}</a></td>                
                
-         <if condition="$vo.copies eq 0">
+         <IF condition="$vo.copies eq 0">
              <td class="copies">现打</td><td class="double_side">-</td><td class="color">-</td><td class="ppt_layout">-</td>    
-      <else/>
+      <ELSE/>
             <td class="copies"> {$vo.copies}</td><td class="double_side">
-                <if condition="$vo.double_side gt 0">
+                <IF condition="$vo.double_side gt 0">
                 双面
-                <else/>
+                <ELSE/>
                 单面
-                </if>
+                </IF>
             </td>
             <td class="color">
-                <if condition="$vo.color gt 0"> 彩印<else/>黑白</if>
+                <IF condition="$vo.color gt 0"> 彩印<ELSE/>黑白</IF>
             </td>
                 <td class="ppt_layout">
                     {$vo.ppt_layout}
                 </td>
-            </if>
+            </IF>
                 <td class="phone">
-                    <notempty name="vo['phone']">
+                    <NOTEMPTY name="vo['phone']">
                     <a tabindex="0" role="button" id="{$vo['id']}_phone" uid="{$vo['use_id']}" class="bind glyphicon glyphicon-phone" data-toggle="popover" data-trigger="focus" data-content="Loading..."></a>
-                    </notempty>
+                    </NOTEMPTY>
                     {$vo.use_name}[{$vo.student_number}]
                 </td>
                 
                 <td class="time">{$vo.time}</td>               
                 
                 <td class="status" id="{$vo['id']}_status" data="{$vo['status']}" copies="{$vo['copies']}">
-                    <switch name="vo['status']">
-                    <case value="1">尚未下载</case>
-                    <case value="2">已下载</case>
-                    <case value="3">正在打印</case>
-                    <case value="4">已印待付</case>
-                    <case value="5">已付款</case>
-                    <default />未知状态
-                    </switch>
+                    <SWITCH name="vo['status']">
+                    <CASE value="1">尚未下载</CASE>
+                    <CASE value="2">已下载</CASE>
+                    <CASE value="3">正在打印</CASE>
+                    <CASE value="4">已印待付</CASE>
+                    <CASE value="5">已付款</CASE>
+                    <DEFAULT />未知状态
+                    </SWITCH>
                 </td>
                 <td>                    
-                    <switch name="vo['status']">
-                    <case value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></case>
-                    <case value="2" break="0"></case>
-                    <case value="3">
-                    <if condition="$vo.copies eq 0">
+                    <SWITCH name="vo['status']">
+                    <CASE value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></CASE>
+                    <CASE value="2" break="0"></CASE>
+                    <CASE value="3">
+                    <IF condition="$vo.copies eq 0">
                     <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn-sm btn btn-danger">确认付款</button>
-                    <else/>
+                    <ELSE/>
                     <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button>
-                    </if>
-                    </case>
-                    <case value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-sm btn-danger">确认付款</button><notempty name="vo['phone']"><if condition="$vo.sended eq 0"><button class="send btn btn-sm btn-warning glyphicon glyphicon-comment">发短信</button><else/></if></notempty></case>
-                    <default />不可操作
-                    </switch>                   
+                    </IF>
+                    </CASE>
+                    <CASE value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-sm btn-danger">确认付款</button><NOTEMPTY name="vo['phone']"><IF condition="$vo.sended eq 0"><button class="send btn btn-sm btn-warning glyphicon glyphicon-comment">发短信</button><ELSE/></IF></NOTEMPTY></CASE>
+                    <DEFAULT />不可操作
+                    </SWITCH>                   
                 </td>
                 
                 
@@ -91,8 +91,8 @@
     </div>
     </div></div>
 </div>
-</block>
-<block name='end'>
+</BLOCK>
+<BLOCK name='end'>
 <script>
 var double_side = new Array("单面","双面");
 var color = new Array("黑白","彩色");
@@ -272,4 +272,4 @@ $(document).ready(function() {
     setInterval(refresh, 15000);
 });
 </script>
-</block>
+</BLOCK>

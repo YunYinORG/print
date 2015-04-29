@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-    <head>
-        <title>云印南天</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
-    </head>
-	<body>
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name="title">云印南天</BLOCK>
+<BLOCK name="head"></BLOCK>
+<BLOCK name='content'>
         <div class="container">
             <div class="col-lg-8 col-lg-offset-2">
                 <h1 class="text-danger text-center">验证成功</h1>
@@ -31,7 +26,8 @@
                 </form>
 			</div>
         </div>
-    </body>
+</BLOCK>
+<BLOCK name='end'>
 	<script src="__JS__/md5.min.js" defer></script>
     <script>
 function checkform(f){
@@ -47,4 +43,4 @@ function checkform(f){
     }
 }
     </script>
-</html>
+</BLOCK>

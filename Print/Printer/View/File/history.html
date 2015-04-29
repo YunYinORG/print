@@ -1,10 +1,10 @@
 {//打印管理界面}
-<extend name="Print/Template/printerbase.html"/>
-<block name='title'>{$title}</block>
-<block name='header'>
-<include file="Print/Template/printernav.html" list="active"/>
-</block>
-<block name='content'>
+<EXTEND name="Print/Template/printerbase.html"/>
+<BLOCK name='title'>{$title}</BLOCK>
+<BLOCK name='header'>
+<INCLUDE file="Print/Template/printernav.html" list="active"/>
+</BLOCK>
+<BLOCK name='content'>
 <div>
     <h2>{$title}</h2>
 </div>
@@ -27,23 +27,23 @@
             <volist name="data" id="vo">
             <tr file_id="{$vo.id}">
                     <td>[{$vo.id}]{$vo.name}</td>
-    <if condition="$vo.copies eq 0">
+    <IF condition="$vo.copies eq 0">
              <td>现打</td><td>-</td><td>-</td><td>-</td>   
-      <else/>
+      <ELSE/>
             <td> {$vo.copies}</td><td>
-                <if condition="$vo.double_side gt 0">
+                <IF condition="$vo.double_side gt 0">
                 双面
-                <else/>
+                <ELSE/>
                 单面
-                </if>
+                </IF>
                 </td>
                 <td>
-                <if condition="$vo.color gt 0"> 彩印<else/>黑白</if>
+                <IF condition="$vo.color gt 0"> 彩印<ELSE/>黑白</IF>
                 </td>
                 <td>
                     {$vo.ppt_layout}
                 </td>
-            </if>
+            </IF>
                 <td>{$vo.use_name}[{$vo.student_number}]</td>
                  <td>{$vo.time}</td>               
             </tr>
@@ -54,4 +54,4 @@
     </div>
     </div></div>
 </div>
-</block>
+</BLOCK>

@@ -1,12 +1,7 @@
-﻿<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-    <head>
-        <title>欢迎使用云印南天</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    </head>
-    <body>
+﻿<EXTEND name="Print/Template/base.html"/>
+<BLOCK name="title">欢迎使用云印南天</BLOCK>
+<BLOCK name="head"></BLOCK>
+<BLOCK name='content'>
         <div class="container">
             <div class="col-lg-8 col-lg-offset-2">
                 <h1 class="text-center text-danger">首次使用须知</h1>
@@ -14,10 +9,10 @@
                     亲爱的<strong class='text-success'>{$data['name']}</strong>
                     <ul>
                     <li>恭喜你，通过了 <q>
-                    <switch name="data['sch_id']" > 
-                        <case value="1">南开大学</case>
-                        <case value="2">天津大学</case>
-                    </switch>
+                    <SWITCH name="data['sch_id']" > 
+                        <CASE value="1">南开大学</CASE>
+                        <CASE value="2">天津大学</CASE>
+                    </SWITCH>
                     </q> <code>实名认证</code>;</li>
                         <li>还差这一步，你已经可以使用<strong >云印南天</strong>平台啦！</li>
                         <li>我们是一个极其重视信息安全和用户隐私的团队；</li>
@@ -53,5 +48,4 @@
                 </form>
             </div>
         </div>
-    </body>
-</html>
+</BLOCK>

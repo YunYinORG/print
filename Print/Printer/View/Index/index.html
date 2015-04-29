@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-    <head>
-        <meta charset="UTF-8">
-        <title>云印南天-打印店入口</title>
-        <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css">
-    </head>
-    <body>
+<EXTEND name="Print/Template/printerbase.html"/>
+<BLOCK name='title'>云印南天-打印店入口</BLOCK>
+<BLOCK name='head'>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css">
+</BLOCK>
+<BLOCK name='content'>
         <div id="carbonForm">
             <h1>打印店登录</h1>
             <form action="__MODULE__/Printer/auth" method="post" id="signupForm">
@@ -33,5 +31,4 @@
                  <a rel="nofollow" href="__MODULE__/Printer/forget">忘记密码？</a>
             </form>
         </div>
-    </body>
-</html>
+</BLOCK>

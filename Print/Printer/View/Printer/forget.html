@@ -1,12 +1,7 @@
-﻿<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-    <head>
-        <title>云印南天——找回密码</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all"/>
-    </head>
-    <body>
+﻿<EXTEND name="Print/Template/printerbase.html"/>
+<BLOCK name='title'>云印南天——找回密码</BLOCK>
+<BLOCK name="head"></BLOCK>
+<BLOCK name='content'>
         <div class="container">
             <div class="col-lg-8 col-lg-offset-2">
                 <h1 class="text-danger text-center">找回密码</h1>
@@ -60,7 +55,7 @@
                     </div>
                 </form>
             </div>
-    </body>
+   </BLOCK>
 	
 	<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" data-backdrop="static" aria-hidden="true">
 		<div class="modal-dialog">
@@ -73,6 +68,8 @@
 			</div>
 		</div>
 	</div>
+    
+    <BLOCK name='end'>
 	<script src="__CDNLIB__/jquery/2.1.1/jquery.min.js"></script>
 	<script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap.min.js" defer="defer"></script>
     <script src="__PUBLIC__/js/md5.min.js" defer></script>
@@ -180,4 +177,4 @@ function findWay(w)
 	}
 }	
 </script>
-</html>
+</BLOCK>

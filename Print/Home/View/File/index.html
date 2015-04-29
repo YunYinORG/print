@@ -1,14 +1,14 @@
 ﻿{//文件管理页}
-<extend name="Print/Template/base.html"/>
-<block name='header'>
-<include file="Print/Template/nav.html" list="active"/>
-</block>
-<block name='content'>
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name='header'>
+<INCLUDE file="Print/Template/nav.html" list="active"/>
+</BLOCK>
+<BLOCK name='content'>
 <div>
     <h2>文档记录 <a class="btn btn-default btn-success" href="__ROOT__/File/add">上传文件</a></h2>
 </div>
 <div class="container-fluid">
-<p class='small center-block alert alert-warning'>文件只有<strong>在打印店下载之前，或者确认付款之后</strong>才<strong>允许删除</strong>。另外，目前对部分<strong>手机</strong>浏览器<strong>上传功能</strong>不兼容，如果文件名显示为<code>乱码</code>，则上传失败，请更换其他浏览器(记得删除错误哦！)</p>
+<p class='small center-BLOCK alert alert-warning'>文件只有<strong>在打印店下载之前，或者确认付款之后</strong>才<strong>允许删除</strong>。另外，目前对部分<strong>手机</strong>浏览器<strong>上传功能</strong>不兼容，如果文件名显示为<code>乱码</code>，则上传失败，请更换其他浏览器(记得删除错误哦！)</p>
     <div class="row col-lg-12 table-responsive">
     <table class="table">
         <thead>
@@ -26,8 +26,7 @@
         </thead>
         <tbody>
             <volist name="data" id="vo">
-            <tr>
-              
+            <tr>          
                 <td id="{$vo.id}_status">
                     <switch name="vo['status']">
                     <case value="1">已上传</case>
@@ -42,30 +41,30 @@
                 <td>[{$vo.id}]{$vo.name}</td>
                 <td>{$vo.time}</td>
                 <td>{$vo.pri_name}[{$vo.pri_id}]</td>
-                <if condition="$vo.copies eq 0">
-             <td>现打</td><td>-</td><td>-</td><td>-</td>    
-      <else/>
+            <IF condition="$vo.copies eq 0">
+            <td>现打</td><td>-</td><td>-</td><td>-</td>    
+            <ELSE/>
             <td> {$vo.copies}</td><td>
-                <if condition="$vo.double_side gt 0">
+                <IF condition="$vo.double_side gt 0">
                 双面
-                <else/>
+                <ELSE/>
                 单面
-                </if>
+                </IF>
                 </td>
                 <td>
-                <if condition="$vo.color gt 0"> 彩印 <else/> 黑白 </if>
+                <IF condition="$vo.color gt 0"> 彩印 <ELSE/> 黑白 </IF>
                 </td>
                 <td>
                     {$vo.ppt_layout}
                 </td>
-            </if>
+            </IF>
        
                 <td>
-                <if condition="($vo.status gt 1)AND($vo.status lt 5)">
+                <IF condition="($vo.status gt 1)AND($vo.status lt 5)">
                     <button type="button" fid="{$vo.id}"class="btn btn-danger" disabled="disabled">删除</button>
-                <else />
+                <ELSE />
                     <button type="button" fid="{$vo.id}"class="delete btn btn-danger">删除</button>
-                </if>
+                </IF>
                 </td>
             </tr>
             </volist>
@@ -76,11 +75,11 @@
     </div>
 
 </div>
-</block>
-<block name='end'>
+</BLOCK>
+<BLOCK name='end'>
 <script>
         $(".delete").on('click',function(){
-            if(confirm("确认删除?删除后无法找回"))
+            IF(confirm("确认删除?删除后无法找回"))
             {
             var URL = "__ROOT__/File/delete";
             var btn=$(this).attr('disabled','true').html('正在删除');
@@ -88,10 +87,10 @@
             $.post(URL,{
                 fid:fid,
             },function(data){
-                if(data.status)
+                IF(data.status)
                 {
                     btn.parent().parent().hide(1000);
-                }else{
+                }ELSE{
                     btn.attr('disabled','false').html('删除');
                     alert('操作失败：'+data.info);
                 }
@@ -99,4 +98,4 @@
             }
         });
 </script>
-</block>
+</BLOCK>

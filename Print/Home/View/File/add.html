@@ -1,15 +1,15 @@
 ﻿{//文件上传页}
-<extend name="Print/Template/base.html"/>
-<block name='header'>
-<include file="Print/Template/nav.html" add="active"/>
-</block>
-<block name='content'>
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name='header'>
+<INCLUDE file="Print/Template/nav.html" add="active"/>
+</BLOCK>
+<BLOCK name='content'>
 <div>
-     <h2>设置打印信息<button class="btn btn-success" id="helpView">打印帮助</button></h2>
+    <h2>设置打印信息<button class="btn btn-success" id="helpView">打印帮助</button></h2>
 </div>
 <div class="container">
     <div class="row" style="display:none;" id="helpBlock">
-    <div class="col-lg-10">
+    <div class="col-md-7">
         <p class="text-info well">
         使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> <code>设置打印份数、格式</code> -> <code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
         不绑定手机不能设置打印参数，不能提前打印，只能上传后到店打印；<br/>
@@ -30,101 +30,90 @@
                         <input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onchange="checkSuffix(this)">
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-5">
                 <ul id="upload-list" class="list-group"></ul>
             </div>
         </div>
         <br/>
-    
-    <div class="row">
-        <div class="col-sm-6">
-        <div class="form-group">
-            <div class="row">
-            <label for="PrinterChoose" class="col-sm-3 control-label">打印店</label>
-                <div class="col-sm-7">
-                <select class="form-control" name="pri_id" id="PrinterChoose" onchange="priceChange(this)" required>
+        <div class="row">
+            <div class="form-group">
+                <label for="PrinterChoose" class="col-md-1 control-label">打印店</label>
+                <select class="col-md-6 form-control" name="pri_id" id="PrinterChoose" onchange="priceChange(this)" required>
                     <option value="">选择想去的打印店....</option>
                     <volist name="data" id="vo">
-                      <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
+                        <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
                     </volist>
                 </select>
+            </div>
+        </div>
+        <br/>
+        <div class="row">        
+            <div class="well col-sm-7">
+                <h4 class="text-info">该店价格信息</h4>
+                <div id='price' class='help-block comments'>
+                    黑白单面：<span id='p_s' class='text-danger'></span><br/>
+                    黑白双面：<span id='p_d' class='text-danger'></span><br/>
+                    彩印单面：<span id='p_c_s' class='text-danger'></span><br/>
+                    彩印双面：<span id='p_c_d' class='text-danger'></span>
                 </div>
             </div>
-            </div>
-        <if condition="$lock eq 1">  
+        </div>
+        <IF condition="$lock eq 1">
         <fieldset id="setting">
-            <div class="form-group">
-                <div class="row">
-                <label for="copies" class="col-sm-3 control-label">打印份数</label>
-                <div class="col-sm-7">
+        <div class="form-group">
+            <div class="row">
+                <label for="copies" class="col-md-1 control-label">打印份数</label>
+                <div class="col-md-6">
                     <input name="copies" type="number" id="copies" min="0" value="0" style="width:20%" /><strong>份</strong>&nbsp;<small style="font-size:13px;color:#AAAAAA">0表示到店后现场打印</small>
                 </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row" style="display:none;" id="pptprint">
+                <label for="default" class="col-md-1 control-label">PPT格式</label>
+                <div class="col-md-6">
+                    <select id="default" class="form-control" name="ppt_layout" required>
+                        <option value="">选择PPT打印格式....</option>
+                        <volist name="ppt" id="vo" offset="1">
+                            <option value="{$i}">{$vo}</option>
+                        </volist>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">
-                    <div style="display:none;" id="pptprint">
-                        <div class="row">
-                        <label for="default" class="col-sm-3 control-label">PPT格式</label>
-                        <div class="col-sm-7">
-                        <select id="default" class="form-control" name="ppt_layout" required>
-                            <option value="">选择PPT打印格式....</option>
-                            <volist name="ppt" id="vo" offset="1">
-                                <option value="{$i}">{$vo}</option>
-                            </volist>
-                        </select>
-                        </div>
-                        </div>
-                    </div>
-            </div>
-            <div class="form-group">
+        </div>
+        <div class="form-group">
             <div class="row">
-                <label for="moreSetting" class='col-sm-3 control-label'>更多设置</label>
-                <div class="col-sm-7">
+                <label for="moreSetting" class='col-md-1 control-label'>更多设置</label>
+                <div class="col-md-6">
                 <div class="checkbox" id="moreSetting">
                     <label for="printcolor">
-                        <input name="color" id="printcolor" value="1" type="checkbox"><strong>彩印</strong>
+                    <input name="color" id="printcolor" value="1" type="checkbox"><strong>彩印</strong>
                     </label>
                     <label for="double_side">
                         <input name="double_side" id='double_side' value="1" type="checkbox"><strong>双面打印</strong>
                     </label>
                 </div>
                 </div>
-            </div>  
-        </div>              
+            </div>
+        </div>
         </fieldset>
-        <else/>
+        <ELSE/>
         <div>
             <a href="/User" style="text-decoration:none"><b>绑定手机后可进行高级设置和提前打印</b></a>
         </div>
-        </if>
-        </div>
-        <div class="col-sm-6 col-lg-4 well">
-            <h4 class="text-info">该店价格信息</h4>
-            <div id='price' class='help-block comments'>
-                黑白单面：<span id='p_s' class='text-danger'></span><br/>
-                黑白双面：<span id='p_d' class='text-danger'></span><br/>
-                彩印单面：<span id='p_c_s' class='text-danger'></span><br/>
-                彩印双面：<span id='p_c_d' class='text-danger'></span>
-            </div>
-        </div>
-        
-    </div>
-    
+        </IF>
+    </form>
     <div class="row">
-        <div class="text-center col-lg-8">
+        <div class="col-md-8">
             <button type="submit" class="btn btn-info" id="fileUploadButton" disabled="true">开始传送</button>
         </div>
     </div>
-</form>
-
 </div>
-</block>
+</BLOCK>
 
-<block name='end'>
+<BLOCK name='end'>
+
 <script language="javascript" type="text/javascript">
+
 function checkSuffix(n) {
     var pos = n.value.lastIndexOf('.');
     var suffix = n.value.substring(pos + 1);
@@ -194,5 +183,7 @@ $("#helpView").click(function(){
     $('#helpView').toggleClass('btn-warning')
     $('#helpBlock').toggle(100);
 });
+
 </script>
-</block>
+
+</BLOCK>

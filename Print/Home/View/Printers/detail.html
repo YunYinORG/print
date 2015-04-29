@@ -1,4 +1,4 @@
-<extend name="Print/Template/base.html"/>
+<EXTEND name="Print/Template/base.html"/>
 <BLOCK name='title'>{$data.name}·云印南天Beta</BLOCK>
 <BLOCK name="header">
     <nav class="navbar navbar-inverse navbar-fixed-top printerlist" role="navigation">
@@ -23,7 +23,7 @@
 </BLOCK>
 
 <BLOCK name='content'>
-<div class="title">
+<div>
     <h2>{$data.name}</h2> 
 </div>
 <div class="container">
@@ -74,11 +74,11 @@
 </div>
 <div class="col-sm-4 col-sm-offset-1">
     <div class="thumbnail">
-        <empty name="data.imageURL">
+        <EMPTY name="data.imageURL">
             <img src="__PUBLIC__/images/logo.png" style="width:70%"/>
-        <else />
+        <ELSE />
             <img src="{$data['imageURL']}" style="width:70%"/>
-        </empty>
+        </EMPTY>
     </div>
     <label>简介</label>
     <p>{$data.profile}</p>

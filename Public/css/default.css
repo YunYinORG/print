@@ -118,7 +118,6 @@ nav li:hover a, nav li.active a, nav li.active span {
 
 #upload-list{
   margin-bottom:0px;
-  margin-top:10px;
 }
 
 #upload-list li{
@@ -169,6 +168,9 @@ nav li:hover a, nav li.active a, nav li.active span {
 @media screen and (min-width: 968px){
   #printersMain {
     margin-left: -25px;
+  }
+  .form-control {
+    width: 50%;
   }
 }
 

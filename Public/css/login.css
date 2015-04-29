@@ -1,23 +1,27 @@
-*{
-	/* Resetting the default styles of the page */
+* {
 	margin:0;
 	padding:0;
+	webkit-box-sizing: content-box;
+	box-sizing: content-box;
 }
 
 html{
 	overflow:auto;
 }
 
-body{
-	/* Setting default text color, background and a font stack */
+body {
 	font-size:0.825em;
 	background:repeat-x #222222;
 	color:#eee;
 	font-family:Arial, Helvetica, sans-serif,'微软雅黑';
+	line-height: default;
 }
 
-#carbonForm{
-	/* The main form container */
+a {
+	color: wheat;
+}
+
+#carbonForm {
 	background-color:#333333;
 	border:1px solid #080808;
 	margin:20px auto;
@@ -28,8 +32,7 @@ body{
 	box-shadow:0 0 1px #444 inset;
 }
 
-#carbonForm h1{
-	/* The form heading */
+#carbonForm h1 {
 	font-family:Century Gothic,Myriad Pro,Arial,Helvetica,sans-serif;
 	font-size:60px;
 	font-weight:normal;
@@ -37,46 +40,43 @@ body{
 	text-align:center;
 }
 
-.fieldContainer{
-	/* The light rounded section, which contans the fields */
+.fieldContainer {
 	background-color:#1E1E1E;
 	border:1px solid #0E0E0E;
 	padding:30px 10px;
-	/* CSS3 box shadow, used as an inner glow */
 	-moz-box-shadow:0 0 20px #292929 inset;
 	-webkit-box-shadow:0 0 20px #292929 inset;
 	box-shadow:0 0 20px #292929 inset;
 }
 
-#carbonForm,.fieldContainer,.errorTip{
-	/* Rounding the divs at once */
+#carbonForm,.fieldContainer,.errorTip {
 	-moz-border-radius:12px;
 	-webkit-border-radius:12px;
 	border-radius:12px;
 }
 
 
-.formRow{
+.formRow {
 	height:35px;
 	padding:10px;
 	position:relative;
 }
 
-.label{
+.label {
 	float:left;
 	padding:0 20px 0 0;
 	text-align:right;
 	width:70px;
 }
 
-label{
+label {
 	font-family:Century Gothic,Myriad Pro,Arial,Helvetica,sans-serif;
 	font-size:11px;
 	letter-spacing:1px;
 	line-height:35px;
 }
 
-.field{
+.field {
 	float:left;
 }
 
@@ -91,6 +91,10 @@ label{
 	padding:4px 5px;
 	background: #FFFFFF;
 	outline:none; /* Preventing the default Safari and Chrome text box highlight */
+}
+
+button {
+	color:black;
 }
 
 .signupButton{
@@ -115,24 +119,18 @@ label{
 	border-radius:6px;
 }
 
-#submit.active{
-	/* Marking the submit button as active adds the preloader gif as background */
-}
-
 #submit:hover{
 	background-color:#dcf2ff;
 	border:1px solid white;
 }
 
-input:hover,
-input:focus{
+input:hover,input:focus {
 	-moz-box-shadow:0 0 8px lightblue;
 	-webkit-box-shadow:0 0 8px lightblue;
 	box-shadow:0 0 8px lightblue;
 }
 
 .errorTip{
-	/* The error divs */
 	background-color:#970F08;
 	color:white;
 	font-size:10px;
@@ -145,4 +143,3 @@ input:focus{
 	width:200px;
 	right:-130px;
 }
-a{color: wheat;}
