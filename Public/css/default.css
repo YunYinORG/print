@@ -54,6 +54,11 @@ nav li:hover a, nav li.active a, nav li.active span {
     color: rgba(214, 214, 214, 1);
 }
 
+span a {
+  text-decoration: none;
+  color: #FFF;
+}
+
 #main {
     overflow: hidden;
     float: right;
@@ -74,8 +79,10 @@ nav li:hover a, nav li.active a, nav li.active span {
     margin-bottom: 4em;
 }
 
-.comments{
+.comments {
+  font-type:Arial;
   font-size:13px;
+  color:#AAA;
 }
 
 /*nav-top*/

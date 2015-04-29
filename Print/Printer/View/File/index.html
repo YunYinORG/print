@@ -28,8 +28,9 @@
         <tbody id="tablehead">
             <volist name="data" id="vo">
             <tr file_id="{$vo.id}">
-                
-                <td><a fid="{$vo.id}" class="download" href="__URL__/download/?fid={$vo.id}" target="_blank">[{$vo.id}]{$vo.name}</a></td>                
+                <td>
+                <a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="打印备注" data-content=""><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+                <a fid="{$vo.id}" class="download" href="__URL__/download/?fid={$vo.id}" target="_blank">[{$vo.id}]{$vo.name}</a></td>                
                
          <IF condition="$vo.copies eq 0">
              <td class="copies">现打</td><td class="double_side">-</td><td class="color">-</td><td class="ppt_layout">-</td>    
@@ -94,6 +95,11 @@
 </BLOCK>
 <BLOCK name='end'>
 <script>
+
+$(function(){
+    $("[data-toggle='popover']").popover();
+});
+
 var double_side = new Array("单面","双面");
 var color = new Array("黑白","彩色");
 var f_status = new Array("未知状态","尚未下载","已下载","正在打印","已印待付款","已付款");
