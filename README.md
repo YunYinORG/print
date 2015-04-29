@@ -14,10 +14,8 @@
 ### Bugs or Fault
 * 多文件不能一次
 * 提前判断文件大小
-* 邮箱用的不是SAE
 * 未登录查看打印店等信息
 * 七牛上传目录前缀
-* 到店打印，下载后状态跃迁问题
 
 ### Features to add
 * 打印店文件到达通知【doing】
@@ -39,8 +37,8 @@
 ### 安全问题：
 * 输入字段严格过滤【always doing】
 * xss(反馈和打印店介绍)【doing】
-* https验证通道【doing】
 * API接口,token直接传递不够安全,时间戳加密(防止劫持)
+* https验证通道【done】
 * 涉及到修改密码的操作前端md5之后再传递【done】
 * xss(httponly) 【done】
 * 隐私数据加密（手机号和邮箱保存加密）【done】
@@ -159,7 +157,7 @@
 4. [gh-pages](https://github.com/nkumstc/print/tree/gh-pages)官方文档网站www.yunyin.org源码
 
 
-### 团队主要人员
+### 一期团队主要人员
 * 项目发起人： [李旭昇](https://github.com/jeffli678)
 * 总设计和负责人： [NewFuture](https://github.com/New-Future)
 * 数据库设计： [牛亮](https://github.com/wangxiaodiu) [梁崇军](https://github.com/inankai)
@@ -183,4 +181,4 @@
 
 本项目源码遵循apache2 开源协议，同时尊重每一位贡献者的权益。
 
-更多信息查看[www.yunyin.org](http://yunyin.org)
+更多信息查看[www.yunyin.org](http://www.yunyin.org)

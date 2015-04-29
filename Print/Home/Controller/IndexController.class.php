@@ -25,10 +25,13 @@ use Think\Controller;
 
 class IndexController extends Controller {
 
-	//首页
+	/**
+	 * 首页
+	 * @method index
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
 	public function index()
 	{
-		$status = '';
 		if (use_id())
 		{
 			$this->status = 'login';
@@ -40,6 +43,8 @@ class IndexController extends Controller {
 		elseif (C('HTTPS_ON'))
 		{
 			$this->status = C('SAFE_URL');
+		}else{
+			$this->status=__ROOT__;
 		}
 		$this->display();
 	}
@@ -72,14 +77,6 @@ class IndexController extends Controller {
 		{
 			$this->error($Form->getError());
 		}
-	}
-
-	public function backfeed()
-	{
-		$FD   = M('Feedback');
-		$list = $FD->select();
-		$this->assign('list', $list);
-		$this->display();
 	}
 
 	public function contact()
