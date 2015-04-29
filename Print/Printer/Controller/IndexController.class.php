@@ -31,10 +31,8 @@ class IndexController extends Controller {
 	 */
 	public function index()
 	{
-		if (pri_id())
+		if (pri_id()) //已经登陆直接跳转
 		{
-
-			//已经登陆直接跳转
 			$this->redirect('Printer/Printer/index');
 		}
 		else

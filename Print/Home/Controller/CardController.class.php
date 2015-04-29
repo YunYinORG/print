@@ -48,10 +48,8 @@ class CardController extends Controller {
 			{
 				$this->error('使用此功能必须绑定手机号！', '/User/index');
 			}
-			elseif ( ! $card)
+			elseif ( ! $card) //数据库中不存在，加入数据库
 			{
-
-				//数据库中不存在，咋加入数据库
 				$card['id'] = $uid;
 				M('Card')->add($card);
 				$this->display();
@@ -144,8 +142,8 @@ class CardController extends Controller {
 			else
 			{
 
-				//验证成功 通知并记录
-				$msg = '';
+				/*验证成功 通知并记录*/
+				$msg     = '';
 				$success = false;
 				import('Common.Encrypt', COMMON_PATH, '.php');
 				$send_phone = decrypt_phone($send_user['phone'], $send_user['student_number'], $send_user['id']);
@@ -191,10 +189,8 @@ class CardController extends Controller {
 					$this->error('消息发送失败！请重试或者交由第三方平台！');
 				}
 
-				if ($recv_off === null)
+				if ($recv_off === null) //该同学不在card记录之中
 				{
-
-					//该同学不在card记录之中
 					$Card->add(array('id' => $recv_user['id']));
 				}
 				$log['find_id'] = $send_user['id'];
@@ -269,8 +265,7 @@ class CardController extends Controller {
 					$findId = $Log->getFieldById($id);
 					if ($Log->where("find_id=$findId AND status<0")->count() >= 2)
 					{
-
-						//恶意操作进行屏蔽
+						/*恶意操作进行屏蔽*/
 						M('Card')->where("id=$findId")->setField('blocked', 1);
 					}
 				}

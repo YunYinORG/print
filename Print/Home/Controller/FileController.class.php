@@ -120,9 +120,8 @@ class FileController extends Controller {
 				{
 					$data['ppt_layout'] = 0;
 				}
-				if (M('File')->add($data))
+				if (M('File')->add($data)) //判断通知
 				{
-					//判断通知
 					$this->redirect('File/index', null, 0, '上传成功');
 				}
 				else

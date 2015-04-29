@@ -87,24 +87,19 @@ function decrypt_phone(&$phone, $snum, $id)
 function encrypt_end($endNum)
 {
 	$key = C('ENCRYPT_PHONE_END'); //获取配置密钥
-	//对后四位进行AES加密
-	$endNum = (int) $endNum;
+	$endNum = (int) $endNum; //对后四位进行AES加密
 	$cipher = aes_encode($endNum, $key);
-	//加密后内容查找密码表进行匹配
-	$table = cipher_table($key);
+	$table = cipher_table($key); //加密后内容查找密码表进行匹配
 	$encryption = array_search($cipher, $table);
 
-	if (false === $encryption)
+	if (false === $encryption) //密码表查找失败,抛出异常
 	{
-		//密码表查找失败
-		//抛出异常
 		E('尾数加密匹配异常!');
 		return false;
 	}
 	else
 	{
-		//转位4位字符串,不足4位补左边0
-		return sprintf('%04s', $encryption);
+		return sprintf('%04s', $encryption); //转位4位字符串,不足4位补左边0
 	}
 }
 
@@ -121,14 +116,11 @@ function encrypt_mid($midNum, $snum, $id)
 	$key = C('ENCRYPT_PHONE_MID'); //获取配置密钥
 	$key = substr($snum.$key, 0, 32); //混淆密钥,每个人的密钥均不同
 	$table = cipher_table($key);
-	//拆成两部分进行解密
-	$midNum += $id;
+	$midNum += $id; //拆成两部分进行解密
 	$mid2 = (int) substr($midNum, 2, 4);
-	//后4位加密
-	$mid2 = array_search(aes_encode($mid2, $key), $table);
-	if (false === $mid2)
+	$mid2 = array_search(aes_encode($mid2, $key), $table); //后4位加密
+	if (false === $mid2) //前密码表查找失败
 	{
-		//前密码表查找失败
 		E('中间加密异常!');
 	}
 	else
@@ -148,15 +140,13 @@ function decrypt_end($encodeEnd)
 {
 	$key = C('ENCRYPT_PHONE_END'); //获取配置密钥
 	$table = cipher_table($key); //读取密码表
-	//获取对应aes密码
-	$end = intval($encodeEnd);
+	$end = intval($encodeEnd); //获取对应aes密码
 	$cipher = $table[$end];
 	if ( ! $cipher)
 	{
 		E('尾号密码查找失败');
 	}
-	//对密码进行解密
-	$endNum = (int) aes_decode($cipher, $key);
+	$endNum = (int) aes_decode($cipher, $key); //对密码进行解密
 	return sprintf('%04s', $endNum);
 }
 
@@ -170,15 +160,15 @@ function decrypt_end($encodeEnd)
  */
 function decrypt_mid($midEncode, $snum, $id)
 {
-	//获取密码表
-	$key = C('ENCRYPT_PHONE_MID');
+	/*获取密码表*/
+	$key   = C('ENCRYPT_PHONE_MID');
 	$key   = substr($snum.$key, 0, 32);
 	$table = cipher_table($key);
-	//解密
+	/*解密*/
 	$mid2 = (int) substr($midEncode, 2, 4);
 	$mid2 = $table[$mid2];
 	$mid2 = sprintf('%04s', aes_decode($mid2, $key));
-	//还原
+	/*还原*/
 	$num = substr_replace($midEncode, $mid2, 2);
 	$num -= $id;
 	return $num;
@@ -197,8 +187,8 @@ function cipher_table($key)
 	$table = F($tableName); //读取缓存中的密码表
 	if ( ! $table)
 	{
-		//密码表不存在则重新生成
-		//对所有数字,逐个进行AES加密生成密码表
+		/*密码表不存在则重新生成
+		对所有数字,逐个进行AES加密生成密码表*/
 		$td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_ECB, '');
 		mcrypt_generic_init($td, $key, '0000000000000000');
 		for ($i = 0; $i < 10000; ++$i)
@@ -259,13 +249,12 @@ function encrypt_email($email)
 		return $email;
 	}
 	list($name, $domain) = explode('@', $email);
-	//aes加密
 	$name2 = substr($name, 1);
 	if ($name2)
 	{
-		aes_encode($name2, C('ENCRYPT_EMAIL'));
+		aes_encode($name2, C('ENCRYPT_EMAIL')); //aes加密
 		$name2 = base64_encode($name2); //base64转码
-		//特殊字符编码
+		/*特殊字符编码*/
 		$encodeMap = array(
 			'+' => '-',
 			'=' => '_',
@@ -274,8 +263,7 @@ function encrypt_email($email)
 	}
 	else
 	{
-		//对于用户名只有一个的邮箱生成随机数掩盖
-		$name2 = rand();
+		$name2 = rand(); //对于用户名只有一个的邮箱生成随机数掩盖
 	}
 	return $name[0].$name2.'@'.$domain;
 }
@@ -294,22 +282,20 @@ function decrypt_email(&$email)
 	}
 	list($name, $domain) = explode('@', $email);
 	$name2 = substr($name, 1);
-	if (strlen($name2) < 24)
+	if (strlen($name2) < 24) //长度小于24位随机掩码直接去掉
 	{
-		//长度小于24为随机掩码直接去掉
 		$name2 = '';
 	}
 	else
 	{
-		//解密 并base64还原
+		/*解密 并base64还原*/
 		$decodeMap = array(
 			'-' => '+',
 			'_' => '=',
 			'.' => '/');
 		$name2 = strtr($name2, $decodeMap);
 		$name2 = base64_decode($name2);
-		//aes解解码
-		aes_decode($name2, C('ENCRYPT_EMAIL'));
+		aes_decode($name2, C('ENCRYPT_EMAIL')); //aes解解码
 	}
 	$email = $name[0].trim($name2).'@'.$domain;
 	return $email;

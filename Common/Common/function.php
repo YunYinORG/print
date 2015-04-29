@@ -62,9 +62,7 @@ function update_token($info, $type = null)
 		case C('STUDENT_API'):
 			$data['to_id'] = $info;
 			$data['type'] = $type;
-			//删除之前token；再更新token
-			$Token
-				->where($data)->delete();
+			$Token->where($data)->delete(); 	//删除之前的token；再更新token
 			$token = token($info);
 			$data['token'] = md5($token);
 			if ( ! $Token->add($data))
@@ -109,7 +107,6 @@ function delete_token($info, $type = null)
 		case C('PRINTER'):
 		case C('STUDENT_API'):
 		case C('PRINTER_WEB'):
-
 			$data['to_id'] = $info;
 			$data['type'] = $type;
 			break;
@@ -183,8 +180,7 @@ function upload_file($storage = '', $config = array())
 	{
 		case 'QINIU':
 			$driver = 'QINIU';
-			//上传驱动的配置
-			$driverConfig = C('UPLOAD_CONFIG_QINIU');
+			$driverConfig = C('UPLOAD_CONFIG_QINIU'); 	//上传驱动的配置
 			break;
 		case 'SAE':
 			$driver = 'SAE';
@@ -193,8 +189,7 @@ function upload_file($storage = '', $config = array())
 			$driver = 'LOCAL';
 			break;
 		default:
-			//读取默认上传类型和配置
-			$driver = C('FILE_UPLOAD_TYPE');
+			$driver = C('FILE_UPLOAD_TYPE'); 	//读取默认上传类型和配置
 			break;
 	}
 
@@ -260,8 +255,7 @@ function download_file($url, $param = '', $storage = '')
 		case 'QINIU':
 			$setting = C('UPLOAD_CONFIG_QINIU');
 			$url = 'http://'.$setting['domain'].str_replace('/', '_', $url);
-			$duetime = NOW_TIME + 86400;
-			//下载凭证有效时间
+			$duetime = NOW_TIME + 86400; 	//下载凭证有效时间
 			$DownloadUrl = $url.'?'.$param.'&e='.$duetime;
 			$Sign  = hash_hmac('sha1', $DownloadUrl, $setting['secretKey'], true);
 			$EncodedSign = str_replace(array('+', '/'), array('-', '_'), base64_encode($Sign));
@@ -370,21 +364,18 @@ function get_phone_by_id($id)
  */
 function random($n, $mode = '')
 {
-	//10位一下的数字使用随机数快速生成
-	if ($n < 10 && $mode == 'N')
+	if ($n < 10 && $mode == 'N') //10位一下的数字使用随机数快速生成
 	{
 		$max = pow(10, $n);
 		return substr($max + rand(1, $max), -$n);
 	}
 
 	$str = '';
-	//是否含有数字
-	if (strstr($mode, 'N') != null)
+	if (strstr($mode, 'N') != null) //是否含有数字
 	{
 		$str .= '1234567890';
 	}
-	//是否含由字母或者大小写
-	if (strstr($mode, 'W') != null)
+	if (strstr($mode, 'W') != null) //是否含由字母或者大小写
 	{
 		$str .= 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	}
@@ -396,8 +387,7 @@ function random($n, $mode = '')
 	{
 		$str .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	}
-	//默认全部使用
-	if ( ! $str)
+	if ( ! $str) //默认全部使用
 	{
 		$str .= 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	}

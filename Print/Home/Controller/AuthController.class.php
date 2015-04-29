@@ -46,9 +46,8 @@ class AuthController extends Controller {
 		$number   = I('post.number', null, C('REGEX_NUMBER'));
 		$password = I('post.password');
 
-		if ( ! $number ||  ! $password)
+		if ( ! $number ||  ! $password) //学号或者密码不存在
 		{
-			//学号或者密码不存在
 			$this->error(L('WRONG_FORMAT'), C('BASE_URL'));
 		}
 
@@ -57,14 +56,12 @@ class AuthController extends Controller {
 			->where('student_number="%s"', $number)
 			->field('id,password,status')
 			->find();
-		if ($user)
+		if ($user) //已经注册过，直接登录
 		{
-			//已经注册过，直接登录
 
 			$login_id = $this->_login($number, $password, $user);
-			if ( ! $login_id)
+			if ( ! $login_id) //登录失败
 			{
-				//登录失败
 				$this->error(L('LOGIN_FAIL'), C('BASE_URL'));
 			}
 			else
@@ -78,8 +75,7 @@ class AuthController extends Controller {
 		}
 		else
 		{
-			//未注册尝试验证
-
+			/*未注册尝试验证*/
 			$data = $this->_verify($number, $password);
 			if ( ! $data)
 			{
@@ -87,7 +83,7 @@ class AuthController extends Controller {
 			}
 			else
 			{
-				/**验证成功缓存验证信息并跳转*/
+				/*验证成功缓存验证信息并跳转*/
 				S($key, null);
 				$token = md5($number.token($number));
 				S('REG_'.$token, $data, 300);
@@ -135,9 +131,7 @@ class AuthController extends Controller {
 				}
 				break;
 		}
-
-		//所有其他情况或者信息获取，调转到首页
-		redirect(C('BASE_URL'));
+		redirect(C('BASE_URL')); //所有其他情况或者信息获取，调转到首页
 	}
 
 	/**
@@ -156,11 +150,11 @@ class AuthController extends Controller {
 		{
 			$this->error(L('ACCOUNT_FORMAT_ERROR'));
 		}
-		elseif ( ! $urp_password || !$password)
+		elseif ( ! $urp_password ||  ! $password)
 		{
 			$this->error(L('PASSWORD_EMPTY'));
 		}
-		//验证账号
+		/*验证账号*/
 		if ( ! $this->_verify($number, $urp_password))
 		{
 			$this->error(L('VERIFY_FAIL'));
@@ -178,7 +172,7 @@ class AuthController extends Controller {
 			}
 			else
 			{
-				//密码重置成功，跳转到首页
+				/*密码重置成功，跳转到首页*/
 				redirect(C('BASE_URL'), 3, L('PASSWORD_RESET_SUCC'));
 			}
 		}
@@ -293,7 +287,7 @@ class AuthController extends Controller {
 	 */
 	private function _verify($number, $password)
 	{
-		//尚未注册，先判断学校导入学校验证文件
+		/*尚未注册，先判断学校导入学校验证文件*/
 		if (preg_match(C('REGEX_NUMBER_NKU'), $number))
 		{
 			if ( ! C('NKU_OPEN'))
