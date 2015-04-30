@@ -1,5 +1,10 @@
 ﻿{//文件上传页}
 <EXTEND name="Print/Template/base.html"/>
+<BLOCK name='head'>
+    <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
+    <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+    <script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap-switch.min.js" defer="defer"></script>
+</BLOCK>
 <BLOCK name='header'>
 <INCLUDE file="Print/Template/nav.html" add="active"/>
 </BLOCK>
@@ -82,15 +87,12 @@
         </div>
         <div class="form-group">
             <div class="row">
-                <label for="moreSetting" class='col-md-1 control-label'>更多设置</label>
                 <div class="col-md-6">
-                <div class="checkbox" id="moreSetting">
-                    <label for="printcolor">
-                    <input name="color" id="printcolor" value="1" type="checkbox"><strong>彩印</strong>
-                    </label>
-                    <label for="double_side">
-                        <input name="double_side" id='double_side' value="1" type="checkbox"><strong>双面打印</strong>
-                    </label>
+                <div id="moreSetting">
+                    <label for="printcolor"><strong>彩印</strong></label>
+                    <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox"/>
+                    &nbsp;<label for="double_side"><strong>双面打印</strong></label>
+                    <input type="checkbox" name="double_side" id='double_side' value="1"/>
                 </div>
                 </div>
             </div>
@@ -116,7 +118,14 @@
 
 <BLOCK name='end'>
 
+<script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap-switch.min.js" defer="defer"></script>
+
 <script language="javascript" type="text/javascript">
+
+$(function(){
+    $("#printcolor").bootstrapSwitch('size','small');
+    $("#double_side").bootstrapSwitch('size','small');
+});
 
 function checkSuffix(n) {
     var pos = n.value.lastIndexOf('.');
