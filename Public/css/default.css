@@ -59,6 +59,7 @@ span a {
   color: #FFF;
 }
 
+
 #main {
     overflow: hidden;
     float: right;
@@ -73,6 +74,7 @@ span a {
 
 #moreSetting {
   margin-top: 0px;
+  margin-bottom: 15px;
 }
 
 #banner {

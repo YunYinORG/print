@@ -41,8 +41,8 @@
         <br/>
         <div class="row">
             <div class="form-group">
-                <label for="PrinterChoose" class="col-md-1 control-label">打印店</label>
-                <select class="col-md-6 form-control" name="pri_id" id="PrinterChoose" onchange="priceChange(this)" required>
+                <label for="PrinterChoose" class="col-lg-1 col-sm-2 control-label">打印店</label>
+                <select class="col-lg-5 col-sm-10 form-control" name="pri_id" id="PrinterChoose" onchange="priceChange(this)" required>
                     <option value="">选择想去的打印店....</option>
                     <volist name="data" id="vo">
                         <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
@@ -52,7 +52,7 @@
         </div>
         <br/>
         <div class="row">        
-            <div class="well col-sm-7">
+            <div class="well col-lg-6 col-sm-12">
                 <h4 class="text-info">该店价格信息</h4>
                 <div id='price' class='help-block comments'>
                     黑白单面：<span id='p_s' class='text-danger'></span><br/>
@@ -66,16 +66,16 @@
         <fieldset id="setting">
         <div class="form-group">
             <div class="row">
-                <label for="copies" class="col-md-1 control-label">打印份数</label>
-                <div class="col-md-6">
+                <label for="copies" class="col-lg-1 col-sm-2 control-label">份数</label>
+                <div class="col-lg-6 col-sm-10">
                     <input name="copies" type="number" id="copies" min="0" value="0" style="width:20%" /><strong>份</strong>&nbsp;<small class="comments">0表示到店后现场打印</small>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="row" style="display:none" id="pptprint">
-                <label for="default" class="col-md-1 control-label">PPT格式</label>
-                <div class="col-md-6">
+                <label for="default" class="col-lg-1 col-sm-2 control-label">PPT格式</label>
+                <div class="col-lg-6 col-sm-10">
                     <select id="default" class="form-control" name="ppt_layout" required>
                         <option value="">选择PPT打印格式....</option>
                         <volist name="ppt" id="vo" offset="1">
@@ -86,19 +86,21 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="row">
-                <div class="col-md-6">
-                <div id="moreSetting">
-                    <label for="printcolor"><strong>彩印</strong></label>
+            <div id="moreSetting">
+                <div class="row">
+                    <label for="printcolor" class="col-lg-1 col-sm-2"><strong>彩印</strong></label>
+                    <div class="col-lg-2 col-sm-4">
                     <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox"/>
-                    &nbsp;<label for="double_side"><strong>双面打印</strong></label>
+                    </div>
+                    <label for="double_side" class="col-lg-1 col-sm-2"><strong>双面</strong></label>
+                    <div class="col-lg-2 col-sm-4">
                     <input type="checkbox" name="double_side" id='double_side' value="1"/>
-                </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <label for="addtion-need" class='col-md-1 control-label'>备注信息</label>
-                <textarea id="addtion-need" class="form-control col-md-4" rows="4" placeholder="如有其他打印设置需要可在此处填写，若无可空白，限制32字以内" name="profile"></textarea>
+                <label for="addtion-need" class='col-lg-1 col-sm-2 control-label'>备注</label>
+                <textarea id="addtion-need" class="form-control col-lg-4 col-sm-10" rows="4" placeholder="如有其他打印设置需要可在此处填写，若无可空白，限制32字以内" name="profile"></textarea>
             </div>
         </div>
         </fieldset>
