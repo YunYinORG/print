@@ -92,4 +92,23 @@ class PrinterController extends Controller {
 		$this->data = $Printer->select();
 		$this->display();
 	}
+
+	public function changeStatus(){
+		if ( ! admin_id())
+		{
+			$this->redirect('index');
+		}
+		$Printer = D('Printer');
+		$account = I('get.account');
+		$data['status'] = I('get.status');
+		$result = $Printer->where("account=$account")->save($data);
+		if ($result)
+		{
+			$this->success('修改成功','/Admin/Printer/manage');
+		}
+		else
+		{
+			$this->error('修改失败'.$Printer->getError());
+		}
+	}
 }
