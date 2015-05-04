@@ -65,19 +65,32 @@
         <IF condition="$lock eq 1">
         <div class="form-group">
             <div class="row">
-                <label for="ispre" class="col-lg-1 col-sm-2 control-label">现场打印</label>
+                <label for="ispre" class="col-lg-1 col-sm-2 control-label">设置</label>
                 <div class="col-lg-2 col-sm-4">
                     <input name="ispre" id="ispre" type="checkbox" disabled="true"/>
                 </div>
                 <div class="setting">
                 <label for="copies" class="col-lg-1 col-sm-2 control-label">份数</label>
                 <div class="col-lg-2 col-sm-4">
-                    <input name="copies" type="number" id="copies" min="1" value="1" disabled="true"/>
+                    <input name="copies" type="number" class="form-control" id="copies" min="1" value="1" disabled="true"/>
                 </div>
                 </div>
             </div>
         </div>
+       
         <div class="form-group">
+            <div class="row setting">
+                <label for="printcolor" class="col-lg-1 col-sm-2"><strong>颜色</strong></label>
+                <div class="col-lg-2 col-sm-4">
+                    <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox" disabled="true"/>
+                </div>
+                <label for="double_side" class="col-lg-1 col-sm-2"><strong>单双</strong></label>
+                <div class="col-lg-2 col-sm-4">
+                    <input type="checkbox" name="double_side" id='double_side' value="1" disabled="true"/>
+                </div>
+            </div>
+        </div>
+         <div class="form-group">
             <div class="row setting" style="display:none" id="pptprint">
                 <label for="default" class="col-lg-1 col-sm-2 control-label">PPT格式</label>
                 <div class="col-lg-11 col-sm-10">
@@ -92,23 +105,11 @@
         </div>
         <div class="form-group">
             <div class="row setting">
-                <label for="printcolor" class="col-lg-1 col-sm-2"><strong>彩印</strong></label>
-                <div class="col-lg-2 col-sm-4">
-                    <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox" disabled="true"/>
-                </div>
-                <label for="double_side" class="col-lg-1 col-sm-2"><strong>双面</strong></label>
-                <div class="col-lg-2 col-sm-4">
-                    <input type="checkbox" name="double_side" id='double_side' value="1" disabled="true"/>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="row setting">
-                <a class="comments col-lg-12" id="showAdd">更多设置？</a>
-                <div style="display:none">
+                <!-- <a class="comments col-lg-12" id="showAdd">更多设置？</a> -->
+                <!-- <div style="display:none"> -->
                 <label for="addtion-need" class='col-lg-1 col-sm-2 control-label'>备注</label>
-                <textarea id="addtion-need" class="form-control col-lg-4 col-sm-10" rows="4" placeholder="如有其他打印设置需要可在此处填写，若无可空白，限制32字以内" name="profile"></textarea>
-                </div>
+                <textarea id="addtion-need" class="form-control col-lg-4 col-sm-10" placeholder="如有其要求此处填写，若无可空白，限制32字以内" length="32" name="requirements"></textarea>
+                <!-- </div> -->
             </div>
         </div>
         <ELSE/>
@@ -132,26 +133,21 @@
 <script language="javascript" type="text/javascript">
 
 $(function(){
-    $("#ispre").bootstrapSwitch('size','small');
-    $("#ispre").bootstrapSwitch('offText','预打');
-    $("#ispre").bootstrapSwitch('onText','现打');
-    $("#printcolor").bootstrapSwitch('size','small');
-    $("#double_side").bootstrapSwitch('size','small');
-    $("#double_side").bootstrapSwitch('offText','单面');
-    $("#double_side").bootstrapSwitch('onText','双面');
-});
+    $("#ispre").bootstrapSwitch({'offText':'到店打印','onText':'提前打印'});
+    $("#printcolor").bootstrapSwitch({'offText':'黑白打印','onText':'彩色打印'});
+    $("#double_side").bootstrapSwitch({'offText':'单','onText':'双'});
+    $('.setting').hide();
 
-$("#helpView").click(function(){
+    $("#helpView").click(function(){
     $('#helpView').toggleClass('btn-warning');
-    $('#help-info').toggle(100);
-});
+    $('#help-info').toggle(100);});
 
-$('#ispre').on('switchChange.bootstrapSwitch',function(){
+    $('#ispre').on('switchChange.bootstrapSwitch',function(){
     var fn = $('#upload-file').val();
     var pos = fn.lastIndexOf('.');
     var suf = fn.substring(pos + 1);
     var other_suffix =['ppt' , 'pptx'];
-    if($('#ispre').bootstrapSwitch('state') === true){
+    if($('#ispre').bootstrapSwitch('state') ==false){
         $('.setting').hide(100);
         $('#default').removeAttr('required');
     } else {
@@ -163,11 +159,17 @@ $('#ispre').on('switchChange.bootstrapSwitch',function(){
             $('#default').attr('required','true');
         }
     }
+    });
+
+
 });
 
-$("#showAdd").click(function(){
-    $('#showAdd').next().toggle(100);
-});
+
+
+
+// $("#showAdd").click(function(){
+//     $('#showAdd').next().toggle(100);
+// });
 
 function checkSuffix(n) {
     var pos = n.value.lastIndexOf('.');
@@ -186,7 +188,7 @@ function checkSuffix(n) {
     else {
         var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
         $("#ispre").bootstrapSwitch('disabled',false);
-        $('.setting').show();
+        // $('.setting').show();
         $("#pptprint").hide();
         $('#copies').attr('disabled', false);
         $('#double_side').bootstrapSwitch('disabled', false);
@@ -198,7 +200,9 @@ function checkSuffix(n) {
             $('#pptprint').hide();
             $("#upload-list").html('<li class="list-group-item">当前文件：'+ fname +'</li>'+'<li class="list-group-item">支持的格式，但更推荐pdf。');
         } else if (other_suffix.indexOf(suffix)>=0) {
-            $('#pptprint').show();
+             if($('#ispre').bootstrapSwitch('state') ==true){
+              $('#pptprint').show();
+              }
             $('#default').attr('required','true');
             $("#upload-list").html('<li class="list-group-item">当前文件：'+fname +'</li>');
         } else if(pdf_suffix.indexOf(suffix) >= 0){

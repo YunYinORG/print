@@ -108,6 +108,12 @@ class FileController extends Controller {
 				$data['double_side'] = I('post.double_side', 0, 'int');
 				$data['status'] = 1;
 				$data['color'] = I('post.color', 0, 'int');
+				$requirements = I('post.requirements', 0, 'htmlspecialchars');
+				if ($requirements)
+				{
+					$data['requirements'] = $requirements;
+				}
+
 				if ($data['pri_id'] == 0)
 				{
 					$this->error('请选择打印店！', '/File/add');

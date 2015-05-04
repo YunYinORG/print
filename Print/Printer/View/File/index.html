@@ -29,7 +29,9 @@
             <volist name="data" id="vo">
             <tr file_id="{$vo.id}">
                 <td>
-                <a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="打印备注" data-content=""><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+            <NOTEMPTY name="vo['requirements']">
+                <span tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="打印备注" data-content="{$vo['requirements']}" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </NOTEMPTY>
                 <a fid="{$vo.id}" class="download" href="__URL__/download/?fid={$vo.id}" target="_blank">[{$vo.id}]{$vo.name}</a></td>                
                
          <IF condition="$vo.copies eq 0">
