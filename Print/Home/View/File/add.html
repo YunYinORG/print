@@ -104,8 +104,11 @@
         </div>
         <div class="form-group">
             <div class="row setting">
+                <a class="comments col-lg-12" id="showAdd">更多设置？</a>
+                <div style="display:none">
                 <label for="addtion-need" class='col-lg-1 col-sm-2 control-label'>备注</label>
                 <textarea id="addtion-need" class="form-control col-lg-4 col-sm-10" rows="4" placeholder="如有其他打印设置需要可在此处填写，若无可空白，限制32字以内" name="profile"></textarea>
+                </div>
             </div>
         </div>
         <ELSE/>
@@ -139,18 +142,31 @@ $(function(){
 });
 
 $("#helpView").click(function(){
-    $('#helpView').toggleClass('btn-warning')
+    $('#helpView').toggleClass('btn-warning');
     $('#help-info').toggle(100);
 });
 
 $('#ispre').on('switchChange.bootstrapSwitch',function(){
+    var fn = $('#upload-file').val();
+    var pos = fn.lastIndexOf('.');
+    var suf = fn.substring(pos + 1);
+    var other_suffix =['ppt' , 'pptx'];
     if($('#ispre').bootstrapSwitch('state') === true){
         $('.setting').hide(100);
         $('#default').removeAttr('required');
-    }
-    else {
+    } else {
         $('.setting').show(100);
+        if(other_suffix.indexOf(suf) < 0) {
+            $('#default').removeAttr('required');
+            $('#pptprint').hide();
+        } else {
+            $('#default').attr('required','true');
+        }
     }
+});
+
+$("#showAdd").click(function(){
+    $('#showAdd').next().toggle(100);
 });
 
 function checkSuffix(n) {
@@ -183,6 +199,7 @@ function checkSuffix(n) {
             $("#upload-list").html('<li class="list-group-item">当前文件：'+ fname +'</li>'+'<li class="list-group-item">支持的格式，但更推荐pdf。');
         } else if (other_suffix.indexOf(suffix)>=0) {
             $('#pptprint').show();
+            $('#default').attr('required','true');
             $("#upload-list").html('<li class="list-group-item">当前文件：'+fname +'</li>');
         } else if(pdf_suffix.indexOf(suffix) >= 0){
             $('#default').removeAttr('required');

@@ -54,12 +54,6 @@ nav li:hover a, nav li.active a, nav li.active span {
     color: rgba(214, 214, 214, 1);
 }
 
-.info-page-label {
-  text-decoration: none;
-  color: #FFF;
-}
-
-
 #main {
     overflow: hidden;
     float: right;
@@ -127,6 +121,10 @@ nav li:hover a, nav li.active a, nav li.active span {
   font-size: 13px;
 }
 
+#showAdd {
+  margin-bottom: 15px;
+}
+
 /*user-info*/
 
 #info-title{
@@ -138,6 +136,11 @@ nav li:hover a, nav li.active a, nav li.active span {
 .info-label a {
   text-decoration: none;
   color: #FFFFFF;
+}
+
+.info-page-label {
+  text-decoration: none;
+  color: #FFF;
 }
 
 #carbonForm{
