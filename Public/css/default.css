@@ -54,7 +54,7 @@ nav li:hover a, nav li.active a, nav li.active span {
     color: rgba(214, 214, 214, 1);
 }
 
-span a {
+.info-page-label {
   text-decoration: none;
   color: #FFF;
 }
@@ -69,12 +69,6 @@ span a {
     border-top: 0px solid #2980b9;
     min-height: 100%;
     text-align: left;
-}
-
-
-#moreSetting {
-  margin-top: 0px;
-  margin-bottom: 15px;
 }
 
 #banner {
@@ -178,9 +172,6 @@ span a {
   #printersMain {
     margin-left: -25px;
   }
-  .form-control {
-    width: 50%;
-  }
 }
 
 @media screen and (max-width: 1275px) {
@@ -217,8 +208,11 @@ span a {
     width: 23%;
     padding: 2em 1% 0 1%;
   }
-  .printerlist .navbar-nav > li > a{
+  .printerlist .navbar-nav > li > a {
     line-height: 0em;
+  }
+  .form-control {
+    width: 41.6666667%;
   }
   /*bootstrap-nav*/
   nav {
