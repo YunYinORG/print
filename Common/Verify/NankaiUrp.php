@@ -15,35 +15,31 @@
  */
 function getName($stu_number, $pwd)
 {
-	//验证地址--urp密码验证页
+	/*验证地址--urp密码验证页*/
 	$action_url = 'http://urp.nankai.edu.cn/userPasswordValidate1.portal';
-	$snoopy = new Snoopy;
+	$snoopy     = new Snoopy;
 	$snoopy->rawheaders['Pragma'] = 'no-cache';
 	$Snoopy->rawheaders['X_FORWARDED_FOR'] = get_client_ip();
 	$success_words = '<script type="text/javascript">location.href = \'http://urp.nankai.edu.cn/index.portal\';</script>';
 	$error_key     = '密码错误';
 	$snoopy->referer = 'http://urp.nku.cn';
 
-	//用户学号和密码
+	/*用户学号和密码*/
 	$input['Login.Token1'] = $stu_number;
 	$input['Login.Token2'] = $pwd;
 
-	//模拟登陆
-	$snoopy->submit($action_url, $input);
+	$snoopy->submit($action_url, $input); //模拟登陆
 
-	//登录结果页面
-	$result = $snoopy->results;
+	$result = $snoopy->results; //登录结果页面
 
-	//echo $snoopy->results;
-	if (strpos($result, $error_key) !== false)
+	if (strpos($result, $error_key) !== false) //echo $snoopy->results;
 	{
 		return false;
 	}
 	elseif (strpos($result, $success_words) !== false)
 	{
 
-		//登录成功
-		//保存cookie信息页面抓取信息
+		/*登录成功,保存cookie信息页面抓取信息*/
 		$snoopy->setcookies();
 		$snoopy->fetchtext('http://urp.nankai.edu.cn/index.portal');
 		$text = $snoopy->results;
@@ -1228,7 +1224,7 @@ class Snoopy {
 	\*======================================================================*/
 
 	function _disconnect($fp)
-		{
+	{
 		return (fclose($fp));
 	}
 
@@ -1241,18 +1237,18 @@ class Snoopy {
 	\*======================================================================*/
 
 	function _prepare_post_body($formvars, $formfiles)
-		{
+	{
 		settype($formvars, 'array');
 		settype($formfiles, 'array');
 		$postdata = '';
 
 		if (count($formvars) == 0 && count($formfiles) == 0)
-			{
+		{
 			return;
 		}
 
 		switch ($this->_submit_type)
-			{
+		{
 			case 'application/x-www-form-urlencoded':
 				reset($formvars);
 				while (list($key, $val) = each($formvars))

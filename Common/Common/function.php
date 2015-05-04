@@ -171,7 +171,7 @@ function upload_file($storage = '', $config = array())
 		return false;
 	}
 	$config = array_merge(C('FILE_UPLAOD_CONFIG'), $config); //基本设置
-	$driverConfig = ''; //驱动配置
+	$driver_config = ''; //驱动配置
 	if ( ! $storage)
 	{
 		$storage = C('FILE_UPLOAD_TYPE');
@@ -180,7 +180,7 @@ function upload_file($storage = '', $config = array())
 	{
 		case 'QINIU':
 			$driver = 'QINIU';
-			$driverConfig = C('UPLOAD_CONFIG_QINIU'); 	//上传驱动的配置
+			$driver_config = C('UPLOAD_CONFIG_QINIU'); 	//上传驱动的配置
 			break;
 		case 'SAE':
 			$driver = 'SAE';
@@ -193,7 +193,7 @@ function upload_file($storage = '', $config = array())
 			break;
 	}
 
-	$Upload = new \Think\Upload($config, $driver, $driverConfig);
+	$Upload = new \Think\Upload($config, $driver, $driver_config);
 	return $Upload->upload();
 }
 
@@ -215,11 +215,11 @@ function delete_file($path, $storage = '')
 	switch ($storage)
 	{
 		case 'Sae':
-			$arr      = explode('/', ltrim($path, './'));
-			$domain   = array_shift($arr);
-			$filePath = implode('/', $arr);
-			$s        = Think\Think::instance('SaeStorage');
-			return $s->delete($domain, $filePath);
+			$arr       = explode('/', ltrim($path, './'));
+			$domain    = array_shift($arr);
+			$file_path = implode('/', $arr);
+			$s         = Think\Think::instance('SaeStorage');
+			return $s->delete($domain, $file_path);
 			break;
 		case 'QINIU':
 			$setting = C('UPLOAD_CONFIG_QINIU');
@@ -256,12 +256,12 @@ function download_file($url, $param = '', $storage = '')
 			$setting = C('UPLOAD_CONFIG_QINIU');
 			$url = 'http://'.$setting['domain'].str_replace('/', '_', $url);
 			$duetime = NOW_TIME + 86400; 	//下载凭证有效时间
-			$DownloadUrl = $url.'?'.$param.'&e='.$duetime;
-			$Sign  = hash_hmac('sha1', $DownloadUrl, $setting['secretKey'], true);
-			$EncodedSign = str_replace(array('+', '/'), array('-', '_'), base64_encode($Sign));
-			$Token = $setting['accessKey'].':'.$EncodedSign;
-			$RealDownloadUrl = $DownloadUrl.'&token='.$Token;
-			return $RealDownloadUrl;
+			$download_url = $url.'?'.$param.'&e='.$duetime;
+			$sign  = hash_hmac('sha1', $download_url, $setting['secretKey'], true);
+			$encoded_sign = str_replace(array('+', '/'), array('-', '_'), base64_encode($sign));
+			$token = $setting['accessKey'].':'.$encoded_sign;
+			$real_download_url = $download_url.'&token='.$token;
+			return $real_download_url;
 			break;
 		case 'LOCAL':
 			return '/Uploads/'.$url;
@@ -404,15 +404,15 @@ function random($n, $mode = '')
  *
  * @author NewFutre[newfuture@yunyin.org]
  *
- * @param  [string] $toMail           [收件人邮箱]
+ * @param  [string] $to_mail          [收件人邮箱]
  * @param  [array]  $info             [邮箱信息'title'标题,'content'内容]
  * @param  [array]  $config           [邮件发送配置]
  * @return [bool]   [发送结果]
  */
-function send_mail($toMail, $info, $config)
+function send_mail($to_mail, $info, $config)
 {
 	$Mail = new \Vendor\Mail(C('MAIL_SMTP'));
-	$Mail->addTo($toMail)
+	$Mail->addTo($to_mail)
 	     ->setLogin($config['email'], $config['pwd'])
 	     ->setFrom($config['email'], $config['name'])
 	     ->setSubject($info['title'])
@@ -481,29 +481,29 @@ function send_sms_code($phone, $type)
  * @return bool   true 验证成功	 false 验证失败	 尝试次数达到限制	 null 验证信息不存在
  */
 function check_sms_code($phone, $code, $type)
-	{
+{
 	$info = S($type.$phone);
 	if ($info)
-		{
+	{
 		if ($info['code'] == $code)
-			{
+		{
 			S($type.$phone, null);
 			return true;
 		}
-			elseif ($info['tries'] >= 5)
-			{
+		elseif ($info['tries'] >= 5)
+		{
 			S($type.$phone, null);
 			return 0;
 		}
-			else
-			{
+		else
+		{
 			$info['tries'] = $info['tries'] + 1;
 			S($type.$phone, $info, 600);
 			return false;
 		}
 	}
-		else
-		{
+	else
+	{
 		return null;
 	}
 }

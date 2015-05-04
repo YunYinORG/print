@@ -79,16 +79,16 @@ function decrypt_phone(&$phone, $snum, $id)
 }
 
 /**
- *  encrypt_end($endNum)
+ *  encrypt_end($end_num)
  *  4位尾号加密
- * @param  $endNum   4位尾号
+ * @param  $end_num  4位尾号
  * @return string(4) 加密后的4位数字
  */
-function encrypt_end($endNum)
+function encrypt_end($end_num)
 {
 	$key = C('ENCRYPT_PHONE_END'); //获取配置密钥
-	$endNum = (int) $endNum; //对后四位进行AES加密
-	$cipher = aes_encode($endNum, $key);
+	$end_num = (int) $end_num; //对后四位进行AES加密
+	$cipher = aes_encode($end_num, $key);
 	$table = cipher_table($key); //加密后内容查找密码表进行匹配
 	$encryption = array_search($cipher, $table);
 
@@ -104,20 +104,20 @@ function encrypt_end($endNum)
 }
 
 /**
- *  encrypt_mid($midNum, $snum, $id)
+ *  encrypt_mid($mid_num, $snum, $id)
  *  中间6位数加密
- * @param  $midNum   string                   6位数字
+ * @param  $mid_num  string                   6位数字
  * @param  $snum     string                   编号字符串,用于混淆密钥
  * @param  $id       int                      用户id,在1~100000之间的整数,用于混淆原文
  * @return string(6) 加密后的6位数字
  */
-function encrypt_mid($midNum, $snum, $id)
+function encrypt_mid($mid_num, $snum, $id)
 {
 	$key = C('ENCRYPT_PHONE_MID'); //获取配置密钥
 	$key = substr($snum.$key, 0, 32); //混淆密钥,每个人的密钥均不同
 	$table = cipher_table($key);
-	$midNum += $id; //拆成两部分进行解密
-	$mid2 = (int) substr($midNum, 2, 4);
+	$mid_num += $id; //拆成两部分进行解密
+	$mid2 = (int) substr($mid_num, 2, 4);
 	$mid2 = array_search(aes_encode($mid2, $key), $table); //后4位加密
 	if (false === $mid2) //前密码表查找失败
 	{
@@ -126,7 +126,7 @@ function encrypt_mid($midNum, $snum, $id)
 	else
 	{
 		$mid2 = sprintf('%04s', $mid2);
-		return substr_replace($midNum, $mid2, 2);
+		return substr_replace($mid_num, $mid2, 2);
 	}
 }
 
@@ -146,30 +146,30 @@ function decrypt_end($encodeEnd)
 	{
 		E('尾号密码查找失败');
 	}
-	$endNum = (int) aes_decode($cipher, $key); //对密码进行解密
-	return sprintf('%04s', $endNum);
+	$end_num = (int) aes_decode($cipher, $key); //对密码进行解密
+	return sprintf('%04s', $end_num);
 }
 
 /**
- *  decrypt_mid($midEncode, $snum, $id)
+ *  decrypt_mid($mid_encode, $snum, $id)
  *  中间6位数解密函数
- * @param  $midEncode    string                   加密后的6位数字
+ * @param  $mid_encode   string                   加密后的6位数字
  * @param  $snum         string                   编号字符串,用于混淆密钥
  * @param  $id           int                      用户id,在1~100000之间的整数,用于混淆原文
  * @return string(6)/int 解密后的6位数字
  */
-function decrypt_mid($midEncode, $snum, $id)
+function decrypt_mid($mid_encode, $snum, $id)
 {
 	/*获取密码表*/
 	$key   = C('ENCRYPT_PHONE_MID');
 	$key   = substr($snum.$key, 0, 32);
 	$table = cipher_table($key);
 	/*解密*/
-	$mid2 = (int) substr($midEncode, 2, 4);
+	$mid2 = (int) substr($mid_encode, 2, 4);
 	$mid2 = $table[$mid2];
 	$mid2 = sprintf('%04s', aes_decode($mid2, $key));
 	/*还原*/
-	$num = substr_replace($midEncode, $mid2, 2);
+	$num = substr_replace($mid_encode, $mid2, 2);
 	$num -= $id;
 	return $num;
 }
@@ -183,8 +183,8 @@ function decrypt_mid($midEncode, $snum, $id)
  */
 function cipher_table($key)
 {
-	$tableName = $key; //缓存表名称
-	$table = F($tableName); //读取缓存中的密码表
+	$table_name = $key; //缓存表名称
+	$table = F($table_name); //读取缓存中的密码表
 	if ( ! $table)
 	{
 		/*密码表不存在则重新生成
@@ -197,7 +197,7 @@ function cipher_table($key)
 		}
 		mcrypt_generic_deinit($td);
 		sort($table); //根据加密后内容排序得到密码表
-		F($tableName, $table); //缓存密码表
+		F($table_name, $table); //缓存密码表
 	}
 	return $table;
 }
@@ -255,11 +255,11 @@ function encrypt_email($email)
 		aes_encode($name2, C('ENCRYPT_EMAIL')); //aes加密
 		$name2 = base64_encode($name2); //base64转码
 		/*特殊字符编码*/
-		$encodeMap = array(
+		$encode_map = array(
 			'+' => '-',
 			'=' => '_',
 			'/' => '.');
-		$name2 = strtr($name2, $encodeMap);
+		$name2 = strtr($name2, $encode_map);
 	}
 	else
 	{
@@ -289,11 +289,11 @@ function decrypt_email(&$email)
 	else
 	{
 		/*解密 并base64还原*/
-		$decodeMap = array(
+		$decode_map = array(
 			'-' => '+',
 			'_' => '=',
 			'.' => '/');
-		$name2 = strtr($name2, $decodeMap);
+		$name2 = strtr($name2, $decode_map);
 		$name2 = base64_decode($name2);
 		aes_decode($name2, C('ENCRYPT_EMAIL')); //aes解解码
 	}
