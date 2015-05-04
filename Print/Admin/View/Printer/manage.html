@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/login.css">
 </head>
 <body>
+<h2><a href="__URL__">返回管理首页</a></h2>
 	<h1>打印店管理</h1>
     <table class="table" width="60%" border="1">
         <thead>
@@ -37,16 +38,16 @@
                     <td>
 						<switch name="vo['status']">
 							<case value="1">
-								<form action="changeStatus">
-									<input type="hidden" name="account" value={$vo['account']}>
+								<form action="changeStatus" method="post" >
+									<input type="hidden" name="id" value={$vo['id']}>
 									<input type="radio" name="status" value="1" checked="true">打开
 									<input type="radio" name="status" value="0" >关闭
 									<input type="submit" value="提交">
 								</form>
 							</case>
                             <case value="0">
-								<form action="changeStatus">
-									<input type="hidden" name="account" value={$vo['account']}>
+								<form action="changeStatus" method="post" >
+									<input type="hidden" name="id" value={$vo['id']}>
 									<input type="radio" name="status" value="1" >打开
 									<input type="radio" name="status" value="0" checked="true">关闭
 									<input type="submit" value="提交">
