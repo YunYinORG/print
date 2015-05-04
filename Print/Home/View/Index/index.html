@@ -55,7 +55,8 @@
                     <div class="col-lg-4 col-md-5 col-sm-8">
                         <div class="input-group">
                             <span class="input-group-addon">密码</span>
-                            <input type="password" tabindex="2" class="form-control" id="pwd" name="password" placeholder="首次使用用南开URP或天大办公网密码" required>
+                            <input type="password" tabindex="2" class="form-control" id="pwd" name="password" placeholder="首次用URP或办公网密码" required>
+                            <a class="PwdEye btn input-group-addon" data-query='#pwd'></a>
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-1 col-sm-8">
@@ -87,6 +88,7 @@
 	</footer>
 </BLOCK>
 <BLOCK name="end">
+<script src='__PUBLIC__/js/pwd.js' defer></script>
 <script>
     function checkForm()
     {

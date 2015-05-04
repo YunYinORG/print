@@ -1,23 +1,24 @@
 ﻿<EXTEND name="Print/Template/base.html"/>
 <BLOCK name="title">欢迎使用云印南天</BLOCK>
 <BLOCK name="head"></BLOCK>
+<BLOCK name="header"> <h1 class="text-center text-success">欢迎加入云印,即将完成</h1></BLOCK>
 <BLOCK name='content'>
         <div class="container">
             <div class="col-lg-8 col-lg-offset-2">
-                <h1 class="text-center text-danger">首次使用须知</h1>
+                <h2 class="text-center text-danger">首次登录须知</h2>
                 <div class='alert alert-warning'>
-                    亲爱的<strong class='text-success'>{$data['name']}</strong>
+                    亲爱的<strong class='text-success'>{$data['name']}</strong>同学
                     <ul>
-                    <li>恭喜你，通过了 <q>
+                    <li>恭喜你，通过了<q class="strong">
                     <SWITCH name="data['sch_id']" > 
                         <CASE value="1">南开大学</CASE>
                         <CASE value="2">天津大学</CASE>
                     </SWITCH>
                     </q> <code>实名认证</code>;</li>
-                        <li>还差这一步，你已经可以使用<strong >云印南天</strong>平台啦！</li>
+                        <li>还差这一步，你已经可以使用<strong>云印南天</strong>平台啦！</li>
                         <li>我们是一个极其重视信息安全和用户隐私的团队；</li>
                         <li>在使用之前我们强烈建议你设置独立密码,<b class='text-info'>你也可以跳过设置</b>,将使用认证密码作为登录密码；</li>
-                        <li>当然不论使用什么密码,我们会对密码进行3次<code>不可逆加密</code>（即使数据库泄露也不可能反向获取你的真实密码）！</li>
+                        <li>我们会对密码进行3次<code>不可逆加密</code>（即使数据库泄露也不可能反向获取你的真实密码）！</li>
                         <li>对于恶意使用者，我们有权封号，对于严重不诚信用户进行公布。</li>
                         <li>任何问题和意见均可随时联系我们（微博、人人、微信、邮箱、GitHub等均可）！</li>
                         <li>更多详细内容请阅读云印南天<strong><a target="_blank" href="/Index/privacy?User/register">隐私声明</a></strong>。</li>
@@ -26,26 +27,42 @@
             </div>
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="text-center text-info">
-                    <h2>设定新的登录密码</h2>
+                    <h2 class="text-warning" id='msg'>设置独立的登录密码</h2>
                 </div>
-                <form  role="form" method="post" action="signup">
+                <form  role="form" method="post" onsubmit="return checkform(this)" action="signup">
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="password">新的密码</label>
-                        <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password">
+                        <input id="password" class="form-control" placeholder='设置云印登录密码'name="password" type="password" id="password" required><a class="PwdEye input-group-addon" data-query="#password"></a>
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="re_password">确认密码</label>
-                        <input  class="form-control" placeholder='重复刚才的密码' name="re_password" type="password" id="re_password">
+                        <input id="re_password" class="form-control" placeholder='重复刚才的密码' name="re_password" type="password" id="re_password" required><a class="PwdEye btn input-group-addon" data-query='#re_password'></a>
                     </div>
                     <div class="form-group input-group btn-group-justified">
                         <div class="btn-group">
-                            <button type="submit" name="ignore" value="0" class="btn btn-success">设定新密码</button>
+                        <button type="submit" name="ignore" value="0" class="btn btn-success">设定新密码</button>
                         </div>
                         <div class="btn-group">
-                        <button type="submit" name="ignore" value="1"  title='使用认证密码作为登陆密码' class="btn btn-danger">跳过设置</button>
+                        <a href="signup?ignore=1" title='使用认证密码作为登陆密码' class="btn btn-danger">跳过设置</a>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+        <hr/>
+</BLOCK>
+<BLOCK name='end'>
+<script src="__PUBLIC__/js/pwd.js" defer='defer'></script>
+<script >
+function checkform(f)
+{
+    if(checkPwd(f))
+    {
+        return true;
+    }else{
+        $('#msg').text('两次密码不一致！');
+        return false;
+    }
+}
+</script>
 </BLOCK>
