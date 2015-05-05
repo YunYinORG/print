@@ -1,11 +1,12 @@
-﻿---
+---
 layout: post
-title: github使用                     	 
+title: 如何提交新的文档                    	 
 date: 2015-05-02 22:30 						 
 description: github使用					 	
-category:使用说明 						 	
-tags:github markdown 						 
+category: 使用说明 						 	
+tags: github markdown 技术文档					 
 ---
+
 1.	在https://windows.github.com/ 下载安装github for windows版，注册账户
 2.	转至https://github.com/登陆
 3.	转至https://github.com/nkumstc/print 点击fork
