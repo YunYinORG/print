@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+</head>
+<body>
+<form name="form1" method="post" action="__URL__/send">
+	<div align="center" style="font-size:20px;color:#0000FF">
+		失主姓名：{$recv_name}
+		学号：{$recv_number}
+		<input type="hidden" id="name" value="{$recv_name}"></input>
+		<input type="hidden" id="number" value="{$recv_number}"></input>
+    <br>附加消息
+		<textarea rows="3" name="add_msg" id="add_msg" onkeyup="send_preview()"></textarea>
+	<br>
+		将发送的信息预览：<div id="send_msg"> </div>
+    <br>
+      <button type="submit" id="send" name="send" onclick="return confirm('确定发送？')">发送</button>
+  </div>
+</form>
+</body>
+</html>
+<script>
+var name = document.getElementById('name').value; 
+var number = document.getElementById('number').value; 
+var send_msg = '学号是' + number + '的'+ name + '同学你好：';
+function send_preview()
+{
+	var add_msg = document.getElementById('add_msg').value; 
+    document.getElementById("send_msg").innerHTML = send_msg + add_msg;
+}
+</script>
