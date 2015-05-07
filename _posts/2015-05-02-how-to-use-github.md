@@ -27,7 +27,7 @@ tags: github markdown 技术文档
  ![propose](http://www.yunyin.org/assets/image/2015-05-02/gh_propose.jpg)
  
 
-以上就是你要做的了，下面就等future合并生效了。
+###以上就是你要做的了，下面就等future合并生效了。
 
 ###有图片的文档写法（以gh-pages/posts为例）
 
@@ -44,7 +44,7 @@ tags: github markdown 技术文档
  ![sync](http://www.yunyin.org/assets/image/2015-05-02/gh_sync.jpg)
 
 4.	点击view on github
- ![view](http://www.yunyin.org/assets/image/2015-05-02/gh_view on github.jpg)
+ ![view](http://www.yunyin.org/assets/image/2015-05-02/gh_view on gh.jpg)
 
 5.	new pull request
  ![p r q](http://www.yunyin.org/assets/image/2015-05-02/gh_new pull request.jpg)
@@ -60,13 +60,16 @@ tags: github markdown 技术文档
 日期+标题.md（如：2015-03-20-how-to-use.md）
 3.文章开头
 每篇文章的最前面添加，在冒号后填空，括号内容为注释
->---
->layout: post
->title:                      	 （标题）
->date:  						 （发布日期）
->description: 					 （描述摘要）	
->category: 						 （分类）	
->tags: 						 （标签）	
->---
-	
 
+>layout: post
+>
+>title:（标题）
+>
+>date: （发布日期）
+>
+>description: （描述摘要）	
+>
+>category: （分类）	
+>
+>tags:（标签）	
+>
