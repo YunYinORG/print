@@ -73,7 +73,7 @@ return array(
 	'REGEX_NUMBER_TJU' => '/^[1-3]01[0-4]\d{6}$/', //天大学号
 	'REGEX_ACCOUNT'    => '/^\w{3,16}$/', //打印店账号正则
 	'REGEX_TOKEN'      => '/^\w{38,48}$/',
-	'REGEX_PHONE'      => '/^1[3458]\d{9}$/',
+	'REGEX_PHONE'      => '/^1[34578]\d{9}$/',
 	'REGEX_EMAIL'      => '/^[\w\.\-]{1,17}@[A-Za-z,0-9,\-,\.]{1,30}\.[A-Za-z]{2,6}$/',
 
 	//文件上传相关配置
@@ -91,7 +91,7 @@ return array(
 	// 'VAR_LANGUAGE'     => 'l', // 默认语言切换变量
 
 	/*HTTPS安全连接是否开启，Home/Conf/config.php有对应的safe_url为https*/
-	'HTTPS_ON' => ture, //本地调试开发时，在secret中设置'HTTPS_ON'=>false；
+	'HTTPS_ON' => true, //本地调试开发时，在secret中设置'HTTPS_ON'=>false；
 	'BASE_URL' => 'http://yunyin.org', //本地调试开发时，在secret中设置'BASE_URL'=>'http://localhost';
 
 );

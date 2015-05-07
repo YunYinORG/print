@@ -48,8 +48,10 @@ class CardController extends Controller {
 			{
 				$this->error('使用此功能必须绑定手机号！', '/User/index');
 			}
-			elseif ( ! $card) //数据库中不存在，加入数据库
+			elseif ( ! $card)
 			{
+
+				/*数据库中不存在，加入数据库*/
 				$card['id'] = $uid;
 				M('Card')->add($card);
 				$this->display();
@@ -60,15 +62,6 @@ class CardController extends Controller {
 				$this->display();
 			}
 		}
-	}
-
-	/**
-	 * help
-	 * 帮助说明
-	 */
-	public function help()
-	{
-		$this->display();
 	}
 
 	/**
@@ -156,11 +149,11 @@ class CardController extends Controller {
 					$success |= $sms_result;
 					if ($sms_result)
 					{
-						$msg = '短信已发送!\n';
+						$msg = '短信已发送!<br/>';
 					}
 					else
 					{
-						$msg = '短信发送失败!\n';
+						$msg = '短信发送失败!<br/>';
 					}
 				}
 				if ($recv_user['email'])
@@ -177,7 +170,7 @@ class CardController extends Controller {
 					$success |= $mail_result;
 					if ($mail_result)
 					{
-						$msg .= '邮件已发送!\n';
+						$msg .= '邮件已发送!<br/>';
 					}
 					else
 					{
@@ -197,7 +190,7 @@ class CardController extends Controller {
 				$log['lost_id'] = $recv_user['id'];
 				if ( ! M('Cardlog')->add($log))
 				{
-					$this->error('记录失败!!!\n'.$msg);
+					$this->error('记录失败!!!<br/>'.$msg);
 				}
 				else
 				{
@@ -265,6 +258,7 @@ class CardController extends Controller {
 					$findId = $Log->getFieldById($id);
 					if ($Log->where("find_id=$findId AND status<0")->count() >= 2)
 					{
+
 						/*恶意操作进行屏蔽*/
 						M('Card')->where("id=$findId")->setField('blocked', 1);
 					}
@@ -275,6 +269,134 @@ class CardController extends Controller {
 			{
 				$this->error('操作失败');
 			}
+		}
+	}
+
+	/**
+	 * showPhone()
+	 * 显示拾得者手机
+	 * 若已感谢、举报或忽略，显示按钮失效
+	 */
+	public function showPhone()
+	{
+		$uid = use_id();
+		$id  = I('id', null, 'int');
+		$log['id'] = $id;
+		$log['lost_id'] = $uid;
+		if ($find_id = M('Cardlog')->where($log)->getField('find_id'))
+		{
+			$phone = get_phone_by_id($find_id);
+			if (IS_AJAX)
+			{
+				$this->success(array('phone' => $phone));
+			}
+			else
+			{
+				echo $phone;
+			}
+		}
+	}
+
+	/**
+	 * help
+	 * 帮助说明
+	 */
+	public function help()
+	{
+		$uid = use_id();
+		if ( ! $uid)
+		{
+			$this->error('请登录！', '/');
+		}
+		else
+		{
+			$this->recv_name = session('recv_name');
+			$this->recv_number = session('recv_number');
+		}
+		session('find_id', $uid);
+		$this->display();
+	}
+
+	/**
+	 * 失主尚未加入平台,或已加入平台但未绑定信息
+	 * 向第三方平台发送消息
+	 * @param number	学号
+	 * @param name	姓名
+	 * @param add_msg         附加消息
+	 */
+	public function send()
+	{
+		$find_id    = session('find_id');
+		$cache_name = 'send_'.$find_id;
+		$times      = S($cache_name);
+		if ($times > 5)
+		{
+			\Think\Log::record('第三方平台发送失败：ip:'.get_client_ip().',find_id'.$find_id);
+			$this->error('发送次数过多!', '/Card/log');
+		}
+		else
+		{
+			S($cache_name, $times + 1, 3600);
+		}
+		$number   = session('recv_number');
+		$name     = session('recv_name');
+		$send_msg = '学号是'.$number.'的'.$name.'同学你好：';
+		$send_msg .= I('add_msg');
+		$recv_user_id = M('User')->getFieldByStudentNumber($number, 'id');
+		$recv_off     = M('Card')->getFieldById($recv_user_id, 'off');
+		if ($recv_user_id && ($recv_off != 1))
+		{
+			/*失主已加入平台但未绑定信息,且未关闭此功能,添加到丢失记录*/
+			if ($recv_off === null)
+			{
+				$card['id'] = $recv_user_id;
+				$Card->add($card);
+			}
+			$log['find_id'] = $find_id;
+			$log['lost_id'] = $recv_user_id;
+			M('Cardlog')->add($log);
+		}
+		/*post数据到API*/
+		$post = function($url, $key, $send_msg)
+		{
+			$post_url = $url;
+			$post_data = array(
+				'key'    => $key,
+				'status' => base64_encode($send_msg),
+			);
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $post_url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+			$data = curl_exec($ch);
+			curl_close($ch);
+			return $data;
+		};
+
+		$url    = 'https://newfuturepy.sinaapp.com/broadcast';
+		$key    = C('WEIBO_API_PWD');
+		$data   = $post($url, $key, $send_msg);
+		$result = json_decode($data);
+		if ($result->renren)
+		{
+			echo '人人发送成功.';
+		}
+		else
+		{
+			echo '人人发送失败.';
+		}
+		switch ($result->weibo)
+		{
+			case 2:
+				echo '微博发送成功.';
+				break;
+			case 0:
+				\Think\Log::record('微博API调用出现错误或授权过期');
+			default:
+				echo '微博发送失败.';
 		}
 	}
 

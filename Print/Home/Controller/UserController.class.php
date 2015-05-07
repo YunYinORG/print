@@ -88,10 +88,10 @@ class UserController extends Controller
             $this->error(L('REG_INVALID'));
         }
         /*重设密码或者使用密码*/
-        if (I('post.ignore')) 
+        if (I('ignore')) 
         {
             //使用默认密码
-            $reg_data['password']          = encode($reg_data['password'], $reg_data['student_number']);
+            $password= $reg_data['password'];
         } 
         else
         {
@@ -105,10 +105,9 @@ class UserController extends Controller
             {
                 $password = md5($password);
             }
-            
-            $reg_data['password']          = encode(md5($password), $reg_data['student_number']);
         }
         
+        $reg_data['password']          = encode($password, $reg_data['student_number']);
         if ($uid      = M('User')->add($reg_data)) 
         {
             //注册成功！

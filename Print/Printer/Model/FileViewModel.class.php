@@ -16,6 +16,7 @@ class FileViewModel extends ViewModel {
 			'color',
 			'ppt_layout',
 			'sended',
+			'requirements'
 		),
 		'user' => array(
 			'name' => 'use_name',

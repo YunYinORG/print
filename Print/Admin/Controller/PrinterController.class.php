@@ -70,7 +70,7 @@ class PrinterController extends Controller {
 		$data['address'] = I('post.address');
 		$data['phone'] = I('post.phone');
 
-		$Printer = D('Printer');
+		$Printer = M('Printer');
 		$result  = $Printer->add($data);
 		if ($result)
 		{
@@ -88,8 +88,28 @@ class PrinterController extends Controller {
 		{
 			$this->redirect('index');
 		}
-		$Printer = D('Printer');
+		$Printer = M('Printer');
 		$this->data = $Printer->select();
 		$this->display();
+	}
+
+	public function changeStatus()
+	{
+		if ( ! admin_id())
+		{
+			$this->redirect('index');
+		}
+		$Printer = M('Printer');
+		$pid = I('post.id', null, 'int');
+		$data['status'] = I('post.status');
+		$result = $Printer->where("id=$pid")->save($data);
+		if ($result)
+		{
+			$this->success('修改成功', '/Admin/Printer/manage');
+		}
+		else
+		{
+			$this->error('修改失败'.$Printer->getError());
+		}
 	}
 }

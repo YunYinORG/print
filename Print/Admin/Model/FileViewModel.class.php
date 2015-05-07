@@ -1,4 +1,4 @@
-<?php namespace Home\Model;
+<?php namespace Admin\Model;
 use Think\Model\ViewModel;
 
 class FileViewModel extends ViewModel {
@@ -21,6 +21,11 @@ class FileViewModel extends ViewModel {
 			'name' => 'pri_name',
 			//'id',
 			'_on' => 'printer.id=file.pri_id',
+		),
+		'user' => array(
+			'name' => 'user_name',
+			'student_number' => 'stu_num',
+			'_on' => 'user.id=file.use_id'
 		),
 	);
 }
