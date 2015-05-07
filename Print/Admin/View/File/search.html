@@ -1,0 +1,11 @@
+<EXTEND name="base" />
+<block name="script">
+<script>
+	$(document).ready(function(){
+		var status = {$status};
+		if ((status>=0)&&(status<=4)){
+			$("#status").val(status);
+		}
+	});
+</script>
+</block>
