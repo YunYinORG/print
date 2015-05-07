@@ -178,6 +178,128 @@ class FileController extends Controller {
 		$this->error('当前状态不允许删除！');
 	}
 
+	public function getToken()
+	{
+		$uid = use_id(U('Index/index'));
+		if ($uid)
+		{
+			$setting = C('UPLOAD_CONFIG_QINIU');
+			$setting['timeout'] = 300;
+			$name = 'temp_'.date('Y-m-d').'_'.uniqid();
+
+			$insert['use_id'] = $uid;
+			$insert['url'] = $name;
+
+			if (M('File')->add($insert))
+			{
+				$data = array('scope' => $setting['bucket'].':'.$name, 'deadline' => $setting['timeout'] + time(), 'returnBody' => '{"rname":$(fname)&"name":$(key)}');
+				$uploadToken = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($setting['secretKey'], $setting['accessKey'], json_encode($data));
+				header('Access-Control-Allow-Origin:http://upload.qiniu.com');
+				$result = array('name' => $name, 'token' => $uploadToken);
+				$this->success($result);
+			}
+			else
+			{
+				$this->error('can not get token');
+			}
+
+		}
+		else
+		{
+			$this->error('login');
+		}
+
+	}
+
+	public function fileData()
+	{
+		$uid = use_id(U('/Index/index'));
+		if ($uid)
+		{
+
+		}
+		else
+		{
+			$this->error('请登录！', '/');
+		}
+	}
+
+	public function deleteTempFile()
+	{
+		$uid = use_id(U('/Index/index'));
+		if ($uid)
+		{
+			$path    = I('filename');
+			$setting = C('UPLOAD_CONFIG_QINIU');
+			$setting['timeout'] = 300;
+			$url    = str_replace('/', '_', $path);
+			$qiniu  = new \Think\Upload\Driver\Qiniu\QiniuStorage($setting);
+			$result = $qiniu->del($url);
+			if ($result)
+			{
+				$this->success('deleted');
+			}
+			else
+			{
+				$this->error('not');
+			}
+		}
+		else
+		{
+			$this->error('请登录！', '/');
+		}
+
+	}
+
+	public function renameTempFile()
+	{
+		$uid = use_id(U('/Index/index'));
+		if ($uid)
+		{
+			$path    = I('filename');
+			$setting = C('UPLOAD_CONFIG_QINIU');
+			$setting['timeout'] = 300;
+			$url     = str_replace('/', '_', $path);
+			$newPath = str_replace('temp_', '', $path);
+			$qiniu   = new \Think\Upload\Driver\Qiniu\QiniuStorage($setting);
+			$result  = $qiniu->rename($url, $newPath);
+			if ($result)
+			{
+				$this->success('deleted');
+			}
+			else
+			{
+				$this->error('not');
+			}
+		}
+		else
+		{
+			$this->error('请登录！', '/');
+		}
+
+	}
+
+	public function temp()
+	{
+		$uid = use_id(U('Index/index'));
+		if ($uid)
+		{
+			$Printer = M('Printer');
+			$User    = M('User');
+			$user    = $User->Field('sch_id,phone')->getById($uid);
+			$this->lock = $user['phone'] ? 1 : 0;
+			$condition['sch_id'] = $user['sch_id'];
+			$condition['status'] = 1;
+			$this->data = $Printer->where($condition)->order('rank desc')->Field('id,name,address')->select();
+			$this->ppt = C('PPT_LAYOUT');
+			$this->display();
+		}
+		else
+		{
+			$this->redirect('/Index/index');
+		}
+	}
+
 	public function _empty()
 	{
 		$this->redirect('index');
