@@ -2,7 +2,7 @@
 <EXTEND name="Print/Template/base.html"/>
 <BLOCK name='addhead'>
     <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
-    <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+    <link href="__PUBLIC__/css/upload.css" rel="stylesheet" type="text/css"/>
 </BLOCK>
 <BLOCK name='header'>
 <INCLUDE file="Print/Template/nav.html" add="active"/>
@@ -15,7 +15,7 @@
     <div class="row" style="display:none;" id="help-info">
     <div class="col-lg-8 col-xs-12">
         <p class="text-info well">
-        使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> <code>设置打印份数、格式</code> -> <code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
+        使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> (<code>设置打印份数、格式</code> -> )<code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
         不绑定手机不能设置打印参数，不能提前打印，只能上传后到店打印；<br/>
         暂时仅支持<code>pdf</code>、<code>doc(x)</code>、<code>wps</code>、<code>ppt(x)</code>格式的文件上传；<br/>
         如上传文件名出现<code>乱码</code>，请更换浏览器。电脑下Chrome效果最佳，手机建议使用UC浏览器；<br/>
@@ -27,7 +27,7 @@
     <br/>
     <form id="print" method="post" action="__URL__/uploadOne" onsubmit="return checkform();" enctype="multipart/form-data">
         <div class="row">
-            <div class="text-center col-lg-6 col-md-8 col-xs-12">
+            <div class="text-center col-lg-8 col-lg-offset-1  col-md-8 col-xs-12">
                 <div class="form-group">
                     <div class="upload-btn">
                         <div class="upload-area"><span class="glyphicon glyphicon-open"></span>点击上传文件<small>(不超过10MB)</small></div>
@@ -38,10 +38,10 @@
             </div>
         </div>
         <br/>
-        <div class="row">
-            <div class="form-group">
-                <label for="PrinterChoose" class="col-lg-1 col-sm-2 control-label">打印店</label>
-                <select class="col-lg-5 col-sm-10 form-control" name="pri_id" id="PrinterChoose" onchange="priceChange(this)" required>
+        <div class="row form-group">
+            <div class="col-lg-8 col-lg-offset-1 col-sm-10">
+                <label for="PrinterChoose" class="sr-only">打印店</label>
+                <select class="form-control" name="pri_id" id="PrinterChoose" onchange="priceChange(this)" required>
                     <option value="">选择想去的打印店....</option>
                     <volist name="data" id="vo">
                         <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
@@ -51,7 +51,7 @@
         </div>
         <br/>
         <div class="row">        
-            <div class="well col-lg-6 col-sm-12">
+            <div class="well col-lg-8 col-lg-offset-1  col-sm-12">
                 <h4 class="text-info">该店价格信息</h4>
                 <div id='price' class='help-block comments'>
                     黑白单面：<span id='p_s' class='text-danger'></span><br/>
@@ -62,37 +62,32 @@
             </div>
         </div>
         <IF condition="$lock eq 1">
-        <div class="form-group">
-            <div class="row">
-                <label for="ispre" class="col-lg-1 col-sm-2 control-label">设置</label>
-                <div class="col-lg-2 col-sm-4">
-                    <input name="ispre" id="ispre" type="checkbox" disabled="true"/>
+        <div class="row form-group text-cneter">
+                <div class="col-lg-2 col-lg-offset-1 col-xs-4 col-xs-offset-1">
+                   <label for="ispre" class="sr-only">设置</label>
+                    <input name="ispre" id="ispre" type="checkbox" data-label-text="设置" data-off-text="到店打印"  data-on-text="提前打印" data-off-color="success" data-on-color="warning" data-label-width="" disabled="true"/>
                 </div>
                 <div class="setting">
-                <label for="copies" class="col-lg-1 col-sm-2 control-label">份数</label>
-                <div class="col-lg-2 col-sm-4">
-                    <input name="copies" type="number" class="form-control" id="copies" min="1" value="1" disabled="true"/>
+                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                <div class="input-group">
+                    <label for="copies" class="sr-only">份数</label>
+                    <input name="copies" type="number" placeholder="份数" class="form-control" id="copies" min="1" value="1"/>
+                     <span class="input-group-addon">份</span>
                 </div>
+                </div>  
+                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                    <label for="printcolor" class="sr-only">颜色</label>
+                    <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox" data-label-text="颜色" data-off-text="黑白打印"  data-on-text="彩色打印" data-on-color="warning" data-off-color="success" data-label-width=""/>
                 </div>
-            </div>
+                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                  <label for="double_side" class="sr-only">单双</label>
+                    <input type="checkbox" name="double_side" id='double_side' value="1" data-label-text="单双" data-off-text="单面打印"  data-on-text="双面打印" data-on-color="warning" data-off-color="success" data-label-width="" disabled="true"/>
+                </div>
         </div>
-       
-        <div class="form-group">
-            <div class="row setting">
-                <label for="printcolor" class="col-lg-1 col-sm-2"><strong>颜色</strong></label>
-                <div class="col-lg-2 col-sm-4">
-                    <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox" disabled="true"/>
-                </div>
-                <label for="double_side" class="col-lg-1 col-sm-2"><strong>单双</strong></label>
-                <div class="col-lg-2 col-sm-4">
-                    <input type="checkbox" name="double_side" id='double_side' value="1" disabled="true"/>
-                </div>
-            </div>
         </div>
-         <div class="form-group">
-            <div class="row setting" style="display:none" id="pptprint">
-                <label for="default" class="col-lg-1 col-sm-2 control-label">PPT格式</label>
-                <div class="col-lg-11 col-sm-10">
+         <div class="row form-group setting" id="pptprint">
+                <div class="col-lg-8 col-lg-offset-1 col-sm-10">
+                 <label for="default" class="sr-only">PPT格式</label>
                     <select id="default" class="form-control" name="ppt_layout" required>
                         <option value="">选择PPT打印格式....</option>
                         <volist name="ppt" id="vo" offset="1">
@@ -100,25 +95,21 @@
                         </volist>
                     </select>
                 </div>
-            </div>
         </div>
-        <div class="form-group">
-            <div class="row setting">
-                <!-- <a class="comments col-lg-12" id="showAdd">更多设置？</a> -->
-                <!-- <div style="display:none"> -->
-                <label for="addtion-need" class='col-lg-1 col-sm-2 control-label'>备注</label>
-                <textarea id="addtion-need" class="form-control col-lg-4 col-sm-10" placeholder="如有其要求此处填写，若无可空白，限制32字以内" length="32" name="requirements"></textarea>
-                <!-- </div> -->
+        <div class="row form-group">
+            <div class="setting col-lg-8 col-lg-offset-1 col-sm-10 col-xs-10 col-xs-offset-1">
+                <label for="addtion-need" class='sr-only'>备注</label>
+                <textarea id="addtion-need" class="form-control" placeholder="备注，若无可空白，限制32字以内" length="32" name="requirements"></textarea>
             </div>
         </div>
         <ELSE/>
         <div>
-            <a href="/User"><b>绑定手机后可进行高级设置和提前打印</b></a>
+            <a href="__ROOT__/User"><b>绑定手机后可进行高级设置和提前打印</b></a>
         </div>
         </IF>
     <div class="row">
-        <div class="col-md-8">
-            <button type="submit" class="btn btn-info" id="fileUploadButton" disabled="true">开始传送</button>
+        <div class="form-group col-md-8 col-lg-offset-4 col-lg-1 ">
+            <button type="submit" class="btn btn-lg btn-info" id="fileUploadButton" disabled="true">开始传送</button>
         </div>
     </div>
     </form>
@@ -126,15 +117,12 @@
 </BLOCK>
 
 <BLOCK name='end'>
-<script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap-switch.min.js" defer="defer"></script>
+<script src="__PUBLIC__/js/upload.js" defer="defer"></script>
 <script language="javascript" type="text/javascript">
-
 $(function(){
-    $("#ispre").bootstrapSwitch({'offText':'到店打印','onText':'提前打印'});
-    $("#printcolor").bootstrapSwitch({'offText':'黑白打印','onText':'彩色打印'});
-    $("#double_side").bootstrapSwitch({'offText':'单','onText':'双'});
+    $("[type='checkbox']").bootstrapSwitch();
     $('.setting').hide();
-
+    
     $("#helpView").click(function(){
     $('#helpView').toggleClass('btn-warning');
     $('#help-info').toggle(100);});
