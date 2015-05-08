@@ -165,7 +165,7 @@ class CardController extends Controller {
 						$send_user['email'] = decrypt_email($send_user['email']);
 					}
 					/*发送邮件通知*/
-					$mail_result = send_mail($recv_email, L('MAIL_CARD', array('name' => $recv_user['name'], 'sender' => $send_user)), C('MAIL_NOTIFY'));
+					$mail_result = send_mail($recv_user, L('MAIL_CARD', array('name' => $recv_user['name'], 'sender' => $send_user)), C('MAIL_NOTIFY'));
 
 					$success |= $mail_result;
 					if ($mail_result)

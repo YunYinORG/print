@@ -1,6 +1,6 @@
 <EXTEND name="Print/Template/base.html"/>
 <BLOCK name="title">云印南天</BLOCK>
-<BLOCK name="head"></BLOCK>
+<BLOCK name="addhead"></BLOCK>
 <BLOCK name='header'>
     <h1 class="text-danger text-center">验证成功,重置密码</h1>
 </BLOCK>
@@ -14,10 +14,12 @@
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="password">新的密码</label>
                         <input class="form-control" placeholder='要设置的密码'name="password" type="password" id="password" required>
+                         <a class="PwdEye btn input-group-addon" data-query='#password'></a>
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="re_password">确认密码</label>
                         <input  class="form-control" placeholder='重复刚才的密码' type="password" id="re_password" required>
+                         <a class="PwdEye btn input-group-addon" data-query='#re_password'></a>
                     </div>
                     <input type="hidden" name='isMD5' value="0"/>
                     <div class="text-center">
@@ -28,15 +30,15 @@
         </div>
 </BLOCK>
 <BLOCK name='end'>
-	<script src="__JS__/md5.min.js" defer></script>
+	<script src="__PUBLIC__/js/pwd.js" defer></script>
     <script>
 function checkform(f){
     if(checkPwd(f))
     {
+        return true;
+    }else{
         alert('两次密码不一致！');
         return false;
-    }else{
-        return true;
     }
 }
     </script>

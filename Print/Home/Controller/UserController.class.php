@@ -283,7 +283,9 @@ class UserController extends Controller
                 if ($cid) 
                 {
                     $url = U('User/verifyEmail', 'id=' . $cid . '&code=' . $data['code'], '', true);
-                    if (send_mail($email, L('MAIL_BIND', array('mail' => $email, 'link' => $url)), C('MAIL_VERIFY'))) 
+                    $user= array('email' => $email);
+                    $user['name']=M('User')->getFiledById($uid,'name');
+                    if (send_mail($user, L('MAIL_BIND', array('mail' => $email, 'link' => $url)), C('MAIL_VERIFY'))) 
                     {
                         $this->success('验证邮件已发送到' . $email . '请及时到邮箱验证查收!注意垃圾箱哦o(^▽^)o');
                     } 
@@ -338,7 +340,7 @@ class UserController extends Controller
                         //首次绑定邮件
                         if (!$user['email']) 
                         {
-                            send_mail($email, L('MAIL_FIRST', array('name' => $user['name'])), C('MAIL_NOTIFY'));
+                            send_mail($user, L('MAIL_FIRST', array('name' => $user['name'])), C('MAIL_NOTIFY'));
                         }
                         $this->success('绑定成功！', '/');
                     } 
@@ -436,7 +438,7 @@ class UserController extends Controller
                 {
                     $this->error('邮箱地址无效！');
                 }
-                $user = M('User')->Field('id,email')->getByStudentNumber($number);
+                $user = M('User')->Field('name,id,email')->getByStudentNumber($number);
                 if (!empty($user['email'])) 
                 {
                     import('Common.Encrypt', COMMON_PATH, '.php');
@@ -448,7 +450,7 @@ class UserController extends Controller
                 } 
                 else
                 {
-                    $this->error('学号未注册或未绑定邮箱！');
+                    $this->error('学号未登录过或未绑定邮箱！');
                 }
                 $data['use_id']      = $user['id'];
                 $data['type']      = 2; //密码找回类型为2
@@ -460,7 +462,7 @@ class UserController extends Controller
                 if ($cid) 
                 {
                     $url = U('User/checkEmailCode', 'id=' . $cid . '&code=' . $data['code'], '', true);
-                    if (send_mail($email, L('MAIL_FINDPWD', array('link' => $url)), C('MAIL_VERIFY'))) 
+                    if (send_mail($user, L('MAIL_FINDPWD', array('link' => $url)), C('MAIL_VERIFY'))) 
                     {
                         $this->success('验证邮件已发送到' . $email . '请及时到邮箱查收!注意垃圾箱哦o(^▽^)o', '/', 5);
                     } 

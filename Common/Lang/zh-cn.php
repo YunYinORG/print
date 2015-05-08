@@ -18,10 +18,10 @@ return array(
 	),
 	'MAIL_CARD' => array( //一卡通招领：{$name}接收者姓名,{$sender}拾卡人信息
 		'title'   => '云印校园卡认领通知',
-		'content' => '亲爱的<i>{$name}</i>同学：<br/>{$sender["school"]}的<i>{$sender}</i>同学说TA捡到了你的学子卡<br/>TA的手机号:<b><a herf="tel:{$sender["phone"]}">{$sender["phone"]}</a></b>;<br/>,TA的邮箱: <b><a href="mailto:{$sender["email"]}">{$sender["phone"]|default="无"}</a></b>;<br/>请尽快与其联系并认领吧。^_^',
+		'content' => '<p>亲爱的<b>{$name}</b>同学：</p><p>非常高兴地告诉你，你离家出走的校园卡已经被{$sender["school"]}大学的{$sender["name"]}同学捡到啦^_^</p><p>尽快通过Ta的手机号: <b><a href="tel:{$sender[\'phone\']}">{$sender["phone"]}</a></b> 或Ta的邮箱: <b><a href="mailto:{$sender[\'email\']}">{$sender["email"]|default="无"}</a></b> 与其联系吧。</p><p>然后请登录云印校园卡记录中心（ <a href="http://yunyin.org/Card/log">yunyin.org/Card/log</a> ） 确认一下结果哦！（好人好事，我们要感谢；恶意骚扰，我们要举报◕ω◕）</p>',
 	),
 	//邮件签名落款
-	'MAIL_SIGN' => '<p align="right" style="margin-right:3em;"><strong>云印南天团队</strong></p><div style="color:gray;"><hr><div style="padding-left:1em;"><div align="left" style="line-height:1.66;font-size:0.9em;display:inline-block"><div>官方主页：<a href="http://www.yunyin.org">www.yunyin.org</a></div><div>官方微博：<a href="http://weibo.com/cloudPrint">@云印南天</a>（CloudPrint）</div><div>人人主页：<a href="http://page.renren.com/602117408">@云印南天</a></div><div>微信账号：云印南天（YunYinNanTian）</div></div><img style="display:inline-block;height:6em" src="http://www.yunyin.org/assets/image/weixin_qrcode.png"></div></div>',
+	'MAIL_SIGN' => '<sign><p align="right" style="margin-right:3em"><strong>云小印</strong>代表云印南天团队奉上</p><div style="color:gray"><hr><div style="padding-left:1em"><div align="left" style="line-height:1.66;font-size:.9em;display:inline-block"><div>官方主页：<a style="color:gray" href="http://www.yunyin.org">www.yunyin.org</a></div><div>官方微博：<a style="color:gray" href="http://weibo.com/cloudPrint">@云印南天</a>（CloudPrint）</div><div>人人主页：<a style="color:gray" href="http://page.renren.com/602117408">@云印南天</a></div><div>微信账号：云印南天（YunYinNanTian）</div></div><img style="display:inline-block;max-height:6em" src="http://www.yunyin.org/assets/image/weixin_qrcode.png"></div></div></sign>',
 
 	/*登录验证*/
 	'NOT_HTTPS_ERROR'      => '必须通过https安全信道进行登录或注册操作!', //不是使用的https通道
