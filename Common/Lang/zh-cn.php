@@ -6,7 +6,7 @@ return array(
 	/*邮件系列*/
 	'MAIL_FIRST' => array( //第一封邮件： 变量{$name}用户名
 		'title'   => '云小印的第一封信',
-		'content' => '<b>亲爱的{$name}同学,你好</b><p>我是云小印,云印南天的专属机器人。</p><p>很高兴很激动地告诉你：你已经在云印上成功绑这个邮箱啦，这是云小印给你发送通知的专用邮件哦！<br>我发现这是你第一次在此绑定邮箱，所以有些话我想对你说（为了不打扰你，下次你换邮箱我就不重复了）。</p><ol><li><h3>我的邮箱</h3><em>云小印现在只有两个邮箱：</em><ul><li>安全验证邮箱：verify@mail.yunyin.org（找回密码或者验证，不会主动发送任何信息）</li><li>紧急通知邮箱：notify@mail.yunyin.org（当有紧急事情，如校园卡丢失，通过此邮件通知）</li></ul><p>如果不能这封不能正常显示请，把我的邮箱设为联系人或者白名单吧,如果能反馈就更好了！<br>那啥，我现在还没学会人工智能，还看不懂你的回信，所以就不要给我回信啦！(吐槽feedback@yunyin.org,有真人回复，是真的！)</p></li><li><h3>我的主页</h3><p>如果你想了解更多内容可到我的主页查看www.yunyin.org（你也可以来编辑修改哦！）; 应用地址是yunyin.org记得分清哦,收藏更方便！<br>悄悄告诉你：<q>后续重要说明和教程指导什么的都会第一时间出现在这里！</q></p></li><li><h2>我们一起<strong>改造校园服务吧</strong></h2><p>感谢你对云印的信任和支持！我们竭力以极客态度和开源精神，重新为你打造更加安全便捷的校园服务。打印不仅仅可以有更好的体验！<br>我和你一样希望校园更加方便和简单。快来和我们的团队一起设计我们自己的校园服务！有你的参与，梦想和现实会一点点靠近的！</p><ul><li>如果你决得我们的文档有问题，你可以直接修改并提交（主页，文档和应用代码都是开源的并接受修改请求！）；</li><li>如果你觉得云印的那些内容不够好，你可以直接在为我们的开源地址上修改(包括我对你说的所有话，没错，就是这封邮件！)；</li><li>如果你觉得解决不了，告诉我们，我们一起来解决；</li><li>如果你觉得技术都不会，我们一起来讨论；</li><li>如果觉得哪里不好，就对我们疯狂吐槽吧；</li><li>如果觉得好就告诉同学一起来吧!</li></ul><p></p></li><li><h3>我的联系方式</h3><ol><li>帮助邮箱:help@yunyin.org;</li><li>微信账号:云印南天（YunYinNanTian）;</li><li>官方微博:云印南天(CloudPrint);</li><li>人人主页:云印南天;</li><li>项目地址:https://github.com/nkumstc/print</li></ol></li></ol><p>加油！我们一起努力吧！↖(^ω^)↗我始终坚信<strong><q>未来的校园，有你更精彩</q></strong>！</p><hr><p align="right"><strong>云小印(●`ω`●)</strong><br><strong>云印南天团队</strong></p>',
+		'content' => '<b>亲爱的{$name}同学,你好</b><p>我是云小印,云印南天的专属机器人。</p><p>很高兴很激动地告诉你：你已经在云印上成功绑这个邮箱啦，这是云小印给你发送通知的专用邮件哦！<br>我发现这是你第一次在此绑定邮箱，所以有些话我想对你说（为了不打扰你，下次你换邮箱我就不重复了）。</p><ol><li><h3>我的邮箱</h3><em>云小印现在只有两个邮箱：</em><ul><li>安全验证邮箱：verify@mail.yunyin.org（找回密码或者验证，不会主动发送任何信息）</li><li>紧急通知邮箱：notify@mail.yunyin.org（当有紧急事情，如校园卡丢失，通过此邮件通知）</li></ul><p>如果不能这封不能正常显示请，把我的邮箱设为联系人或者白名单吧,如果能反馈就更好了！<br>那啥，我现在还没学会人工智能，还看不懂你的回信，所以就不要给我回信啦！(吐槽feedback@yunyin.org,有真人回复，是真的！)</p></li><li><h3>我的主页</h3><p>如果你想了解更多内容可到我的主页查看www.yunyin.org（你也可以来编辑修改哦！）; 应用地址是yunyin.org记得分清哦,收藏更方便！<br>悄悄告诉你：<q>后续重要说明和教程指导什么的都会第一时间出现在这里！</q></p></li><li><h2>我们一起<strong>改造校园服务吧</strong></h2><p>感谢你对云印的信任和支持！我们竭力以极客态度和开源精神，重新为你打造更加安全便捷的校园服务。打印不仅仅可以有更好的体验！<br>我和你一样希望校园更加方便和简单。快来和我们的团队一起设计我们自己的校园服务！有你的参与，梦想和现实会一点点靠近的！</p><ul><li>如果你决得我们的文档有问题，你可以直接修改并提交（主页，文档和应用代码都是开源的并接受修改请求！）；</li><li>如果你觉得云印的那些内容不够好，你可以直接在为我们的开源地址上修改(包括我对你说的所有话，没错，就是这封邮件！)；</li><li>如果你觉得解决不了，告诉我们，我们一起来解决；</li><li>如果你觉得技术都不会，我们一起来讨论；</li><li>如果觉得哪里不好，就对我们疯狂吐槽吧；</li><li>如果觉得好就告诉同学一起来吧!</li></ul><p></p></li><li><h3>我的联系方式</h3><ol><li>帮助邮箱:help@yunyin.org;</li><li>微信账号:云印南天（YunYinNanTian）;</li><li>官方微博:云印南天(CloudPrint);</li><li>人人主页:云印南天;</li><li>项目地址:https://github.com/nkumstc/print</li></ol></li></ol><p>加油！我们一起努力吧！↖(^ω^)↗我始终坚信<strong><q>未来的校园，有你更精彩</q></strong>！</p>',
 	),
 	'MAIL_BIND' => array( //绑定邮箱：{$mail}绑定的邮箱；{$link}验证链接
 		'title'   => '云印邮箱绑定验证',
@@ -14,14 +14,14 @@ return array(
 	),
 	'MAIL_FINDPWD' => array( //找回密码：{$link}找回链接
 		'title'   => '云印找回密码邮件',
-		'content' => '您正在云印南天使用密码找回,<br>请点击以下链接重设密码： <a href="{$link}">{$link}</a>',
+		'content' => '您正在云印南天使用密码找回,<br>请点击以下链接重设密码：<a href="{$link}">{$link}</a>',
 	),
 	'MAIL_CARD' => array( //一卡通招领：{$name}接收者姓名,{$sender}拾卡人信息
 		'title'   => '云印校园卡认领通知',
 		'content' => '<p>亲爱的<b>{$name}</b>同学：</p><p>非常高兴地告诉你，你离家出走的校园卡已经被{$sender["school"]}大学的{$sender["name"]}同学捡到啦^_^</p><p>尽快通过Ta的手机号: <b><a href="tel:{$sender[\'phone\']}">{$sender["phone"]}</a></b> 或Ta的邮箱: <b><a href="mailto:{$sender[\'email\']}">{$sender["email"]|default="无"}</a></b> 与其联系吧。</p><p>然后请登录云印校园卡记录中心（ <a href="http://yunyin.org/Card/log">yunyin.org/Card/log</a> ） 确认一下结果哦！（好人好事，我们要感谢；恶意骚扰，我们要举报◕ω◕）</p>',
 	),
 	//邮件签名落款
-	'MAIL_SIGN' => '<sign><p align="right" style="margin-right:3em"><strong>云小印</strong>代表云印南天团队奉上</p><div style="color:gray"><hr><div style="padding-left:1em"><div align="left" style="line-height:1.66;font-size:.9em;display:inline-block"><div>官方主页：<a style="color:gray" href="http://www.yunyin.org">www.yunyin.org</a></div><div>官方微博：<a style="color:gray" href="http://weibo.com/cloudPrint">@云印南天</a>（CloudPrint）</div><div>人人主页：<a style="color:gray" href="http://page.renren.com/602117408">@云印南天</a></div><div>微信账号：云印南天（YunYinNanTian）</div></div><img style="display:inline-block;max-height:6em" src="http://www.yunyin.org/assets/image/weixin_qrcode.png"></div></div></sign>',
+	'MAIL_SIGN' => '<sign><p><br/>(^▽^)祝你开心哦！</p><p align="right" style="margin-right:3em"><b>云小印(●\'◡\'●)</b>代表云印南天团队奉上</p><div style="color:gray"><hr><div style="padding-left:1em"><div align="left" style="line-height:1.66;font-size:.9em;display:inline-block"><div>官方主页：<a style="color:gray" href="http://www.yunyin.org">www.yunyin.org</a></div><div>官方微博：<a style="color:gray" href="http://weibo.com/cloudPrint">@云印南天</a>（CloudPrint）</div><div>人人主页：<a style="color:gray" href="http://page.renren.com/602117408">@云印南天</a></div><div>微信账号：云印南天（YunYinNanTian）</div></div><img style="display:inline-block;max-height:6em" src="http://www.yunyin.org/assets/image/weixin_qrcode.png"></div></div></sign>',
 
 	/*登录验证*/
 	'NOT_HTTPS_ERROR'      => '必须通过https安全信道进行登录或注册操作!', //不是使用的https通道

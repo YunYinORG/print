@@ -284,7 +284,7 @@ class UserController extends Controller
                 {
                     $url = U('User/verifyEmail', 'id=' . $cid . '&code=' . $data['code'], '', true);
                     $user= array('email' => $email);
-                    $user['name']=M('User')->getFiledById($uid,'name');
+                    $user['name']=M('User')->getFieldById($uid,'name');
                     if (send_mail($user, L('MAIL_BIND', array('mail' => $email, 'link' => $url)), C('MAIL_VERIFY'))) 
                     {
                         $this->success('验证邮件已发送到' . $email . '请及时到邮箱验证查收!注意垃圾箱哦o(^▽^)o');
@@ -340,6 +340,7 @@ class UserController extends Controller
                         //首次绑定邮件
                         if (!$user['email']) 
                         {
+                            $user['email']=$email;
                             send_mail($user, L('MAIL_FIRST', array('name' => $user['name'])), C('MAIL_NOTIFY'));
                         }
                         $this->success('绑定成功！', '/');
