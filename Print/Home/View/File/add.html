@@ -1,9 +1,8 @@
 ﻿{//文件上传页}
 <EXTEND name="Print/Template/base.html"/>
-<BLOCK name='head'>
+<BLOCK name='addhead'>
     <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
     <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
-    <script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap-switch.min.js" defer="defer"></script>
 </BLOCK>
 <BLOCK name='header'>
 <INCLUDE file="Print/Template/nav.html" add="active"/>
@@ -12,7 +11,7 @@
 <div>
     <h2>设置打印信息<button class="btn btn-success" id="helpView">打印帮助</button></h2>
 </div>
-<div class="container">
+<div class="container-fluid">
     <div class="row" style="display:none;" id="help-info">
     <div class="col-lg-8 col-xs-12">
         <p class="text-info well">
@@ -127,9 +126,7 @@
 </BLOCK>
 
 <BLOCK name='end'>
-
 <script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap-switch.min.js" defer="defer"></script>
-
 <script language="javascript" type="text/javascript">
 
 $(function(){

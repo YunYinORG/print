@@ -1,12 +1,11 @@
 <EXTEND name="Print/Template/base.html"/>
 <BLOCK name="title">云印南天</BLOCK>
 <BLOCK name="head"></BLOCK>
-<BLOCK name='header'></BLOCK>
+<BLOCK name='header'>
+    <h1 class="text-danger text-center">验证成功,重置密码</h1>
+</BLOCK>
 <BLOCK name='content'>
         <div class="container">
-            <div class="col-lg-8 col-lg-offset-2">
-                <h1 class="text-danger text-center">验证成功</h1>
-            </div>
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="text-center text-info">
                     <h2>请重设你的密码并牢记</h2>
@@ -32,14 +31,11 @@
 	<script src="__JS__/md5.min.js" defer></script>
     <script>
 function checkform(f){
-    if(f.password.value!=f.re_password.value)
+    if(checkPwd(f))
     {
-        f.password.focus=true;
         alert('两次密码不一致！');
         return false;
     }else{
-        f.password.value=md5(f.password.value);
-        f['isMD5'].value=1;
         return true;
     }
 }

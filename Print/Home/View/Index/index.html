@@ -1,7 +1,6 @@
 <EXTEND name="Print/Template/base.html"/>
-
-<BLOCK name="head">
-<link href="__PUBLIC__/css/new.css" rel="stylesheet" type="text/css"/>
+<BLOCK name="addhead">
+        <link href="__PUBLIC__/css/new.css" rel="stylesheet" type="text/css"/>
 </BLOCK>
 
 <BLOCK name="header">
@@ -13,7 +12,7 @@
 </BLOCK>
 
 <BLOCK name='main'>
-<main class="container">
+<main class="container-fluid">
 <div class="col-lg-12">
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
@@ -121,3 +120,6 @@
 	});
     </script>
 </BLOCK>
+<select name="" id="input" class="form-control" required="required">
+    <option value=""></option>
+</select>

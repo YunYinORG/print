@@ -79,7 +79,7 @@
 <BLOCK name='end'>
 <script>
         $(".delete").on('click',function(){
-            IF(confirm("确认删除?删除后无法找回"))
+            if(confirm("确认删除?删除后无法找回"))
             {
             var URL = "__ROOT__/File/delete";
             var btn=$(this).attr('disabled','true').html('正在删除');
@@ -87,10 +87,10 @@
             $.post(URL,{
                 fid:fid,
             },function(data){
-                IF(data.status)
+                if(data.status)
                 {
                     btn.parent().parent().hide(1000);
-                }ELSE{
+                }else{
                     btn.attr('disabled','false').html('删除');
                     alert('操作失败：'+data.info);
                 }

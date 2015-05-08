@@ -1,6 +1,6 @@
 ﻿<EXTEND name="Print/Template/base.html"/>
 <BLOCK name="title">欢迎使用云印南天</BLOCK>
-<BLOCK name="head"></BLOCK>
+<BLOCK name="addhead"></BLOCK>
 <BLOCK name="header"> <h1 class="text-center text-success">欢迎加入云印,即将完成</h1></BLOCK>
 <BLOCK name='content'>
         <div class="container">
@@ -36,7 +36,7 @@
                     </div>
                     <div class="form-group input-group">
                         <label class="input-group-addon"  for="re_password">确认密码</label>
-                        <input id="re_password" class="form-control" placeholder='重复刚才的密码' name="re_password" type="password" id="re_password" required><a class="PwdEye btn input-group-addon" data-query='#re_password'></a>
+                        <input id="re_password" class="form-control" placeholder='重复刚才的密码' type="password" id="re_password" required><a class="PwdEye btn input-group-addon" data-query='#re_password'></a>
                     </div>
                     <div class="form-group input-group btn-group-justified">
                         <div class="btn-group">
@@ -46,12 +46,13 @@
                         <a href="signup?ignore=1" title='使用认证密码作为登陆密码' class="btn btn-danger">跳过设置</a>
                         </div>
                     </div>
+                    <input type="hidden" name='isMD5' value="0"/>
                 </form>
             </div>
         </div>
         <hr/>
 </BLOCK>
-<BLOCK name='end'>
+<BLOCK name='endjs'>
 <script src="__PUBLIC__/js/pwd.js" defer='defer'></script>
 <script >
 function checkform(f)

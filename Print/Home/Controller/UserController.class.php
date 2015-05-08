@@ -580,7 +580,7 @@ class UserController extends Controller
             if (encode($deprecated_password, $user['student_number']) == $user['password']) 
             {
                 M('User')->where('id=%d', $uid)->setField('password', encode($password, $user['student_number']));
-                $this->success('密码修改成功重新登陆！', 'logout');
+                $this->success('密码修改成功重新登陆！', U('/Auth/logout'));
             } 
             else
             {
