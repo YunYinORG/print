@@ -153,4 +153,28 @@ class Sms {
 		$templateId = C('SMSID_PRINTED');
 		return $this->sendSMS($phone, $msg, $templateId);
 	}
+
+	/**
+	 * 通知打印店需要处理文件
+	 * @param $msgInfo 短信信息['pri_name' 打印店 , 'no_download' 未下载数目 , 'unprinted' 未打印数目]
+	 */
+	public function noticePrinter($toPhone, $msgInfo)
+	{
+		$phone = $toPhone;
+		$msg   = $msgInfo['pri_name'].','.$msgInfo['no_download'].','.$msgInfo['unprinted'];
+		$templateId = C('SMSID_NOTICE_PRINTER');
+		return $this->sendSMS($phone, $msg, $templateId);
+	}
+
+	/**
+	 * 通知到店打印同学文件状态
+	 * @param $msgInfo 短信信息['user_name' 同学名字 , 'info' 文件名、份数信息 , 'status' 文件状态]
+	 */
+	public function noticeUser($toPhone, $msgInfo)
+	{
+		$phone = $toPhone;
+		$msg   = $msgInfo['user_name'].','.$msgInfo['info'].','.$msgInfo['status'];
+		$templateId = C('SMSID_NOTICE_USER');
+		return $this->sendSMS($phone, $msg, $templateId);
+	}
 }

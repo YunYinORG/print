@@ -380,7 +380,7 @@ class CardController extends Controller {
 		$key    = C('WEIBO_API_PWD');
 		$data   = $post($url, $key, $send_msg);
 		$result = json_decode($data);
-		if ($result->renren)
+		if ($result->renren == 1)
 		{
 			echo '人人发送成功.';
 		}
