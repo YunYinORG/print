@@ -16,6 +16,8 @@
  * Function list:
  * - index()
  * - search()
+ * - notifyPrinters()
+ * - notifyUsers()
  * Classes list:
  * - FileController extends Controller
  */
@@ -39,6 +41,7 @@ class FileController extends Controller {
 			$show  = $Page->show();
 			$ppt_layout = C('PPT_LAYOUT');
 			$result = $File->where($condition)->order('file.id desc')->limit($Page->firstRow.','.$Page->listRows)->select();
+			
 			foreach ($result as &$file)
 			{
 				$file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
@@ -109,9 +112,9 @@ class FileController extends Controller {
 		$result1 = $NotifyPrinted->where($condition1)->group('pri_name')->select();
 		$result2 = $NotifyPrinted->where($condition2)->group('pri_name')->select();
 		$result = array();
-		echo "<meta http-equiv='Content-Type'' content='text/html; charset=utf-8'>";
-		foreach ($result1 as &$item1)
+		for($k=0; $k<count($result1); $k++)
 		{
+			$item1 = $result1[$k];
 			for ($i = 0; $i < count($result2); $i++)
 			{	
 				$item2 = $result2[$i];
@@ -124,8 +127,9 @@ class FileController extends Controller {
 					array_push($result, array($item1['pri_name'], $item1['count'], "0"));
 			}
 		}
-		foreach ($result2 as &$item2)
+		for($k=0; $k<count($result2); $k++)
 		{
+			$item2 = $result2[$k];
 			for ($i = 0; $i < count($result1); $i++)
 			{	
 				$item1 = $result1[$i];
@@ -144,9 +148,11 @@ class FileController extends Controller {
 					array_push($result, array($item2['pri_name'], "0", $item2['count']));
 			}
 		}
-		echo "打印店名称，没下载个数，没打印个数<br />";
-		foreach ($result as &$item)
+		echo "<meta http-equiv='Content-Type'' content='text/html; charset=utf-8'>";
+		echo "打印店名称，没下载个数，没打印个数<br />";	
+		for($k=0; $k<count($result); $k++)
 		{
+			$item = $result[$k];
 			echo $item[0]."\t\t".$item[1]."\t\t".$item[2]."<br />";
 		}	
 		
@@ -157,8 +163,17 @@ class FileController extends Controller {
 		//identify
 		$verify_key = I('get.key');
 		if ($verify_key != C('VERIFY_KEY'))
-			return;
-		
-		echo "Notify the Users!";
+			return;	
+		$condition['status'] = array('in','2,4');
+		$condition['time'] = array('lt', date('Y-m-d h:i:s',time()-3600*24));
+		$NotifyUser = D('NotifyUser');
+		$result = array();
+		$result = $NotifyUser->field('use_name,count("use_name") as count')->where($condition)->group('use_name')->select();
+//		echo "<meta http-equiv='Content-Type'' content='text/html; charset=utf-8'>";
+		for($i=0; $i<count($result); $i++)
+		{
+			$item = $result[$i];
+			echo $item['use_name'].$item['count']."<br />";
+		}
 	}
 }
