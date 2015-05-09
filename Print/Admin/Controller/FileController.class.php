@@ -49,6 +49,7 @@ class FileController extends Controller {
 			$this->display();			
 		}
 	}
+
 	public function search()
 	{
 		if ( ! admin_id())
@@ -93,5 +94,71 @@ class FileController extends Controller {
 		$this->assign('page', $show);
 		$this->assign('status', $status);
 		$this->display();
+	}
+
+	public function notifyPrinters()
+	{
+		//identify
+		$verify_key = I('get.key');
+		if ($verify_key != C('VERIFY_KEY'))
+			return;
+		$condition1['status'] = 1;
+		$condition2['status'] = 2;
+		$condition2['copies'] = array('gt', 0);
+		$NotifyPrinted = D('NotifyPrinter');
+		$result1 = $NotifyPrinted->where($condition1)->group('pri_name')->select();
+		$result2 = $NotifyPrinted->where($condition2)->group('pri_name')->select();
+		$result = array();
+		echo "<meta http-equiv='Content-Type'' content='text/html; charset=utf-8'>";
+		foreach ($result1 as &$item1)
+		{
+			for ($i = 0; $i < count($result2); $i++)
+			{	
+				$item2 = $result2[$i];
+				if ($item1['pri_name'] == $item2['pri_name'])
+				{
+					array_push($result, array($item1['pri_name'], $item1['count'], $item2['count']));
+					break;
+				}
+				if ($i == (count($result2)-1))
+					array_push($result, array($item1['pri_name'], $item1['count'], "0"));
+			}
+		}
+		foreach ($result2 as &$item2)
+		{
+			for ($i = 0; $i < count($result1); $i++)
+			{	
+				$item1 = $result1[$i];
+				if ($item1['pri_name'] == $item2['pri_name'])
+				{
+					for ($j = 0; $j < count($result); $j++)
+					{
+						$item = $result[$j];
+						if ($item1['pri_name'] == $item[0])break;
+						if ($j == (count($result) - 1))
+							array_push($result, array($item1['pri_name'], $item1['count'], $item2['count']));
+					}
+					break;
+				}
+				if ($i == (count($result1)-1))
+					array_push($result, array($item2['pri_name'], "0", $item2['count']));
+			}
+		}
+		echo "打印店名称，没下载个数，没打印个数<br />";
+		foreach ($result as &$item)
+		{
+			echo $item[0]."\t\t".$item[1]."\t\t".$item[2]."<br />";
+		}	
+		
+	}
+
+	public function notifyUsers()
+	{
+		//identify
+		$verify_key = I('get.key');
+		if ($verify_key != C('VERIFY_KEY'))
+			return;
+		
+		echo "Notify the Users!";
 	}
 }
