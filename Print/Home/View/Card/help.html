@@ -10,7 +10,7 @@
 <div class="container-fluid">
 	<div class="row col-xs-offset-2 col-xs-8">
 	<div class="alert alert-warning">
-		<p>统一、高效的通知平台，拒绝丢失物品刷屏，净化微博、人人、朋友圈<br/>
+		<p>欢迎来到——便捷、高效的通知平台，拒绝丢失物品刷屏，净化微博、人人、朋友圈<br/>
 		在这里，你给失主的留言将和预先设定的文字模板组合成一条状态，并发送到云印的微博和人人公众号</p>
 	</div>
 	</div>
@@ -26,7 +26,7 @@
 	<div class="row form-group">
 	<div class="col-xs-offset-2 col-xs-8 text-center">
 		<button class="btn btn-lg btn-default" type="submit" id="send" name="send" onclick="return confirm('确定发送？')">发送</button>
-		<a class="btn btn-lg btn-default" href="/__ROOT__" onclick="this.href+=window.location.search.replace('?','')">返回</a>
+		<a class="btn btn-lg btn-default" href="/Card" onclick="this.href+=window.location.search.replace('?','')">返回</a>
 		</div>
   	</div>
 	</form>
@@ -41,7 +41,7 @@
 	function preview_send(){
 		var send_msg = document.getElementById('send_msg').value;
 		var add_msg = document.getElementById('add_msg').value; 
-    	document.getElementById("preview_msg").innerHTML = send_msg + add_msg + '。请同学们奔走相告！';
+    	document.getElementById("preview_msg").innerHTML = send_msg + '<strong>' + add_msg + '</strong>' + '。请同学们奔走相告！';
 	}	
 </script>
 </BLOCK>

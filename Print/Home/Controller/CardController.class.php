@@ -113,7 +113,7 @@ class CardController extends Controller {
 		}
 		else
 		{
-			$recv_user = $User->field('id,name,student_number,phone,email')->cache(true)->getByStudentNumber($number);
+			$recv_user = $User->field('id,name,student_number,phone,email')->getByStudentNumber($number);
 			$recv_off  = $Card->cache(true)->getFieldById($recv_user['id'], 'off');
 			if ( ! $recv_user || $recv_off || ( ! $recv_user['phone'] &&  ! $recv_user['email']))
 			{
@@ -170,7 +170,7 @@ class CardController extends Controller {
 				if ($recv_user['email'])
 				{
 					$recv_email = decrypt_email($recv_user['email']);
-					$send_user['school'] = M('school')->cache(true)->getFieldById($send_user['sch_id'], 'name');
+					$send_user['school'] = M('school')->getFieldById($send_user['sch_id'], 'name');
 					if ($send_user['email'])
 					{
 						$send_user['email'] = decrypt_email($send_user['email']);
@@ -319,7 +319,7 @@ class CardController extends Controller {
 		}
 		elseif ( ! session('recv_user_school'))
 		{
-			$this->error('请先填写失主信息！', '/Card/index');
+			$this->error('请先填写失主信息！', '/Card');
 		}
 		else
 		{
