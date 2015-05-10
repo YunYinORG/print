@@ -85,12 +85,11 @@ class CardController extends Controller {
 	 */
 	public function find()
 	{
-		$uid    = use_id();
-		$number = I('number', false, C('REGEX_NUMBER'));
-		$name   = I('name', false, 'trim');
-
-		$User = M('User');
-		$Card = M('Card');
+		$uid       = use_id();
+		$number    = I('number', false, C('REGEX_NUMBER'));
+		$name      = I('name', false, 'trim');
+		$User      = M('User');
+		$Card      = M('Card');
 		$send_user = $uid ? $User->field('id,sch_id,student_number,name,phone,email')->getById($uid) : false;
 		if ( ! $send_user)
 		{
@@ -116,21 +115,33 @@ class CardController extends Controller {
 		{
 			$recv_user = $User->field('id,name,student_number,phone,email')->cache(true)->getByStudentNumber($number);
 			$recv_off  = $Card->cache(true)->getFieldById($recv_user['id'], 'off');
-			if ( ! $recv_user)
+			if ( ! $recv_user || $recv_off || ( ! $recv_user['phone'] &&  ! $recv_user['email']))
 			{
-				$this->error($name.'尚未加入此平台', '/Card/help');
+				$find_user        = $User->field('name, student_number')->getById($uid);
+				$find_user_school = preg_match(C('REGEX_NUMBER_NKU'), $find_user['student_number']) ? '南开大学' : '天津大学';
+				$recv_user_school = preg_match(C('REGEX_NUMBER_NKU'), $number) ? '南开大学' : '天津大学';
+				session('recv_user_name', $name);
+				session('recv_user_number', $number);
+				session('recv_user_school', $recv_user_school);
+				session('find_user_school', $find_user_school);
+				session('find_user_name', $find_user['name']);
+				if ( ! $recv_user)
+				{
+					$error_info = '尚未加入此平台';
+				}
+				if ( ! $recv_user['phone'] &&  ! $recv_user['email'])
+				{
+					$error_info = '尚未绑定个人信息';
+				}
+				if ($recv_off)
+				{
+					$error_info = '关闭此功能';
+				}
+				$this->error($name.$error_info, '/Card/help');
 			}
 			elseif ($name !== $recv_user['name'])
 			{
 				$this->error('失主信息核对失败！');
-			}
-			elseif ($recv_off)
-			{
-				$this->error('对方关闭此功能', '/Card/help');
-			}
-			elseif ( ! $recv_user['phone'] &&  ! $recv_user['email'])
-			{
-				$this->error($name.'尚未绑定个人信息', '/Card/help');
 			}
 			else
 			{
@@ -166,7 +177,6 @@ class CardController extends Controller {
 					}
 					/*发送邮件通知*/
 					$mail_result = send_mail($recv_user, L('MAIL_CARD', array('name' => $recv_user['name'], 'school' => $send_user['school'], 'sender_name' => $send_user['name'], 'phone' => $send_user['phone'], 'email' => $send_user['email'])), C('MAIL_NOTIFY'));
-
 					$success |= $mail_result;
 					if ($mail_result)
 					{
@@ -181,7 +191,6 @@ class CardController extends Controller {
 				{
 					$this->error('消息发送失败！请重试或者交由第三方平台！');
 				}
-
 				if ($recv_off === null) //该同学不在card记录之中
 				{
 					$Card->add(array('id' => $recv_user['id']));
@@ -308,11 +317,22 @@ class CardController extends Controller {
 		{
 			$this->error('请登录！', '/');
 		}
+		elseif ( ! session('recv_user_school'))
+		{
+			$this->error('请先填写失主信息！', '/Card/index');
+		}
 		else
 		{
-			$this->recv_name = session('recv_name');
-			$this->recv_number = session('recv_number');
-			$this->is_user = session('is_user'); //是否云印用户
+			if (session('is_user'))
+			{
+				$send_msg = '#失物招领#'.session('recv_user_school').'的'.session('recv_user_name').'同学（学号'.session('recv_user_number').'）离家出走的校园卡已经被'.session('find_user_school').'的'.session('find_user_name').'同学捡到。请尽快登录#云印南天校园卡招领中心#（yunyin.org/Card/log）联系,TA的留言：';
+			}
+			else
+			{
+				$send_msg = '#云印南天校园卡招领中心##失物招领#'.session('recv_user_school').'的'.session('recv_user_name').'同学（学号'.session('recv_user_number').'）离家出走的校园卡已经被'.session('find_user_school').'的'.session('find_user_name').'同学捡到。TA的留言：';
+			}
+			session('send_msg', $send_msg);
+			$this->send_msg = $send_msg;
 		}
 		session('find_id', $uid);
 		$this->display();
@@ -320,10 +340,9 @@ class CardController extends Controller {
 
 	/**
 	 * 失主尚未加入平台,或已加入平台但未绑定信息
-	 * 向第三方平台发送消息
-	 * @param number	学号
-	 * @param name	姓名
-	 * @param add_msg         附加消息
+	 * 向微博、人人平台发送消息
+	 * @param send_msg		要发送的信息
+	 * @param add_msg                        附加消息
 	 */
 	public function send()
 	{
@@ -341,14 +360,9 @@ class CardController extends Controller {
 		{
 			S($cache_name, $times + 1, 3600);
 		}
-		$number           = session('recv_number');
-		$name             = session('recv_name');
-		$add_msg          = I('add_msg');
-		$find_user        = $User->field('name', 'student_number')->getById($find_id);
-		$find_user_school = preg_match(C('REGEX_NUMBER_NKU'), $find_user['student_number']) ? '南开大学' : '天津大学';
-		$recv_user_school = preg_match(C('REGEX_NUMBER_NKU'), $number) ? '南开大学' : '天津大学';
-		$recv_user_id     = $User->getFieldByStudentNumber($number, 'id');
-		$recv_off         = $Card->getFieldById($recv_user_id, 'off');
+		$add_msg      = I('add_msg');
+		$recv_user_id = $User->getFieldByStudentNumber($number, 'id');
+		$recv_off     = $Card->getFieldById($recv_user_id, 'off');
 		if ($recv_user_id && ($recv_off != 1))
 		{
 			/*失主已加入平台但未绑定信息,且未关闭此功能,添加到丢失记录*/
@@ -361,14 +375,12 @@ class CardController extends Controller {
 			$log['lost_id'] = $recv_user_id;
 			M('Cardlog')->add($log);
 			session('is_user', 1);
-			$send_msg = '#失物招领#'.$recv_user_school.'的'.$name.'同学（学号'.$number.'）离家出走的校园卡已经被'.$find_user_school.'的'.$find_user['name'].'同学捡到。请尽快登录#云印南天校园卡招领中心#（yunyin.org/Card/log）
-						联系,TA的留言：'.$add_msg.'。请同学们奔走相告！';
 		}
 		else
 		{
 			session('is_user', 0);
-			$send_msg = '#云印南天校园卡招领中心##失物招领#'.$recv_user_school.'的'.$name.'同学（学号'.$number.'）离家出走的校园卡已经被'.$find_user_school.'的'.$find_user['name'].'同学捡到。TA的留言：'.$add_msg.'。请同学们奔走相告！';
 		}
+		$send_msg = session('send_msg').$add_msg.'。请同学们奔走相告！';
 		/*post数据到API*/
 		$post = function($url, $key, $send_msg)
 		{
