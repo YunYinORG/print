@@ -115,16 +115,16 @@ class FileController extends Controller {
 		for($k=0; $k<count($result1); $k++)
 		{
 			$item1 = $result1[$k];
-			for ($i = 0; $i < count($result2); $i++)
+			for ($i = 0; $i<count($result2); $i++)
 			{	
 				$item2 = $result2[$i];
-				if ($item1['pri_name'] == $item2['pri_name'])
+				if ($item1['pri_id'] == $item2['pri_id'])
 				{
-					array_push($result, array($item1['pri_name'], $item1['count'], $item2['count']));
+					array_push($result, array($item1['phone'], $item1['pri_name'], $item1['count'], $item2['count']));
 					break;
 				}
 				if ($i == (count($result2)-1))
-					array_push($result, array($item1['pri_name'], $item1['count'], "0"));
+					array_push($result, array($item1['phone'], $item1['pri_name'], $item1['count'], "0"));
 			}
 		}
 		for($k=0; $k<count($result2); $k++)
@@ -133,27 +133,40 @@ class FileController extends Controller {
 			for ($i = 0; $i < count($result1); $i++)
 			{	
 				$item1 = $result1[$i];
-				if ($item1['pri_name'] == $item2['pri_name'])
+				if ($item1['pri_id'] == $item2['pri_id'])
 				{
+					/*
 					for ($j = 0; $j < count($result); $j++)
 					{
 						$item = $result[$j];
-						if ($item1['pri_name'] == $item[0])break;
+						if ($item1['pri_name'] == $item[1])break;
 						if ($j == (count($result) - 1))
-							array_push($result, array($item1['pri_name'], $item1['count'], $item2['count']));
+							array_push($result, array($item1['phone'], $item1['pri_name'], $item1['count'], $item2['count']));
 					}
+					*/
 					break;
 				}
 				if ($i == (count($result1)-1))
-					array_push($result, array($item2['pri_name'], "0", $item2['count']));
+					array_push($result, array($item1['phone'], $item2['pri_name'], "0", $item2['count']));
 			}
 		}
 		echo "<meta http-equiv='Content-Type'' content='text/html; charset=utf-8'>";
 		echo "打印店名称，没下载个数，没打印个数<br />";	
+		$SMS = new \Vendor\Sms();
 		for($k=0; $k<count($result); $k++)
 		{
 			$item = $result[$k];
-			echo $item[0]."\t\t".$item[1]."\t\t".$item[2]."<br />";
+			$phone = $item[0];
+			$msgInfo = array("pri_name"=>$item[1], "no_download"=>$item[2], "unprinted"=>$item[3]);
+			if ($SMS->noticePrinter($phone, $msgInfo))
+			{				
+				echo "提醒信息已经发送";
+			}
+			else
+			{
+				echo "发送不成功";
+			}
+			echo $item[0]."\t\t".$item[1]."\t\t".$item[2].$item[3]."<br />";
 		}	
 		
 	}
@@ -164,16 +177,84 @@ class FileController extends Controller {
 		$verify_key = I('get.key');
 		if ($verify_key != C('VERIFY_KEY'))
 			return;	
-		$condition['status'] = array('in','2,4');
+		$condition1['status'] = "2"; 	//已经下载
+		$condition2['status'] = '4';	//已经打印
 		$condition['time'] = array('lt', date('Y-m-d h:i:s',time()-3600*24));
 		$NotifyUser = D('NotifyUser');
 		$result = array();
-		$result = $NotifyUser->field('use_name,count("use_name") as count')->where($condition)->group('use_name')->select();
-//		echo "<meta http-equiv='Content-Type'' content='text/html; charset=utf-8'>";
+		$result1 = $NotifyUser->field('user_id,phone,use_name,file_name,count("use_name") as count,$status')->where($condition1)->group('use_name')->select();
+		$result2 = $NotifyUser->field('user_id,use_name,file_name,count("use_name") as count')->where($condition2)->group('use_name')->select();
+		$result3 = $NotifyUser->field('user_id,phone,use_name,file_name,status')->where($condition1)->select();
+		$result4 = $NotifyUser->field('user_id,phone,use_name,file_name,status')->where($condition2)->select();
+		for($i=0; $i<count($result1); $i++)
+		{
+			$item1 = $result1[$i];
+			if ($item1['count'] == 1)
+			{
+				array_push($result, array($item1['phone'], $item1['use_name'], $item['file_name'], "已经下载"));
+			}
+			else if ($item1['count'] > 1)
+			{
+				$count = 0;
+				$info = "";
+				for($k=0; $k<count($result3); $k++)
+				{
+					$item3 = $result3[$k];
+					if ($item3['user_id'] == $item1['user_id'])
+					{
+						$count++;
+						$info = $info.substr($item3['file_name'],0,4)."...等";
+						if ($count == 2)break;
+					}
+				}
+				$info = $info.$item1['count'];
+				array_push($result, array($item1['phone'], $item1['use_name'], $info, "已经下载"));
+			}	
+		}
+		for($i=0; $i<count($result2); $i++)
+		{
+			$item2 = $result2[$i];
+			if ($item2['count'] == 1)
+			{
+				array_push($result, array($item2['phone'], $item2['use_name'], $item['file_name'], "已经下载"));
+			}
+			else if ($item2['count'] > 1)
+			{
+				$count = 0;
+				$info = "";
+				for($k=0; $k<count($result4); $k++)
+				{
+					$item4 = $result4[$k];
+					if ($item4['user_id'] == $item2['user_id'])
+					{
+						$count++;
+						$info = $info.substr($item4['file_name'],0,4)."...等";
+						if ($count == 2)break;
+					}
+				}
+				$info = $info.$item2['count'];
+				array_push($result, array($item2['phone'], $item2['use_name'], $info, "已经下载"));
+			}	
+		}
+		
+		echo "<meta http-equiv='Content-Type'' content='text/html; charset=utf-8'>";
+		$SMS = new \Vendor\Sms();
 		for($i=0; $i<count($result); $i++)
 		{
 			$item = $result[$i];
-			echo $item['use_name'].$item['count']."<br />";
+			$phone = $item[0];
+			if (!empty($phone)) {
+				$msgInfo = array("user_name"=>$item[1], "info"=>$item[2],"status"=>$item[3]);
+				if ($SMS->noticePrinter($phone, $msgInfo))
+				{				
+					echo "提醒信息已经发送";
+				}
+				else
+				{
+					echo "发送不成功";
+				}
+			}			
+			echo $item['phone']."\t\t".$item['use_name']."\t\t".$item['count']."<br />";
 		}
 	}
 }

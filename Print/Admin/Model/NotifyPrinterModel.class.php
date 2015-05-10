@@ -8,7 +8,9 @@ class NotifyPrinterModel extends ViewModel {
 			'COUNT(file.status)' => 'count',
 		),
 		'printer' => array(
+			'id' => 'pri_id',
 			'name' => 'pri_name',
+			'phone',
 			'_on' => 'printer.id=file.pri_id'
 		),
 	);
