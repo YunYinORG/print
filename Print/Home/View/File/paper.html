@@ -1,0 +1,166 @@
+﻿{//论文打印页}
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name='addhead'>
+    <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
+    <link href="__PUBLIC__/css/upload.css" rel="stylesheet" type="text/css"/>
+</BLOCK>
+<BLOCK name='header'>
+    <h1 class="text-center text-primary"><a href="/__ROOT__">云印南天</a>——毕业论文打印服务</h1>
+</BLOCK>
+<BLOCK name='content'>
+<div class="container-fluid">
+    <form id="print" method="post" action="__URL__/uploadOne" onsubmit="return checkform();" enctype="multipart/form-data">
+        <!--div id="master" style="display:none">
+            <img src="__PUBLIC__/images/masterpaper.jpg" alt="南开大学硕士生毕业论文封面图"/>
+        </div>
+        <div id="doctor" style="display:none">
+            <img src="__PUBLIC__/images/docpaper.jpg" alt="南开大学博士生毕业论文封面图"/>
+        </div-->
+        <div class="row">
+            <div class="text-center col-lg-8 col-lg-offset-1  col-md-8 col-xs-12">
+                <div class="form-group">
+                    <div class="upload-btn">
+                        <div class="upload-area"><span class="glyphicon glyphicon-open"></span>点击上传文件<small>(不超过10MB)</small></div>
+                        <input id="upload-file" type="file" name="file" accept="application/pdf" onchange="checkSuffix(this)">
+                    </div>
+                </div>
+                <ul id="upload-list" class="list-group"></ul>
+            </div>
+        </div>
+        <br/>
+        <div class="row form-group">
+            <div class="col-lg-8 col-lg-offset-1 col-sm-10">
+                <label for="PrinterChoose" class="sr-only">打印店</label>
+                <select class="form-control" name="pri_id" id="PrinterChoose" onchange="priceChange(this)" required>
+                    <option value="">选择想去的打印店....</option>
+                    <volist name="data" id="vo">
+                        <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="well col-lg-8 col-lg-offset-1  col-sm-12">
+                <h4 class="text-info">该店价格信息</h4>
+                <div id='price' class='help-block comments'>
+                    黑白打印：<span id='p_s' class='text-danger'></span><br/>
+                    彩色打印：<span id='p_c_s' class='text-danger'></span><br/>
+                    包装费：<span id='p_w' class='text-danger'></span>
+                </div>
+            </div>
+        </div>
+        <IF condition="$lock eq 1">
+        <div class="row form-group text-cneter">
+                <div class="col-lg-2 col-lg-offset-1 col-xs-4 col-xs-offset-1" style="display:none">
+                    <label for="ispre" class="sr-only">设置</label>
+                    <input name="ispre" id="ispre" type="checkbox" data-label-text="设置" data-off-text="到店打印"  data-on-text="提前打印" data-off-color="success" data-on-color="warning" data-label-width=""/>
+                </div>
+            <div class="setting">
+                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                <div class="input-group">
+                    <label for="copies" class="sr-only">份数</label>
+                    <input name="copies" type="number" placeholder="份数" class="form-control" id="copies" min="1" value="1" disabled="true" />
+                     <span class="input-group-addon">份</span>
+                </div>
+                </div>  
+                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                    <label for="printcolor" class="sr-only">颜色</label>
+                    <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox" data-label-text="颜色" data-off-text="黑白打印"  data-on-text="彩色打印" data-on-color="warning" data-off-color="success" data-label-width="" disabled="true" />
+                </div>
+                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1" style="display:none">
+                    <label for="double_side" class="sr-only">单双</label>
+                    <input type="checkbox" name="double_side" id='double_side' value="1" data-label-text="单双" data-off-text="单面打印"  data-on-text="双面打印" data-on-color="warning" data-off-color="success" data-label-width="" disabled="true"/>
+                </div>
+            </div>
+        </div>
+        <div style="display:none" class="row form-group setting" id="pptprint">
+            <div class="col-lg-8 col-lg-offset-1 col-sm-10">
+                 <label for="default" class="sr-only">PPT格式</label>
+                    <select id="default" class="form-control" name="ppt_layout">
+                        <option value="">选择PPT打印格式....</option>
+                        <volist name="ppt" id="vo" offset="1">
+                            <option value="{$i}">{$vo}</option>
+                        </volist>
+                    </select>
+            </div>
+        </div>
+        <div style="display:none" class="row form-group">
+            <div class="setting col-lg-8 col-lg-offset-1 col-sm-10 col-xs-10 col-xs-offset-1">
+                <label for="addtion-need" class='sr-only'>备注</label>
+                <textarea id="addtion-need" class="form-control" length="32" name="requirements">论文打印:</textarea>
+            </div>
+        </div>
+        <ELSE/>
+        <div>
+            <a href="__ROOT__/User"><b>请先点击该链接绑定手机以使用该服务</b></a>
+        </div>
+        </IF>
+    <div class="row">
+        <div class="form-group col-md-8 col-lg-offset-4 col-lg-1 ">
+            <button type="submit" class="btn btn-lg btn-info" id="fileUploadButton" disabled="true">开始传送</button>
+        </div>
+    </div>
+    </form>
+    <div class="row col-md-10 col-md-offset-1 text-center">
+        <a class="btn btn-lg btn-success" href="/__ROOT__" onclick="this.href+=window.location.search.replace('?','')">返回</a>
+    </div>
+</div>
+</BLOCK>
+
+<BLOCK name='end'>
+<script src="__PUBLIC__/js/upload.js" defer="defer"></script>
+<script language="javascript" type="text/javascript">
+$(function(){
+    $("[type='checkbox']").bootstrapSwitch();
+});
+
+function checkSuffix(n) {
+    var pos = n.value.lastIndexOf('.');
+    var suffix = n.value.substring(pos + 1);
+    var pdf_suffix = ['pdf'];
+    if(pdf_suffix.indexOf(suffix) < 0){
+        $("#upload-list").html('<li class="list-group-item">只支持pdf格式文件。</li>');
+        $("#fileUploadButton").attr('disabled',true);
+        $('#copies').attr('disabled', true);
+        $('#printcolor').bootstrapSwitch('disabled', true);
+    }
+    else {
+        var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
+        $('#copies').attr('disabled', false);
+        $('#printcolor').bootstrapSwitch('disabled', false);
+        $("#fileUploadButton").attr('disabled', false);
+        if(pdf_suffix.indexOf(suffix) >= 0){
+            $('#default').removeAttr('required');
+            $("#upload-list").html('<li class="list-group-item">当前文件：'+fname +'</li>');
+        }
+    }
+}
+
+function checkform(){
+    $('#fileUploadButton').attr('disabled',true);
+    $('#fileUploadButton').html('正在传送中');
+    return true;
+}
+
+function priceChange(n){
+    var pid = n.value;
+    var URL = "/Printers/getPrice";
+    $.post(URL, {
+            pid : pid
+        }, function(data) {
+            if (data.status) {
+                $('#p_c_s').html(data.info.p_c_s+'元/张');
+                $('#p_s').html(data.info.p_s+'元/张');
+                $('#p_w').html(data.info.p_s+'元/份');            
+            } else {
+                $('#p_c_s').html("未设置");
+                $('#p_s').html("未设置");
+                $('#p_w').html("未设置");
+            }
+        });
+}
+
+</script>
+
+</BLOCK>
