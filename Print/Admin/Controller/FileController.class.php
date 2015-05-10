@@ -191,7 +191,7 @@ class FileController extends Controller {
 					if ($item3['user_id'] == $item1['user_id'])
 					{
 						$count++;
-						$info = $info.substr($item3['file_name'],0,4);
+						$info = $info.substr($item3['file_name'],0,8)."..";
 						if ($count == 2)break;
 						else
 						{
@@ -199,7 +199,7 @@ class FileController extends Controller {
 						}
 					}
 				}
-				$info = $info."..等".$item1['count']."个文件";
+				$info = $info."等".$item1['count']."个文件";
 				array_push($result, array($item1['phone'], $item1['use_name'], $info, "已经下载", $item1['user_id'], $item1['stu_num']));
 			}	
 		}	
@@ -209,19 +209,16 @@ class FileController extends Controller {
 		{
 			$item = $result[$i];
 			import('Common.Encrypt', COMMON_PATH, '.php');
-			echo $item[0];
-			echo $item[5]."<br />";
-			echo $item[4];
 			$phone = decrypt_phone($item[0], $item[5], $item[4]);
 			echo $phone;
 			if (!empty($phone)) 
 			{
 				$msgInfo = array("user_name"=>$item[1], "info"=>$item[2], "status"=>$item[3]);
-				if ($SMS->noticeUser($phone, $msgInfo))
+				//if ($SMS->noticeUser($phone, $msgInfo))
 				{				
 					echo "提醒信息已经发送";
 				}
-				else
+				//else
 				{
 					echo "发送不成功";
 				}
