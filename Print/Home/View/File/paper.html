@@ -1,7 +1,6 @@
 ﻿{//论文打印页}
 <EXTEND name="Print/Template/base.html"/>
 <BLOCK name='addhead'>
-    <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
     <link href="__PUBLIC__/css/upload.css" rel="stylesheet" type="text/css"/>
 </BLOCK>
 <BLOCK name='header'>
@@ -52,24 +51,23 @@
         </div>
         <IF condition="$lock eq 1">
         <div class="row form-group text-cneter">
-                <div class="col-lg-2 col-lg-offset-1 col-xs-4 col-xs-offset-1" style="display:none">
+                <div style="display:none">
                     <label for="ispre" class="sr-only">设置</label>
                     <input name="ispre" id="ispre" type="checkbox" data-label-text="设置" data-off-text="到店打印"  data-on-text="提前打印" data-off-color="success" data-on-color="warning" data-label-width=""/>
                 </div>
             <div class="setting">
-                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                <div class="col-xs-5 col-xs-offset-1">
                 <div class="input-group">
                     <label for="copies" class="sr-only">份数</label>
                     <input name="copies" type="number" placeholder="份数" class="form-control" id="copies" min="1" value="1" disabled="true" />
                      <span class="input-group-addon">份</span>
                 </div>
                 </div>  
-                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                <div class="col-xs-5 col-xs-offset-1">
                     <label for="printcolor" class="sr-only">颜色</label>
                     <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox" data-label-text="颜色" data-off-text="黑白打印"  data-on-text="彩色打印" data-on-color="warning" data-off-color="success" data-label-width="" disabled="true" />
                 </div>
-                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1" style="display:none">
-                    <label for="double_side" class="sr-only">单双</label>
+                <div style="display:none">
                     <input type="checkbox" name="double_side" id='double_side' value="1" data-label-text="单双" data-off-text="单面打印"  data-on-text="双面打印" data-on-color="warning" data-off-color="success" data-label-width="" disabled="true"/>
                 </div>
             </div>
@@ -97,14 +95,14 @@
         </div>
         </IF>
     <div class="row">
-        <div class="form-group col-md-8 col-lg-offset-4 col-lg-1 ">
+        <div class="col-xs-6 text-center">
             <button type="submit" class="btn btn-lg btn-info" id="fileUploadButton" disabled="true">开始传送</button>
+        </div>
+        <div class="col-xs-6 text-center">
+            <a class="btn btn-lg btn-success" href="/__ROOT__" onclick="this.href+=window.location.search.replace('?','')">返回</a>
         </div>
     </div>
     </form>
-    <div class="row col-md-10 col-md-offset-1 text-center">
-        <a class="btn btn-lg btn-success" href="/__ROOT__" onclick="this.href+=window.location.search.replace('?','')">返回</a>
-    </div>
 </div>
 </BLOCK>
 

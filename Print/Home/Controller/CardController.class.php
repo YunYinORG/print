@@ -38,7 +38,7 @@ class CardController extends Controller {
 		$uid = use_id(U('Index/index'));
 		if ($uid)
 		{
-			$user = M('User')->cache(true)->field('phone,status')->getById($uid);
+			$user = M('User')->field('phone,status')->getById($uid);
 			$card = M('Card')->getById($uid);
 			if ($user['status'] < 0)
 			{
