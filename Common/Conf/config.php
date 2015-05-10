@@ -93,4 +93,5 @@ return array(
 	/*HTTPS安全连接是否开启，Home/Conf/config.php有对应的safe_url为https*/
 	'HTTPS_ON' => true, //本地调试开发时，在secret中设置'HTTPS_ON'=>false；
 	'BASE_URL' => 'http://yunyin.org', //本地调试开发时，在secret中设置'BASE_URL'=>'http://localhost';
+
 );
