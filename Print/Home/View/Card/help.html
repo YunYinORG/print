@@ -1,36 +1,47 @@
-<!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title></title>
-</head>
-<body>
-<center>
-<h1>通知到云印微博、人人公众号</h1>
-
-<h2>统一、高效的通知平台，拒绝丢失物品刷屏，净化微博、人人、朋友圈</h2>
-<h2>在这里，你给失主的留言将和预先设定的文字模板组合成一条状态，并发送到云印的微博和人人公众号</h2>
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name="head">
+    <title>分享到云印微博-云印南天</title>
+    <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+</BLOCK>
+<BLOCK name="header">
+    <h1 class="text-center text-primary">通知到<a href="http://weibo.com/cloudPrint">云印微博</a>、<a href="http://page.renren.com/602117408">人人公众号</a></h1>
+</BLOCK>
+<BLOCK name='content'>
+<div class="container-fluid">
+	<div class="row col-xs-offset-2 col-xs-8">
+	<div class="alert alert-warning">
+		<p>统一、高效的通知平台，拒绝丢失物品刷屏，净化微博、人人、朋友圈<br/>
+		在这里，你给失主的留言将和预先设定的文字模板组合成一条状态，并发送到云印的微博和人人公众号</p>
+	</div>
+	</div>
 	<form name="form1" method="post" action="__URL__/send">
-	<div style="font-size:20px;">
-    <br>你想对失主说的话：
-		<textarea rows="3" name="add_msg" id="add_msg" onkeyup="preview_send()"></textarea>
-    </br>
-	 <button type="submit" id="send" name="send" onclick="return confirm('确定发送？')">发送</button>
-  </div>
+	<div class="row col-xs-offset-2 col-xs-8 form-group">
+		<label>你想对失主说的话：</label>
+		<textarea class="form-control" rows="3" name="add_msg" id="add_msg" onkeyup="preview_send()"></textarea>
+	</div>
+	<div class="row col-xs-offset-2 col-xs-8 form-group">
+		<label>将发送的信息预览：</label>
+		<div id="preview_msg" class="bg-info" style="margin-top:10px; margin-bottom:10px;"> </div>
+    </div>
+	<div class="row form-group">
+	<div class="col-xs-offset-2 col-xs-8 text-center">
+		<button class="btn btn-lg btn-default" type="submit" id="send" name="send" onclick="return confirm('确定发送？')">发送</button>
+		<a class="btn btn-lg btn-default" href="/__ROOT__" onclick="this.href+=window.location.search.replace('?','')">返回</a>
+		</div>
+  	</div>
 	</form>
-		将发送的信息预览：<div id="preview_msg"> </div>
-    <br>
 	<input type="hidden" id="send_msg" value="{$send_msg}"></input>
-<p>请勿恶意使用，若遭举报将永久收回你对此功能的使用权</p>
-<p>
-</center>
-</body>
-</html>
+	<div class="row col-xs-offset-2 col-xs-8 text-center">
+		<p class='help-block'>请勿恶意使用，若遭举报将永久收回你对此功能的使用权</p>
+	</div>
+</div>
+</BLOCK>
+<BLOCK name='end'>
 <script>
-var send_msg = document.getElementById('send_msg').value;
-function preview_send()
-{
-	var add_msg = document.getElementById('add_msg').value; 
-    document.getElementById("preview_msg").innerHTML = send_msg + add_msg + '。请同学们奔走相告！';
-}
+	function preview_send(){
+		var send_msg = document.getElementById('send_msg').value;
+		var add_msg = document.getElementById('add_msg').value; 
+    	document.getElementById("preview_msg").innerHTML = send_msg + add_msg + '。请同学们奔走相告！';
+	}	
 </script>
+</BLOCK>

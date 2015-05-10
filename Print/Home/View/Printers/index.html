@@ -1,7 +1,7 @@
 ﻿{//打印店列表页}
 <EXTEND name="Print/Template/base.html"/>
 <BLOCK name='header'>
-<include file="Print/Template/nav.html" printers="active"/>
+<INCLUDE file="Print/Template/nav.html" printers="active"/>
 </BLOCK>
 <BLOCK name='content'>
 <div>
@@ -9,12 +9,10 @@
 </div>
 <br/>
 <div class="container-fluid" id="printersMain">
-
 <div class="row">
-
 <div class="col-lg-10 col-md-10">
 <volist name="data" id="vo">
-<div class="col-lg-offset-1 col-lg-3 col-xs-offset-1 col-sm-3 col-xs-10 thumbnail printersBLOCK">
+<div class="col-lg-offset-1 col-lg-3 col-xs-offset-1 col-sm-3 col-xs-10 thumbnail printersBlock">
 	<div class="bg-info text-center">
 	<br/>
 	<h2><a href="__ROOT__/Printers/detail?id={$vo.id}">{$vo.name}</a></h2>

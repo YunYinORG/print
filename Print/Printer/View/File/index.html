@@ -9,7 +9,6 @@
     <h2>{$title}</h2>
 </div>
 <div class="container-fulid">
-    <div class="row"><div class="col-lg-12">
     <div class="table-responsive">
     <table class="table">
         <thead>
@@ -28,7 +27,7 @@
         <tbody id="tablehead">
             <volist name="data" id="vo">
             <tr file_id="{$vo.id}">
-                <td>
+                <td style="width:15%">
             <NOTEMPTY name="vo['requirements']">
                 <span tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="打印备注" data-content="{$vo['requirements']}" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </NOTEMPTY>
@@ -70,7 +69,7 @@
                     <DEFAULT />未知状态
                     </SWITCH>
                 </td>
-                <td>                    
+                <td>
                     <SWITCH name="vo['status']">
                     <CASE value="1"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-primary">通知已下载</button></CASE>
                     <CASE value="2" break="0"></CASE>
@@ -81,7 +80,7 @@
                     <button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-success">通知已打印</button>
                     </IF>
                     </CASE>
-                    <CASE value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-sm btn-danger">确认付款</button><NOTEMPTY name="vo['phone']"><IF condition="$vo.sended eq 0"><button class="send btn btn-sm btn-warning glyphicon glyphicon-comment">发短信</button><ELSE/></IF></NOTEMPTY></CASE>
+                    <CASE value="4"><button type="button" id="{$vo.id}_button" fid='{$vo.id}' class="set btn btn-sm btn-danger">确认付款</button><NOTEMPTY name="vo['phone']"><IF condition="$vo.sended eq 0"><button class="send btn btn-sm btn-warning"><span class="glyphicon glyphicon-comment">发短信</span></button><ELSE/></IF></NOTEMPTY></CASE>
                     <DEFAULT />不可操作
                     </SWITCH>                   
                 </td>
@@ -92,7 +91,6 @@
         </tbody>
     </table>
     </div>
-    </div></div>
 </div>
 </BLOCK>
 <BLOCK name='end'>
