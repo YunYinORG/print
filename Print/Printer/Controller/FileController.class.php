@@ -168,6 +168,7 @@ class FileController extends Controller {
 			else
 			{
 				$status['operation'] = $status['status'];
+				$status['sendDownloadMessage']=this->sendDownloadMessage($pid,$fid);
 			}
 		}
 		elseif (($result['status'] == C('FILE_DOWNLOAD')) && ($download != 1))
@@ -251,11 +252,48 @@ class FileController extends Controller {
 				$file_name = '到店打印_';
 			}
 			$file_name = $file_name."[$fid]".$info['name'];
+
 			redirect(download_file($info['url'], 'attname='.urlencode($file_name)));
 		}
 		else
 		{
 			$this->error('文件已删除，不能再下载！');
+		}
+	}
+
+	private function sendDownloadMessage($pid,$fid)
+	{
+		$File    = D('FileView');
+		$map['id'] = $fid;
+		$info    = $File->where($map)->field('use_id,phone,name')->find();
+		$Printer = M('Printer');
+		$info['pri_name'] = M('Printer')->getFieldById($pid, 'name');
+		if ($info['phone'] && $info['name'])
+		{
+			unset($info['phone']);
+			if (mb_strlen($info['name']) > 18)
+			{
+				$info['name'] = mb_substr($info['name'], 0, 18);
+			}
+			$phone = get_phone_by_id($info['use_id']);
+			unset($info['use_id']);
+			$info['fid'] = $fid;
+			$SMS = new \Vendor\Sms();
+			if ($SMS->printed($phone, $info))
+			{
+				$File = M('File');
+				$map['id'] = $fid;
+				$result = $File->where($map)->setField('sended', 1);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
 		}
 	}
 

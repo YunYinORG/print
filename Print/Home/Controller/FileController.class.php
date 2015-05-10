@@ -84,6 +84,27 @@ class FileController extends Controller {
 		}
 	}
 
+	public function paper()
+	{
+		$uid = use_id(U('Index/index'));
+		if ($uid)
+		{
+			$Printer = M('Printer');
+			$User    = M('User');
+			$user    = $User->Field('sch_id,phone')->getById($uid);
+			$this->lock = $user['phone'] ? 1 : 0;
+			$condition['sch_id'] = $user['sch_id'];
+			$condition['status'] = 1;
+			$this->data = $Printer->where($condition)->order('rank desc')->Field('id,name,address')->select();
+			$this->ppt = C('PPT_LAYOUT');
+			$this->display();
+		}
+		else
+		{
+			$this->redirect('/Index/index');
+		}
+	}
+
 	/**
 	 * 单文件上传
 	 */
@@ -198,7 +219,7 @@ class FileController extends Controller {
 
 			if (M('File')->add($insert))
 			{
-				$data = array('scope' => $setting['bucket'].':'.$name, 'deadline' => $setting['timeout'] + time(), 'returnBody' => '{"rname":$(fname)&"name":$(key)}');
+				$data = array('scope' => $setting['bucket'].':'.$name, 'deadline' => $setting['timeout'] + time(), 'returnBody' => '{"rname":$(fname),"name":$(key)}');
 				$uploadToken = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($setting['secretKey'], $setting['accessKey'], json_encode($data));
 				header('Access-Control-Allow-Origin:http://upload.qiniu.com');
 				$result = array('name' => $name, 'token' => $uploadToken);

@@ -1,9 +1,8 @@
 {//文件上传页}
 <EXTEND name="Print/Template/base.html"/>
-<BLOCK name='head'>
+<BLOCK name='addhead'>
     <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
-    <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
-    <script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap-switch.min.js" defer="defer"></script>
+    <link href="__PUBLIC__/css/upload.css" rel="stylesheet" type="text/css"/>
 </BLOCK>
 <BLOCK name='header'>
 <INCLUDE file="Print/Template/nav.html" add="active"/>
@@ -12,11 +11,11 @@
 <div>
     <h2>设置打印信息<button class="btn btn-success" id="helpView">打印帮助</button></h2>
 </div>
-<div class="container">
+<div class="container-fluid">
     <div class="row" style="display:none;" id="help-info">
-    <div class="col-md-7">
+    <div class="col-lg-8 col-xs-12">
         <p class="text-info well">
-        使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> <code>设置打印份数、格式</code> -> <code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
+        使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> (<code>设置打印份数、格式</code> -> )<code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
         不绑定手机不能设置打印参数，不能提前打印，只能上传后到店打印；<br/>
         暂时仅支持<code>pdf</code>、<code>doc(x)</code>、<code>wps</code>、<code>ppt(x)</code>格式的文件上传；<br/>
         如上传文件名出现<code>乱码</code>，请更换浏览器。电脑下Chrome效果最佳，手机建议使用UC浏览器；<br/>
@@ -28,21 +27,22 @@
     <br/>
     <form id="print" method="post" action="__URL__/uploadOne" onsubmit="return checkform();" enctype="multipart/form-data">
         <div class="row">
-            <div class="text-center col-md-5">
+            <div class="text-center col-lg-8 col-lg-offset-1  col-md-8 col-xs-12">
                 <div class="form-group">
                     <div class="upload-btn">
                         <div class="upload-area"><span class="glyphicon glyphicon-open"></span>点击上传文件<small>(不超过10MB)</small></div>
-                        <input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onchange="checkSuffix(this)" multiple>
+                        <input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="checkSuffix()">
                     </div>
                 </div>
                 <ul id="upload-list" class="list-group"></ul>
+                <span id="progress"></span>
             </div>
         </div>
         <br/>
-        <div class="row">
-            <div class="form-group">
-                <label for="PrinterChoose" class="col-lg-1 col-sm-2 control-label">打印店</label>
-                <select class="col-lg-5 col-sm-10 form-control" name="pri_id" id="PrinterChoose" onchange="File.priceChange(this)" required>
+        <div class="row form-group">
+            <div class="col-lg-8 col-lg-offset-1 col-sm-10">
+                <label for="PrinterChoose" class="sr-only">打印店</label>
+                <select class="form-control" name="pri_id" id="PrinterChoose" onchange="priceChange(this)" required>
                     <option value="">选择想去的打印店....</option>
                     <volist name="data" id="vo">
                         <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
@@ -52,7 +52,7 @@
         </div>
         <br/>
         <div class="row">        
-            <div class="well col-lg-6 col-sm-12">
+            <div class="well col-lg-8 col-lg-offset-1  col-sm-12">
                 <h4 class="text-info">该店价格信息</h4>
                 <div id='price' class='help-block comments'>
                     黑白单面：<span id='p_s' class='text-danger'></span><br/>
@@ -63,19 +63,32 @@
             </div>
         </div>
         <IF condition="$lock eq 1">
-        <fieldset id="setting">
-        <div class="form-group">
-            <div class="row">
-                <label for="copies" class="col-lg-1 col-sm-2 control-label">份数</label>
-                <div class="col-lg-6 col-sm-10">
-                    <input name="copies" type="number" id="copies" min="0" value="0" style="width:20%" /><strong>份</strong>&nbsp;<small class="comments">0表示到店后现场打印</small>
+        <div class="row form-group text-cneter">
+                <div class="col-lg-2 col-lg-offset-1 col-xs-4 col-xs-offset-1">
+                   <label for="ispre" class="sr-only">设置</label>
+                    <input name="ispre" id="ispre" type="checkbox" data-label-text="设置" data-off-text="到店打印"  data-on-text="提前打印" data-off-color="success" data-on-color="warning" data-label-width="" disabled="true"/>
                 </div>
-            </div>
+                <div class="setting">
+                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                <div class="input-group">
+                    <label for="copies" class="sr-only">份数</label>
+                    <input name="copies" type="number" placeholder="份数" class="form-control" id="copies" min="1" value="1"/>
+                     <span class="input-group-addon">份</span>
+                </div>
+                </div>  
+                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                    <label for="printcolor" class="sr-only">颜色</label>
+                    <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox" data-label-text="颜色" data-off-text="黑白打印"  data-on-text="彩色打印" data-on-color="warning" data-off-color="success" data-label-width=""/>
+                </div>
+                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                  <label for="double_side" class="sr-only">单双</label>
+                    <input type="checkbox" name="double_side" id='double_side' value="1" data-label-text="单双" data-off-text="单面打印"  data-on-text="双面打印" data-on-color="warning" data-off-color="success" data-label-width="" disabled="true"/>
+                </div>
         </div>
-        <div class="form-group">
-            <div class="row" style="display:none" id="pptprint">
-                <label for="default" class="col-lg-1 col-sm-2 control-label">PPT格式</label>
-                <div class="col-lg-6 col-sm-10">
+        </div>
+         <div class="row form-group setting" id="pptprint">
+                <div class="col-lg-8 col-lg-offset-1 col-sm-10">
+                 <label for="default" class="sr-only">PPT格式</label>
                     <select id="default" class="form-control" name="ppt_layout">
                         <option value="">选择PPT打印格式....</option>
                         <volist name="ppt" id="vo" offset="1">
@@ -83,35 +96,21 @@
                         </volist>
                     </select>
                 </div>
+        </div>
+        <div class="row form-group">
+            <div class="setting col-lg-8 col-lg-offset-1 col-sm-10 col-xs-10 col-xs-offset-1">
+                <label for="addtion-need" class='sr-only'>备注</label>
+                <textarea id="addtion-need" class="form-control" placeholder="备注，若无可空白，限制32字以内" length="32" name="requirements"></textarea>
             </div>
         </div>
-        <div class="form-group">
-            <div id="moreSetting">
-                <div class="row">
-                    <label for="printcolor" class="col-lg-1 col-sm-2"><strong>彩印</strong></label>
-                    <div class="col-lg-2 col-sm-4">
-                    <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox"/>
-                    </div>
-                    <label for="double_side" class="col-lg-1 col-sm-2"><strong>双面</strong></label>
-                    <div class="col-lg-2 col-sm-4">
-                    <input type="checkbox" name="double_side" id='double_side' value="1"/>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <label for="addtion-need" class='col-lg-1 col-sm-2 control-label'>备注</label>
-                <textarea id="addtion-need" class="form-control col-lg-4 col-sm-10" rows="4" placeholder="如有其他打印设置需要可在此处填写，若无可空白，限制32字以内" name="profile"></textarea>
-            </div>
-        </div>
-        </fieldset>
         <ELSE/>
         <div>
-            <a href="/User" style="text-decoration:none"><b>绑定手机后可进行高级设置和提前打印</b></a>
+            <a href="__ROOT__/User"><b>绑定手机后可进行高级设置和提前打印</b></a>
         </div>
         </IF>
     <div class="row">
-        <div class="col-md-8">
-            <button type="submit" class="btn btn-info" id="fileUploadButton" disabled="true">开始传送</button>
+        <div class="form-group col-md-8 col-lg-offset-4 col-lg-1 ">
+            <button type="submit" class="btn btn-lg btn-info" id="fileUploadButton" disabled="true">开始传送</button>
         </div>
     </div>
     </form>
@@ -119,15 +118,37 @@
 </BLOCK>
 
 <BLOCK name='end'>
-
-<script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap-switch.min.js" defer="defer"></script>
+<script src="__PUBLIC__/js/upload.js" defer="defer"></script>
 <script src="__PUBLIC__/js/underscore-min.js" ></script>
 
 <script language="javascript" type="text/javascript">
 
 $(function(){
-    $("#printcolor").bootstrapSwitch('size','small');
-    $("#double_side").bootstrapSwitch('size','small');
+    $("[type='checkbox']").bootstrapSwitch();
+    $('.setting').hide();
+    
+    $("#helpView").click(function(){
+    $('#helpView').toggleClass('btn-warning');
+    $('#help-info').toggle(100);});
+
+    $('#ispre').on('switchChange.bootstrapSwitch',function(){
+    var fn = $('#upload-file').val();
+    var pos = fn.lastIndexOf('.');
+    var suf = fn.substring(pos + 1);
+    var other_suffix =['ppt' , 'pptx'];
+    if($('#ispre').bootstrapSwitch('state') ==false){
+        $('.setting').hide(100);
+        $('#default').removeAttr('required');
+    } else {
+        $('.setting').show(100);
+        if(other_suffix.indexOf(suf) < 0) {
+            $('#default').removeAttr('required');
+            $('#pptprint').hide();
+        } else {
+            $('#default').attr('required','true');
+        }
+    }
+    });
 });
 
 var Files = function() {
@@ -135,10 +156,6 @@ var Files = function() {
     this.printer = null;
     this.print_ahead = null;
     this.length = 0;
-    $('#setting').show();
-    $('#copies').attr('disabled', false);
-    $('#double_side').attr('disabled', false);
-    $("#fileUploadButton").attr('disabled', false);
 };
 
 Files.prototype.priceChange = function (n){
@@ -167,15 +184,21 @@ Files.prototype.addFile = function(file) {
         this.files.push(file);
     };
 };
-Files.prototype.uploadFiles = function() {
-    for (var i = 0; file = file_queue.files[i]; i++) 
-    {
-        file.uploadFile();
-    }
-};
+
 Files.prototype.delete = function(id) {
-    this.files[id] = undefined;
-    this.length--;
+    var URL = "/File/deleteTempFile";
+    var temp = this;
+    $.post(URL, {
+            filename : temp.files[id].name
+        }, function(data) {
+            if (data.status) {
+                alert(data.info);
+                temp.files[id] = undefined;
+                temp.length--;
+            } else {
+                alert(data.info);
+            }
+        });
 };
 
 Files.prototype.reUpload = function(id) {
@@ -191,6 +214,63 @@ function File(id,name)
     this.newName = null;
 }
 
+
+// function completeHandler (myXhr,status) {
+//     if (myXhr.readyState==4) {
+//         // var temp_name = myXhr.
+//         var file_view = $('#file_'+myXhr.id);
+//         var span = file_view.find(span);
+//         if (myXhr.status==200) {
+//             myXhr.uploadStatus = true;
+//             span.html('uploaded');
+//             span.append('<button type="button" class="btn btn-danger btn-xs delete" onclick="deleteFile(this)">delete</button>');
+//         }
+//         else {
+//             span.html('upload failed');
+//             span.append('<button type="button" class="btn btn-primary btn-xs re-upload" onclick="reUpload(this)">reUpload</button>');
+//         }
+//     }
+// }
+// function beforeSendHandler (myXhr,settings) {
+    
+// }
+// function errorHandler (myXhr,status,error) {
+    
+// }
+
+// function progressHandlingFunction (e) {
+//     if (e.lengthComputable) {
+//         $('#progress').html('value:'+e.loaded+'max:'+e.total);
+//     };
+// }
+// File.prototype.uploadFile = function() {
+//     var url = 'http://upload.qiniu.com/';
+//     var file = document.getElementById('upload-file').files[this.id];
+//     var fd = new FormData();
+//     fd.append('file',file);
+//     fd.append('token',this.token);
+//     fd.append('key',this.newName);
+//     $.ajax({
+//         url:url,
+//         type:'POST',
+//         xhr:function  () {
+//             var myXhr = $.ajaxSettings.xhr();
+//             if (myXhr.upload) {
+//                 myXhr.upload.addEventListener('progress',progressHandlingFunction,false);
+//             };
+//             return myXhr;
+//         },
+//         beforeSend: beforeSendHandler,
+//         complete: completeHandler,
+//         error: errorHandler,
+//         data: fd,
+//         cache: false,
+//         contentType:false,
+//         processData: false
+//     });
+// };
+
+
 File.prototype.uploadFile = function() {
     var url = 'http://upload.qiniu.com/';
     var fd = new FormData();
@@ -198,7 +278,7 @@ File.prototype.uploadFile = function() {
     fd.append('file',file);
     fd.append('token',this.token);
     fd.append('key',this.newName);
-    xmlhttp=null;
+    var xmlhttp=null;
     if (window.XMLHttpRequest)
     {
         xmlhttp=new XMLHttpRequest();
@@ -212,6 +292,7 @@ File.prototype.uploadFile = function() {
         xmlhttp.onreadystatechange=this.uploaded;
         xmlhttp.open("POST",url,true);
         xmlhttp.send(fd);
+        xmlhttp.id = this.id;
     }
     else
     {
@@ -222,7 +303,6 @@ File.prototype.uploadFile = function() {
 }
 
 File.prototype.uploaded = function() {
-    console.log(xmlhttp);
     if (xmlhttp.readyState==4) {
         var file_view = $('#file_'+this.id);
         var span = file_view.find(span);
@@ -278,7 +358,6 @@ var PPT = function(id,name) {
 }
 PPT.prototype = new temp();
     
-var xmlhttp;
 var file_queue = new Files();
 var fileData = new FormData();
 var doc_suffix = ['doc', 'docx', 'wps'];
@@ -286,6 +365,13 @@ var pdf_suffix = ['pdf'];
 var other_suffix = ['ppt', 'pptx'];
 
 function checkSuffix() {
+    $("#ispre").bootstrapSwitch('disabled',false);
+    $('.setting').show();
+    $("#pptprint").hide();
+    $('#copies').attr('disabled', false);
+    $('#double_side').bootstrapSwitch('disabled', false);
+    $('#printcolor').bootstrapSwitch('disabled', false);
+    $("#fileUploadButton").attr('disabled', false);
     var files = document.getElementById('upload-file').files;
     for (var i = 0,j=0; file = files[i]; i++) 
     {
@@ -299,7 +385,10 @@ function checkSuffix() {
             newFile.getToken();
             file_queue.addFile(newFile);
             j++;
-        } else if (pdf_suffix.indexOf(suffix)>=0) 
+            $('#pptprint').show();
+            $('#default').attr('required','true');
+        }
+        else if (pdf_suffix.indexOf(suffix)>=0) 
         {
             newFile = new PDF(j,filename);
             newFile.getToken();
@@ -339,9 +428,7 @@ function checkform(){
     }
     for (var i = 0; i < file_queue.files.length; i++) {
         var file = file_queue.files[i];
-        if (file===undefined) {
-            continue;
-        } else {
+        if (file!==undefined) {
             if (file.uploadStatus==false) {
                 return false;
             }
@@ -364,7 +451,6 @@ function deleteFile (e) {
 function reUpload (e) {
     var id = e.parent().attr('id').replace(/file_/,"");
     id = parseInt(id);
-    file_queue.delete(id);
     file_queue.reUpload(id);
 }
 
