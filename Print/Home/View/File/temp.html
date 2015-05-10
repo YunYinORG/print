@@ -42,7 +42,7 @@
         <div class="row">
             <div class="form-group">
                 <label for="PrinterChoose" class="col-lg-1 col-sm-2 control-label">打印店</label>
-                <select class="col-lg-5 col-sm-10 form-control" name="pri_id" id="PrinterChoose" onchange="priceChange(this)" required>
+                <select class="col-lg-5 col-sm-10 form-control" name="pri_id" id="PrinterChoose" onchange="File.priceChange(this)" required>
                     <option value="">选择想去的打印店....</option>
                     <volist name="data" id="vo">
                         <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
@@ -76,7 +76,7 @@
             <div class="row" style="display:none" id="pptprint">
                 <label for="default" class="col-lg-1 col-sm-2 control-label">PPT格式</label>
                 <div class="col-lg-6 col-sm-10">
-                    <select id="default" class="form-control" name="ppt_layout" required>
+                    <select id="default" class="form-control" name="ppt_layout">
                         <option value="">选择PPT打印格式....</option>
                         <volist name="ppt" id="vo" offset="1">
                             <option value="{$i}">{$vo}</option>
@@ -121,6 +121,7 @@
 <BLOCK name='end'>
 
 <script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap-switch.min.js" defer="defer"></script>
+<script src="__PUBLIC__/js/underscore-min.js" ></script>
 
 <script language="javascript" type="text/javascript">
 
@@ -129,49 +130,18 @@ $(function(){
     $("#double_side").bootstrapSwitch('size','small');
 });
 
-function checkSuffix(n) {
-    var pos = n.value.lastIndexOf('.');
-    var suffix = n.value.substring(pos + 1);
-    var doc_suffix = ['doc', 'docx', 'wps'];
-    var pdf_suffix = ['pdf'];
-    var other_suffix = ['ppt', 'pptx'];
-    if (doc_suffix.indexOf(suffix) >= 0) {
-        alert('打印小常识：将文档转成PDF格式，打印出来的格式基本不会发生变化！（任性就随意了(^▽^)）')
-        $('#default').removeAttr('required');
-        $('#setting').show();
-        $('#pptprint').hide();
-        $('#copies').attr('disabled', false);
-        $('#double_side').attr('disabled', false);
-        $("#fileUploadButton").attr('disabled', false);
-        var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
-        $("#upload-list").html('<li class="list-group-item">当前文件：'+ fname +'</li>'+'<li class="list-group-item">支持的格式，但更推荐pdf。');
-    } else if (other_suffix.indexOf(suffix)>=0) {
-        $('#pptprint').show();
-        $('#setting').show();
-        $('#copies').attr('disabled', false);
-        $('#double_side').attr('disabled', false);
-        $("#fileUploadButton").attr('disabled', false);
-        var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
-        $("#upload-list").html('<li class="list-group-item">当前文件：'+fname +'</li>');
-    } else if(pdf_suffix.indexOf(suffix) >= 0){
-        $('#default').removeAttr('required');
-        $('#setting').show();
-        $('#pptprint').hide();
-        $('#copies').attr('disabled', false);
-        $('#double_side').attr('disabled', false);
-        $("#fileUploadButton").attr('disabled', false);
-        var fname = n.value.substring(n.value.lastIndexOf('\\')+1);
-        $("#upload-list").html('<li class="list-group-item">当前文件：'+fname +'</li>');
-    } else {
-        $("#upload-list").html('<li class="list-group-item">不支持'+ suffix + '格式文件。</li>');
-        $("#fileUploadButton").attr('disabled',true);
-    }
-    trigger();
-    startUpload();
-}
+var Files = function() {
+    this.files = [];
+    this.printer = null;
+    this.print_ahead = null;
+    this.length = 0;
+    $('#setting').show();
+    $('#copies').attr('disabled', false);
+    $('#double_side').attr('disabled', false);
+    $("#fileUploadButton").attr('disabled', false);
+};
 
-
-function priceChange(n){
+Files.prototype.priceChange = function (n){
     var pid = n.value;
     var URL = "/Printers/getPrice";
     $.post(URL, {
@@ -191,58 +161,43 @@ function priceChange(n){
         });
 }
 
-function checkform(){
-    $('#fileUploadButton').attr('disabled',true);
-    $('#fileUploadButton').html('正在传送中');
-    return true;
-}
-
-$("#helpView").click(function(){
-    $('#helpView').toggleClass('btn-warning')
-    $('#help-info').toggle(100);
-});
-    
-var xmlhttp;
-var fileData = new FormData();
-var fileStatus = new Array();
-function trigger () {
-    var doc_suffix = ['doc', 'docx', 'wps'];
-    var pdf_suffix = ['pdf'];
-    var other_suffix = ['ppt', 'pptx'];
-    var file = document.getElementById('upload-file');
-    for (var i = file.files.length - 1; i >= 0; i--) 
+Files.prototype.addFile = function(file) {
+    var legal = (file instanceof PDF)||(file instanceof DOC)||(file instanceof PPT)
+    if (legal) {
+        this.files.push(file);
+    };
+};
+Files.prototype.uploadFiles = function() {
+    for (var i = 0; file = file_queue.files[i]; i++) 
     {
-        var pos = file.files[i].name.lastIndexOf('.');
-        var suffix =file.files[i].name.substring(pos+1);
-        if ((other_suffix.indexOf(suffix)>=0)||(pdf_suffix.indexOf(suffix)>=0)||(doc_suffix.indexOf(suffix)>=0)) 
-        {
-            fileStatus.append(i);
-        }    
+        file.uploadFile();
     }
-}
+};
+Files.prototype.delete = function(id) {
+    this.files[id] = undefined;
+    this.length--;
+};
 
-function uploaded () {
-    console.log(xmlhttp);
-    if (xmlhttp.readyState==4) {
-        if (xmlhttp.status==200) {
-            var jsonData = xmlhttp.response.replace('&',',');
-            jsonData = JSON.parse(jsonData);
-            fileData.append(jsonData.name,jsonData.rname);
-            fileStatus.pop();
-            if (fileStatus.length) {
-                startUpload();
-            };
-        }
-    }
-}
+Files.prototype.reUpload = function(id) {
+    this.files[id].getToken();
+};
 
-function uploadFile(id,data) 
+function File(id,name)
 {
-    var url = "http://upload.qiniu.com/";
+    this.id = id;
+    this.name = name;
+    this.token = null;
+    this.uploadStatus = false;
+    this.newName = null;
+}
+
+File.prototype.uploadFile = function() {
+    var url = 'http://upload.qiniu.com/';
     var fd = new FormData();
-    fd.append("file", document.getElementById('upload-file').files[id]);
-    fd.append("token",data.token);
-    fd.append("key",data.name);
+    var file = document.getElementById('upload-file').files[this.id];
+    fd.append('file',file);
+    fd.append('token',this.token);
+    fd.append('key',this.newName);
     xmlhttp=null;
     if (window.XMLHttpRequest)
     {
@@ -254,56 +209,165 @@ function uploadFile(id,data)
     }
     if (xmlhttp!=null)
     {
-        xmlhttp.onreadystatechange=uploaded;
+        xmlhttp.onreadystatechange=this.uploaded;
         xmlhttp.open("POST",url,true);
         xmlhttp.send(fd);
     }
     else
     {
-        alert("Your browser does not support XMLHTTP.");
+        var file_view = $('#file_'+this.id);
+        var span = file_view.find(span);
+        span.html('Your browser does not support XMLHTTP');
     }
 }
 
-function startUpload(){
-        var URL = "__ROOT__/File/getToken";
-        $.get(URL,function(data){
-            if(data.status)
-            {
-                uploadFile(fileStatus[fileStatus.length-1],data.info);
-            }else{
-                alert('操作失败：'+data.info);
-            }
-        });
-}
-
-$("#print").on('submit',function(){
-    if(fileStatus.length)
-    {
-        alert('not done yet');
-    } else {
-        fileData.append("pri_id",$('#PrinterChoose').value);
-        fileData.append("copies",$('#copies').value);
+File.prototype.uploaded = function() {
+    console.log(xmlhttp);
+    if (xmlhttp.readyState==4) {
+        var file_view = $('#file_'+this.id);
+        var span = file_view.find(span);
+        if (xmlhttp.status==200) {
+            this.uploadStatus = true;
+            span.html('uploaded');
+            span.append('<button type="button" class="btn btn-danger btn-xs delete" onclick="deleteFile(this)">delete</button>');
+        }
+        else {
+            span.html('upload failed');
+            span.append('<button type="button" class="btn btn-primary btn-xs re-upload" onclick="reUpload(this)">reUpload</button>');
+        }
     }
-});
-
-function File()
-{
-    this.printer = '';
-    this.print_ahead = true;
 }
+
 
 File.prototype.getToken = function() {
     var URL = "__ROOT__/File/getToken";
+    var temp = this;
     $.get(URL,function(data){
         if(data.status)
         {
-            uploadFile(fileStatus[fileStatus.length-1],data.info);
+            temp.token = data.info.token;
+            temp.newName = data.info.name;
+            temp.uploadFile();
         }else{
-            alert('操作失败：'+data.info);
+            var file_view = $('#file_'+this.id);
+            var span = file_view.find(span);
+            span.html('get token fail');
+            span.append('<button type="button" class="btn btn-primary btn-xs re-upload" onclick="reUpload(this)">reUpload</button>');
         }
     });
 };
 
-</script>
+var temp = function() {};
+temp.prototype = File.prototype;
 
+var PDF = function(id,name) {
+    File.apply(this,arguments);
+    $("#upload-list").append('<li class="list-group-item" id="file_"'+id+'>当前文件：'+name +'<span style="color:red">uploading</span></li>');
+}
+PDF.prototype = new temp();
+
+var DOC = function(id,name) {
+    File.apply(this,arguments);
+    $("#upload-list").append('<li class="list-group-item" id="file_"'+id+'>当前文件：'+name +'(支持的格式，但更推荐pdf)<span style="color:red">uploading</span></li>');
+}
+DOC.prototype = new temp();
+
+var PPT = function(id,name) {
+    File.apply(this,arguments);
+    $("#upload-list").append('<li class="list-group-item" id="file_"'+id+'>当前文件：'+name +'<span style="color:red">uploading</span></li>');
+}
+PPT.prototype = new temp();
+    
+var xmlhttp;
+var file_queue = new Files();
+var fileData = new FormData();
+var doc_suffix = ['doc', 'docx', 'wps'];
+var pdf_suffix = ['pdf'];
+var other_suffix = ['ppt', 'pptx'];
+
+function checkSuffix() {
+    var files = document.getElementById('upload-file').files;
+    for (var i = 0,j=0; file = files[i]; i++) 
+    {
+        var filename = file.name;
+        var pos = filename.lastIndexOf('.');
+        var suffix = filename.substring(pos+1);
+        var newFile = null;
+        if (other_suffix.indexOf(suffix)>=0)
+        {
+            newFile = new PPT(j,filename);
+            newFile.getToken();
+            file_queue.addFile(newFile);
+            j++;
+        } else if (pdf_suffix.indexOf(suffix)>=0) 
+        {
+            newFile = new PDF(j,filename);
+            newFile.getToken();
+            file_queue.addFile(newFile);
+            j++;
+        }
+        else if (doc_suffix.indexOf(suffix)>=0)
+        {            
+            newFile = new DOC(j,filename);
+            newFile.getToken();
+            file_queue.addFile(newFile);
+            j++;
+        }
+        else
+        {
+            //
+        }
+    }
+}
+
+$("#helpView").click(function(){
+    $('#helpView').toggleClass('btn-warning')
+    $('#help-info').toggle(100);
+});
+
+$("#print").on('submit',function(e){
+    if(checkform==false)
+    {
+        e.preventDefault();
+        alert('not done yet');
+    }
+});
+
+function checkform(){
+    if (file_queue.length==0) {
+        return false;
+    }
+    for (var i = 0; i < file_queue.files.length; i++) {
+        var file = file_queue.files[i];
+        if (file===undefined) {
+            continue;
+        } else {
+            if (file.uploadStatus==false) {
+                return false;
+            }
+        }
+    }
+    for (var i = 0; i < file_queue.files.length; i++) {
+        var file = file_queue.files[i];
+        $('#id').append('<input name="filename_"'+i+'" value="'+ file.name+'" type="hidden"');
+    };
+    $('#id').append('<input name="file_num" value="'+ file_queue.length+'" type="hidden"');
+    return true;
+}
+
+function deleteFile (e) {
+    var id = e.parent().attr('id').replace(/file_/,"");
+    id = parseInt(id);
+    file_queue.delete(id);
+}
+
+function reUpload (e) {
+    var id = e.parent().attr('id').replace(/file_/,"");
+    id = parseInt(id);
+    file_queue.delete(id);
+    file_queue.reUpload(id);
+}
+
+
+</script>
 </BLOCK>
