@@ -378,7 +378,7 @@ class CardController extends Controller {
 		$reciever=session('reciever');
 		if(!$reciever)
 		{
-			$this->error('禁止乱发信息！！！');
+			$this->error('禁止乱发信息！！！','/Card');
 		}
 
 		/*判断尝试次数*/
@@ -388,7 +388,7 @@ class CardController extends Controller {
 		if ($times > 5)
 		{
 			\Think\Log::record('第三方平台发送失败：ip:'.get_client_ip().',find_id'.$find_id);
-			$this->error('发送次数过多!', '/Card/log');
+			$this->error('发送次数过多!', '/Card');
 		}
 		else
 		{
@@ -397,23 +397,27 @@ class CardController extends Controller {
 
 		/*获取拾主和失主的信息*/
 		$School=M('School');
-		$reciever['school']=$School->cache(true)->getFieldById($reciever['sch_id'],'name');
-		$finder=M('User')->field('name,student_number AS number,sch_id')->getById($uid);
-		$finder['school']=$School->cache(true)->getFieldById($finder['sch_id'],'name');
-		$finder['msg']  = I('add_msg');
-
+		$finder=M('User')->field('name,sch_id')->getById($uid);
+		$msg_info=array(
+			'card_number'=>$reciever['number'],
+			'card_name'=>$reciever['name'],
+			'card_school'=>$School->cache(true)->getFieldById($reciever['sch_id'],'name'),
+			'finder_name'=>$finder['name'],
+			'finder_school'=>$School->cache(true)->getFieldById($finder['sch_id'],'name'),
+			'msg'=>I('add_msg'),
+			);
 		if(!$reciever['uid'])
 		{
-			$msg= L('CARD_MSG_OUT',array('reciever' =>$reciever ,'finder'=>$finder ));
+			$msg= L('CARD_MSG_OUT',$msg_info);
 		}
 		else
 		{
+			$msg= L('CARD_MSG_IN',$msg_info);
 
 			/*失主已加入平台但未绑定信息,且未关闭此功能,添加到丢失记录*/		
 			M('Card')->add(array('id'=>$reciever['uid']));
 			$log=array('find_id'=>$send_user['id'],'lost_id'=> $recv_user['id']);
 			M('Cardlog')->add($log);
-			$msg= L('CARD_MSG_IN',array('reciever' =>$reciever ,'finder'=>$finder ));
 		}
 	
 		/*post数据到API*/
@@ -422,10 +426,11 @@ class CardController extends Controller {
 			'key' =>C('WEIBO_API_PWD') ,
 			'status'=>base64_encode($msg)
 			);
-		$result = json_decode($this->_post($url,$dat));	
+		$result = json_decode($this->_post($url,$data));	
 		
 		if($result)
 		{
+			session('reciever',null);
 			$result_info='人人发送成功'.($result->renren).'条；微博发送'.($result->weibo).'条';
 			$this->success($result_info,'/Card/log');
 		}else
@@ -433,15 +438,6 @@ class CardController extends Controller {
 			$this->error('网路故障，请联系我们');
 		}
 
-		// if(IS_AJAX)
-		// {
-		// 	$this->success($result);
-		// }else
-		// {
-		
-		// }
-	
-		
 	}
 
 	/**
