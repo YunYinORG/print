@@ -11,6 +11,7 @@ class NotifyUserModel extends ViewModel {
 		),
 		'user' => array(
 			'id' => 'user_id',
+			'student_number' => 'stu_num',
 			'name' => 'use_name',
 			'phone',
 			'_on' => 'user.id=file.use_id'
