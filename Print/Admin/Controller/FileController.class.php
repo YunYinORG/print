@@ -214,11 +214,11 @@ class FileController extends Controller {
 			if (!empty($phone)) 
 			{
 				$msgInfo = array("user_name"=>$item[1], "info"=>$item[2], "status"=>$item[3]);
-				//if ($SMS->noticeUser($phone, $msgInfo))
+				if ($SMS->noticeUser($phone, $msgInfo))
 				{				
 					echo "提醒信息已经发送";
 				}
-				//else
+				else
 				{
 					echo "发送不成功";
 				}
