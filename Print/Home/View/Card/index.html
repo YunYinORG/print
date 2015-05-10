@@ -6,8 +6,7 @@
  <h1 class="text-center text-primary">校园卡找回中心</h1>
 <section class='row'>
     <ul class="text-center list-inline">
-        <li><a class="btn btn-success" href="log">校园找回记录<span class="badge">{$new}</span></a></li>
-        <li><a class="btn btn-warning" href="help">志愿者送还平台</a></li>
+        <li><a class="btn btn-success" href="Card/log">找回记录<span class="badge">{$new}</span></a></li>
     </ul>
 </section>
 <section class='row alert well col-xs-offset-1'>
@@ -30,16 +29,14 @@
     <div class="col-xs-10 col-xs-offset-1">
         <ul>
             <li>如果你拾到了同学的校园卡（学号相关证件）,在此输入TA的<q>卡号（学号）</q>和TA的<q>姓名</q>;</li>
-            <li>系统会把你的联系方式（绑定的<code>手机号</code>和绑定的<code>邮箱</code>）和丢失信息通知到TA的手机和邮箱,TA直接联系你;</li>
-            <li>为了防止恶意使用,每个人的使用次数有限制;如果收到骚扰举报将永久封禁此功能</li>
-            <li>如果你不想透露自己的联系方式，或者现在无法联系到失主,你可以交给<a href="help">第三方平台</a>来处理</li>
+            <li>系统会把你的联系方式（绑定的<code>手机号</code>和绑定的<code>邮箱</code>）和丢失信息通知到TA的手机和邮箱（如果有的话）,TA将可以联系到你;</li>
+            <li>为了防止恶意使用,每个人的使用次数有限制;如果收到骚扰举报将永久封禁此功能</li>     
         </ul>
     </div>
 </section>
 <section class='row alert alert-success col-xs-offset-1'>
     <div class="col-xs-10 col-xs-offset-1">
-        校园找回平台，线上找回系统由<a>云印平台</a>全力支持；<br/>南开大学的线下送还服务由<a>南开计控志愿服务部</a>提供支持。<br/>
-        任何问题请及时联系我们。
+        校园找回平台，由<a>云印南天</a>提供全力支持；<br/>任何问题请及时联系我们。
     </div>
 </section>
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
@@ -83,7 +80,7 @@ function find(f) {
                     btn.html('已经通知');
                 } else {
                     if (data.url) {
-                        link.attr('href', data.url).html('解决这个问题');
+                        link.attr('href', data.url).html('=.=解决这个问题');
                     }
                     title.html('错误提示');
                     btn.html('通知失主').attr('disabled', false);
