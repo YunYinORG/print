@@ -10,7 +10,8 @@
     你还没有丢过卡哦o(^▽^)o
     <ELSE/>
     <foreach name="lost" item="v">
-    <div>
+    <div id="{$v['id']}">
+        <i class="glyphicon glyphicon-phone showPhone"></i>
         <span class='name label label-info'> {$v['find_name']} ({$v['find_number']})</span>
         同学于 <span class=''>{$v['time']}</span> 捡到我的卡
         <switch name="v['status']" >
@@ -24,8 +25,9 @@
         <span class='label label-success'>已感谢</span>
         </case>
         <default />
-        <span class='result' id="{$v['id']}">
-        <button class="btn btn-success" value="1">感谢</button><button class="btn btn-danger" value="-1">举报</button>
+        <span class='result'>
+        <button class="btn btn-success" value="1">感谢</button>
+        <button class="btn btn-danger" value="-1">举报</button>
         </span>
         </switch>
     </div>
@@ -74,32 +76,46 @@ $('.result>button').click(function() {
     }
     if (confirm(msg)) {
         var url = '/Card/result';
-        var id = $(this).parent('.result').hide().attr('id');
+        var id = $(this).parent('.result').hide().parent().attr('id');
         $.post(url, {
             'id': id,
             'status': status
         }, function(data, result) {
-            var r = $('#' + id).show();
+            var r = $('#' + id+' .result').show();
             if (result == 'success') {
                 if (data.status) {
                     switch (status) {
                         case '1':
-                            r.html('已感谢');
+                            r.addClass('label label-success').html('已感谢');
                             break;
                         case '0':
-                            r.html('已忽略');
+                            r.addClass('label label-primary').html('已忽略');
                             break;
                         case '-1':
-                            r.html('已举报');
+                            r.addClass('label label-danger').html('已举报');
                             break;
                     }
-                }
+                }else{
                 alert(data.info);
+                }
             } else {
                 alert('服务器连接出错！');
             }
         })
     }
+});
+
+$(".showPhone").click(function(){
+    var url = '/Card/showPhone';
+    var id = $(this).parent().attr('id');
+    $.post(url, {
+            'id': id
+        }, function(data, result){
+            if (result == 'success') {
+                alert("TA的手机号码是：" + data.info.phone);
+            }
+        }                   
+    );
 });
 </script>
 </block>

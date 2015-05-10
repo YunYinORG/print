@@ -1,0 +1,373 @@
+{//文件上传页}
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name='head'>
+    <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
+    <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+    <script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap-switch.min.js" defer="defer"></script>
+</BLOCK>
+<BLOCK name='header'>
+<INCLUDE file="Print/Template/nav.html" add="active"/>
+</BLOCK>
+<BLOCK name='content'>
+<div>
+    <h2>设置打印信息<button class="btn btn-success" id="helpView">打印帮助</button></h2>
+</div>
+<div class="container">
+    <div class="row" style="display:none;" id="help-info">
+    <div class="col-md-7">
+        <p class="text-info well">
+        使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> <code>设置打印份数、格式</code> -> <code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
+        不绑定手机不能设置打印参数，不能提前打印，只能上传后到店打印；<br/>
+        暂时仅支持<code>pdf</code>、<code>doc(x)</code>、<code>wps</code>、<code>ppt(x)</code>格式的文件上传；<br/>
+        如上传文件名出现<code>乱码</code>，请更换浏览器。电脑下Chrome效果最佳，手机建议使用UC浏览器；<br/>
+        打印纸张统一为<code>A4</code>，有特殊需求可上传后到店打印；<br/>无论打印店队列多长，到店可直接取货。若打印店没有提前打印，你可以在店直接打印；<br/>
+        对于提前打印的文件请于打印完成后<code>24小时</code>内取走；对于所有情况的打印请于<code>2天内</code>完成；<br/>
+        当前提供价格仅供参考，所有打印店均可在<code>量大时减价</code>；</p>
+    </div>
+    </div>
+    <br/>
+    <form id="print" method="post" action="__URL__/uploadOne" onsubmit="return checkform();" enctype="multipart/form-data">
+        <div class="row">
+            <div class="text-center col-md-5">
+                <div class="form-group">
+                    <div class="upload-btn">
+                        <div class="upload-area"><span class="glyphicon glyphicon-open"></span>点击上传文件<small>(不超过10MB)</small></div>
+                        <input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onchange="checkSuffix(this)" multiple>
+                    </div>
+                </div>
+                <ul id="upload-list" class="list-group"></ul>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="form-group">
+                <label for="PrinterChoose" class="col-lg-1 col-sm-2 control-label">打印店</label>
+                <select class="col-lg-5 col-sm-10 form-control" name="pri_id" id="PrinterChoose" onchange="File.priceChange(this)" required>
+                    <option value="">选择想去的打印店....</option>
+                    <volist name="data" id="vo">
+                        <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+        <br/>
+        <div class="row">        
+            <div class="well col-lg-6 col-sm-12">
+                <h4 class="text-info">该店价格信息</h4>
+                <div id='price' class='help-block comments'>
+                    黑白单面：<span id='p_s' class='text-danger'></span><br/>
+                    黑白双面：<span id='p_d' class='text-danger'></span><br/>
+                    彩印单面：<span id='p_c_s' class='text-danger'></span><br/>
+                    彩印双面：<span id='p_c_d' class='text-danger'></span>
+                </div>
+            </div>
+        </div>
+        <IF condition="$lock eq 1">
+        <fieldset id="setting">
+        <div class="form-group">
+            <div class="row">
+                <label for="copies" class="col-lg-1 col-sm-2 control-label">份数</label>
+                <div class="col-lg-6 col-sm-10">
+                    <input name="copies" type="number" id="copies" min="0" value="0" style="width:20%" /><strong>份</strong>&nbsp;<small class="comments">0表示到店后现场打印</small>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row" style="display:none" id="pptprint">
+                <label for="default" class="col-lg-1 col-sm-2 control-label">PPT格式</label>
+                <div class="col-lg-6 col-sm-10">
+                    <select id="default" class="form-control" name="ppt_layout">
+                        <option value="">选择PPT打印格式....</option>
+                        <volist name="ppt" id="vo" offset="1">
+                            <option value="{$i}">{$vo}</option>
+                        </volist>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div id="moreSetting">
+                <div class="row">
+                    <label for="printcolor" class="col-lg-1 col-sm-2"><strong>彩印</strong></label>
+                    <div class="col-lg-2 col-sm-4">
+                    <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox"/>
+                    </div>
+                    <label for="double_side" class="col-lg-1 col-sm-2"><strong>双面</strong></label>
+                    <div class="col-lg-2 col-sm-4">
+                    <input type="checkbox" name="double_side" id='double_side' value="1"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label for="addtion-need" class='col-lg-1 col-sm-2 control-label'>备注</label>
+                <textarea id="addtion-need" class="form-control col-lg-4 col-sm-10" rows="4" placeholder="如有其他打印设置需要可在此处填写，若无可空白，限制32字以内" name="profile"></textarea>
+            </div>
+        </div>
+        </fieldset>
+        <ELSE/>
+        <div>
+            <a href="/User" style="text-decoration:none"><b>绑定手机后可进行高级设置和提前打印</b></a>
+        </div>
+        </IF>
+    <div class="row">
+        <div class="col-md-8">
+            <button type="submit" class="btn btn-info" id="fileUploadButton" disabled="true">开始传送</button>
+        </div>
+    </div>
+    </form>
+</div>
+</BLOCK>
+
+<BLOCK name='end'>
+
+<script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap-switch.min.js" defer="defer"></script>
+<script src="__PUBLIC__/js/underscore-min.js" ></script>
+
+<script language="javascript" type="text/javascript">
+
+$(function(){
+    $("#printcolor").bootstrapSwitch('size','small');
+    $("#double_side").bootstrapSwitch('size','small');
+});
+
+var Files = function() {
+    this.files = [];
+    this.printer = null;
+    this.print_ahead = null;
+    this.length = 0;
+    $('#setting').show();
+    $('#copies').attr('disabled', false);
+    $('#double_side').attr('disabled', false);
+    $("#fileUploadButton").attr('disabled', false);
+};
+
+Files.prototype.priceChange = function (n){
+    var pid = n.value;
+    var URL = "/Printers/getPrice";
+    $.post(URL, {
+            pid : pid
+        }, function(data) {
+            if (data.status) {
+                $('#p_c_s').html(data.info.p_c_s+'元/张');
+                $('#p_c_d').html(data.info.p_c_d+'元/张');
+                $('#p_s').html(data.info.p_s+'元/张');
+                $('#p_d').html(data.info.p_d+'元/张');
+            } else {
+                $('#p_c_s').html("未设置");
+                $('#p_c_d').html("未设置");
+                $('#p_s').html("未设置");
+                $('#p_d').html("未设置");
+            }
+        });
+}
+
+Files.prototype.addFile = function(file) {
+    var legal = (file instanceof PDF)||(file instanceof DOC)||(file instanceof PPT)
+    if (legal) {
+        this.files.push(file);
+    };
+};
+Files.prototype.uploadFiles = function() {
+    for (var i = 0; file = file_queue.files[i]; i++) 
+    {
+        file.uploadFile();
+    }
+};
+Files.prototype.delete = function(id) {
+    this.files[id] = undefined;
+    this.length--;
+};
+
+Files.prototype.reUpload = function(id) {
+    this.files[id].getToken();
+};
+
+function File(id,name)
+{
+    this.id = id;
+    this.name = name;
+    this.token = null;
+    this.uploadStatus = false;
+    this.newName = null;
+}
+
+File.prototype.uploadFile = function() {
+    var url = 'http://upload.qiniu.com/';
+    var fd = new FormData();
+    var file = document.getElementById('upload-file').files[this.id];
+    fd.append('file',file);
+    fd.append('token',this.token);
+    fd.append('key',this.newName);
+    xmlhttp=null;
+    if (window.XMLHttpRequest)
+    {
+        xmlhttp=new XMLHttpRequest();
+    }
+    else if (window.ActiveXObject)
+    {
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    if (xmlhttp!=null)
+    {
+        xmlhttp.onreadystatechange=this.uploaded;
+        xmlhttp.open("POST",url,true);
+        xmlhttp.send(fd);
+    }
+    else
+    {
+        var file_view = $('#file_'+this.id);
+        var span = file_view.find(span);
+        span.html('Your browser does not support XMLHTTP');
+    }
+}
+
+File.prototype.uploaded = function() {
+    console.log(xmlhttp);
+    if (xmlhttp.readyState==4) {
+        var file_view = $('#file_'+this.id);
+        var span = file_view.find(span);
+        if (xmlhttp.status==200) {
+            this.uploadStatus = true;
+            span.html('uploaded');
+            span.append('<button type="button" class="btn btn-danger btn-xs delete" onclick="deleteFile(this)">delete</button>');
+        }
+        else {
+            span.html('upload failed');
+            span.append('<button type="button" class="btn btn-primary btn-xs re-upload" onclick="reUpload(this)">reUpload</button>');
+        }
+    }
+}
+
+
+File.prototype.getToken = function() {
+    var URL = "__ROOT__/File/getToken";
+    var temp = this;
+    $.get(URL,function(data){
+        if(data.status)
+        {
+            temp.token = data.info.token;
+            temp.newName = data.info.name;
+            temp.uploadFile();
+        }else{
+            var file_view = $('#file_'+this.id);
+            var span = file_view.find(span);
+            span.html('get token fail');
+            span.append('<button type="button" class="btn btn-primary btn-xs re-upload" onclick="reUpload(this)">reUpload</button>');
+        }
+    });
+};
+
+var temp = function() {};
+temp.prototype = File.prototype;
+
+var PDF = function(id,name) {
+    File.apply(this,arguments);
+    $("#upload-list").append('<li class="list-group-item" id="file_"'+id+'>当前文件：'+name +'<span style="color:red">uploading</span></li>');
+}
+PDF.prototype = new temp();
+
+var DOC = function(id,name) {
+    File.apply(this,arguments);
+    $("#upload-list").append('<li class="list-group-item" id="file_"'+id+'>当前文件：'+name +'(支持的格式，但更推荐pdf)<span style="color:red">uploading</span></li>');
+}
+DOC.prototype = new temp();
+
+var PPT = function(id,name) {
+    File.apply(this,arguments);
+    $("#upload-list").append('<li class="list-group-item" id="file_"'+id+'>当前文件：'+name +'<span style="color:red">uploading</span></li>');
+}
+PPT.prototype = new temp();
+    
+var xmlhttp;
+var file_queue = new Files();
+var fileData = new FormData();
+var doc_suffix = ['doc', 'docx', 'wps'];
+var pdf_suffix = ['pdf'];
+var other_suffix = ['ppt', 'pptx'];
+
+function checkSuffix() {
+    var files = document.getElementById('upload-file').files;
+    for (var i = 0,j=0; file = files[i]; i++) 
+    {
+        var filename = file.name;
+        var pos = filename.lastIndexOf('.');
+        var suffix = filename.substring(pos+1);
+        var newFile = null;
+        if (other_suffix.indexOf(suffix)>=0)
+        {
+            newFile = new PPT(j,filename);
+            newFile.getToken();
+            file_queue.addFile(newFile);
+            j++;
+        } else if (pdf_suffix.indexOf(suffix)>=0) 
+        {
+            newFile = new PDF(j,filename);
+            newFile.getToken();
+            file_queue.addFile(newFile);
+            j++;
+        }
+        else if (doc_suffix.indexOf(suffix)>=0)
+        {            
+            newFile = new DOC(j,filename);
+            newFile.getToken();
+            file_queue.addFile(newFile);
+            j++;
+        }
+        else
+        {
+            //
+        }
+    }
+}
+
+$("#helpView").click(function(){
+    $('#helpView').toggleClass('btn-warning')
+    $('#help-info').toggle(100);
+});
+
+$("#print").on('submit',function(e){
+    if(checkform==false)
+    {
+        e.preventDefault();
+        alert('not done yet');
+    }
+});
+
+function checkform(){
+    if (file_queue.length==0) {
+        return false;
+    }
+    for (var i = 0; i < file_queue.files.length; i++) {
+        var file = file_queue.files[i];
+        if (file===undefined) {
+            continue;
+        } else {
+            if (file.uploadStatus==false) {
+                return false;
+            }
+        }
+    }
+    for (var i = 0; i < file_queue.files.length; i++) {
+        var file = file_queue.files[i];
+        $('#id').append('<input name="filename_"'+i+'" value="'+ file.name+'" type="hidden"');
+    };
+    $('#id').append('<input name="file_num" value="'+ file_queue.length+'" type="hidden"');
+    return true;
+}
+
+function deleteFile (e) {
+    var id = e.parent().attr('id').replace(/file_/,"");
+    id = parseInt(id);
+    file_queue.delete(id);
+}
+
+function reUpload (e) {
+    var id = e.parent().attr('id').replace(/file_/,"");
+    id = parseInt(id);
+    file_queue.delete(id);
+    file_queue.reUpload(id);
+}
+
+
+</script>
+</BLOCK>
