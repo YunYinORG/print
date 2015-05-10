@@ -214,9 +214,9 @@ nav li:hover a, nav li.active a, nav li.active span {
   .printerlist .navbar-nav > li > a {
     line-height: 0em;
   }
-  .form-control {
+/*  .form-control {
     width: 41.6666667%;
-  }
+  }*/
   /*bootstrap-nav*/
   nav {
       text-align: center;

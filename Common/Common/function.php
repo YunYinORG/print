@@ -404,15 +404,26 @@ function random($n, $mode = '')
  *
  * @author NewFutre[newfuture@yunyin.org]
  *
- * @param  [string] $to_mail          [收件人邮箱]
+ * @param  [string/array] $to          [收件人邮箱]
  * @param  [array]  $info             [邮箱信息'title'标题,'content'内容]
  * @param  [array]  $config           [邮件发送配置]
  * @return [bool]   [发送结果]
  */
-function send_mail($to_mail, $info, $config)
+function send_mail($to, $info, $config)
 {
+	/*判断是否包含收件人姓名*/
+	if(is_array($to))
+	{
+		$to_mail=$to['email'];
+		$to_name=$to['name'];
+	}else{
+		$to_mail=$to;
+		$to_name=$to;
+	}
+
+	/*发邮件*/
 	$Mail = new \Vendor\Mail(C('MAIL_SMTP'));
-	$Mail->addTo($to_mail)
+	$Mail->addTo($to_mail,$to_name)
 	     ->setLogin($config['email'], $config['pwd'])
 	     ->setFrom($config['email'], $config['name'])
 	     ->setSubject($info['title'])

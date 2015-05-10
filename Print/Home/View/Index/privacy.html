@@ -1,13 +1,18 @@
 <EXTEND name="Print/Template/base.html"/>
-<BLOCK name="title">云印南天——隐私声明</BLOCK>
+
 <BLOCK name="head">
-    <meta name="description" content="云印南天隐私声明,南开大学云打印云印南天">
+    <title>云印南天隐私声明</title>
+    <meta name="keywords" content="云印南天隐私声明" />
+    <meta name="description" content="南开大学和天津大学校园云打印平台隐私保护政策"/>
+    <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 </BLOCK>
-<BLOCK name='content'>
-    <header class="container">
-        <h1 class="text-center text-primary"><a href="/">云印南天</a>——隐私声明</h1>
-    </header>
-    <main class="container text-center">
+
+<BLOCK name="header">
+        <h1 class="text-center text-primary"><a href="/__ROOT__">云印南天</a>——隐私声明</h1>
+</BLOCK>
+
+<BlOCK name="content">
+    <article class="container text-center">
         <div class="row col-md-10 col-md-offset-1">
             <h2 class="text-info">信息授权</h2>
             <div class="alert alert-info text-left">
@@ -75,16 +80,8 @@
                     </div>
                 </div>
                 <div class="row col-md-10 col-md-offset-1 text-center">
-                    <a class="btn btn-lg btn-success" onclick="this.href='/'+window.location.search.replace('?','')">返回</a>
+                    <a class="btn btn-lg btn-success" href="/__ROOT__" onclick="this.href+=window.location.search.replace('?','')">返回</a>
                 </div>
-</main>
-        <footer class="container">
-            <div class="row text-center">
-                <ul class="list-inline">
-                        <li><a href="/">&copy;云印南天</a></li>
-                        <li><a href="https://github.com/nkumstc/print">开源项目</a></li>
-                        <li><a href="mailto:contactATyunyin.org" onclick="this.href=this.href.replace(/AT/,&quot;&#64;&quot;)">联系我们</a></li>
-                    </ul>
-                </div>
-            </footer>
+        </article>
 </BLOCK>
+<BLOCK name="endjs"></BLOCK>
