@@ -137,7 +137,7 @@ class CardController extends Controller {
 				{
 					$error_info = '关闭此功能';
 				}
-				$this->error($name.$error_info, '/Card/help');
+				$this->error($name.$error_info, '/Card/broadcast');
 			}
 			elseif ($name !== $recv_user['name'])
 			{
@@ -264,7 +264,7 @@ class CardController extends Controller {
 			{
 				if ($status < 0)
 				{
-					$findId = $Log->getFieldById($id);
+					$findId = $Log->getFieldById($id,'find_id');
 					if ($Log->where("find_id=$findId AND status<0")->count() >= 2)
 					{
 
@@ -307,10 +307,10 @@ class CardController extends Controller {
 	}
 
 	/**
-	 * help
+	 * broadcast
 	 * 帮助说明
 	 */
-	public function help()
+	public function broadcast()
 	{
 		$uid = use_id();
 		if ( ! $uid)

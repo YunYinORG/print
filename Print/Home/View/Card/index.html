@@ -3,15 +3,15 @@
 <include file="Print/Template/nav.html" card="active"/>
 </block>
 <block name='content'>
- <h1 class="text-center text-primary">校园卡找回中心</h1>
+ <h1 class="text-center text-primary">校园卡招领中心</h1>
 <section class='row'>
     <ul class="text-center list-inline">
-        <li><a class="btn btn-success" href="Card/log">找回记录<span class="badge">{$new}</span></a></li>
+        <li><a class="btn btn-success" href="__URL__/log">找回记录<span class="badge">{$new}</span></a></li>
     </ul>
 </section>
 <section class='row alert well'>
-    <h2 class="text-center">捡到了TA的校园卡</h2>
-    <form role="form" method="post" onsubmit="return find(this);" action="__URL__/find">
+    <h2 class="text-center">捡到了TA的校园卡?</h2>
+    <form id='findform' role="form" method="post" onsubmit="return check(this);" action="__URL__/find">
         <div class="col-md-offset-1 col-md-4">
             <label class="sr-only"  for="number">学号</label>
             <input class="form-control" placeholder='失主卡号' name="number" type="text" id="number" autocomplete="off" required>
@@ -36,7 +36,7 @@
 </section>
 <section class='row alert alert-success'>
     <div class="col-xs-10 col-xs-offset-1 col-lg-offset-0">
-        校园找回平台，由<a>云印南天</a>提供全力支持；<br/>任何问题请及时联系我们。
+        校园卡招领平台，由<a>云印南天团队</a>提供全力支持；<br/>任何问题请及时联系我们contact@yunyin.org。
     </div>
 </section>
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
@@ -47,24 +47,43 @@
                 <h3 class="modal-title" id="modal_label"></h3>
             </div>
             <div class="modal-body"><span id='modal_content'></span><a id="modal_url"></a></div>
+         <div class="modal-footer" >
+            <button id="okbtn" type="button" class="btn btn-primary ok" data-dismiss="modal">确认</button>
+            <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
+          </div>
         </div>
     </div>
 </div>
 </block>
 <block name='end'>
 <script>
-function find(f) {
-    var name = f['name'].value;
-    var number = f['number'].value;
+function check(f) {
+    $('#okbtn').unbind("click")
+    var title = $('#modal_label');
+    var content = $('#modal_content');
+    var name = f['name'].value.trim();
+    var number = f['number'].value.trim();
     if (!/^(\d{7}|\d{10})$/.test(number)) {
-        alert('卡号（学号）格式不对');
-        f['number'].focus()
+       title.html('错误提示');
+       content.html('卡号（学号）格式不对,目前只支持南开和天大在校学生！');
+        f['number'].focus();
     } else if (!/^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]){2,8}$/.test(name)) {
-        alert('请填写正确的名字');
+        title.html('错误提示');
+        content.html('请填写正确的名字,云小印认为"'+name+'"不是名字！！！');
         f['name'].focus();
-    } else if (confirm('确认让系统短信或邮件通知 ' + name + ' (' + number + ')？')) {
-        $('#submit').attr('disabled', true).html('正在核实...');
-        var url = f.action;
+    } else{
+        title.html("确认信息");
+        content.html("最后一次确认信息：学号<b>"+number+"</b>("+name+")！");
+        $('#okbtn').one('click',function(){find(number,name);});
+    }
+    $('#modal').modal('show');
+    return false;
+} 
+
+function find(number,name)
+{
+    $('#submit').attr('disabled', true).html('正在核实...');
+        var url =document.forms['findform'].action;
         $.post(url, {
             'name': name,
             'number': number
@@ -82,7 +101,7 @@ function find(f) {
                     if (data.url) {
                         link.attr('href', data.url).html('=.=解决这个问题');
                     }
-                    title.html('错误提示');
+                    title.html('通知失败');
                     btn.html('通知失主').attr('disabled', false);
                     content.html(data.info);
                 }
@@ -93,8 +112,6 @@ function find(f) {
             }
             $('#modal').modal('show');
         });
-    }
-    return false;
-} 
+}
 </script>
 </block>
