@@ -181,7 +181,13 @@ class CardController extends Controller {
 					}
 
 					/*拼装邮件*/
-					$mail_msg=L('MAIL_CARD', array('name' => $recv_user['name'], 'school' => $send_user['school'], 'sender_name' => $send_user['name'], 'phone' => $send_user['phone'], 'email' => $send_user['email']));
+					$mail_msg=L('MAIL_CARD', array(
+						'name' => $recv_user['name'],
+						'school' => $send_user['school'],
+						'sender_name' => $send_user['name'],
+						'phone' => $send_user['phone'],
+						'email' => $send_user['email'])
+					);
 					$mail_result = send_mail($recv_user,$mail_msg , C('MAIL_NOTIFY'));
 					$success |= $mail_result;
 					if ($mail_result)
