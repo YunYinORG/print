@@ -189,7 +189,7 @@ Files.prototype.delete = function(id) {
     var URL = "/File/deleteTempFile";
     var temp = this;
     $.post(URL, {
-            filename : temp.files[id].name
+            filename : temp.files[id].newName
         }, function(data) {
             if (data.status) {
                 alert(data.info);
@@ -289,7 +289,7 @@ File.prototype.uploadFile = function() {
     }
     if (xmlhttp!=null)
     {
-        xmlhttp.onreadystatechange=this.uploaded;
+        xmlhttp.onreadystatechange=uploaded;
         xmlhttp.open("POST",url,true);
         xmlhttp.send(fd);
         xmlhttp.id = this.id;
@@ -302,12 +302,12 @@ File.prototype.uploadFile = function() {
     }
 }
 
-File.prototype.uploaded = function() {
-    if (xmlhttp.readyState==4) {
+function uploaded() {
+    if (this.readyState==4) {
         var file_view = $('#file_'+this.id);
-        var span = file_view.find(span);
-        if (xmlhttp.status==200) {
-            this.uploadStatus = true;
+        var span = file_view.find('span');
+        if (this.status==200) {
+            file_queue.files[this.id].uploadStatus = true;
             span.html('uploaded');
             span.append('<button type="button" class="btn btn-danger btn-xs delete" onclick="deleteFile(this)">delete</button>');
         }
@@ -336,25 +336,24 @@ File.prototype.getToken = function() {
         }
     });
 };
-
 var temp = function() {};
 temp.prototype = File.prototype;
 
 var PDF = function(id,name) {
     File.apply(this,arguments);
-    $("#upload-list").append('<li class="list-group-item" id="file_"'+id+'>当前文件：'+name +'<span style="color:red">uploading</span></li>');
+    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span style="color:red">uploading</span></li>');
 }
 PDF.prototype = new temp();
 
 var DOC = function(id,name) {
     File.apply(this,arguments);
-    $("#upload-list").append('<li class="list-group-item" id="file_"'+id+'>当前文件：'+name +'(支持的格式，但更推荐pdf)<span style="color:red">uploading</span></li>');
+    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'(支持的格式，但更推荐pdf)<span style="color:red">uploading</span></li>');
 }
 DOC.prototype = new temp();
 
 var PPT = function(id,name) {
     File.apply(this,arguments);
-    $("#upload-list").append('<li class="list-group-item" id="file_"'+id+'>当前文件：'+name +'<span style="color:red">uploading</span></li>');
+    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span style="color:red">uploading</span></li>');
 }
 PPT.prototype = new temp();
     
@@ -443,9 +442,10 @@ function checkform(){
 }
 
 function deleteFile (e) {
-    var id = e.parent().attr('id').replace(/file_/,"");
+    var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
     id = parseInt(id);
     file_queue.delete(id);
+    $('file_'+id).remove();
 }
 
 function reUpload (e) {
