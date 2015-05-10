@@ -90,73 +90,74 @@ class CardController extends Controller {
 		$name      = I('name', false, 'trim');
 		$User      = M('User');
 		$Card      = M('Card');
+		
 		$send_user = $uid ? $User->field('id,sch_id,student_number,name,phone,email')->getById($uid) : false;
-		if ( ! $send_user)
+		if ( ! $send_user)//判断登录信息
 		{
 			$this->error('请登录！', '/');
 		}
-		elseif ( ! $send_user['phone'])
+		elseif ( ! $send_user['phone'])//未绑定手机
 		{
 			$this->error('尚未绑定手机', '/User/index');
 		}
-		elseif ($send_user['student_number'] == $number)
+		elseif ($send_user['student_number'] == $number)//自己给自己发
 		{
 			$this->error('不要用自己的做实验哦！');
 		}
-		elseif ($Card->cache(true)->getFieldById($uid, 'blocked'))
+		elseif ($Card->cache(true)->getFieldById($uid, 'blocked'))//已经被屏蔽
 		{
 			$this->error('由于恶意使用,您的此功能已被禁用', '/Card/help');
 		}
-		elseif ( ! $name &&  ! $number)
+		elseif ( ! $name &&  ! $number)//找卡人信息不足	
 		{
 			$this->error('信息不足');
 		}
 		else
 		{
-			$recv_user = $User->field('id,name,student_number,phone,email')->getByStudentNumber($number);
-			$recv_off  = $Card->cache(true)->getFieldById($recv_user['id'], 'off');
-			if ( ! $recv_user || $recv_off || ( ! $recv_user['phone'] &&  ! $recv_user['email']))
+			/*尝试 验证 匹配 通知*/
+
+			$School =M('School');
+			$recv_user = $User->field('id,name,student_number AS number,sch_id,phone,email')->getByStudentNumber($number);
+			if(!$recv_user)//判断是否存加入平台
 			{
-				$find_user        = $User->field('name, student_number')->getById($uid);
-				$find_user_school = preg_match(C('REGEX_NUMBER_NKU'), $find_user['student_number']) ? '南开大学' : '天津大学';
-				$recv_user_school = preg_match(C('REGEX_NUMBER_NKU'), $number) ? '南开大学' : '天津大学';
-				session('recv_user_name', $name);
-				session('recv_user_number', $number);
-				session('recv_user_school', $recv_user_school);
-				session('find_user_school', $find_user_school);
-				session('find_user_name', $find_user['name']);
-				if ( ! $recv_user)
+				/* 判断学校*/
+				if(preg_match(C('REGEX_NUMBER_NKU'), $number))//南开
 				{
-					$error_info = '尚未加入此平台';
+					$this->_saveReciever($name, $number, 1,false);
+				}elseif (preg_match(C('REGEX_NUMBER_TJU'), $number)) {//天大
+					$this->_saveReciever($name, $number, 2,false);
+				}else{//其他
+					$this->error('对不起，目前平台仅对南开大学和天津大学在校生开放，其他需求或者学校请联系我们！');
 				}
-				if ( ! $recv_user['phone'] &&  ! $recv_user['email'])
-				{
-					$error_info = '尚未绑定个人信息';
-				}
-				if ($recv_off)
-				{
-					$error_info = '关闭此功能';
-				}
-				$this->error($name.$error_info, '/Card/broadcast');
-			}
-			elseif ($name !== $recv_user['name'])
+				$this->error($name."($number)尚未加入，你可以在此广播到社交网络", '/Card/broadcast');		
+			}elseif ($name !== $recv_user['name'])//验证姓名
 			{
 				$this->error('失主信息核对失败！');
 			}
-			else
+			elseif($recv_off  = $Card->cache(120)->getFieldById($recv_user['id'], 'off'))//接受者是否关闭此功能
 			{
+				$this->error('对方关闭了此功能,不希望你打扰TA，我们爱莫能助╮(╯-╰)╭');
+			}elseif ( !($recv_user['phone']||$recv_user['email']))//判断邮箱和手机是否存在
+			{
+				$this->_saveReciever($recv_user['name'], $recv_user['number'], $recv_user['sch_id'],$recv_user['id']);
+				$this->error($name."($number)尚未绑定联系方式，你可以在此广播到社交网络", '/Card/broadcast');
+			}
+			{
+				/*验证成功 ，手机或者邮箱存在 通知并记录*/
 
-				/*验证成功 通知并记录*/
-				$msg     = '';
+				$msg     = '';//提示消息
 				$success = false;
 				import('Common.Encrypt', COMMON_PATH, '.php');
 				$send_phone = decrypt_phone($send_user['phone'], $send_user['student_number'], $send_user['id']);
-				$info = array('send_phone' => $send_phone, 'send_name' => $send_user['name'], 'recv_name' => $recv_user['name']);
-				if ($recv_user['phone'])
+			
+				if ($recv_user['phone'])//手机存在
 				{
-					$recv_phone = decrypt_phone($recv_user['phone'], $recv_user['student_number'], $recv_user['id']);
+					/*发送短信通知*/
+					$recv_phone = decrypt_phone($recv_user['phone'], $recv_user['number'], $recv_user['id']);
 					$SMS = new \Vendor\Sms();
+					$info = array('send_phone' => $send_phone, 'send_name' => $send_user['name'], 'recv_name' => $recv_user['name']);
 					$sms_result = $SMS->findCard($recv_phone, $info);
+				
 					$success |= $sms_result;
 					if ($sms_result)
 					{
@@ -167,16 +168,21 @@ class CardController extends Controller {
 						$msg = '短信发送失败!<br/>';
 					}
 				}
-				if ($recv_user['email'])
+
+				if ($recv_user['email'])//检查邮箱是否存在
 				{
+					/*发送邮件通知*/
+
 					$recv_email = decrypt_email($recv_user['email']);
-					$send_user['school'] = M('school')->getFieldById($send_user['sch_id'], 'name');
+					$send_user['school'] = $School->cache(true)->getFieldById($send_user['sch_id'], 'name');
 					if ($send_user['email'])
 					{
 						$send_user['email'] = decrypt_email($send_user['email']);
 					}
-					/*发送邮件通知*/
-					$mail_result = send_mail($recv_user, L('MAIL_CARD', array('name' => $recv_user['name'], 'school' => $send_user['school'], 'sender_name' => $send_user['name'], 'phone' => $send_user['phone'], 'email' => $send_user['email'])), C('MAIL_NOTIFY'));
+
+					/*拼装邮件*/
+					$mail_msg=L('MAIL_CARD', array('name' => $recv_user['name'], 'school' => $send_user['school'], 'sender_name' => $send_user['name'], 'phone' => $send_user['phone'], 'email' => $send_user['email']));
+					$mail_result = send_mail($recv_user,$mail_msg , C('MAIL_NOTIFY'));
 					$success |= $mail_result;
 					if ($mail_result)
 					{
@@ -187,16 +193,22 @@ class CardController extends Controller {
 						$msg .= '邮件发送失败!';
 					}
 				}
-				if ( ! $success)
+
+				if ( ! $success)//判断发送结果
+				{				
+					$this->_saveReciever($recv_user['name'], $recv_user['number'], $recv_user['sch_id'],$recv_user['id']);
+					$this->error('消息发送失败！请重试或者交由第三方平台！','/Card/broadcast');
+				}else{
+
+				/*记录招领信息*/
+		
+				if ($recv_off === null) 
 				{
-					$this->error('消息发送失败！请重试或者交由第三方平台！');
-				}
-				if ($recv_off === null) //该同学不在card记录之中
-				{
+					//该同学不在card记录之中,则先创建
 					$Card->add(array('id' => $recv_user['id']));
 				}
-				$log['find_id'] = $send_user['id'];
-				$log['lost_id'] = $recv_user['id'];
+
+				$log=array('find_id'=>$send_user['id'],'lost_id'=> $recv_user['id']);
 				if ( ! M('Cardlog')->add($log))
 				{
 					$this->error('记录失败!!!<br/>'.$msg);
@@ -205,6 +217,9 @@ class CardController extends Controller {
 				{
 					$this->success($msg);
 				}
+
+				}
+				
 			}
 		}
 	}
@@ -307,34 +322,45 @@ class CardController extends Controller {
 	}
 
 	/**
-	 * broadcast
-	 * 帮助说明
+	 * 广播显示页
+	 * @method broadcast
+	 * @return [type]    [description]
+	 * @author NewFuture[newfuture@yunyin.org]
 	 */
 	public function broadcast()
 	{
 		$uid = use_id();
-		if ( ! $uid)
+		if ( ! $uid)//未登录
 		{
 			$this->error('请登录！', '/');
 		}
-		elseif ( ! session('recv_user_school'))
+
+		$reciever=session('reciever');
+		if ( !$reciever)//没有传递session信息
 		{
-			$this->error('请先填写失主信息！', '/Card');
+			$this->error('此页仅供招领广播使用，请填写失主信息！', '/Card');
+		}
+		
+		/*获取发送者和接收者信息*/
+		$School=M('School');
+		$finder=M('User')->field('name,sch_id')->getById($uid);
+		$msg_info=array(
+			'card_number'=>$reciever['number'],
+			'card_name'=>$reciever['name'],
+			'card_school'=>$School->cache(true)->getFieldById($reciever['sch_id'],'name'),
+			'finder_name'=>$finder['name'],
+			'finder_school'=>$School->cache(true)->getFieldById($finder['sch_id'],'name'),
+			'msg'=>'',
+			);
+
+		if($reciever['uid'])//接收者是平台成员
+		{
+			$this->send_msg = L('CARD_MSG_IN',$msg_info);
 		}
 		else
 		{
-			if (session('is_user'))
-			{
-				$send_msg = '#失物招领#'.session('recv_user_school').'的'.session('recv_user_name').'同学（学号'.session('recv_user_number').'）离家出走的校园卡已经被'.session('find_user_school').'的'.session('find_user_name').'同学捡到。请尽快登录#云印南天校园卡招领中心#（yunyin.org/Card/log）联系,TA的留言：';
-			}
-			else
-			{
-				$send_msg = '#云印南天校园卡招领中心##失物招领#'.session('recv_user_school').'的'.session('recv_user_name').'同学（学号'.session('recv_user_number').'）离家出走的校园卡已经被'.session('find_user_school').'的'.session('find_user_name').'同学捡到。TA的留言：';
-			}
-			session('send_msg', $send_msg);
-			$this->send_msg = $send_msg;
+			$this->send_msg = L('CARD_MSG_OUT',$msg_info);
 		}
-		session('find_id', $uid);
 		$this->display();
 	}
 
@@ -346,11 +372,19 @@ class CardController extends Controller {
 	 */
 	public function send()
 	{
-		$find_id    = session('find_id');
-		$cache_name = 'send_'.$find_id;
+		$uid=use_id('/');
+
+		/*判断是否有接收者*/
+		$reciever=session('reciever');
+		if(!$reciever)
+		{
+			$this->error('禁止乱发信息！！！');
+		}
+
+		/*判断尝试次数*/
+		$cache_name = 'send_'.$uid;
 		$times      = S($cache_name);
 		$User       = M('User');
-		$Card       = M('Card');
 		if ($times > 5)
 		{
 			\Think\Log::record('第三方平台发送失败：ip:'.get_client_ip().',find_id'.$find_id);
@@ -360,69 +394,54 @@ class CardController extends Controller {
 		{
 			S($cache_name, $times + 1, 3600);
 		}
-		$add_msg      = I('add_msg');
-		$recv_user_id = $User->getFieldByStudentNumber($number, 'id');
-		$recv_off     = $Card->getFieldById($recv_user_id, 'off');
-		if ($recv_user_id && ($recv_off != 1))
-		{
-			/*失主已加入平台但未绑定信息,且未关闭此功能,添加到丢失记录*/
-			if ($recv_off === null)
-			{
-				$card['id'] = $recv_user_id;
-				$Card->add($card);
-			}
-			$log['find_id'] = $find_id;
-			$log['lost_id'] = $recv_user_id;
-			M('Cardlog')->add($log);
-			session('is_user', 1);
-		}
-		else
-		{
-			session('is_user', 0);
-		}
-		$send_msg = session('send_msg').$add_msg.'。请同学们奔走相告！';
-		/*post数据到API*/
-		$post = function($url, $key, $send_msg)
-		{
-			$post_url = $url;
-			$post_data = array(
-				'key'    => $key,
-				'status' => base64_encode($send_msg),
-			);
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $post_url);
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-			curl_setopt($ch, CURLOPT_HEADER, 0);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-			$data = curl_exec($ch);
-			curl_close($ch);
-			return $data;
-		};
 
-		$url    = 'https://newfuturepy.sinaapp.com/broadcast';
-		$key    = C('WEIBO_API_PWD');
-		$data   = $post($url, $key, $send_msg);
-		$result = json_decode($data);
-		if ($result->renren == 1)
+		/*获取拾主和失主的信息*/
+		$School=M('School');
+		$reciever['school']=$School->cache(true)->getFieldById($reciever['sch_id'],'name');
+		$finder=M('User')->field('name,student_number AS number,sch_id')->getById($uid);
+		$finder['school']=$School->cache(true)->getFieldById($finder['sch_id'],'name');
+		$finder['msg']  = I('add_msg');
+
+		if(!$reciever['uid'])
 		{
-			echo '人人发送成功.';
+			$msg= L('CARD_MSG_OUT',array('reciever' =>$reciever ,'finder'=>$finder ));
 		}
 		else
 		{
-			echo '人人发送失败.';
+
+			/*失主已加入平台但未绑定信息,且未关闭此功能,添加到丢失记录*/		
+			M('Card')->add(array('id'=>$reciever['uid']));
+			$log=array('find_id'=>$send_user['id'],'lost_id'=> $recv_user['id']);
+			M('Cardlog')->add($log);
+			$msg= L('CARD_MSG_IN',array('reciever' =>$reciever ,'finder'=>$finder ));
 		}
-		switch ($result->weibo)
+	
+		/*post数据到API*/
+		$url    = 'https://newfuturepy.sinaapp.com/broadcast';
+		$data = array(
+			'key' =>C('WEIBO_API_PWD') ,
+			'status'=>base64_encode($msg)
+			);
+		$result = json_decode($this->_post($url,$dat));	
+		
+		if($result)
 		{
-			case 2:
-				echo '微博发送成功.';
-				break;
-			case 0:
-				\Think\Log::record('微博API调用出现错误或授权过期');
-			default:
-				echo '微博发送失败.';
+			$result_info='人人发送成功'.($result->renren).'条；微博发送'.($result->weibo).'条';
+			$this->success($result_info,'/Card/log');
+		}else
+		{
+			$this->error('网路故障，请联系我们');
 		}
+
+		// if(IS_AJAX)
+		// {
+		// 	$this->success($result);
+		// }else
+		// {
+		
+		// }
+	
+		
 	}
 
 	/**
@@ -431,5 +450,46 @@ class CardController extends Controller {
 	public function _empty()
 	{
 		$this->redirect('index');
+	}
+
+
+	/**
+	 * 保存接收者信息
+	 * @method _saveReciever
+	 * @param  [type]        $name   [description]
+	 * @param  [type]        $number [description]
+	 * @param  [type]        $sch_id [description]
+	 * @return [type]                [description]
+	 * @access private
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
+	private function _saveReciever($name,$number,$sch_id,$uid=false)
+	{
+		$reciever=array('name'=>$name,'number'=>$number,'sch_id'=>$sch_id,'uid'=>$uid);
+		session('reciever',$reciever);
+	}
+
+	/**
+	 * post 数据
+	 * @method _post
+	 * @param  [type]  $url  [description]
+	 * @param  array   $data [description]
+	 * @return [type]        [description]
+	 * @access private
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
+	private function _post($url, $data=array())
+	{
+
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+			$result = curl_exec($ch);
+			curl_close($ch);
+			return $result;
 	}
 }

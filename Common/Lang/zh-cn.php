@@ -23,6 +23,13 @@ return array(
 	//邮件签名落款
 	'MAIL_SIGN' => '<sign><p><br/>(^▽^)祝你开心哦！</p><p align="right" style="margin-right:3em"><b>云小印(●\'◡\'●)</b>代表云印南天团队奉上</p><div style="color:gray"><hr><div style="padding-left:1em"><div align="left" style="line-height:1.66;font-size:.9em;display:inline-block"><div>官方主页：<a style="color:gray" href="http://www.yunyin.org">www.yunyin.org</a></div><div>官方微博：<a style="color:gray" href="http://weibo.com/cloudPrint">@云印南天</a>（CloudPrint）</div><div>人人主页：<a style="color:gray" href="http://page.renren.com/602117408">@云印南天</a></div><div>微信账号：云印南天（YunYinNanTian）</div></div><img style="display:inline-block;max-height:6em" src="http://www.yunyin.org/assets/image/weixin_qrcode.png"></div></div></sign>',
 
+	/*校园卡招领广播*/
+	/*参数 $reciever["school"，"name"，"number"]，$finder["school"，'name'。'msg']*/
+	//此人在平台内，
+	'CARD_MSG_IN'=>'#{$card_school}失物招领#{$card_name}同学（学号{$card_number}）离家出走的校园卡已经被{$finder_school}的{$finder_name}同学捡到。请尽快登录#云印南天校园卡招领中心#（yunyin.org/Card/log）联系,TA的留言：{$msg}',
+	//此人不在平台
+	'CARD_MSG_OUT'=>'#云印南天校园卡招领中心##{$card_school}失物招领#{$card_name}同学（学号{$card_number}）离家出走的校园卡已经被{$finder_school}的{$finder_name}同学捡到。TA的留言：{$msg}',
+
 	/*登录验证*/
 	'NOT_HTTPS_ERROR'      => '必须通过https安全信道进行登录或注册操作!', //不是使用的https通道
 	'TRIES_LIMIT '         => '尝试次数太多，已被临时锁定',

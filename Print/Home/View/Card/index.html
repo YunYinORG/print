@@ -39,7 +39,7 @@
         校园卡招领平台，由<a>云印南天团队</a>提供全力支持；<br/>任何问题请及时联系我们contact@yunyin.org。
     </div>
 </section>
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -48,7 +48,7 @@
             </div>
             <div class="modal-body"><span id='modal_content'></span><a id="modal_url"></a></div>
          <div class="modal-footer" >
-            <button id="okbtn" type="button" class="btn btn-primary ok" data-dismiss="modal">确认</button>
+            <button id="okbtn" type="button" class="btn btn-primary ok">确认</button>
             <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
           </div>
         </div>
@@ -58,7 +58,7 @@
 <block name='end'>
 <script>
 function check(f) {
-    $('#okbtn').unbind("click")
+   $('#okbtn').hide()
     var title = $('#modal_label');
     var content = $('#modal_content');
     var name = f['name'].value.trim();
@@ -73,8 +73,8 @@ function check(f) {
         f['name'].focus();
     } else{
         title.html("确认信息");
-        content.html("最后一次确认信息：学号<b>"+number+"</b>("+name+")！");
-        $('#okbtn').one('click',function(){find(number,name);});
+        content.html("确认学号是否正确<b><mark>"+number+"</mark></b>("+name+")?");
+        $('#okbtn').unbind("click").show().click(function(){find(number,name);});
     }
     $('#modal').modal('show');
     return false;
@@ -82,6 +82,7 @@ function check(f) {
 
 function find(number,name)
 {
+    $('#okbtn').unbind("click").hide();
     $('#submit').attr('disabled', true).html('正在核实...');
         var url =document.forms['findform'].action;
         $.post(url, {
