@@ -67,19 +67,20 @@ function check(f)
 }
 function send()
 {
-	$('#ok').hide();
+    $('#ok').attr('disabled', true).html('正在发送...');
 	var url=document.forms.sendform.action;
 	var msg=document.getElementById('add_msg').value.trim();
 	$.post(url,{'add_msg':msg},function(data){
 		if(data.status)
 		{	
-			$('#modal_label').html('发送成功');
+			$('#modal_label').html('发布成功');
 			$('#modal_content').html(data.info);
+            $('#ok').html('已经发送').attr('disabled',true);
 			
 		}else{
 			$('#modal_label').html('发布失败');
 			$('#modal_content').html(data.info);
-			$('#ok').show();
+            $('#ok').hide();
 		}
 
 		$('#modal').modal('show');
