@@ -445,7 +445,7 @@ function deleteFile (e) {
     var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
     id = parseInt(id);
     file_queue.delete(id);
-    $('file_'+id).remove();
+    $('#file_'+id).remove();
 }
 
 function reUpload (e) {

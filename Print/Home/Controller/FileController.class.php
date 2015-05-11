@@ -129,7 +129,7 @@ class FileController extends Controller {
 				$data['url'] = $info['file']['savepath'].$info['file']['savename'];
 
 				// $data['copies'] = I('post.copies', 0, 'int') < 0 ? 0 : I('post.copies', 0, 'int');
-				// $data['double_side'] = I('post.double_side', 0, 'int');				
+				// $data['double_side'] = I('post.double_side', 0, 'int');
 				// $data['color'] = I('post.color', 0, 'int');
 				// $requirements = I('post.requirements', 0, 'htmlspecialchars');
 				// if ($requirements)
@@ -149,10 +149,10 @@ class FileController extends Controller {
 				// {
 				// 	$data['ppt_layout'] = 0;
 				// }
-				// 
-				
-				$File=D('File');
-				if ($File->create($data)&&$File->add()) //上传
+				//
+
+				$File = D('File');
+				if ($File->create($data) && $File->add()) //上传
 				{
 					$this->redirect('File/index', null, 0, '上传成功');
 				}
@@ -265,7 +265,7 @@ class FileController extends Controller {
 			$result = $qiniu->del($url);
 			if ($result)
 			{
-				$this->success('deleted');
+				$this->success($result);
 			}
 			else
 			{
