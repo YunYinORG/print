@@ -1,21 +1,10 @@
-<?php
-namespace API\Model;
+<?php namespace API\Model;
 use Think\Model\ViewModel;
 
 class FileViewModel extends ViewModel {
 	public $viewFields = array(
 		'file' => array(
-			'id',
-			'use_id',
-			'pri_id',
-			'name',
-			'url',
-			'time',
-			'status',
-			'copies',
-			'color',
-			'double_side',
-			'requirements',
+			'id', 'pri_id', 'use_id', 'name', 'url', 'time', 'requirements', 'copies', 'double_side', 'status', 'color', 'ppt_layout', 'sended',
 		),
 		'user' => array(
 			'name' => 'use_name',
