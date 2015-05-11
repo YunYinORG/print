@@ -126,7 +126,7 @@ class PrinterController extends Controller {
 				{
 					$this->error('邮箱地址无效！');
 				}
-				$printer = M('Printer')->Field('id,email')->getByAccount($account);
+				$printer = M('Printer')->Field('id,email,name')->getByAccount($account);
 				if ( ! empty($printer['email']))
 				{
 					if ($email != $printer['email'])
@@ -148,7 +148,7 @@ class PrinterController extends Controller {
 				if ($cid)
 				{
 					$url = U('Printer/checkEmailCode', 'id='.$cid.'&code='.$data['code'], '', true);
-					if (send_mail($email, $url, 2))
+					if (send_mail($printer, L('MAIL_FINDPWD',array('link' =>$url)),C('MAIL_VERIFY')))
 					{
 						$this->success('验证邮件已发送到'.$email.'请及时到邮箱查收');
 					}

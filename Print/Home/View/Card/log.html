@@ -1,37 +1,37 @@
-<extend name="Print/Template/base.html"/>
-<block name='header'>
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name='header'>
 <include file="Print/Template/nav.html" card="active"/>
-</block>
-<block name='content'>
+</BLOCK>
+<BLOCK name='content'>
 <h1 class="text-center text-primary">我的校园卡找回记录</h1>
 <section class='row alert alert-danger'>
     <h2>丢失记录</h2>
     <EMPTY name='lost'>
     你还没有丢过卡哦o(^▽^)o
     <ELSE/>
-    <foreach name="lost" item="v">
+    <FOREACH name="lost" item="v">
     <div id="{$v['id']}">
         <i class="glyphicon glyphicon-phone showPhone"></i>
-        <span class='name label label-info'> {$v['find_name']} ({$v['find_number']})</span>
+        <code class='name label-info'> {$v['find_name']} ({$v['find_number']})</cpde>
         同学于 <span class=''>{$v['time']}</span> 捡到我的卡
-        <switch name="v['status']" >
-        <case value="-1">
-        <span class='label label-danger'>已举报</span>
-        </case>
-        <case value="0">
-        <span class='label label-primary'>已忽略</span>
-        </case>
-        <case value="1">
-        <span class='label label-success'>已感谢</span>
-        </case>
-        <default />
+        <SWITCH name="v['status']" >
+        <CASE value="-1">
+        <mark class='label label-danger'>已举报</mark>
+        </CASE>
+        <CASE value="0">
+        <mark class='label label-primary'>已忽略</mark>
+        </CASE>
+        <CASE value="1">
+        <mark class='label label-success'>已感谢</mark>
+        </CASE>
+        <DEFAULT />
         <span class='result'>
         <button class="btn btn-success" value="1">感谢</button>
         <button class="btn btn-danger" value="-1">举报</button>
         </span>
-        </switch>
+        </SWITCH>
     </div>
-    </foreach>
+    </FOREACH>
     </EMPTY>
 </section>
 <section class='row alert alert-success'>
@@ -39,29 +39,29 @@
     <EMPTY name='find'>
     空空如也!
     <ELSE/>
-    <foreach name="find" item="v">
+    <FOREACH name="find" item="v">
     <div>
         我在<span class=''>{$v['time']}</span>捡到
-        <span class='label label-info'> {$v['lost_name']} ({$v['lost_number']})</span> 同学的卡
-        <switch name="v['status']" >
-        <case value="-1">
-        <span class='label label-danger'>被举报</span>
-        </case>
-        <case value="0">
-        <span class='label label-primary'>被忽略</span>
-        </case>
-        <case value="1">
-        <span class='label label-success'>收到感谢</span>
-        </case>
-        <default />
-        <span class='label label-warning'>待处理</span>
-        </switch>
+        <code class='label-info'> {$v['lost_name']} ({$v['lost_number']})</code> 同学的卡
+        <SWITCH name="v['status']" >
+        <CASE value="-1">
+        <mark class='label label-danger'>被举报</mark>
+        </CASE>
+        <CASE value="0">
+        <mark class='label label-primary'>被忽略</mark>
+        </CASE>
+        <CASE value="1">
+        <mark class='label label-success'>收到感谢</mark>
+        </CASE>
+        <DEFAULT />
+        <mark class='label label-warning'>待处理</mark>
+        </SWITCH>
     </div>
-    </foreach>
+    </FOREACH>
     </EMPTY>
 </section>
-</block>
-<block name='end'>
+</BLOCK>
+<BLOCK name='end'>
 <script>
 $('.result>button').click(function() {
     var status = this.value;
@@ -118,4 +118,4 @@ $(".showPhone").click(function(){
     );
 });
 </script>
-</block>
+</BLOCK>
