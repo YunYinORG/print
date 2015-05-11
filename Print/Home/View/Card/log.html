@@ -12,7 +12,7 @@
     <FOREACH name="lost" item="v">
     <div id="{$v['id']}">
         <i class="glyphicon glyphicon-phone showPhone"></i>
-        <code class='name label-info'> {$v['find_name']} ({$v['find_number']})</cpde>
+        <code class='name label-info'> {$v['find_name']} ({$v['find_number']})</code>
         同学于 <span class=''>{$v['time']}</span> 捡到我的卡
         <SWITCH name="v['status']" >
         <CASE value="-1">

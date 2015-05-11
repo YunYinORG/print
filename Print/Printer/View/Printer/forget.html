@@ -4,7 +4,7 @@
 <BLOCK name='header'>
                 <div class="col-lg-8 col-lg-offset-2">
                 <h1 class="text-danger text-center">找回密码</h1>
-                <div class='alert alert-warning'>
+                <div class='alert alert-warning text-center'>
                     为了防止你的账号信息滥用，你可以通过手机验证、邮箱验证，找回你的密码。
                     <br/>如果账号尚未注册请联系我们：contact@yunyin.org<br/>返回：<a title="云印南天打印店" href="__MODULE__">云印南天打印店首页</a>
                 </div>
@@ -31,13 +31,10 @@
                         <input  class="form-control" placeholder='绑定的手机号码' name="phone" type="text" pattern="1[3458]\d{9}" id="phone" required>
 					</div> 
 					  <input name="way" type="hidden" value="phone"/>
-					<div class="text-center">
+					<div class="form-group text-center">
                         <button type="submit" class="btn btn-lg btn-success">提交</button>
                     </div>	                                 
-                </form>
-			</div>
-			
-			<div class="col-lg-8 col-lg-offset-2">              
+                </form>     
 				<form style="display:none;" id="email_form" role="form" method="post" action="__URL__/findPwd">
                     <div class="text-center text-info">
 						<h2>验证邮箱并重设密码</h2>
@@ -51,12 +48,12 @@
                         <input  class="form-control" placeholder='绑定的邮箱地址' name="email" type="text" id="email" required>
                     </div>
 						<input name="way" type="hidden" value="email"/>
-                    <div class="text-center">
+                    <div class="form-group text-center">
                         <button type="submit" class="btn btn-lg btn-success">提交</button>
                     </div>
                 </form>
             </div> 
-             </div>
+    </div>
    </BLOCK>
     
     <BLOCK name='end'>
