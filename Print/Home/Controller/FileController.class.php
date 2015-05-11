@@ -121,33 +121,38 @@ class FileController extends Controller {
 				{
 					$name = mb_substr($name, 0, 58).'.'.$info['file']['ext'];
 				}
-				$data['pri_id'] = I('post.pri_id', 0, 'int');
+
+				// $data['status'] = 1;
+				// $data['pri_id'] = I('post.pri_id', 0, 'int');
 				$data['use_id'] = $uid;
 				$data['name'] = $name;
 				$data['url'] = $info['file']['savepath'].$info['file']['savename'];
-				$data['copies'] = I('post.copies', 0, 'int') < 0 ? 0 : I('post.copies', 0, 'int');
-				$data['double_side'] = I('post.double_side', 0, 'int');
-				$data['status'] = 1;
-				$data['color'] = I('post.color', 0, 'int');
-				$requirements = I('post.requirements', 0, 'htmlspecialchars');
-				if ($requirements)
-				{
-					$data['requirements'] = $requirements;
-				}
 
-				if ($data['pri_id'] == 0)
-				{
-					$this->error('请选择打印店！', '/File/add');
-				}
-				if ($info['file']['ext'] == 'ppt' || $info['file']['ext'] == 'pptx')
-				{
-					$data['ppt_layout'] = I('post.ppt_layout', 0, 'int');
-				}
-				else
-				{
-					$data['ppt_layout'] = 0;
-				}
-				if (M('File')->add($data)) //判断通知
+				// $data['copies'] = I('post.copies', 0, 'int') < 0 ? 0 : I('post.copies', 0, 'int');
+				// $data['double_side'] = I('post.double_side', 0, 'int');				
+				// $data['color'] = I('post.color', 0, 'int');
+				// $requirements = I('post.requirements', 0, 'htmlspecialchars');
+				// if ($requirements)
+				// {
+				// 	$data['requirements'] = $requirements;
+				// }
+
+				// if ($data['pri_id'] <= 0)
+				// {
+				// 	$this->error('请选择打印店！', '/File/add');
+				// }
+				// if ($info['file']['ext'] == 'ppt' || $info['file']['ext'] == 'pptx')
+				// {
+				// 	$data['ppt_layout'] = I('post.ppt_layout', 0, 'int');
+				// }
+				// else
+				// {
+				// 	$data['ppt_layout'] = 0;
+				// }
+				// 
+				
+				$File=D('File');
+				if ($File->create($data)&&$File->add()) //上传
 				{
 					$this->redirect('File/index', null, 0, '上传成功');
 				}
@@ -190,10 +195,6 @@ class FileController extends Controller {
 					$result = $File->where($map)->cache(true)->save($data);
 					if ($result)
 					{
-
-						//删除缓存
-						//                        S(cache_name('user',$uid),null);
-						//                        S(cache_name('printer',$file['pri_id']),null);
 						$this->success($result);
 					}
 					$this->error('记录更新异常');

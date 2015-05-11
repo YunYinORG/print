@@ -168,7 +168,7 @@ class FileController extends Controller {
 			else
 			{
 				$status['operation'] = $status['status'];
-				$status['sendDownloadMessage']=this->sendDownloadMessage($pid,$fid);
+				$status['sendDownloadMessage']=$this->sendDownloadMessage($pid,$fid);
 			}
 		}
 		elseif (($result['status'] == C('FILE_DOWNLOAD')) && ($download != 1))
