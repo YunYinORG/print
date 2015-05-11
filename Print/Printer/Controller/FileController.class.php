@@ -168,7 +168,7 @@ class FileController extends Controller {
 			else
 			{
 				$status['operation'] = $status['status'];
-				$status['sendDownloadMessage']=$this->sendDownloadMessage($pid,$fid);
+				$status['sendDownloadMessage'] = $this->sendDownloadMessage($pid, $fid);
 			}
 		}
 		elseif (($result['status'] == C('FILE_DOWNLOAD')) && ($download != 1))
@@ -261,9 +261,9 @@ class FileController extends Controller {
 		}
 	}
 
-	private function sendDownloadMessage($pid,$fid)
+	private function sendDownloadMessage($pid, $fid)
 	{
-		$File    = D('FileView');
+		$File = D('FileView');
 		$map['id'] = $fid;
 		$info    = $File->where($map)->field('use_id,phone,name')->find();
 		$Printer = M('Printer');
