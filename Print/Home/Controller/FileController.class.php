@@ -184,7 +184,7 @@ class FileController extends Controller {
 			$map['id'] = $fid;
 			$map['_string'] = 'status=1 OR status=5';
 			$File = M('File');
-			$file = $File->where($map)->cache(true)->Field('url,pri_id')->find();
+			$file = $File->where($map)->Field('url,pri_id')->find();
 			if ($file)
 			{
 				$url = $file['url'];
@@ -192,7 +192,7 @@ class FileController extends Controller {
 				{
 					$data['status'] = 0;
 					$data['url'] = '';
-					$result = $File->where($map)->cache(true)->save($data);
+					$result = $File->where($map)->save($data);
 					if ($result)
 					{
 						$this->success($result);
