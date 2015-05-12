@@ -245,7 +245,8 @@ class FileController extends Controller {
 				$file_name = $info['copies'].'份_'.($info['double_side'] ? '双面_' : '单面_').($info['color'] ? '彩印_' : '黑白_');
 				if ($ppt_layout = $info['ppt_layout'])
 				{
-					$file_name .= C('PPT_LAYOUT')[$ppt_layout].'版_';
+					$layouts=C('PPT_LAYOUT');
+					$file_name .= $layouts[$ppt_layout].'版_';
 				}
 			}
 			else
