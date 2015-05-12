@@ -265,9 +265,7 @@ class FileController extends Controller {
 	{
 		$File = D('FileView');
 		$map['id'] = $fid;
-		$info    = $File->where($map)->field('use_id,phone,name')->find();
-		$Printer = M('Printer');
-		$info['pri_name'] = M('Printer')->getFieldById($pid, 'name');
+		$info = $File->where($map)->field('use_id,phone,name')->find();
 		if ($info['phone'] && $info['name'])
 		{
 			unset($info['phone']);
@@ -276,14 +274,13 @@ class FileController extends Controller {
 				$info['name'] = mb_substr($info['name'], 0, 18);
 			}
 			$phone = get_phone_by_id($info['use_id']);
+			$info['user_name'] = M('User')->getFieldById($info['use_id'], 'name');
 			unset($info['use_id']);
-			$info['fid'] = $fid;
+			$info['info'] = $info['name'];
+			$info['status'] = '已下载';
 			$SMS = new \Vendor\Sms();
-			if ($SMS->printed($phone, $info))
+			if ($SMS->noticeUser($phone, $info))
 			{
-				$File = M('File');
-				$map['id'] = $fid;
-				$result = $File->where($map)->setField('sended', 1);
 				return true;
 			}
 			else
