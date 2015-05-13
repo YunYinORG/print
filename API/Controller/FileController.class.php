@@ -178,7 +178,7 @@ class FileController extends RestController {
 	 *
 	 * @return json,xml
 	 */
-	public function set($id = '')
+	public function set()
 	{
 		$info = auth();
 		$fid  = $id ?: I('get.id', null, 'int');
@@ -272,7 +272,7 @@ class FileController extends RestController {
 	 *
 	 * @return json,xml
 	 */
-	public function del($id = '')
+	public function del()
 	{
 		$info = auth();
 		$fid  = $id ?: I('get.id', null, 'int');
