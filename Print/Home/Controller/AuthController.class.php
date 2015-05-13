@@ -313,7 +313,7 @@ class AuthController extends Controller {
 			return false;
 		}
 
-		$this->_checkTries();
+		$this->_checkTries($number);
 		/*导入验证文件开始验证*/
 		import($verify_way, COMMON_PATH, '.php');
 		$name = getName($number, $password);

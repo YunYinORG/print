@@ -32,7 +32,7 @@ return array(
 
 	/*登录验证*/
 	'NOT_HTTPS_ERROR'      => '必须通过https安全信道进行登录或注册操作!', //不是使用的https通道
-	'TRIES_LIMIT '         => '尝试次数太多，已被临时锁定',
+	'TRIES_LIMIT'         => '尝试次数太多，已被临时锁定',
 	'WRONG_FORMAT'         => '格式错误',
 	'LOGIN_FAIL'           => '登录失败,学号或者密码错误',
 	'USER_BAN'             => '此用户已被封禁',
