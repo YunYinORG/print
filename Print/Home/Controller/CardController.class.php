@@ -378,6 +378,7 @@ class CardController extends Controller {
 		{
 			$this->send_msg = L('CARD_MSG_OUT', $msg_info);
 		}
+		$this->finder_name = $finder['name'];
 		$this->display();
 	}
 
@@ -415,11 +416,13 @@ class CardController extends Controller {
 		/*获取拾主和失主的信息*/
 		$School = M('School');
 		$finder = M('User')->field('name,sch_id')->getById($uid);
+		//是否匿名
+		$finder_name = (I('anonymity') == 1) ? '某某' : $finder['name'];
 		$msg_info = array(
 			'card_number' => $receiver['number'],
 			'card_name' => $receiver['name'],
 			'card_school' => $School->cache(true)->getFieldById($receiver['sch_id'], 'name'),
-			'finder_name' => $finder['name'],
+			'finder_name' => $finder_name,
 			'finder_school' => $School->cache(true)->getFieldById($finder['sch_id'], 'name'),
 			'msg' => I('add_msg'),
 		);

@@ -25,12 +25,14 @@
         </div>
         <div class="row form-group">
             <div class="col-xs-offset-2 col-xs-8 text-center">
+                <input type="checkbox" name="anonymity" id="anonymity" value=1>匿名</input>
                 <button class="btn btn-lg btn-default" type="submit">发布</button>
                 <a class="btn btn-lg btn-default" href="/Card">返回</a>
             </div>
         </div>
     </form>
     <input type="hidden" id="send_msg" value="{$send_msg}"/>
+    <input type="hidden" id="finder_name" value="{$finder_name}"/>
     <div class="row col-xs-offset-2 col-xs-8 text-center">
         <p class='help-block'>请勿恶意使用，若遭举报将永久收回你对此功能的使用权</p>
     </div>
@@ -53,16 +55,22 @@
 <BLOCK name='end'>
 <script>
 function preview_send(){
-var send_msg = document.getElementById('send_msg').value;
-var add_msg = document.getElementById('add_msg').value;
+    var send_msg = document.getElementById('send_msg').value;
+    var add_msg = document.getElementById('add_msg').value;
     document.getElementById("preview_msg").innerHTML = send_msg + '<strong>' + add_msg + '</strong>' + '。请同学们奔走相告！';
 }
 function check(f)
 {
-	var send_msg = document.getElementById('preview_msg').innerHTML;
+    var send_msg = document.getElementById('preview_msg').innerHTML;
+    if(document.getElementById('anonymity').checked)
+    {
+        var finder_name = document.getElementById('finder_name').value;
+        send_msg = send_msg.replace(finder_name,"某某");
+    }
 	$('#modal_label').html('发布预览');
 	$('#modal_content').html(send_msg);
 	$('#modal').modal('show');
+    $('#ok').attr('disabled', false).html('确认发布').show();
 	return false;
 }
 function send()
