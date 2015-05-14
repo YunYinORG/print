@@ -78,7 +78,8 @@ function send()
     $('#ok').attr('disabled', true).html('正在发送...');
 	var url=document.forms.sendform.action;
 	var msg=document.getElementById('add_msg').value.trim();
-	$.post(url,{'add_msg':msg},function(data){
+    var anonymity=document.getElementById('add_msg').checked?1:0;
+	$.post(url,{'add_msg':msg,'anonymity':anonymity},function(data){
 		if(data.status)
 		{	
 			$('#modal_label').html('发布成功');
