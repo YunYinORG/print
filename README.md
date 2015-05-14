@@ -1,5 +1,8 @@
-云印南天宣传网站
+已经迁移做独立仓库[https://github.com/YunYinORG/yunyinorg.github.io](https://github.com/YunYinORG/yunyinorg.github.io)
 =====
+
+云印南天宣传网站
+
 
 云印南天主页[www.yunyin.org](http://www.yunyin.org)
 --------------------
