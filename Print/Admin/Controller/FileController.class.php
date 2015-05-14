@@ -99,67 +99,69 @@ class FileController extends Controller {
 		$this->display();
 	}
 
+/**
+ * 提醒打印店下载或者打印
+ * @method notifyPrinters
+ * @return [type]         [description]
+ * @author xuzhang[xuzhang@yunyin.org]
+ */
 	public function notifyPrinters()
 	{
-		//identify
 		$verify_key = I('get.key');
 		if ($verify_key != C('VERIFY_KEY'))
-			return;
+		{
+			$this->$this->error('验证失效');
+		}
+
+		/*查询*/
 		$condition1['status'] = 1;
 		$condition2['status'] = 2;
 		$condition2['copies'] = array('gt', 0);
 		$NotifyPrinted = D('NotifyPrinter');
-		$result1 = $NotifyPrinted->where($condition1)->group('pri_name')->select();
-		$result2 = $NotifyPrinted->where($condition2)->group('pri_name')->select();
-		$result = array();
-		for($k=0; $k<count($result1); $k++)
-		{
-			$item1 = $result1[$k];
-			for ($i = 0; $i<count($result2); $i++)
-			{	
-				$item2 = $result2[$i];
-				if ($item1['pri_id'] == $item2['pri_id'])
-				{
-					array_push($result, array($item1['phone'], $item1['pri_name'], $item1['count'], $item2['count']));
-					break;
-				}
-				if ($i == (count($result2)-1))
-					array_push($result, array($item1['phone'], $item1['pri_name'], $item1['count'], "0"));
-			}
-		}
-		for($k=0; $k<count($result2); $k++)
-		{
-			$item2 = $result2[$k];
-			for ($i = 0; $i < count($result1); $i++)
-			{	
-				$item1 = $result1[$i];
-				if ($item1['pri_id'] == $item2['pri_id'])
-				{
-					break;
-				}
-				if ($i == (count($result1)-1))
-					array_push($result, array($item1['phone'], $item2['pri_name'], "0", $item2['count']));
-			}
-		}
-		echo "<meta http-equiv='Content-Type'' content='text/html; charset=utf-8'>";
-		echo "打印店名称，没下载个数，没打印个数<br />";	
-		$SMS = new \Vendor\Sms();
-		for($k=0; $k<count($result); $k++)
-		{
-			$item = $result[$k];
-			$phone = $item[0];
-			$msgInfo = array("pri_name"=>$item[1], "no_download"=>$item[2], "unprinted"=>$item[3]);
-			if ($SMS->noticePrinter($phone, $msgInfo))
-			{				
-				echo "提醒信息已经发送";
-			}
-			else
-			{
-				echo "发送不成功";
-			}
-			echo $phone."\t\t".$msgInfo["pri_name"]."\t\t".$msgInfo["no_download"]."\t\t".$msgInfo["unprinted"]."<br />";
-		}	
+		$to_download = $NotifyPrinted->where($condition1)->group('pri_name')->select();
+		$to_print = $NotifyPrinted->where($condition2)->group('pri_name')->select();
 		
+		/*合并结果*/
+		$result = array();
+		foreach ($to_download as $d) 
+		{
+			$result[$d['pri_id']]=array(
+				'pri_name'=>$d['pri_name'],
+				'no_download'=>$d['count'],
+				'unprinted'=>0,
+				'phone'=>$d['phone']);
+		}
+
+		foreach ($to_print as $p)
+		 {
+			if(isset($result[$p['pri_id']]))
+			{
+				$result['to_print']=$p['count'];
+			}else{
+				//如果这个店之前没有创建在此创建
+				$result[$p['pri_id']]=array(
+				'pri_name'=>$p['pri_name'],
+				'no_download'=>0,
+				'unprinted'=>$p['count'],
+				'phone'=>$p['phone']);
+			}
+		}
+		
+		if(!empty($result))
+		{
+			/*逐个店通知*/
+			$SMS = new \Vendor\Sms();
+			foreach ($result as $i=> $notice)
+			 {
+			 	echo '[',$i,']:',$notice['pri_name'],$notice['no_download'],',',$notice['unprinted'],':';
+				if ($SMS->noticePrinter($notice['phone'], $notice))
+				{				
+					echo '1';
+				}else{
+					echo $notice['phone'];
+				}
+			}
+		}
 	}
 
 	public function notifyUsers()
