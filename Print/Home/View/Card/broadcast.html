@@ -78,7 +78,7 @@ function send()
     $('#ok').attr('disabled', true).html('正在发送...');
 	var url=document.forms.sendform.action;
 	var msg=document.getElementById('add_msg').value.trim();
-    var anonymity=document.getElementById('add_msg').checked?1:0;
+    var anonymity=document.getElementById('anonymity').checked?1:0;
 	$.post(url,{'add_msg':msg,'anonymity':anonymity},function(data){
 		if(data.status)
 		{	

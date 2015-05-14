@@ -417,7 +417,7 @@ class CardController extends Controller {
 		$School = M('School');
 		$finder = M('User')->field('name,sch_id')->getById($uid);
 		//是否匿名
-		$finder_name = (I('anonymity') == 1) ? '某某' : $finder['name'];
+		$finder_name = I('anonymity') ? '某某' : $finder['name'];
 		$msg_info = array(
 			'card_number' => $receiver['number'],
 			'card_name' => $receiver['name'],
