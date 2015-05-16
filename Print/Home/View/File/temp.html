@@ -25,7 +25,7 @@
     </div>
     </div>
     <br/>
-    <form id="print" method="post" action="__URL__/uploadOne" onsubmit="return checkform();" enctype="multipart/form-data">
+    <form id="print" method="post" action="__URL__/uploadOne" enctype="multipart/form-data">
         <div class="row">
             <div class="text-center col-lg-8 col-lg-offset-1  col-md-8 col-xs-12">
                 <div class="form-group">
@@ -158,7 +158,7 @@ var Files = function() {
     this.length = 0;
 };
 
-Files.prototype.priceChange = function (n){
+ function priceChange(n){
     var pid = n.value;
     var URL = "/Printers/getPrice";
     $.post(URL, {
@@ -308,6 +308,7 @@ function uploaded() {
         var span = file_view.find('span');
         if (this.status==200) {
             file_queue.files[this.id].uploadStatus = true;
+            file_queue.length++;
             span.html('uploaded');
             span.append('<button type="button" class="btn btn-danger btn-xs delete" onclick="deleteFile(this)">delete</button>');
         }
@@ -413,33 +414,41 @@ $("#helpView").click(function(){
     $('#help-info').toggle(100);
 });
 
-$("#print").on('submit',function(e){
-    if(checkform==false)
-    {
-        e.preventDefault();
-        alert('not done yet');
-    }
-});
-
-function checkform(){
-    if (file_queue.length==0) {
-        return false;
-    }
+$("#print").submit(function(e){
+    e.preventDefault();
+    var filenames = [];
     for (var i = 0; i < file_queue.files.length; i++) {
         var file = file_queue.files[i];
         if (file!==undefined) {
             if (file.uploadStatus==false) {
                 return false;
             }
+            filenames.push(file.name);
         }
     }
-    for (var i = 0; i < file_queue.files.length; i++) {
-        var file = file_queue.files[i];
-        $('#id').append('<input name="filename_"'+i+'" value="'+ file.name+'" type="hidden"');
-    };
-    $('#id').append('<input name="file_num" value="'+ file_queue.length+'" type="hidden"');
-    return true;
-}
+    var url = '__URL__/upload';
+    var copies = $('#copies').val();
+    var pri_id = $('#pri_id').val();
+    var color = $('#printcolor').val();
+    var double_side = $('#double_side').val();
+    var addtion_need = $('#addtion-need').val();
+    var ppt_layout = $('default').val();
+    $.post(url, {
+            'filenames[]':filenames,
+            number:file_queue.length,
+            pri_id:pri_id,
+            color:color,
+            double_side:double_side,
+            copies:copies,
+            ppt_layout:ppt_layout,
+            requirements:addtion_need
+        }, function(data) {
+            if (data.status) {
+
+            } else {
+            }
+        });
+});
 
 function deleteFile (e) {
     var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
@@ -449,7 +458,7 @@ function deleteFile (e) {
 }
 
 function reUpload (e) {
-    var id = e.parent().attr('id').replace(/file_/,"");
+    var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
     id = parseInt(id);
     file_queue.reUpload(id);
 }

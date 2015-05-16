@@ -172,6 +172,11 @@ class FileController extends Controller {
 		}
 	}
 
+	public function upload()
+	{
+		var_dump($_POST);
+	}
+
 	/**
 	 * 删除文件记录
 	 */
