@@ -10,19 +10,8 @@
 <BLOCK name='content'>
 <div class="container-fluid">
     <div>
-        <h2>设置打印信息<button class="btn btn-success" id="helpView">打印帮助</button></h2>
-    </div>
-    <div class="row well" style="display:none;" id="help-info">
-    <div class="col-lg-9 col-xs-12">
-        <p class=" text-info">
-        使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> (<code>设置打印份数、格式</code> -> )<code>文件记录页查看状态</code> -><code> 取货</code>；<br/>
-        不绑定手机不能设置打印参数，不能提前打印，只能上传后到店打印；<br/>
-        暂时仅支持<code>pdf</code>、<code>doc(x)</code>、<code>wps</code>、<code>ppt(x)</code>格式的文件上传；<br/>
-        如上传文件名出现<code>乱码</code>，请更换浏览器。电脑下Chrome效果最佳，手机建议使用UC浏览器；<br/>
-        打印纸张统一为<code>A4</code>，有特殊需求可上传后到店打印；<br/>无论打印店队列多长，到店可直接取货。若打印店没有提前打印，你可以在店直接打印；<br/>
-        对于提前打印的文件请于打印完成后<code>24小时</code>内取走；对于所有情况的打印请于<code>2天内</code>完成；<br/>
-        当前提供价格仅供参考，所有打印店均可在<code>量大时减价</code>。</p>
-    </div>
+        <h2>设置打印信息<button type="button" class="btn btn-primary btn-normal" data-toggle="modal" data-target="#printhelp">
+打印帮助</button></h2>
     </div>
     <br/>
     <form id="print" method="post" action="__URL__/uploadOne" onsubmit="return checkform();" enctype="multipart/form-data">
@@ -109,12 +98,42 @@
         </IF>
     <div class="row">
         <div class="form-group col-md-8 col-lg-offset-4 col-lg-1 ">
-            <button type="submit" class="btn btn-lg btn-info" id="fileUploadButton" disabled="true">开始传送</button>
+            <button type="submit" class="btn btn-lg btn-primary" id="fileUploadButton" disabled="true">开始传送</button>
         </div>
     </div>
     </form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="printhelp" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">打印帮助</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-info">
+        使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> <code>设置打印份数、格式</code> -> <code>文件记录页查看状态</code> -> <code>取货</code>；<br/>
+        不绑定手机不能设置打印参数，只能上传后到店打印；<br/>
+        暂时仅支持<code>pdf</code>、<code>doc(x)</code>、<code>wps</code>、<code>ppt(x)</code>格式的文件上传；<br/>
+        如上传文件名出现<code>乱码</code>，请更换浏览器。电脑下Chrome效果最佳，手机建议使用UC浏览器；<br/>
+        打印纸张默认为<code>A4</code>，有特别需要请备注；<br/>
+        无论打印店队列多长，到店可直接取货。若打印店没有提前打印，你可以在店直接打印；<br/>
+        对于提前打印的文件请于打印完成后<code>24小时</code>内取走；对于所有情况的打印请于<code>2天内</code>完成；<br/>
+        当前提供价格仅供参考，所有打印店均可在<code>量大时减价</code>。
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </div>
 </BLOCK>
+
 
 <BLOCK name='end'>
 <script src="__PUBLIC__/js/upload.js" defer="defer"></script>
