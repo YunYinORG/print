@@ -152,6 +152,12 @@ class CardController extends Controller {
 			{
 				/*验证成功 ，手机或者邮箱存在 通知并记录*/
 
+				if ($recv_off === null)
+				{
+					//该同学不在card记录之中,则先创建
+					$Card->add(array('id' => $recv_user['id']));
+				}
+
 				$msg = ''; //提示消息
 				$success = false;
 				import('Common.Encrypt', COMMON_PATH, '.php');
@@ -214,14 +220,7 @@ class CardController extends Controller {
 				}
 				else
 				{
-
 					/*记录招领信息*/
-
-					if ($recv_off === null)
-					{
-						//该同学不在card记录之中,则先创建
-						$Card->add(array('id' => $recv_user['id']));
-					}
 
 					$log = array('find_id' => $send_user['id'], 'lost_id' => $recv_user['id']);
 					if ( ! M('Cardlog')->add($log))
@@ -413,32 +412,25 @@ class CardController extends Controller {
 			S($cache_name, $times + 1, 3600);
 		}
 
+		/*添加到丢失记录*/
+		$receiver_id = $receiver['uid'] ? $receiver['uid'] : 0;
+		$log = array('find_id' => $uid, 'lost_id' => $receiver_id, 'status' => 0);
+		$msg_id = M('Cardlog')->add($log);
 		/*获取拾主和失主的信息*/
 		$School = M('School');
 		$finder = M('User')->field('name,sch_id')->getById($uid);
 		//是否匿名
-		$finder_name = I('anonymity') ? '某某' : $finder['name'];
+		$finder_name = I('anonymity') ? '云小印' : $finder['name'];
 		$msg_info = array(
 			'card_number' => $receiver['number'],
-			'card_name' => $receiver['name'],
+			'card_name' => '[' . $msg_id . ']' . $receiver['name'],
 			'card_school' => $School->cache(true)->getFieldById($receiver['sch_id'], 'name'),
 			'finder_name' => $finder_name,
 			'finder_school' => $School->cache(true)->getFieldById($finder['sch_id'], 'name'),
 			'msg' => I('add_msg'),
 		);
-		if ( ! $receiver['uid'])
-		{
-			$msg = L('CARD_MSG_OUT', $msg_info);
-		}
-		else
-		{
-			$msg = L('CARD_MSG_IN', $msg_info);
 
-			/*失主已加入平台但未绑定信息,且未关闭此功能,添加到丢失记录*/
-			M('Card')->add(array('id' => $receiver['uid']));
-			$log = array('find_id' => $send_user['id'], 'lost_id' => $recv_user['id']);
-			M('Cardlog')->add($log);
-		}
+		$msg = L('CARD_MSG_IN', $msg_info);
 
 		/*post数据到API*/
 		$url = 'https://newfuturepy.sinaapp.com/broadcast';

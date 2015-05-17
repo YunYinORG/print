@@ -57,7 +57,7 @@
 function preview_send(){
     var send_msg = document.getElementById('send_msg').value;
     var add_msg = document.getElementById('add_msg').value;
-    document.getElementById("preview_msg").innerHTML = send_msg + '<strong>' + add_msg + '</strong>' + '。请同学们奔走相告！';
+    document.getElementById("preview_msg").innerHTML = send_msg + '<strong>' + add_msg + '</strong>';
 }
 function check(f)
 {
@@ -65,7 +65,7 @@ function check(f)
     if(document.getElementById('anonymity').checked)
     {
         var finder_name = document.getElementById('finder_name').value;
-        send_msg = send_msg.replace(finder_name,"某某");
+        send_msg = send_msg.replace(finder_name,"云小印");
     }
 	$('#modal_label').html('发布预览');
 	$('#modal_content').html(send_msg);
