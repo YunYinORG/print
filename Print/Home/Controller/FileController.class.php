@@ -178,30 +178,38 @@ class FileController extends Controller {
 		if ($uid)
 		{
 			$filenames = I('post.filenames');
-			$newNames  = I('post.newNames');
+			$newnames  = I('post.newnames');
 			$suffixes  = I('post.suffixes');
 			$number    = I('post.number', 0, int);
 			$File      = D('File');
 			$result    = array();
 			for ($i = 0; $i < $number; $i++)
 			{
-				$name   = $filenames[i];
-				$suffix = $suffixes[i];
+				$name   = $filenames[$i];
+				$suffix = $suffixes[$i];
 				if (mb_strlen($name) > 62)
 				{
 					$name = mb_substr($name, 0, 58).'.'.$suffix;
 				}
 				$data['use_id'] = $uid;
 				$data['name'] = $name;
-				$data['url'] = $newNames[i];
-
-				if ($File->create($data) && $File->add()) //上传
+				$data['url'] = $newnames[$i];
+				if (F($newnames[$i]) == $filenames[$i])
 				{
-					$result[$data['name']] = 1;
+					F($newnames[$i], NULL);
+					if ($File->create($data) && $File->add()) //上传
+					{
+
+						$result[$i] = array('name' => $filenames[$i], 'r' => 1);
+					}
+					else
+					{
+						$result[$i] = array('name' => $filenames[$i], 'r' => 0);
+					}
 				}
 				else
 				{
-					$result[$data['name']] = 0;
+					$result[$i] = array('name' => $filenames[$i], 'r' => 0);
 				}
 			}
 			$this->success($result);

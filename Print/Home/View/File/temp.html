@@ -42,8 +42,8 @@
         <br/>
         <div class="row form-group">
             <div class="col-lg-8 col-lg-offset-1 col-sm-10">
-                <label for="PrinterChoose" class="sr-only">打印店</label>
-                <select class="form-control" name="pri_id" id="PrinterChoose" onchange="priceChange(this)" required>
+                <label for="pri_id" class="sr-only">打印店</label>
+                <select class="form-control" name="pri_id" id="pri_id" onchange="priceChange(this)" required>
                     <option value="">选择想去的打印店....</option>
                     <volist name="data" id="vo">
                         <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
@@ -190,7 +190,7 @@ Files.prototype.delete = function(id) {
     var URL = "/File/deleteTempFile";
     var temp = this;
     $.post(URL, {
-            filename : temp.files[id].newName
+            filename : temp.files[id].newname
         }, function(data) {
             if (data.status) {
                 alert(data.info);
@@ -213,7 +213,7 @@ function File(id,name,suffix)
     this.suffix = suffix;
     this.token = null;
     this.uploadStatus = false;
-    this.newName = null;
+    this.newname = null;
 }
 
 
@@ -251,7 +251,7 @@ function File(id,name,suffix)
 //     var fd = new FormData();
 //     fd.append('file',file);
 //     fd.append('token',this.token);
-//     fd.append('key',this.newName);
+//     fd.append('key',this.newname);
 //     $.ajax({
 //         url:url,
 //         type:'POST',
@@ -279,7 +279,7 @@ File.prototype.uploadFile = function() {
     var file = document.getElementById('upload-file').files[this.id];
     fd.append('file',file);
     fd.append('token',this.token);
-    fd.append('key',this.newName);
+    fd.append('key',this.newname);
     var xmlhttp=null;
     if (window.XMLHttpRequest)
     {
@@ -316,7 +316,7 @@ function uploaded() {
         }
         else {
             span.html('upload failed');
-            span.append('<button type="button" class="btn btn-primary btn-xs re-upload" onclick="reUpload(this)">reUpload</button>');
+            span.append('<button type="button" class="btn btn-primary btn-xs re-upload" onclick="reUpload(this)">reUpload</button><button type="button" class="btn btn-danger btn-xs delete" onclick="deleteFile(this)">delete</button>');
         }
     }
 }
@@ -333,7 +333,7 @@ File.prototype.getToken = function() {
         if(data.status)
         {
             temp.token = data.info.token;
-            temp.newName = data.info.name;
+            temp.newname = data.info.name;
             temp.uploadFile();
         }
     });
@@ -379,6 +379,8 @@ function checkSuffix() {
         var pos = filename.lastIndexOf('.');
         var suffix = filename.substring(pos+1);
         var newFile = null;
+        if(file.size<20*1024)
+        {
         if (other_suffix.indexOf(suffix)>=0)
         {
             newFile = new PPT(j,filename,suffix);
@@ -404,7 +406,11 @@ function checkSuffix() {
         }
         else
         {
-            //
+     $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+filename +'<span style="color:red">后缀名不对</span></li>');
+        }
+        }else
+        {
+      $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+filename +'<span style="color:red">文件太大了</span></li>'); 
         }
     }
 }
@@ -417,7 +423,8 @@ $("#helpView").click(function(){
 $("#print").submit(function(e){
     e.preventDefault();
     var filenames = [];
-    var newNames = [];
+    var newnames = [];
+    var suffixes = [];
     for (var i = 0; i < file_queue.files.length; i++) {
         var file = file_queue.files[i];
         if (file!==undefined) {
@@ -425,7 +432,7 @@ $("#print").submit(function(e){
                 return false;
             }
             filenames.push(file.name);
-            newNames.push(file.newName);
+            newnames.push(file.newname);
             suffixes.push(file.suffix);
         }
     }
@@ -439,7 +446,7 @@ $("#print").submit(function(e){
     var wait = $('#ispre').bootstrapSwitch('state');
     $.post(url, {
             'filenames[]':filenames,
-            'newNames[]':newNames,
+            'newnames[]':newnames,
             'suffixes[]':suffixes,
             number:file_queue.length,
             pri_id:pri_id,
@@ -451,8 +458,17 @@ $("#print").submit(function(e){
             wait:wait
         }, function(data) {
             if (data.status) {
-
+                var info;
+                var message='';
+                for(var i=0;info = data.info[i];i++)
+                {
+                    message+=info.name;
+                    message+=(info.r?':success\n':':fail\n');
+                }
+                confirm(message);
+                window.location.reload();
             } else {
+                alert(data.info);
             }
         });
 });
@@ -468,6 +484,12 @@ function reUpload (e) {
     var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
     id = parseInt(id);
     file_queue.reUpload(id);
+
+        var file_view = $('#file_'+this.id);
+        var span = file_view.find('span');
+        file_queue.files[this.id].uploadStatus = true;
+        file_queue.length++;
+        span.html('uploading');
 }
 
 
