@@ -335,11 +335,6 @@ File.prototype.getToken = function() {
             temp.token = data.info.token;
             temp.newName = data.info.name;
             temp.uploadFile();
-        }else{
-            var file_view = $('#file_'+this.id);
-            var span = file_view.find(span);
-            span.html('get token fail');
-            span.append('<button type="button" class="btn btn-primary btn-xs re-upload" onclick="reUpload(this)">reUpload</button>');
         }
     });
 };

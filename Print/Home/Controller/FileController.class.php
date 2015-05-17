@@ -254,19 +254,12 @@ class FileController extends Controller {
 			$setting = C('UPLOAD_CONFIG_QINIU');
 			$setting['timeout'] = 300;
 			$new_name = 'temp_'.date('Y-m-d').'_'.uniqid();
-			if (F($new_name, I('post.filename')))
-			{
-				$data = array('scope' => $setting['bucket'].':'.$name, 'deadline' => $setting['timeout'] + time(), 'returnBody' => '{"rname":$(fname),"name":$(key)}');
-				$uploadToken = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($setting['secretKey'], $setting['accessKey'], json_encode($data));
-				header('Access-Control-Allow-Origin:http://upload.qiniu.com');
-				$result = array('name' => $new_name, 'token' => $uploadToken);
-				$this->success($result);
-			}
-			else
-			{
-				$this->error('can not get token');
-			}
-
+			F($new_name, I('post.filename'));
+			$data = array('scope' => $setting['bucket'].':'.$name, 'deadline' => $setting['timeout'] + time(), 'returnBody' => '{"rname":$(fname),"name":$(key)}');
+			$uploadToken = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($setting['secretKey'], $setting['accessKey'], json_encode($data));
+			header('Access-Control-Allow-Origin:http://upload.qiniu.com');
+			$result = array('name' => $new_name, 'token' => $uploadToken);
+			$this->success($result);
 		}
 		else
 		{
