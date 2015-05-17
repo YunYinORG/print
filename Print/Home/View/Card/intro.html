@@ -1,0 +1,56 @@
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name="title">欢迎使用云印南天</BLOCK>
+<BLOCK name="addhead"></BLOCK>
+<BLOCK name="header">
+<h1 class="text-center text-success">招卡中心页面预览</h1>
+
+</BLOCK>
+<BLOCK name='content'>
+<article class="container">
+<div class="row col-md-offset-1 col-md-10 col-xs-offset-0 col-xs-12 alert alert-info">
+    <ul>
+    <li>欢迎使用云印南天招卡中心，在正式使用前你需要<a href="/">登陆</a>。</li>
+    <li>在这里你可以看到招卡中心的页面，鼠标悬停至相关区域可获取简要的使用说明。</li>
+    <li>若有任何问题或意见，欢迎通过contact@yunyin.org联系我们。</li>
+    </ul>
+</div>
+    <section class='row col-xs-12'>
+    <ul class="text-center list-inline">
+        <li><button type="button" class="btn btn-success" data-toggle="popover" data-trigger="hover" data-placement="top" title="找回记录" data-content="找回记录里记录了你的丢卡和捡卡记录，数字3代表有3条未读消息。另外，你还可以通过这里对捡到你的一卡通的同学表示感谢或举报，受到举报数过多的用户系统将予以封禁。">找回记录<span class="badge">3</span></button></li>
+    </ul>
+    </section>
+    <section class='row col-md-offset-1 col-md-10 well alert'>
+        <h2 class="text-center">捡到了TA的校园卡?</h2>
+        <div>
+            <div class="col-md-offset-0 col-md-4">
+                <label class="sr-only" for="number">学号</label>
+                <input class="form-control" name="number" type="text" id="number" placeholder="在此处填写失主校园卡学号..">
+            </div>
+            <div class="col-md-4">
+                <label class="sr-only"  for="name">姓名</label>
+                <input class="form-control" name="name" type="text" id="name" placeholder="在此处填写失主姓名..">
+            </div>
+            <div class="text-center col-md-4">
+                <button class="form-control btn btn-danger" data-toggle="popover" data-trigger="hover" data-placement="top" title="通知失主" data-content="点击此按钮后，若失主为注册用户，系统会自动发送短信或邮件予以通知。若失主未注册，云印微博、人人会将信息公示，你也可以对失主留言。">通知失主</button>
+            </div>
+        </div>
+    </section>
+    <div class='row col-xs-offset-0 col-xs-12 col-md-10 col-md-offset-1 alert alert-warning'>
+            <ul>
+                <li>如果你拾到了同学的校园卡（学号相关证件）,在此输入TA的<q>卡号（学号）</q>和TA的<q>姓名</q>;</li>
+                <li>系统会把你的联系方式（绑定的<code>手机号</code>和绑定的<code>邮箱</code>）和丢失信息通知到TA的手机和邮箱（如果有的话）,TA将可以联系到你;</li>
+                <li>为了防止恶意使用,每个人的使用次数有限制;如果收到骚扰举报将永久封禁此功能</li>     
+            </ul>
+    </div>
+    <div class="row col-xs-12 text-center">
+    <a class="btn btn-lg btn-primary" href="/">登陆后使用</a>
+    </div>
+</article>
+</BLOCK>
+<BLOCK name='end'>
+<script type="text/javascript">
+$(function(){
+    $("[data-toggle='popover']").popover();
+});
+</script>
+</BLOCK>
