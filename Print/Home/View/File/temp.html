@@ -31,7 +31,8 @@
                 <div class="form-group">
                     <div class="upload-btn">
                         <div class="upload-area"><span class="glyphicon glyphicon-open"></span>点击上传文件<small>(不超过10MB)</small></div>
-                        <input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="checkSuffix()">
+                        <input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="checkSuffix()" 
+                        multiple="multiple">
                     </div>
                 </div>
                 <ul id="upload-list" class="list-group"></ul>
@@ -205,10 +206,11 @@ Files.prototype.reUpload = function(id) {
     this.files[id].getToken();
 };
 
-function File(id,name)
+function File(id,name,suffix)
 {
     this.id = id;
     this.name = name;
+    this.suffix = suffix;
     this.token = null;
     this.uploadStatus = false;
     this.newName = null;
@@ -340,19 +342,19 @@ File.prototype.getToken = function() {
 var temp = function() {};
 temp.prototype = File.prototype;
 
-var PDF = function(id,name) {
+var PDF = function(id,name,suffix) {
     File.apply(this,arguments);
     $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span style="color:red">uploading</span></li>');
 }
 PDF.prototype = new temp();
 
-var DOC = function(id,name) {
+var DOC = function(id,name,suffix) {
     File.apply(this,arguments);
     $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'(支持的格式，但更推荐pdf)<span style="color:red">uploading</span></li>');
 }
 DOC.prototype = new temp();
 
-var PPT = function(id,name) {
+var PPT = function(id,name,suffix) {
     File.apply(this,arguments);
     $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span style="color:red">uploading</span></li>');
 }
@@ -366,7 +368,6 @@ var other_suffix = ['ppt', 'pptx'];
 
 function checkSuffix() {
     $("#ispre").bootstrapSwitch('disabled',false);
-    $('.setting').show();
     $("#pptprint").hide();
     $('#copies').attr('disabled', false);
     $('#double_side').bootstrapSwitch('disabled', false);
@@ -381,7 +382,7 @@ function checkSuffix() {
         var newFile = null;
         if (other_suffix.indexOf(suffix)>=0)
         {
-            newFile = new PPT(j,filename);
+            newFile = new PPT(j,filename,suffix);
             newFile.getToken();
             file_queue.addFile(newFile);
             j++;
@@ -390,14 +391,14 @@ function checkSuffix() {
         }
         else if (pdf_suffix.indexOf(suffix)>=0) 
         {
-            newFile = new PDF(j,filename);
+            newFile = new PDF(j,filename,suffix);
             newFile.getToken();
             file_queue.addFile(newFile);
             j++;
         }
         else if (doc_suffix.indexOf(suffix)>=0)
         {            
-            newFile = new DOC(j,filename);
+            newFile = new DOC(j,filename,suffix);
             newFile.getToken();
             file_queue.addFile(newFile);
             j++;
@@ -417,6 +418,7 @@ $("#helpView").click(function(){
 $("#print").submit(function(e){
     e.preventDefault();
     var filenames = [];
+    var newNames = [];
     for (var i = 0; i < file_queue.files.length; i++) {
         var file = file_queue.files[i];
         if (file!==undefined) {
@@ -424,17 +426,21 @@ $("#print").submit(function(e){
                 return false;
             }
             filenames.push(file.name);
+            newNames.push(file.newName);
+            suffixes.push(file.suffix);
         }
     }
     var url = '__URL__/upload';
-    var copies = $('#copies').val();
+    var copies = $('#ispre').bootstrapSwitch('state')?$('#copies').val():0;
     var pri_id = $('#pri_id').val();
-    var color = $('#printcolor').val();
-    var double_side = $('#double_side').val();
+    var color = $('#printcolor').bootstrapSwitch('state');
+    var double_side = $('#double_side').bootstrapSwitch('state');
     var addtion_need = $('#addtion-need').val();
     var ppt_layout = $('default').val();
     $.post(url, {
             'filenames[]':filenames,
+            'newNames[]':newNames,
+            'suffixes[]':suffixes,
             number:file_queue.length,
             pri_id:pri_id,
             color:color,

@@ -174,7 +174,43 @@ class FileController extends Controller {
 
 	public function upload()
 	{
-		var_dump($_POST);
+		$uid = use_id(U('/Index/index'));
+		if ($uid)
+		{
+			$filenames = I('post.filenames');
+			$newNames  = I('post.newNames');
+			$suffixes  = I('post.suffixes');
+			$File      = D('File');
+
+			$name = isset($info['file']['name']) ? $info['file']['name'] : false;
+			if ($info && $name)
+			{
+				if (mb_strlen($name) > 62)
+				{
+					$name = mb_substr($name, 0, 58).'.'.$info['file']['ext'];
+				}
+				$data['use_id'] = $uid;
+				$data['name'] = $name;
+				$data['url'] = $info['file']['savepath'].$info['file']['savename'];
+
+				if ($File->create($data) && $File->add()) //上传
+				{
+					$this->redirect('File/index', null, 0, '上传成功');
+				}
+				else
+				{
+					$this->error('保存信息出错啦！', '/File/add');
+				}
+			}
+			else
+			{
+				$this->error('文件上传失败！', '/File/add');
+			}
+		}
+		else
+		{
+			$this->error('请登录！', '/');
+		}
 	}
 
 	/**
