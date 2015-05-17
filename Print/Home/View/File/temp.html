@@ -437,6 +437,7 @@ $("#print").submit(function(e){
     var double_side = $('#double_side').bootstrapSwitch('state');
     var addtion_need = $('#addtion-need').val();
     var ppt_layout = $('default').val();
+    var wait = $('#ispre').bootstrapSwitch('state');
     $.post(url, {
             'filenames[]':filenames,
             'newNames[]':newNames,
@@ -447,7 +448,8 @@ $("#print").submit(function(e){
             double_side:double_side,
             copies:copies,
             ppt_layout:ppt_layout,
-            requirements:addtion_need
+            requirements:addtion_need,
+            wait:wait
         }, function(data) {
             if (data.status) {
 

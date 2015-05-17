@@ -180,32 +180,31 @@ class FileController extends Controller {
 			$filenames = I('post.filenames');
 			$newNames  = I('post.newNames');
 			$suffixes  = I('post.suffixes');
+			$number    = I('post.number', 0, int);
 			$File      = D('File');
-
-			$name = isset($info['file']['name']) ? $info['file']['name'] : false;
-			if ($info && $name)
+			$result    = array();
+			for ($i = 0; $i < $number; $i++)
 			{
+				$name   = $filenames[i];
+				$suffix = $suffixes[i];
 				if (mb_strlen($name) > 62)
 				{
-					$name = mb_substr($name, 0, 58).'.'.$info['file']['ext'];
+					$name = mb_substr($name, 0, 58).'.'.$suffix;
 				}
 				$data['use_id'] = $uid;
 				$data['name'] = $name;
-				$data['url'] = $info['file']['savepath'].$info['file']['savename'];
+				$data['url'] = $newNames[i];
 
 				if ($File->create($data) && $File->add()) //上传
 				{
-					$this->redirect('File/index', null, 0, '上传成功');
+					$result[$data['name']] = 1;
 				}
 				else
 				{
-					$this->error('保存信息出错啦！', '/File/add');
+					$result[$data['name']] = 0;
 				}
 			}
-			else
-			{
-				$this->error('文件上传失败！', '/File/add');
-			}
+			$this->success($result);
 		}
 		else
 		{
@@ -256,21 +255,21 @@ class FileController extends Controller {
 			$setting['timeout'] = 300;
 			$name = 'temp_'.date('Y-m-d').'_'.uniqid();
 
-			$insert['use_id'] = $uid;
-			$insert['url'] = $name;
-
-			if (M('File')->add($insert))
-			{
-				$data = array('scope' => $setting['bucket'].':'.$name, 'deadline' => $setting['timeout'] + time(), 'returnBody' => '{"rname":$(fname),"name":$(key)}');
-				$uploadToken = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($setting['secretKey'], $setting['accessKey'], json_encode($data));
-				header('Access-Control-Allow-Origin:http://upload.qiniu.com');
-				$result = array('name' => $name, 'token' => $uploadToken);
-				$this->success($result);
-			}
-			else
-			{
-				$this->error('can not get token');
-			}
+			$data['use_id'] = $uid;
+			$data['url'] = $name;
+			// F()
+			// if (M('File')->add($insert))
+			// {
+			// 	$data = array('scope' => $setting['bucket'].':'.$name, 'deadline' => $setting['timeout'] + time(), 'returnBody' => '{"rname":$(fname),"name":$(key)}');
+			// 	$uploadToken = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($setting['secretKey'], $setting['accessKey'], json_encode($data));
+			// 	header('Access-Control-Allow-Origin:http://upload.qiniu.com');
+			// 	$result = array('name' => $name, 'token' => $uploadToken);
+			// 	$this->success($result);
+			// }
+			// else
+			// {
+			// 	$this->error('can not get token');
+			// }
 
 		}
 		else
@@ -278,19 +277,6 @@ class FileController extends Controller {
 			$this->error('login');
 		}
 
-	}
-
-	public function fileData()
-	{
-		$uid = use_id(U('/Index/index'));
-		if ($uid)
-		{
-
-		}
-		else
-		{
-			$this->error('请登录！', '/');
-		}
 	}
 
 	public function deleteTempFile()
