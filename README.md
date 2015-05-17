@@ -1,11 +1,13 @@
 云印南天
 =================
-更方便的校园打印 [yunyin.org](http://yunyin.org)
+创造更方便的校园服务[yunyin.org](http://yunyin.org)
 -------------------------
+
+Make a BETTER campus！
 
 ### 官方媒体
 
-+ **微信公众号**：云印南天(`yunyinnantian`) [点击查看](http://www.yunyin.org/assets/image/weixin_qrcode.png)
++ **微信公众号**：云印南天(`YunYinNanTian`) [点击查看](http://www.yunyin.org/assets/image/weixin_qrcode.png)
 + **官方网站**：[www.yunyin.org](http://www.yunyin.org) :heart:
 + **官方微博**：[云印南天](http://weibo.com/cloudPrint) (`cloudPrint`)
 + **人人主页**：@[云印南天](http://page.renren.com/602117408)
@@ -46,7 +48,7 @@
 ### API相关说明:
 采用`REST`风格的接口设计，所有接口文档和源码均对外开放
 
-此处查看最新API文档[API.md](https://github.com/nkumstc/print/blob/master/API.md)
+此处查看最新API文档[API.md](https://github.com/YunYinORG/print/blob/master/API.md)
 
 
 ##框架目录
@@ -147,25 +149,15 @@
 >>
 
 
-### 仓库分支说明
+### 仓库说明
 
-包含`服务器端`，`打印店客户端`，`数据库`，和`官方宣传页` 四个稳定分支
+包含`web服务器端`，`打印店客户端`，两个仓库
 
-1. [master](https://github.com/nkumstc/print/tree/master) web端源码仓库分支
-2. [DB](https://github.com/nkumstc/print/tree/DB)     数据库设计源码仓库分支
-3. [printer](https://github.com/nkumstc/print/tree/printer) 打印店客户端和源码仓库分支
-4. [gh-pages](https://github.com/nkumstc/print/tree/gh-pages)官方文档网站www.yunyin.org源码
+1. [print仓库](https://github.com/YunYinORG/print/) web端源码核心仓库分支
+2. [DB分支](https://github.com/YunYinORG/print/tree/DB)     数据库设计源码仓库分支
+3. [printer仓库](https://github.com/YunYinORG/printer) 打印店客户端和源码仓库分支
+4. [yunyinorg.github.io](https://github.com/YunYinORG/yunyinorg.github.io)官方文档网站www.yunyin.org源码
 
-
-### 一期团队主要人员
-* 项目发起人： [李旭昇](https://github.com/jeffli678)
-* 总设计和负责人： [NewFuture](https://github.com/New-Future)
-* 数据库设计： [牛亮](https://github.com/wangxiaodiu) [梁崇军](https://github.com/inankai)
-* 后端实现： [孙卓豪](https://github.com/605527108) [牛亮](https://github.com/wangxiaodiu) [NewFuture](https://github.com/New-Future)
-* 前端实现： [王博](https://github.com/LimitW)  [杜晓唐](https://github.com/acDante) [孙卓豪](https://github.com/605527108) [NewFuture](https://github.com/New-Future)
-* 打印店客户端： [宋剑超](https://github.com/NKsjc)
-* 图形设计： [陈超](#)
-* 运营推广：[崔梦焱](#) [王雨晴](#)
 
 ### 支持和协议
 
@@ -173,9 +165,9 @@
 
 由南开微软俱乐部，天大微软俱乐部，南开机器人所，等组织和单位提高核心资源支持。由合作服务商提供重要服务资源支持。
 
-由于对github稳定性的担忧和大家访问的便捷性，我们同时在国内两个平台不定期推送最新代码镜像
+由于对github稳定性的担忧和大家访问的便捷性，我们同时在国内两个git托管平台不定期推送最新代码镜像
 
-* GitHub托管地址【主站,处理pull request和issues】[https://github.com/nkumstc/print](https://github.com/nkumstc/print)
+* GitHub托管地址【主站,处理pull request和issues】[https://github.com/YunYinORG/print](https://github.com/YunYinORG/print)
 * 开源中国oschina托管地址：[http://git.oschina.net/newfuture/print](http://git.oschina.net/newfuture/print)
 * gitcafe代码托管地址：[https://gitcafe.com/NewFuture/print](https://gitcafe.com/NewFuture/print)
 
