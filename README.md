@@ -17,7 +17,7 @@ Make a BETTER campus！
 * 多文件不能一次
 * 提前判断文件大小
 * 未登录查看打印店等信息
-* 七牛上传目录前缀
+
 
 ### Features to add
 * 打印店文件到达通知【doing】
@@ -31,7 +31,7 @@ Make a BETTER campus！
 * 打印店主页和自主管理【done】
 * 手机绑定 【done】
 * 邮箱绑定和验证 【done】
-* 神秘功能 【done】
+* 校园卡招领功能 【done】
 * 更安全和开放的API接口【done】
 * ...
 * 打印店客户端自动打印

@@ -26,14 +26,14 @@ if (!$stor->fileExists(DOMAIN, $filename))
 /*保留最近7天和每周1和每月1日的数据备份*/
 $week_ago = date('Y-m-d', strtotime('-1 week'));
 $ninety_days_ago = date('Y-m-d', strtotime('-90 day'));
-if (date('N', time()) != '1' && date('d') != '8' && $stor->fileExists('backup', $week_ago.'.sql.zip'))
+if (date('N', time()) != '1' && date('d') != '8' && $stor->fileExists(DOMAIN, $week_ago.'.sql.zip'))
 {
 	//if ( today != monday && today != 8.th), delete 7 days ago backup
-	$stor->delete('backup', $week_ago.'.sql.zip');
+	$stor->delete(DOMAIN, $week_ago.'.sql.zip');
 }
-if (date('d', strtotime('-90 day')) != '1' && $stor->fileExists('backup', $ninety_days_ago.'.sql.zip'))
+if (date('d', strtotime('-90 day')) != '1' && $stor->fileExists(DOMAIN, $ninety_days_ago.'.sql.zip'))
 {
 	//if ( $90daysago != 1.st ), delete 3 months ago backup
-	$stor->delete('backup', $ninety_days_ago.'.sql.zip');
+	$stor->delete(DOMAIN, $ninety_days_ago.'.sql.zip');
 }
 ?>
