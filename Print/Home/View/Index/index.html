@@ -9,11 +9,12 @@
 <span class="visible-xs">南开北洋云打印平台</span>
 </h1>
 <div class="text-center"><span class="label label-danger">无需“忧”盘</span> <span class="label label-info">提前打印</span> <span class="label label-warning">随时随地</span> <span class="label label-success">状态可知</span></div>
+<br/>
 </BLOCK>
 
 <BLOCK name='main'>
 <main class="container-fluid">
-<div class="col-lg-12">
+<div class="col-lg-10 col-lg-offset-1 col-xs-12">
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
             <div class="item active">
@@ -43,9 +44,9 @@
                     </div>
               </CASE>
               <DEFAULT/>
-                 <form class="col-lg-12" method="post" action="{$status}/Auth/" onsubmit="return checkForm();">                   
+                 <form method="post" action="{$status}/Auth/" onsubmit="return checkForm();">                   
                    <div class="row text-center">
-                    <div class="col-lg-4 col-md-5 col-sm-8 col-lg-offset-1 ">
+                    <div class="col-lg-4 col-md-5 col-sm-8 col-lg-offset-1">
                         <div class="input-group">
                             <span class="input-group-addon">账号</span>
                             <input type="text"  id="name" tabindex="1" name="number"  class="form-control" placeholder="学号" pattern="(\d{7}|\d{10})" required>
