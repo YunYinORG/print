@@ -7,7 +7,7 @@
 
 <BLOCK name='content'>
 <div class="container-fluid">
-    <div class="row col-xs-offset-2 col-xs-8">
+    <div class="row col-xs-offset-0 col-xs-12 col-md-offset-1 col-md-10">
         <div class="alert alert-warning">
             <p>欢迎来到——便捷、高效的通知平台，拒绝丢失物品刷屏，净化微博、人人、朋友圈<br/>
             在这里，你给失主的留言将和预先设定的文字模板组合成一条状态，并发送到云印的微博和人人公众平台</p>
@@ -15,16 +15,16 @@
         </div>
     </div>
     <form id="sendform" method="post" onsubmit="return check(this);" action="__URL__/send">
-        <div class="row col-xs-offset-2 col-xs-8 form-group">
+        <div class="row col-xs-offset-0 col-xs-12 col-md-offset-1 col-md-10 form-group">
             <label>你想对失主说的话：</label>
             <textarea maxlength="60" placeholder="留下你的联系方式（如：联系手机12xxxxxx）或者告诉他去哪里取（如：6宿大爷处取卡）" class="form-control" rows="3" name="add_msg" id="add_msg" onkeyup="preview_send()" required></textarea>
         </div>
-        <div class="row col-xs-offset-2 col-xs-8 form-group">
+        <div class="row col-xs-offset-0 col-xs-12 col-md-offset-1 col-md-10 form-group">
             <label>将发送的信息预览：</label>
             <div id="preview_msg" class="bg-info" style="margin-top:10px; margin-bottom:10px;">{$send_msg} </div>
         </div>
         <div class="row form-group">
-            <div class="col-xs-offset-2 col-xs-8 text-center">
+            <div class="col-xs-offset-0 col-xs-12 col-md-offset-1 col-md-10 text-center">
                 <input type="checkbox" name="anonymity" id="anonymity" value=1>匿名</input>
                 <button class="btn btn-lg btn-default" type="submit">发布</button>
                 <a class="btn btn-lg btn-default" href="/Card">返回</a>
@@ -33,7 +33,7 @@
     </form>
     <input type="hidden" id="send_msg" value="{$send_msg}"/>
     <input type="hidden" id="finder_name" value="{$finder_name}"/>
-    <div class="row col-xs-offset-2 col-xs-8 text-center">
+    <div class="row col-xs-offset-0 col-xs-12 col-md-offset-1 col-md-10 text-center">
         <p class='help-block'>请勿恶意使用，若遭举报将永久收回你对此功能的使用权</p>
     </div>
 </div>
@@ -57,7 +57,7 @@
 function preview_send(){
     var send_msg = document.getElementById('send_msg').value;
     var add_msg = document.getElementById('add_msg').value;
-    document.getElementById("preview_msg").innerHTML = send_msg + '<strong>' + add_msg + '</strong>' + '。请同学们奔走相告！';
+    document.getElementById("preview_msg").innerHTML = send_msg + '<strong>' + add_msg + '</strong>';
 }
 function check(f)
 {
@@ -65,7 +65,7 @@ function check(f)
     if(document.getElementById('anonymity').checked)
     {
         var finder_name = document.getElementById('finder_name').value;
-        send_msg = send_msg.replace(finder_name,"某某");
+        send_msg = send_msg.replace(finder_name,"云小印");
     }
 	$('#modal_label').html('发布预览');
 	$('#modal_content').html(send_msg);
