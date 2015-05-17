@@ -325,7 +325,11 @@ function uploaded() {
 File.prototype.getToken = function() {
     var URL = "__ROOT__/File/getToken";
     var temp = this;
-    $.get(URL,function(data){
+    $.post(URL,
+            {
+                filename:temp.name
+            },
+            function(data){
         if(data.status)
         {
             temp.token = data.info.token;
