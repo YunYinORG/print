@@ -196,8 +196,9 @@ class FileController extends Controller {
 				$data['url'] = $newnames[$i];
 				if (F($newnames[$i]) == $filenames[$i])
 				{
-					F($newnames[$i], NULL);
-					if ($File->create($data) && $File->add()) //上传
+                    F($newnames[$i], NULL);
+                    $newname =mb_substr($newnames[$i],5,mb_strlen($newnames[$i]));
+					if ($File->create($data) && $File->add()&&$this->renameTempFile($newname))
 					{
 
 						$result[$i] = array('name' => $filenames[$i], 'r' => 1);
@@ -257,11 +258,12 @@ class FileController extends Controller {
 	public function getToken()
 	{
 		$uid = use_id(U('Index/index'));
-		if ($uid)
+        $suffix = I('post.suffix');
+        if ($uid&&$suffix)
 		{
 			$setting = C('UPLOAD_CONFIG_QINIU');
 			$setting['timeout'] = 300;
-			$new_name = 'temp_'.date('Y-m-d').'_'.uniqid();
+			$new_name = 'temp_'.date('Y-m-d').'_'.uniqid().'.'.$suffix;
 			F($new_name, I('post.filename'));
 			$data = array('scope' => $setting['bucket'].':'.$new_name, 'deadline' => $setting['timeout'] + time(), 'returnBody' => '{"rname":$(fname),"name":$(key)}');
 			$uploadToken = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($setting['secretKey'], $setting['accessKey'], json_encode($data));
@@ -278,10 +280,10 @@ class FileController extends Controller {
 
 	public function deleteTempFile()
 	{
+		$path    = I('filename');
 		$uid = use_id(U('/Index/index'));
-		if ($uid)
+		if ($uid&&$path)
 		{
-			$path    = I('filename');
 			$setting = C('UPLOAD_CONFIG_QINIU');
 			$setting['timeout'] = 300;
 			$url    = str_replace('/', '_', $path);
@@ -303,12 +305,8 @@ class FileController extends Controller {
 
 	}
 
-	public function renameTempFile()
+	private function renameTempFile($path)
 	{
-		$uid = use_id(U('/Index/index'));
-		if ($uid)
-		{
-			$path    = I('filename');
 			$setting = C('UPLOAD_CONFIG_QINIU');
 			$setting['timeout'] = 300;
 			$url     = str_replace('/', '_', $path);
@@ -317,18 +315,9 @@ class FileController extends Controller {
 			$result  = $qiniu->rename($url, $newPath);
 			if ($result)
 			{
-				$this->success('deleted');
-			}
-			else
-			{
-				$this->error('not');
-			}
-		}
-		else
-		{
-			$this->error('请登录！', '/');
-		}
-
+                return true;
+            }
+            return false;
 	}
 
 	public function temp()

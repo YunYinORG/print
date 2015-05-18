@@ -289,8 +289,21 @@ function File(id,name,suffix)
 File.prototype.uploadFile = function() {
     var url = 'http://upload.qiniu.com/';
     var fd = new FormData();
-    var file = document.getElementById('upload-file').files[this.id];
-    fd.append('file',file);
+    var files = document.getElementById('upload-file').files;
+    var id=-1;
+    for (var i = 0; file = files[i]; i++)
+    {
+        if(this.name== file.name)
+        {
+            id = i;
+            break;
+        }
+    }
+    if(id==-1)
+    {
+        return false;
+    }
+    fd.append('file',files[id]);
     fd.append('token',this.token);
     fd.append('key',this.newname);
     var xmlhttp=null;
@@ -340,7 +353,8 @@ File.prototype.getToken = function() {
     var temp = this;
     $.post(URL,
             {
-                filename:temp.name
+                filename:temp.name,
+                suffix:temp.suffix
             },
             function(data){
         if(data.status)
@@ -371,7 +385,18 @@ var PPT = function(id,name,suffix) {
     $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span style="color:red">uploading</span></li>');
 }
 PPT.prototype = new temp();
-    
+
+var UNKNOWN = function(name,error_type) {
+    if(error_type=='big')
+    {
+      $("#upload-list").append('<li class="list-group-item">当前文件：'+filename +'<span style="color:red">文件太大了</span></li>'); 
+    }else if(error_typle =='suffix')
+    {
+     $("#upload-list").append('<li class="list-group-item">当前文件：'+name +'<span style="color:red">后缀名不对</span></li>');
+    }else{
+    }
+}
+
 var file_queue = new Files();
 var fileData = new FormData();
 var doc_suffix = ['doc', 'docx', 'wps'];
@@ -386,44 +411,55 @@ function checkSuffix() {
     $('#printcolor').bootstrapSwitch('disabled', false);
     $("#fileUploadButton").attr('disabled', false);
     var files = document.getElementById('upload-file').files;
-    for (var i = 0,j=0; file = files[i]; i++) 
+    for (var i = 0; file = files[i]; i++) 
     {
         var filename = file.name;
         var pos = filename.lastIndexOf('.');
         var suffix = filename.substring(pos+1);
         var newFile = null;
-        if(file.size<20*1024)
+        var samename =false;
+        for (var i = 0; i< file_queue.files.length; i++)        
         {
+            if (file_queue.files[i]!==undefined) {
+            if(filename == file_queue.files[i].name)
+            {
+                samename==true;
+                break;
+            }
+            }
+        }
+        if(samename)
+        {
+            continue;
+        }
+        if(file.size>20*1024*1024)
+        {
+            newFile = new UNKNOWN(filename,'big');
+            continue;
+        }
         if (other_suffix.indexOf(suffix)>=0)
         {
-            newFile = new PPT(j,filename,suffix);
+            newFile = new PPT(file_queue.files.length,filename,suffix);
             newFile.getToken();
             file_queue.addFile(newFile);
-            j++;
             $('#pptprint').show();
             $('#default').attr('required','true');
         }
         else if (pdf_suffix.indexOf(suffix)>=0) 
         {
-            newFile = new PDF(j,filename,suffix);
+            newFile = new PDF(file_queue.files.length,filename,suffix);
             newFile.getToken();
             file_queue.addFile(newFile);
-            j++;
         }
         else if (doc_suffix.indexOf(suffix)>=0)
         {            
-            newFile = new DOC(j,filename,suffix);
+            newFile = new DOC(file_queue.files.length,filename,suffix);
             newFile.getToken();
             file_queue.addFile(newFile);
-            j++;
         }
         else
         {
-     $("#upload-list").append('<li class="list-group-item">当前文件：'+filename +'<span style="color:red">后缀名不对</span></li>');
-        }
-        }else
-        {
-      $("#upload-list").append('<li class="list-group-item">当前文件：'+filename +'<span style="color:red">文件太大了</span></li>'); 
+            newFile = new UNKNOWN(filename,'suffix');
         }
     }
 }
@@ -432,6 +468,20 @@ $("#helpView").click(function(){
     $('#helpView').toggleClass('btn-warning')
     $('#help-info').toggle(100);
 });
+
+$("#upload-file").click(function(e){
+    for (var i = 0; i < file_queue.files.length; i++) {
+             var file = file_queue.files[i];
+             if (file!==undefined) {
+             if(file.uploadStatus==false)
+             {
+                alert('wait');
+                return false;
+             }
+             }
+    }
+});
+
 
 $("#print").submit(function(e){
     e.preventDefault();
