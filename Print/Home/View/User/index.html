@@ -163,7 +163,7 @@ function bindEmail() {
 }
 //绑定手机
 function bindPhone(type) {
-    var reg = /^1[3458]\d{9}$/;
+    var reg = /^1[34578]\d{9}$/;
     var p = $('[name="phone"]');
     var phone = p.val();
     if (!reg.test(phone)) {

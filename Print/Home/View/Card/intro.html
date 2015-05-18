@@ -1,22 +1,29 @@
 <EXTEND name="Print/Template/base.html"/>
-<BLOCK name="title">欢迎使用云印南天</BLOCK>
+<BLOCK name="title">云印南天-校园卡招领中心</BLOCK>
 <BLOCK name="addhead"></BLOCK>
 <BLOCK name="header">
 <h1 class="text-center text-success">招卡中心页面预览</h1>
-
 </BLOCK>
 <BLOCK name='content'>
 <article class="container">
 <div class="row col-md-offset-1 col-md-10 col-xs-offset-0 col-xs-12 alert alert-info">
     <ul>
-    <li>欢迎使用云印南天招卡中心，在正式使用前你需要<a href="/">登陆</a>。</li>
-    <li>在这里你可以看到招卡中心的页面，鼠标悬停至相关区域可获取简要的使用说明。</li>
-    <li>若有任何问题或意见，欢迎通过contact@yunyin.org联系我们。</li>
+    <h4>欢迎使用云印南天招卡中心(<code>yunyin.org/Card/</code>)，<b>你需要<a href="/">登陆后使用</a></b>。</h4>
+    <li>如果失主信息已经在数据库中,系统会直接通过<strong>短信和邮件联系失主</strong>，你什么也不用做</li>
+    <li>如果失主信息不在云印数据库，根据失主所在学校，直接广播到人人，微博和NKBBS等平台</li>
+    <li>目前加入广播的平台包括
+        <ul>
+            <li>微博官微：<a href="http://weibo.com/cloudprint">云印南天</a></li>
+            <li>人人主页：<a href="http://page.renren.com/602117408">云印南天</a>，<a href="http://page.renren.com/601492154">南开大学失物招领处</a></li>
+            <li>校内论坛：<a href="http://bbs.nankai.edu.cn">我爱南开BBS</a></li>
+            <li>志愿加入招领广播，可通过人人、微博、微信或邮箱（contact@yunyin.org）联系我们</li>
+        </ul>
+    </li>
     </ul>
 </div>
     <section class='row col-xs-12'>
     <ul class="text-center list-inline">
-        <li><button type="button" class="btn btn-success" data-toggle="popover" data-trigger="hover" data-placement="top" title="找回记录" data-content="找回记录里记录了你的丢卡和捡卡记录，数字3代表有3条未读消息。另外，你还可以通过这里对捡到你的一卡通的同学表示感谢或举报，受到举报数过多的用户系统将予以封禁。">找回记录<span class="badge">3</span></button></li>
+        <li><button type="button" class="btn btn-success" data-toggle="popover" data-trigger="hover" data-placement="top" title="找回记录" data-content="找回记录里记录了你的丢卡和捡卡记录，数字1代表有1条未处理的信息。另外，你还可以通过这里对捡到你的一卡通的同学表示感谢或举报，受到举报数过多的用户系统将予以封禁。">找回记录<span class="badge">1</span></button></li>
     </ul>
     </section>
     <section class='row col-md-offset-1 col-md-10 well alert'>
@@ -43,7 +50,7 @@
             </ul>
     </div>
     <div class="row col-xs-12 text-center">
-    <a class="btn btn-lg btn-primary" href="/">登陆后使用</a>
+     <a class="btn btn-lg btn-primary" href="/">登陆后使用</a>
     </div>
 </article>
 </BLOCK>
