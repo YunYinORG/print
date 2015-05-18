@@ -2,13 +2,14 @@
 <BLOCK name="title">云印南天-校园卡招领中心</BLOCK>
 <BLOCK name="addhead"></BLOCK>
 <BLOCK name="header">
-<h1 class="text-center text-success">招卡中心页面预览</h1>
+<h1 class="text-center text-success">校园卡招领服务</h1>
+<h2 class="text-center"><a href="/">请登陆后使用</a></h2>
 </BLOCK>
 <BLOCK name='content'>
 <article class="container">
-<div class="row col-md-offset-1 col-md-10 col-xs-offset-0 col-xs-12 alert alert-info">
-    <ul>
-    <h4>欢迎使用云印南天招卡中心(<code>yunyin.org/Card/</code>)，<b>你需要<a href="/">登陆后使用</a></b>。</h4>
+<div class="row">
+    <ul class="col-md-offset-1 col-md-10 alert alert-success">
+    <h4>招领中心(yunyin.org/Card)简单说明</h4>
     <li>如果失主信息已经在数据库中,系统会直接通过<strong>短信和邮件联系失主</strong>，你什么也不用做</li>
     <li>如果失主信息不在云印数据库，根据失主所在学校，直接广播到人人，微博和NKBBS等平台</li>
     <li>目前加入广播的平台包括
@@ -21,7 +22,7 @@
     </li>
     </ul>
 </div>
-    <section class='row col-xs-12'>
+    <section class='row'>
     <ul class="text-center list-inline">
         <li><button type="button" class="btn btn-success" data-toggle="popover" data-trigger="hover" data-placement="top" title="找回记录" data-content="找回记录里记录了你的丢卡和捡卡记录，数字1代表有1条未处理的信息。另外，你还可以通过这里对捡到你的一卡通的同学表示感谢或举报，受到举报数过多的用户系统将予以封禁。">找回记录<span class="badge">1</span></button></li>
     </ul>
@@ -30,30 +31,27 @@
         <h2 class="text-center">捡到了TA的校园卡?</h2>
         <div>
             <div class="col-md-offset-0 col-md-4">
-                <label class="sr-only" for="number">学号</label>
-                <input class="form-control" name="number" type="text" id="number" placeholder="在此处填写失主校园卡学号..">
+                <input class="form-control" name="number" type="text" id="number" placeholder="在此处填写捡到卡学号">
             </div>
             <div class="col-md-4">
-                <label class="sr-only"  for="name">姓名</label>
-                <input class="form-control" name="name" type="text" id="name" placeholder="在此处填写失主姓名..">
+                <input class="form-control" name="name" type="text" id="name" placeholder="在此处填写失主姓名">
             </div>
             <div class="text-center col-md-4">
                 <button class="form-control btn btn-danger" data-toggle="popover" data-trigger="hover" data-placement="top" title="通知失主" data-content="点击此按钮后，若失主为注册用户，系统会自动发送短信或邮件予以通知。若失主未注册，云印微博、人人会将信息公示，你也可以对失主留言。">通知失主</button>
             </div>
         </div>
     </section>
-    <div class='row col-xs-offset-0 col-xs-12 col-md-10 col-md-offset-1 alert alert-warning'>
-            <ul>
-                <li>如果你拾到了同学的校园卡（学号相关证件）,在此输入TA的<q>卡号（学号）</q>和TA的<q>姓名</q>;</li>
-                <li>系统会把你的联系方式（绑定的<code>手机号</code>和绑定的<code>邮箱</code>）和丢失信息通知到TA的手机和邮箱（如果有的话）,TA将可以联系到你;</li>
-                <li>为了防止恶意使用,每个人的使用次数有限制;如果收到骚扰举报将永久封禁此功能</li>     
-            </ul>
+    <div class='row col-md-10 col-md-offset-1 alert alert-warning'>
+            <p>
+              为了防止恶意使用,每个人的使用次数有限制;如果收到骚扰举报将永久封禁此功能</li>     
+            </p>
     </div>
     <div class="row col-xs-12 text-center">
      <a class="btn btn-lg btn-primary" href="/">登陆后使用</a>
     </div>
 </article>
 </BLOCK>
+
 <BLOCK name='end'>
 <script type="text/javascript">
 $(function(){
