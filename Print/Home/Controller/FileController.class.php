@@ -196,9 +196,7 @@ class FileController extends Controller {
 				$data['url'] = $newnames[$i];
 				if (F($newnames[$i]) == $filenames[$i])
 				{
-                    F($newnames[$i], NULL);
-                    $newname =mb_substr($newnames[$i],5,mb_strlen($newnames[$i]));
-					if ($File->create($data) && $File->add()&&$this->renameTempFile($newname))
+					if ($File->create($data) && $File->add()&&$this->renameTempFile($newnames[$i]))
 					{
 
 						$result[$i] = array('name' => $filenames[$i], 'r' => 1);
