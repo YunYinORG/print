@@ -200,19 +200,27 @@ Files.prototype.addFile = function(file) {
 };
 
 Files.prototype.delete = function(id) {
-    var URL = "/File/deleteTempFile";
-    var temp = this;
-    $.post(URL, {
-            filename : temp.files[id].newname
-        }, function(data) {
-            if (data.status) {
-                alert(data.info);
-                temp.files[id] = undefined;
-                temp.length--;
-            } else {
-                alert(data.info);
-            }
-        });
+    if (file_queue.files[id].uploadStatus) 
+    {
+        var URL = "/File/deleteTempFile";
+        var temp = this;
+        $.post(URL, {
+                filename : temp.files[id].newname
+            }, function(data) {
+                if (data.status) {
+                    alert(data.info);
+                    temp.files[id] = undefined;
+                    temp.length--;
+                } else {
+                    alert(data.info);
+                }
+            });
+    }
+    else
+    {
+        temp.files[id] = undefined;
+        temp.length--;
+    }
 };
 
 Files.prototype.reUpload = function(id) {
@@ -423,7 +431,7 @@ function checkSuffix() {
             if (file_queue.files[i]!==undefined) {
             if(filename == file_queue.files[i].name)
             {
-                samename==true;
+                samename=true;
                 break;
             }
             }

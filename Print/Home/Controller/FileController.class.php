@@ -84,27 +84,6 @@ class FileController extends Controller {
 		}
 	}
 
-	public function paper()
-	{
-		$uid = use_id(U('Index/index'));
-		if ($uid)
-		{
-			$Printer = M('Printer');
-			$User    = M('User');
-			$user    = $User->Field('sch_id,phone')->getById($uid);
-			$this->lock = $user['phone'] ? 1 : 0;
-			$condition['sch_id'] = $user['sch_id'];
-			$condition['status'] = 1;
-			$this->data = $Printer->where($condition)->order('rank desc')->Field('id,name,address')->select();
-			$this->ppt = C('PPT_LAYOUT');
-			$this->display();
-		}
-		else
-		{
-			$this->redirect('/Index/index');
-		}
-	}
-
 	/**
 	 * 单文件上传
 	 */
@@ -196,9 +175,10 @@ class FileController extends Controller {
 				$data['url'] = $newnames[$i];
 				if (F($newnames[$i]) == $filenames[$i])
 				{
-					if ($File->create($data) && $File->add()&&$this->renameTempFile($newnames[$i]))
+					if ($File->create($data))// && $File->add()&&$this->_renameTempFile($newnames[$i]))
 					{
-
+						var_dump($File->add());
+						var_dump($this->_renameTempFile($newnames[$i]));
 						$result[$i] = array('name' => $filenames[$i], 'r' => 1);
 					}
 					else
@@ -211,7 +191,7 @@ class FileController extends Controller {
 					$result[$i] = array('name' => $filenames[$i], 'r' => 0);
 				}
 			}
-			$this->success($result);
+			// $this->success($result);
 		}
 		else
 		{
@@ -252,6 +232,7 @@ class FileController extends Controller {
 		}
 		$this->error('当前状态不允许删除！');
 	}
+
 
 	public function getToken()
 	{
@@ -303,7 +284,7 @@ class FileController extends Controller {
 
 	}
 
-	private function renameTempFile($path)
+	private function _renameTempFile($path)
 	{
 			$setting = C('UPLOAD_CONFIG_QINIU');
 			$setting['timeout'] = 300;
