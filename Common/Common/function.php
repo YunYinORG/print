@@ -158,6 +158,25 @@ function encode($pwd, $id)
 }
 
 /**
+ * 获取上传token
+ * @method upload_token
+ * @param  [string]       $save_name [保存的文件名]
+ * @return [string]                  [上传token]
+ * @author NewFuture[newfuture@yunyin.org]
+ */
+function upload_token($save_name)
+{
+	$config = C('UPLOAD_CONFIG_QINIU');
+	$timeout= 300;
+	$setting = array(
+		'scope' => $config['bucket'].':'.$save_name,
+		 'deadline' => $timeout + time(),
+	  	// 'returnBody' => '{"rname":$(fname),"name":$(key)}'
+	  	);
+	$token = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($config['secretKey'], $config['accessKey'], json_encode($setting));
+	return $token;
+}
+/**
  * 上传文件
  * upload_file($storage='')
  * @param  $storage=''存储服务商 默认读取FILE_UPLOAD_TYPE
@@ -195,6 +214,23 @@ function upload_file($storage = '', $config = array())
 
 	$Upload = new \Think\Upload($config, $driver, $driver_config);
 	return $Upload->upload();
+}
+
+/**
+ * 文件重命名
+ * @method rename_file
+ * @param  [type]      $old_name [原文件位置]
+ * @param  [type]      $new_name [新文件位置]
+ * @return [bool]                [重名结果]
+ * @author NewFuture[newfuture@yunyin.org]
+ */
+function rename_file($old_name,$new_name)
+{
+	$config = C('UPLOAD_CONFIG_QINIU');
+	$old_url    = str_replace('/', '_', $old_name);
+	$new_url = str_replace('/', '_', $new_name);
+	$qiniu   = new \Think\Upload\Driver\Qiniu\QiniuStorage($config);
+	return $qiniu->rename($old_url, $new_url);
 }
 
 /**

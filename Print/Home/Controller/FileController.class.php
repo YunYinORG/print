@@ -107,29 +107,6 @@ class FileController extends Controller {
 				$data['name'] = $name;
 				$data['url'] = $info['file']['savepath'].$info['file']['savename'];
 
-				// $data['copies'] = I('post.copies', 0, 'int') < 0 ? 0 : I('post.copies', 0, 'int');
-				// $data['double_side'] = I('post.double_side', 0, 'int');
-				// $data['color'] = I('post.color', 0, 'int');
-				// $requirements = I('post.requirements', 0, 'htmlspecialchars');
-				// if ($requirements)
-				// {
-				// 	$data['requirements'] = $requirements;
-				// }
-
-				// if ($data['pri_id'] <= 0)
-				// {
-				// 	$this->error('请选择打印店！', '/File/add');
-				// }
-				// if ($info['file']['ext'] == 'ppt' || $info['file']['ext'] == 'pptx')
-				// {
-				// 	$data['ppt_layout'] = I('post.ppt_layout', 0, 'int');
-				// }
-				// else
-				// {
-				// 	$data['ppt_layout'] = 0;
-				// }
-				//
-
 				$File = D('File');
 				if ($File->create($data) && $File->add()) //上传
 				{
@@ -151,56 +128,233 @@ class FileController extends Controller {
 		}
 	}
 
+	/**
+	 * 文件批量上传
+	 * @method upload
+	 * @return [type] [description]
+	 * @author 孙卓豪[@yunyin.org]
+	 * @author 修改NewFuture
+	 */
 	public function upload()
 	{
-		$uid = use_id(U('/Index/index'));
-		if ($uid)
+		$uid = use_id();
+		$files = I('post.files');
+		if (!$uid)
 		{
-			$filenames = I('post.filenames');
-			$newnames  = I('post.newnames');
-			$suffixes  = I('post.suffixes');
-			$number    = I('post.number', 0, int);
+			/*未登录*/
+			$this->error(L('UNLOGIN'), __ROOT__);
+		}elseif(!$files)
+		{
+			/*未登录*/
+			$this->error('无文件');
+		}else
+		{
+			/*批量获取文件名*/
+			
+			// $newnames  = I('post.newnames');
+			// $suffixes  = I('post.suffixes');
+			// $number    = I('post.number', 0, int);
+			
+			/*获取文件设置基本信息*/
 			$File      = D('File');
+			$file_data=[];
+			$file_data['use_id'] = $uid;
+			$file_data=$File->create($file_data);
+
+			/*获取和更新session中的缓存表信息*/
+			$upload_list=session('uploads');
+			session('uploads',null);
+
 			$result    = array();
-			for ($i = 0; $i < $number; $i++)
+			foreach ($files as $path) 
 			{
-				$name   = $filenames[$i];
-				$suffix = $suffixes[$i];
-				if (mb_strlen($name) > 62)
+				$old_name=$upload_list[$path];
+				if($old_name)
 				{
-					$name = mb_substr($name, 0, 58).'.'.$suffix;
-				}
-				$data['use_id'] = $uid;
-				$data['name'] = $name;
-				$data['url'] = $newnames[$i];
-				if (F($newnames[$i]) == $filenames[$i])
-				{
-					if ($File->create($data))// && $File->add()&&$this->_renameTempFile($newnames[$i]))
+					$url='upload_'.$path;
+					rename_file('temp_'.$path,$url);
+					$file_data['url']=$url;
+					$file_data['name']=$old_name;
+					if($File->add($file_data))
 					{
-						var_dump($File->add());
-						var_dump($this->_renameTempFile($newnames[$i]));
-						$result[$i] = array('name' => $filenames[$i], 'r' => 1);
+						$result[] = array('name' => $old_name, 'r' => 1);
+					}else{
+						$result[] = array('name' => $old_name, 'r' => 0);
 					}
-					else
-					{
-						$result[$i] = array('name' => $filenames[$i], 'r' => 0);
-					}
-				}
-				else
-				{
-					$result[$i] = array('name' => $filenames[$i], 'r' => 0);
 				}
 			}
+			if(empty($result))
+			{
+				$this->error('上传失败');
+			}else{
+				$this->success($result);
+			}
+			
+
+			// for ($i = 0; $i < $number; $i++)
+			// {
+			// 	$name   = $filenames[$i];
+			// 	$suffix = $suffixes[$i];
+			// 	if (mb_strlen($name) > 62)
+			// 	{
+			// 		$name = mb_substr($name, 0, 58).'.'.$suffix;
+			// 	}
+			// 	$data['use_id'] = $uid;
+			// 	$data['name'] = $name;
+			// 	$data['url'] = $newnames[$i];
+			// 	if (F($newnames[$i]) == $filenames[$i])
+			// 	{
+			// 		if ($File->create($data))// && $File->add()&&$this->_renameTempFile($newnames[$i]))
+			// 		{
+			// 		//	var_dump($File->add());
+			// 		//	var_dump($this->_renameTempFile($newnames[$i]));
+			// 			$result[$i] = array('name' => $filenames[$i], 'r' => 1);
+			// 		}
+			// 		else
+			// 		{
+			// 			$result[$i] = array('name' => $filenames[$i], 'r' => 0);
+			// 		}
+			// 	}
+			// 	else
+			// 	{
+			// 		$result[$i] = array('name' => $filenames[$i], 'r' => 0);
+			// 	}
+			// }
 			// $this->success($result);
 		}
-		else
-		{
-			$this->error('请登录！', '/');
+	}
+
+
+	/**
+	 * 获取上传token
+	 * @method getToken
+	 * @return [type]   [description]
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
+	public function getToken()
+	{
+		$uid = use_id();
+        $file_name=I('post.filename');
+        if (!$uid)
+        {
+        	$this->error(L('UNLOGIN'), __ROOT__);
+        }elseif(!$file_name)
+        {
+        	$this->error('无效文件名');
+        }else
+		{	
+			/*获取token*/
+			$suffix = $this->_getExt($file_name);
+			$path= date('Y-m-d').'_'.uniqid().'.'.$suffix;
+			$token=upload_token('temp_'.$path);
+
+			if(!$token)
+			{
+				$this->error('获取token失败');
+			}else{
+				/*token获取成功*/
+				/*更新上传缓存表映射*/
+				$upload_list=session('uploads');
+				$upload_list[$path]=$file_name;
+				session('uploads',$upload_list);
+
+				/*返回上传凭证*/
+				header('Access-Control-Allow-Origin:http://upload.qiniu.com');
+				/*最好返回上传url而不是name*/
+				$token_info = array(
+					'name' => $path, 
+					'token' => $token
+					);
+				$this->success($token_info);
+			}
+
 		}
 	}
 
 	/**
-	 * 删除文件记录
+	 * 删除批量上传中的文件
+	 * @method deleteTempFile
+	 * @return [type]         [description]
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
+	public function deleteTempFile()
+	{
+		$path    = I('post.path');
+		$uid = use_id();
+		if (!$uid)
+        {
+        	$this->error(L('UNLOGIN'), __ROOT__);
+        }
+        elseif(!$path)
+        {
+        	$this->error('无效文件名');
+        }
+        else
+		{		
+			/*检查文件是否是真正上传的文件*/
+			$upload_list=session('uploads');
+			if(!isset($upload_list[$path]))
+			{
+				$this->error('文件不存在');
+			}else
+			{
+				/*更新上传映射*/
+				unset($upload_list[$path]);
+				session('uploads',$file_cache);
+				
+				/*删除文件*/
+				if (delete_file($path,'QINIU'))
+				{
+					$this->success(true);
+				}
+				else
+				{
+					$this->error('删除失败');
+				}
+			}			
+		}
+	}
+
+	// private function _renameTempFile($path)
+	// {
+	// 		$setting = C('UPLOAD_CONFIG_QINIU');
+	// 		$setting['timeout'] = 300;
+	// 		$url     = str_replace('/', '_', $path);
+	// 		$newPath = str_replace('temp_', '', $path);
+	// 		$qiniu   = new \Think\Upload\Driver\Qiniu\QiniuStorage($setting);
+	// 		$result  = $qiniu->rename($url, $newPath);
+	// 		if ($result)
+	// 		{
+ //                return true;
+ //            }
+ //            return false;
+	// }
+
+	public function temp()
+	{
+		$uid = use_id(U('Index/index'));
+		if ($uid)
+		{
+			$Printer = M('Printer');
+			$User    = M('User');
+			$user    = $User->Field('sch_id,phone')->getById($uid);
+			$this->lock = $user['phone'] ? 1 : 0;
+			$condition['sch_id'] = $user['sch_id'];
+			$condition['status'] = 1;
+			$this->data = $Printer->where($condition)->order('rank desc')->Field('id,name,address')->select();
+			$this->ppt = C('PPT_LAYOUT');
+			$this->display();
+		}
+		else
+		{
+			$this->redirect('/Index/index');
+		}
+	}
+
+		/**
+	 * 	删除文件记录
+	 * @method delete
+	 * @author NewFuture[newfuture@yunyin.org]
 	 */
 	public function delete()
 	{
@@ -233,95 +387,27 @@ class FileController extends Controller {
 		$this->error('当前状态不允许删除！');
 	}
 
-
-	public function getToken()
-	{
-		$uid = use_id(U('Index/index'));
-        $suffix = I('post.suffix');
-        if ($uid&&$suffix)
-		{
-			$setting = C('UPLOAD_CONFIG_QINIU');
-			$setting['timeout'] = 300;
-			$new_name = 'temp_'.date('Y-m-d').'_'.uniqid().'.'.$suffix;
-			F($new_name, I('post.filename'));
-			$data = array('scope' => $setting['bucket'].':'.$new_name, 'deadline' => $setting['timeout'] + time(), 'returnBody' => '{"rname":$(fname),"name":$(key)}');
-			$uploadToken = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($setting['secretKey'], $setting['accessKey'], json_encode($data));
-			header('Access-Control-Allow-Origin:http://upload.qiniu.com');
-			$result = array('name' => $new_name, 'token' => $uploadToken);
-			$this->success($result);
-		}
-		else
-		{
-			$this->error('login');
-		}
-
-	}
-
-	public function deleteTempFile()
-	{
-		$path    = I('filename');
-		$uid = use_id(U('/Index/index'));
-		if ($uid&&$path)
-		{
-			$setting = C('UPLOAD_CONFIG_QINIU');
-			$setting['timeout'] = 300;
-			$url    = str_replace('/', '_', $path);
-			$qiniu  = new \Think\Upload\Driver\Qiniu\QiniuStorage($setting);
-			$result = $qiniu->del($url);
-			if ($result)
-			{
-				$this->success($result);
-			}
-			else
-			{
-				$this->error('not');
-			}
-		}
-		else
-		{
-			$this->error('请登录！', '/');
-		}
-
-	}
-
-	private function _renameTempFile($path)
-	{
-			$setting = C('UPLOAD_CONFIG_QINIU');
-			$setting['timeout'] = 300;
-			$url     = str_replace('/', '_', $path);
-			$newPath = str_replace('temp_', '', $path);
-			$qiniu   = new \Think\Upload\Driver\Qiniu\QiniuStorage($setting);
-			$result  = $qiniu->rename($url, $newPath);
-			if ($result)
-			{
-                return true;
-            }
-            return false;
-	}
-
-	public function temp()
-	{
-		$uid = use_id(U('Index/index'));
-		if ($uid)
-		{
-			$Printer = M('Printer');
-			$User    = M('User');
-			$user    = $User->Field('sch_id,phone')->getById($uid);
-			$this->lock = $user['phone'] ? 1 : 0;
-			$condition['sch_id'] = $user['sch_id'];
-			$condition['status'] = 1;
-			$this->data = $Printer->where($condition)->order('rank desc')->Field('id,name,address')->select();
-			$this->ppt = C('PPT_LAYOUT');
-			$this->display();
-		}
-		else
-		{
-			$this->redirect('/Index/index');
-		}
-	}
-
 	public function _empty()
 	{
 		$this->redirect('index');
+	}
+
+	/**
+	 * 获取文件后缀名
+	 * @method _getExt
+	 * @param  string  $filename [文件名]
+	 * @return [type]            [扩展名不包含.]
+	 * @access private
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
+	private function _getExt($filename)
+	{
+		$pos=strrpos($filename, '.');
+		if($pos>0)
+		{
+			return strtolower(substr($filename,  $pos+ 1));
+		}else{
+			return '';
+		}
 	}
 }

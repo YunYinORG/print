@@ -56,8 +56,8 @@
         <IF condition="$lock eq 1">
         <div class="row form-group text-cneter">
                 <div class="col-lg-2 col-lg-offset-1 col-xs-4 col-xs-offset-1">
-                   <label for="ispre" class="sr-only">设置</label>
-                    <input name="ispre" id="ispre" type="checkbox" data-label-text="设置" data-off-text="到店打印"  data-on-text="提前打印" data-off-color="success" data-on-color="warning" data-label-width="" disabled="true"/>
+                   <label for="wait" class="sr-only">设置</label>
+                    <input name="wait" id="wait" type="checkbox" data-label-text="设置" data-off-text="到店打印"  data-on-text="提前打印" data-off-color="success" data-on-color="warning" data-label-width="" disabled="true" checked="checked" />
                 </div>
                 <div class="setting">
                 <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
@@ -145,12 +145,12 @@
 $(function(){
     $("[type='checkbox']").bootstrapSwitch();
     $('.setting').hide();
-    $('#ispre').on('switchChange.bootstrapSwitch',function(){
+    $('#wait').on('switchChange.bootstrapSwitch',function(){
     var fn = $('#upload-file').val();
     var pos = fn.lastIndexOf('.');
     var suf = fn.substring(pos + 1);
     var other_suffix =['ppt' , 'pptx'];
-    if($('#ispre').bootstrapSwitch('state') ==false){
+    if($('#wait').bootstrapSwitch('state') ==true){
         $('.setting').hide(100);
         $('#default').removeAttr('required');
     } else {
@@ -205,7 +205,7 @@ Files.prototype.delete = function(id) {
         var URL = "/File/deleteTempFile";
         var temp = this;
         $.post(URL, {
-                filename : temp.files[id].newname
+                path : temp.files[id].newname
             }, function(data) {
                 if (data.status) {
                     alert(data.info);
@@ -313,7 +313,7 @@ File.prototype.uploadFile = function() {
     }
     fd.append('file',files[id]);
     fd.append('token',this.token);
-    fd.append('key',this.newname);
+    fd.append('key','temp_'+this.newname);
     var xmlhttp=null;
     if (window.XMLHttpRequest)
     {
@@ -362,7 +362,7 @@ File.prototype.getToken = function() {
     $.post(URL,
             {
                 filename:temp.name,
-                suffix:temp.suffix
+                // suffix:temp.suffix
             },
             function(data){
         if(data.status)
@@ -412,7 +412,7 @@ var pdf_suffix = ['pdf'];
 var other_suffix = ['ppt', 'pptx'];
 
 function checkSuffix() {
-    $("#ispre").bootstrapSwitch('disabled',false);
+    $("#wait").bootstrapSwitch('disabled',false);
     $("#pptprint").hide();
     $('#copies').attr('disabled', false);
     $('#double_side').bootstrapSwitch('disabled', false);
@@ -508,18 +508,18 @@ $("#print").submit(function(e){
         }
     }
     var url = '__URL__/upload';
-    var copies = $('#ispre').bootstrapSwitch('state')?$('#copies').val():0;
+    var copies = $('#copies').val();
     var pri_id = $('#pri_id').val();
-    var color = $('#printcolor').bootstrapSwitch('state');
-    var double_side = $('#double_side').bootstrapSwitch('state');
+    var color = $('#printcolor').bootstrapSwitch('state')?1:0;
+    var double_side = $('#double_side').bootstrapSwitch('state')?1:0;
     var addtion_need = $('#addtion-need').val();
     var ppt_layout = $('default').val();
-    var wait = $('#ispre').bootstrapSwitch('state');
+    var wait = $('#wait').bootstrapSwitch('state')?1:0;
     $.post(url, {
-            'filenames[]':filenames,
-            'newnames[]':newnames,
-            'suffixes[]':suffixes,
-            number:file_queue.length,
+            // 'filenames[]':filenames,
+            'files[]':newnames,
+            // 'suffixes[]':suffixes,
+            // number:file_queue.length,
             pri_id:pri_id,
             color:color,
             double_side:double_side,
