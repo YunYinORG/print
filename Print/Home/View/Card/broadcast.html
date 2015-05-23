@@ -25,7 +25,10 @@
         </div>
         <div class="row form-group">
             <div class="col-xs-offset-0 col-xs-12 col-md-offset-1 col-md-10 text-center">
-                <input type="checkbox" name="anonymity" id="anonymity" value=1>匿名</input>
+                <div>
+                    <input type="checkbox" name="anonymity" id="anonymity">匿名</input>
+                    <input type="checkbox" name="add_phone" id="add_phone"><code>公开你的手机号</code></input>
+                </div>
                 <button class="btn btn-lg btn-default" type="submit">发布</button>
                 <a class="btn btn-lg btn-default" href="/Card">返回</a>
             </div>
@@ -67,6 +70,10 @@ function check(f)
         var finder_name = document.getElementById('finder_name').value;
         send_msg = send_msg.replace(finder_name,"云小印");
     }
+    if(document.getElementById('add_phone').checked)
+    {
+        send_msg += "<code>TA的手机:{$finder_phone}</code>";
+    }
 	$('#modal_label').html('发布预览');
 	$('#modal_content').html(send_msg);
 	$('#modal').modal('show');
@@ -79,7 +86,8 @@ function send()
 	var url=document.forms.sendform.action;
 	var msg=document.getElementById('add_msg').value.trim();
     var anonymity=document.getElementById('anonymity').checked?1:0;
-	$.post(url,{'add_msg':msg,'anonymity':anonymity},function(data){
+    var add_phone=document.getElementById('add_phone').checked?1:0;
+	$.post(url,{'add_msg':msg,'anonymity':anonymity,'add_phone':add_phone},function(data){
 		if(data.status)
 		{	
 			$('#modal_label').html('发布成功');

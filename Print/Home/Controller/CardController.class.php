@@ -36,9 +36,12 @@ class CardController extends Controller {
 	public function index()
 	{
 		$uid = use_id();
-		if (!$uid){
+		if ( ! $uid)
+		{
 			$this->display('intro');
-		} else {
+		}
+		else
+		{
 			$user = M('User')->field('phone,status')->getById($uid);
 			$card = M('Card')->getById($uid);
 			if ($user['status'] < 0)
@@ -379,6 +382,7 @@ class CardController extends Controller {
 			$this->send_msg = L('CARD_MSG_OUT', $msg_info);
 		}
 		$this->finder_name = $finder['name'];
+		$this->finder_phone = get_phone_by_id($uid);
 		$this->display();
 	}
 
@@ -415,29 +419,32 @@ class CardController extends Controller {
 
 		/*添加到丢失记录*/
 		$receiver_id = $receiver['uid'] ? $receiver['uid'] : 0;
-		$log = array('find_id' => $uid, 'lost_id' => $receiver_id, 'status' => 0);
+		$log    = array('find_id'    => $uid, 'lost_id'    => $receiver_id, 'status'    => 0);
 		$msg_id = M('Cardlog')->add($log);
-		/*获取拾主和失主的信息*/
-		$School = M('School');
-		$finder = M('User')->field('name,sch_id')->getById($uid);
 		//是否匿名
-		$finder_name = I('anonymity') ? '云小印' : $finder['name'];
-		$msg_info = array(
-			'card_number' => $receiver['number'],
-			'card_name' => '[' . $msg_id . ']' . $receiver['name'],
-			'card_school' => $School->cache(true)->getFieldById($receiver['sch_id'], 'name'),
-			'finder_name' => $finder_name,
-			'finder_school' => $School->cache(true)->getFieldById($finder['sch_id'], 'name'),
-			'msg' => I('add_msg'),
+		$finder_name = I('anonymity') ? '云小印' : M('User')->getFieldById($uid, 'name');
+		//是否公开手机
+		$finder_phone = I('add_phone') ? get_phone_by_id($uid) : '';
+		/*$msg_info = array(
+		'card_number' => $receiver['number'],
+		'card_name' => '[' . $msg_id . ']' . $receiver['name'],
+		'card_school' => $School->cache(true)->getFieldById($receiver['sch_id'], 'name'),
+		'finder_name' => $finder_name,
+		'finder_school' => $School->cache(true)->getFieldById($finder['sch_id'], 'name'),
+		'msg' => I('add_msg'),
 		);
-
-		$msg = L('CARD_MSG_IN', $msg_info);
+		$msg = L('CARD_MSG_IN', $msg_info);*/
 
 		/*post数据到API*/
 		$url = 'https://newfuturepy.sinaapp.com/broadcast';
 		$data = array(
 			'key'    => C('WEIBO_API_PWD'),
-			'status' => base64_encode($msg),
+			'school' => M('School')->cache(true)->getFieldById($receiver['sch_id'], 'name'),
+			'cardid' => $receiver['number'],
+			'name'   => $receiver['name'],
+			'contact_name' => $finder_name,
+			'contact_phone' => $finder_phone,
+			'msg'    => I('add_msg'),
 		);
 		$result = json_decode($this->_post($url, $data));
 		if ($result)
