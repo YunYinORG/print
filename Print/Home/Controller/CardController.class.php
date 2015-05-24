@@ -78,8 +78,7 @@ class CardController extends Controller {
 		$Cardlog = D('CardlogView');
 		$this->lost = $Cardlog->where("lost_id=$id")->field('id,find_id,find_name,find_number,time,status')->order('id desc')->select();
 		$find = $Cardlog->where("find_id=$id")->field('id,lost_id,lost_name,lost_number,time,status')->order('id desc')->select();
-
-		foreach ($find as $i => $f)
+		foreach ($find as $i => $f) //id为0表示非云印用户
 		{
 			if ($f['lost_id'] == 0)
 			{
@@ -426,15 +425,16 @@ class CardController extends Controller {
 		{
 			S($cache_name, $times + 1, 3600);
 		}
-
 		/*添加到丢失记录*/
 		$receiver_id = $receiver['uid'] ? $receiver['uid'] : 0;
 		$log    = array('find_id'    => $uid, 'lost_id'    => $receiver_id, 'status'    => 0);
 		$msg_id = M('Cardlog')->add($log);
+		$finder = $User->field('sch_id,name')->getById($uid);
 		//是否匿名
-		$finder_name = I('anonymity') ? '云小印' : M('User')->getFieldById($uid, 'name');
+		$finder_name = I('anonymity') ? '云小印' : $finder['name'];
 		//是否公开手机
 		$finder_phone = I('add_phone') ? get_phone_by_id($uid) : '';
+		$finder_school = M('School')->cache(true)->getFieldById($finder['sch_id'], 'name');
 		/*$msg_info = array(
 		'card_number' => $receiver['number'],
 		'card_name' => '[' . $msg_id . ']' . $receiver['name'],
@@ -448,13 +448,13 @@ class CardController extends Controller {
 		/*post数据到API*/
 		$url = 'https://newfuturepy.sinaapp.com/broadcast';
 		$data = array(
-			'key'    => C('WEIBO_API_PWD'),
-			'school' => M('School')->cache(true)->getFieldById($receiver['sch_id'], 'name'),
-			'cardid' => $receiver['number'],
-			'name'   => $receiver['name'],
-			'contact_name' => $finder_name,
+			'key'           => C('WEIBO_API_PWD'),
+			'school'        => M('School')->cache(true)->getFieldById($receiver['sch_id'], 'name'),
+			'card_id'       => $receiver['number'],
+			'name'          => $receiver['name'],
+			'contact_name'  => $finder_school.$finder_name.'['.$msg_id.']',
 			'contact_phone' => $finder_phone,
-			'msg'    => I('add_msg'),
+			'msg'           => I('add_msg'),
 		);
 		$result = json_decode($this->_post($url, $data));
 		if ($result)

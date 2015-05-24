@@ -11,8 +11,7 @@
 
 <div class="container-fluid">
     <div>
-        <h2>设置打印信息<!--button type="button" class="btn btn-primary btn-normal" data-toggle="modal" data-target="#printhelp">
-打印帮助</button--></h2>
+        <h2>设置打印信息</h2>
     </div>
     <br/>
     <form id="print" method="post" action="__URL__/uploadOne" enctype="multipart/form-data">
@@ -105,33 +104,6 @@
         </div>
     </div>
     </form>
-
-<!-- Modal>
-<div class="modal fade" id="printhelp" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">打印帮助</h4>
-      </div>
-      <div class="modal-body">
-        <p class="text-info">
-        使用流程：<code>上传文件</code> -> <code>选择打印店</code> -> <code>设置打印份数、格式</code> -> <code>文件记录页查看状态</code> -> <code>取货</code>；<br/>
-        不绑定手机不能设置打印参数，只能上传后到店打印；<br/>
-        暂时仅支持<code>pdf</code>、<code>doc(x)</code>、<code>wps</code>、<code>ppt(x)</code>格式的文件上传；<br/>
-        如上传文件名出现<code>乱码</code>，请更换浏览器。电脑下Chrome效果最佳，手机建议使用UC浏览器；<br/>
-        打印纸张默认为<code>A4</code>，有特别需要请备注；<br/>
-        无论打印店队列多长，到店可直接取货。若打印店没有提前打印，你可以在店直接打印；<br/>
-        对于提前打印的文件请于打印完成后<code>24小时</code>内取走；对于所有情况的打印请于<code>2天内</code>完成；<br/>
-        当前提供价格仅供参考，所有打印店均可在<code>量大时减价</code>。
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-      </div>
-    </div>
-  </div>
-</div-->
-
 
 </div>
 </BLOCK>
@@ -239,15 +211,20 @@ File.prototype.uploadFile = function() {
 function uploaded() {
     if (this.readyState==4) {
         var file_view = $('#file_'+this.id);
-        var span = file_view.find('span');
+        var span = file_view.find('.file_op');
+        var attr = file_view.find('.file_attr');
         if (this.status==200){
             file_queue.files[this.id].uploadStatus = true;
-            span.html('<span class="glyphicon glyphicon-ok"></span>');
-            span.append('<button class="glyphicon glyphicon-remove delete" onclick="deleteFile(this)"></button>');
+            attr.removeClass();
+            attr.addClass("file_attr label label-success");
+            attr.html('上传成功');
+            span.html('<span class="glyphicon glyphicon-remove delete" onclick="deleteFile(this)"></span>');
         }
         else {
-            span.html('上传失败');
-            span.append('<button class="glyphicon glyphicon-repeat re-upload" onclick="reUpload(this)"></button><button class="glyphicon glyphicon-remove delete" onclick="deleteFile(this)"></button>');
+            attr.removeClass();
+            attr.addClass("file_attr label label-danger");
+            attr.html('上传失败');
+            span.html('<span class="glyphicon glyphicon-repeat re-upload" onclick="reUpload(this)"></span>&nbsp;&nbsp;<span class="glyphicon glyphicon-remove delete" onclick="deleteFile(this)"></span>');
         }
     }
 }
@@ -273,27 +250,27 @@ var temp = function() {};
 temp.prototype = File.prototype;
 var PDF = function(id,name,suffix) {
     File.apply(this,arguments);
-    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span><span class="btn btn-xs btn-success">上传中..</span></span></li>');
+    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'"><span class="file_attr" style="float:left"></span><span style="float:left">'+ name +'</span><span class="file_op" style="float:right"><span class="label label-xs label-success">上传中..</span></span></li>');
 }
 PDF.prototype = new temp();
 
 var DOC = function(id,name,suffix) {
     File.apply(this,arguments);
-    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'(支持的格式，但更推荐pdf)<span class="btn btn-xs btn-success">上传中..</span>');
+    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'"><span class="file_attr" style="float:left"></span><span style="float:left">'+ name +'(支持的格式，但更推荐pdf)</span> <span class="file_op" style="float:right"><span class="label label-xs label-success">上传中..</span></span></li>');
 }
 DOC.prototype = new temp();
 
 var PPT = function(id,name,suffix) {
     File.apply(this,arguments);
-    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span class="btn btn-xs btn-success">上传中..</span>');
+    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'"><span class="file_attr" style="float:left"></span><span style="float:left">'+name +'</span><span style="float:right" class="file_op"><span class="label label-xs label-success">上传中..</span></span></li>');
 }
 PPT.prototype = new temp();
 
 var UNKNOWN = function(name,error_type) {
     if(error_type=='big') {
-      $("#upload-list").append('<li class="list-group-item">当前文件：'+filename +'<span class="btn btn-xs btn-danger">文件过大</span>');
+      $("#upload-list").append('<li class="list-group-item"><span class="file_attr" style="float:left"></span><span style="float:left">'+filename +'</span> <span style="float:right" class="file_op"><span class="label label-xs label-danger">文件过大</span></span></li>');
     } else if(error_typle =='suffix') {
-        $("#upload-list").append('<li class="list-group-item">当前文件：'+name +'<span class="btn btn-xs btn-danger">不支持的格式</span>');
+        $("#upload-list").append('<li class="list-group-item"><span class="file_attr" style="float:left"></span><span style="float:left">'+name +'</span><span style="float:right" class="file_op"><span class="label label-xs label-danger">不支持的格式</span></span></li>');
     } else{}
 }
 
@@ -368,18 +345,13 @@ function checkSuffix() {
     }
 }
 
-$("#helpView").click(function(){
-    $('#helpView').toggleClass('btn-warning')
-    $('#help-info').toggle(100);
-});
-
 $("#upload-file").click(function(e){
     for (var i = 0; i < file_queue.files.length; i++) {
              var file = file_queue.files[i];
              if (file!==undefined) {
              if(file.uploadStatus==false)
              {
-                alert('wait');
+                //alert('wait');
                 return false;
              }
              }
@@ -461,9 +433,13 @@ function reUpload (e) {
     var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
     id = parseInt(id);
     file_queue.reUpload(id);
-        var file_view = $('#file_'+id);
-        var span = file_view.find('span');
-        span.html('uploading');
+    var file_view = $('#file_'+id);
+    var span = file_view.find('.file_op');
+    var attr = file_view.find('.file_attr');
+    attr.removeClass();
+    attr.addClass("file_attr");
+    attr.html('');
+    span.html('<span class="label label-xs label-success">上传中..</span>');
 }
 
 function priceChange(n){

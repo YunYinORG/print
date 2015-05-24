@@ -153,7 +153,7 @@ class FileController extends Controller {
 			
 			/*获取文件设置基本信息*/
 			$File      = D('File');
-			$file_data=[];
+			$file_data=array();
 			$file_data['use_id'] = $uid;
 			$file_data=$File->create($file_data);
 
