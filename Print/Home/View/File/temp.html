@@ -261,7 +261,6 @@ File.prototype.getToken = function() {
     $.post(URL,
             {
                 filename:temp.name,
-                // suffix:temp.suffix
             },
             function(data){
         if(data.status)
@@ -392,18 +391,14 @@ $("#upload-file").click(function(e){
 
 $("#print").submit(function(e){
     e.preventDefault();
-    var filenames = [];
     var newnames = [];
-    var suffixes = [];
     for (var i = 0; i < file_queue.files.length; i++) {
         var file = file_queue.files[i];
         if (file!==undefined) {
             if (file.uploadStatus==false) {
                 return false;
             }
-            filenames.push(file.name);
             newnames.push(file.newname);
-            suffixes.push(file.suffix);
         }
     }
     var url = '__URL__/upload';
@@ -415,10 +410,7 @@ $("#print").submit(function(e){
     var ppt_layout = $('default').val();
     var wait = $('#wait').bootstrapSwitch('state')?1:0;
     $.post(url, {
-            // 'filenames[]':filenames,
             'files[]':newnames,
-            // 'suffixes[]':suffixes,
-            // number:file_queue.length,
             pri_id:pri_id,
             color:color,
             double_side:double_side,
