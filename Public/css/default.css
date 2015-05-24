@@ -119,6 +119,7 @@ nav li:hover a, nav li.active a, nav li.active span {
 
 #upload-list li{
   font-size: 13px;
+  height: 38px;
 }
 
 #showAdd {
