@@ -10,8 +10,8 @@
 <BLOCK name='content'>
 <div class="container-fluid">
     <div>
-        <h2>设置打印信息<button type="button" class="btn btn-primary btn-normal" data-toggle="modal" data-target="#printhelp">
-打印帮助</button></h2>
+        <h2>设置打印信息<!--button type="button" class="btn btn-primary btn-normal" data-toggle="modal" data-target="#printhelp">
+打印帮助</button--></h2>
     </div>
     <br/>
     <form id="print" method="post" action="__URL__/uploadOne" onsubmit="return checkform();" enctype="multipart/form-data">
@@ -104,7 +104,7 @@
     </form>
 
 
-<!-- Modal -->
+<!-- Modal>
 <div class="modal fade" id="printhelp" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -128,7 +128,7 @@
       </div>
     </div>
   </div>
-</div>
+</div-->
 
 
 </div>
@@ -141,10 +141,6 @@
 $(function(){
     $("[type='checkbox']").bootstrapSwitch();
     $('.setting').hide();
-    
-    $("#helpView").click(function(){
-    $('#helpView').toggleClass('btn-warning');
-    $('#help-info').toggle(100);});
 
     $('#wait').on('switchChange.bootstrapSwitch',function(){
     var fn = $('#upload-file').val();

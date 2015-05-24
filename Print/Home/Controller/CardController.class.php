@@ -77,7 +77,17 @@ class CardController extends Controller {
 		$id = use_id('User/index');
 		$Cardlog = D('CardlogView');
 		$this->lost = $Cardlog->where("lost_id=$id")->field('id,find_id,find_name,find_number,time,status')->order('id desc')->select();
-		$this->find = $Cardlog->where("find_id=$id")->field('id,lost_id,lost_name,lost_number,time,status')->order('id desc')->select();
+		$find = $Cardlog->where("find_id=$id")->field('id,lost_id,lost_name,lost_number,time,status')->order('id desc')->select();
+
+		foreach ($find as $i => $f)
+		{
+			if ($f['lost_id'] == 0)
+			{
+				$find[$i]['lost_name'] = '非云印用户';
+				$find[$i]['lost_number'] = '尚未注册';
+			}
+		}
+		$this->find = $find;
 		$this->display();
 	}
 
@@ -455,6 +465,7 @@ class CardController extends Controller {
 		}
 		else
 		{
+			M('Cardlog')->where('id=%d', $msg_id)->delete();
 			$this->error('发送失败，请通过其他方式寻找失主或联系我们');
 		}
 

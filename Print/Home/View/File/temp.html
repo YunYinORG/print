@@ -11,8 +11,8 @@
 
 <div class="container-fluid">
     <div>
-        <h2>设置打印信息<button type="button" class="btn btn-primary btn-normal" data-toggle="modal" data-target="#printhelp">
-打印帮助</button></h2>
+        <h2>设置打印信息<!--button type="button" class="btn btn-primary btn-normal" data-toggle="modal" data-target="#printhelp">
+打印帮助</button--></h2>
     </div>
     <br/>
     <form id="print" method="post" action="__URL__/uploadOne" enctype="multipart/form-data">
@@ -106,7 +106,7 @@
     </div>
     </form>
 
-<!-- Modal -->
+<!-- Modal>
 <div class="modal fade" id="printhelp" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -130,7 +130,7 @@
       </div>
     </div>
   </div>
-</div>
+</div-->
 
 
 </div>
@@ -150,7 +150,7 @@ var Files = function() {
 };
 
 Files.prototype.addFile = function(file) {
-    var legal = (file instanceof PDF)||(file instanceof DOC)||(file instanceof PPT)
+    var legal = (file instanceof PDF)||(file instanceof DOC)||(file instanceof PPT);
     if (legal) {
         this.files.push(file);
     };
@@ -171,7 +171,7 @@ Files.prototype.delete = function(id) {
                 } else {
                     alert(data.info);
                 }
-            });
+        });
     }
     else
     {
@@ -241,15 +241,15 @@ function uploaded() {
     if (this.readyState==4) {
         var file_view = $('#file_'+this.id);
         var span = file_view.find('span');
-        if (this.status==200) {
+        if (this.status==200){
             file_queue.files[this.id].uploadStatus = true;
             file_queue.length++;
-            span.html('uploaded');
-            span.append('<button type="button" class="btn btn-danger btn-xs delete" onclick="deleteFile(this)">delete</button>');
+            span.html('<span class="glyphicon glyphicon-ok"></span>');
+            span.append('<button class="glyphicon glyphicon-remove delete" onclick="deleteFile(this)"></button>');
         }
         else {
-            span.html('upload failed');
-            span.append('<button type="button" class="btn btn-primary btn-xs re-upload" onclick="reUpload(this)">reUpload</button><button type="button" class="btn btn-danger btn-xs delete" onclick="deleteFile(this)">delete</button>');
+            span.html('上传失败');
+            span.append('<button class="glyphicon glyphicon-repeat re-upload" onclick="reUpload(this)"></button><button class="glyphicon glyphicon-remove delete" onclick="deleteFile(this)"></button>');
         }
     }
 }
@@ -273,34 +273,30 @@ File.prototype.getToken = function() {
 };
 var temp = function() {};
 temp.prototype = File.prototype;
-
 var PDF = function(id,name,suffix) {
     File.apply(this,arguments);
-    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span style="color:red">uploading</span></li>');
+    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span><span class="btn btn-xs btn-success">上传中..</span></span></li>');
 }
 PDF.prototype = new temp();
 
 var DOC = function(id,name,suffix) {
     File.apply(this,arguments);
-    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'(支持的格式，但更推荐pdf)<span style="color:red">uploading</span></li>');
+    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'(支持的格式，但更推荐pdf)<span class="btn btn-xs btn-success">上传中..</span>');
 }
 DOC.prototype = new temp();
 
 var PPT = function(id,name,suffix) {
     File.apply(this,arguments);
-    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span style="color:red">uploading</span></li>');
+    $("#upload-list").append('<li class="list-group-item" id="file_'+id+'">当前文件：'+name +'<span class="btn btn-xs btn-success">上传中..</span>');
 }
 PPT.prototype = new temp();
 
 var UNKNOWN = function(name,error_type) {
-    if(error_type=='big')
-    {
-      $("#upload-list").append('<li class="list-group-item">当前文件：'+filename +'<span style="color:red">文件太大了</span></li>'); 
-    }else if(error_typle =='suffix')
-    {
-     $("#upload-list").append('<li class="list-group-item">当前文件：'+name +'<span style="color:red">后缀名不对</span></li>');
-    }else{
-    }
+    if(error_type=='big') {
+      $("#upload-list").append('<li class="list-group-item">当前文件：'+filename +'<span class="btn btn-xs btn-danger">文件过大</span>');
+    } else if(error_typle =='suffix') {
+        $("#upload-list").append('<li class="list-group-item">当前文件：'+name +'<span class="btn btn-xs btn-danger">不支持的格式</span>');
+    } else{}
 }
 
 var file_queue = new Files();
@@ -446,7 +442,6 @@ function reUpload (e) {
     var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
     id = parseInt(id);
     file_queue.reUpload(id);
-
         var file_view = $('#file_'+id);
         var span = file_view.find('span');
         span.html('uploading');

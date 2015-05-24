@@ -10,26 +10,24 @@
     <div class="row col-xs-offset-0 col-xs-12 col-md-offset-1 col-md-10">
         <div class="alert alert-warning">
             <p>欢迎来到——便捷、高效的通知平台，拒绝丢失物品刷屏，净化微博、人人、朋友圈<br/>
-            在这里，你给失主的留言将和预先设定的文字模板组合成一条状态，并发送到云印的微博和人人公众平台</p>
+            在这里，你给失主的留言将和预先设定的文字模板组合成一条状态，并发送到云印的微博和人人公众平台<br/>以及南开BBS或北洋BBS（根据失主卡号判断学校选择相应平台）</p>
             <p><a href="http://weibo.com/cloudPrint">云印南天官方微博</a>和<a href="http://page.renren.com/602117408">人人公众主页</a>将立即发送此招领信息，请关注动态</p>
         </div>
     </div>
     <form id="sendform" method="post" onsubmit="return check(this);" action="__URL__/send">
         <div class="row col-xs-offset-0 col-xs-12 col-md-offset-1 col-md-10 form-group">
             <label>你想对失主说的话：</label>
-            <textarea maxlength="60" placeholder="留下你的联系方式（如：联系手机12xxxxxx）或者告诉他去哪里取（如：6宿大爷处取卡）" class="form-control" rows="3" name="add_msg" id="add_msg" onkeyup="preview_send()" required></textarea>
-        </div>
-        <div class="row col-xs-offset-0 col-xs-12 col-md-offset-1 col-md-10 form-group">
-            <label>将发送的信息预览：</label>
-            <div id="preview_msg" class="bg-info" style="margin-top:10px; margin-bottom:10px;">{$send_msg} </div>
+            <textarea maxlength="60" placeholder="留下你的联系方式（如：联系手机12xxxxxx）或者告诉他去哪里取（如：6宿大爷处取卡）" class="form-control" rows="3" name="add_msg" id="add_msg" required></textarea>
         </div>
         <div class="row form-group">
             <div class="col-xs-offset-0 col-xs-12 col-md-offset-1 col-md-10 text-center">
-                <div>
+                <label class="checkbox inline">
                     <input type="checkbox" name="anonymity" id="anonymity">匿名</input>
-                    <input type="checkbox" name="add_phone" id="add_phone"><code>公开你的手机号</code></input>
-                </div>
-                <button class="btn btn-lg btn-default" type="submit">发布</button>
+                </label>
+                <label class="checkbox inline">
+                    <input type="checkbox" name="add_phone" id="add_phone"><code>告诉失主你的手机号(仅在校内BBS显示)</code></input>
+                </label>
+                <button class="btn btn-lg btn-default" type="submit">预览</button>
                 <a class="btn btn-lg btn-default" href="/Card">返回</a>
             </div>
         </div>
@@ -57,14 +55,11 @@
 </BLOCK>
 <BLOCK name='end'>
 <script>
-function preview_send(){
-    var send_msg = document.getElementById('send_msg').value;
-    var add_msg = document.getElementById('add_msg').value;
-    document.getElementById("preview_msg").innerHTML = send_msg + '<strong>' + add_msg + '</strong>';
-}
 function check(f)
 {
-    var send_msg = document.getElementById('preview_msg').innerHTML;
+    var send_msg = document.getElementById('send_msg').value;
+    var add_msg = document.getElementById('add_msg').value;
+    send_msg += '<strong>' + add_msg + '</strong>';
     if(document.getElementById('anonymity').checked)
     {
         var finder_name = document.getElementById('finder_name').value;
