@@ -82,7 +82,7 @@ class FileController extends RestController {
 					$where['id'] = array('gt', $start_id);
 				}
 				$cache_key = false;
-				$field .= 'id,color,ppt_layout,double_side,copies,status,name,time,';
+				$field .= 'id,color,ppt_layout,double_side,copies,status,name,time,requirements';
 				$files = $File->field($field)->where($where)->page($page, 10)->cache($cache_key, 10)->select();
 				if ($info['type'])
 				{
