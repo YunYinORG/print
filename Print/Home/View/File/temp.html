@@ -57,7 +57,7 @@
         <div class="row form-group text-cneter">
                 <div class="col-lg-2 col-lg-offset-1 col-xs-4 col-xs-offset-1">
                    <label for="wait" class="sr-only">设置</label>
-                    <input name="wait" id="wait" type="checkbox" data-label-text="设置" data-off-text="到店打印"  data-on-text="提前打印" data-off-color="success" data-on-color="warning" data-label-width="" disabled="true" checked="checked" />
+                    <input name="wait" id="wait" type="checkbox" data-label-text="设置" data-off-text="提前打印"  data-on-text="到店打印" data-off-color="warning" data-on-color="success" data-label-width="" disabled="true" checked="checked" />
                 </div>
                 <div class="setting">
                 <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
@@ -146,6 +146,7 @@ var Files = function() {
     this.files = [];
     this.printer = null;
     this.print_ahead = null;
+    this.pptnum = 0;
     this.length = 0;
 };
 
@@ -153,32 +154,30 @@ Files.prototype.addFile = function(file) {
     var legal = (file instanceof PDF)||(file instanceof DOC)||(file instanceof PPT);
     if (legal) {
         this.files.push(file);
+        this.length++;
     };
 };
 
-Files.prototype.delete = function(id) { 
-    var temp = this;
-    if (file_queue.files[id].uploadStatus) 
+Files.prototype.delete = function(id) {
+    if(this.files[id].suffix=="ppt")
     {
-        var URL = "/File/deleteTempFile";
-        $.post(URL, {
-                path : temp.files[id].newname
-            }, function(data) {
-                if (data.status) {
-                    alert(data.info);
-                    temp.files[id] = undefined;
-                    temp.length--;
-                } else {
-                    alert(data.info);
-                }
-        });
+        this.pptnum--;
+
     }
-    else
+    $('#file_'+id).remove();
+    this.length--;
+    if(this.pptnum==0)
     {
-        temp.files[id] = undefined;
-        temp.length--;
+        $('#pptprint').hide();
+        $('#default').removeAttr('required');
     }
-};
+    if(this.length==0)
+    {
+        $('.setting').hide();
+        $('#wait').bootstrapSwitch('disabled',true);
+    }
+    this.files[id]=undefined;
+}
 
 Files.prototype.reUpload = function(id) {
     this.files[id].getToken();
@@ -243,7 +242,6 @@ function uploaded() {
         var span = file_view.find('span');
         if (this.status==200){
             file_queue.files[this.id].uploadStatus = true;
-            file_queue.length++;
             span.html('<span class="glyphicon glyphicon-ok"></span>');
             span.append('<button class="glyphicon glyphicon-remove delete" onclick="deleteFile(this)"></button>');
         }
@@ -320,10 +318,10 @@ function checkSuffix() {
         var suffix = filename.substring(pos+1);
         var newFile = null;
         var samename =false;
-        for (var i = 0; i< file_queue.files.length; i++)        
+        for (var j = 0; j< file_queue.files.length; j++)        
         {
-            if (file_queue.files[i]!==undefined) {
-            if(filename == file_queue.files[i].name)
+            if (file_queue.files[j]!==undefined) {
+            if(filename == file_queue.files[j].name)
             {
                 samename=true;
                 break;
@@ -344,7 +342,11 @@ function checkSuffix() {
             newFile = new PPT(file_queue.files.length,filename,suffix); 
             newFile.getToken();
             file_queue.addFile(newFile);
-            $('#pptprint').show();
+            if(file_queue.pptnum==0&&($('#wait').bootstrapSwitch('state')==false))
+            {
+                $('#pptprint').show();
+            }
+            file_queue.pptnum++;
             $('#default').attr('required','true');
         }
         else if (pdf_suffix.indexOf(suffix)>=0) 
@@ -434,8 +436,25 @@ $("#print").submit(function(e){
 function deleteFile (e) {
     var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
     id = parseInt(id);
-    file_queue.delete(id);
-    $('#file_'+id).remove();
+    var temp = file_queue.files[id];
+
+    if (temp.uploadStatus) 
+    {
+        var URL = "/File/deleteTempFile";
+        $.post(URL, {
+                path : temp.newname
+            }, function(data) {
+                if (data.status) {
+                    file_queue.delete(id);
+                } else {
+                    alert(data.info);
+                }
+        });
+    }
+    else
+    {
+        file_queue.delete(id);
+    }
 }
 
 function reUpload (e) {
@@ -471,19 +490,16 @@ $(function(){
     $("[type='checkbox']").bootstrapSwitch();
     $('.setting').hide();
     $('#wait').on('switchChange.bootstrapSwitch',function(){
-    var fn = $('#upload-file').val();
-    var pos = fn.lastIndexOf('.');
-    var suf = fn.substring(pos + 1);
-    var other_suffix =['ppt' , 'pptx'];
     if($('#wait').bootstrapSwitch('state') ==true){
         $('.setting').hide(100);
         $('#default').removeAttr('required');
     } else {
         $('.setting').show(100);
-        if(other_suffix.indexOf(suf) < 0) {
+        if(file_queue.pptnum==0) {
             $('#default').removeAttr('required');
             $('#pptprint').hide();
         } else {
+            $('#pptprint').show();
             $('#default').attr('required','true');
         }
     }
