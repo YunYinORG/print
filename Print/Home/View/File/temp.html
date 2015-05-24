@@ -142,55 +142,12 @@
 
 <script language="javascript" type="text/javascript">
 
-$(function(){
-    $("[type='checkbox']").bootstrapSwitch();
-    $('.setting').hide();
-    $('#wait').on('switchChange.bootstrapSwitch',function(){
-    var fn = $('#upload-file').val();
-    var pos = fn.lastIndexOf('.');
-    var suf = fn.substring(pos + 1);
-    var other_suffix =['ppt' , 'pptx'];
-    if($('#wait').bootstrapSwitch('state') ==true){
-        $('.setting').hide(100);
-        $('#default').removeAttr('required');
-    } else {
-        $('.setting').show(100);
-        if(other_suffix.indexOf(suf) < 0) {
-            $('#default').removeAttr('required');
-            $('#pptprint').hide();
-        } else {
-            $('#default').attr('required','true');
-        }
-    }
-    });
-});
-
 var Files = function() {
     this.files = [];
     this.printer = null;
     this.print_ahead = null;
     this.length = 0;
 };
-
- function priceChange(n){
-    var pid = n.value;
-    var URL = "/Printers/getPrice";
-    $.post(URL, {
-            pid : pid
-        }, function(data) {
-            if (data.status) {
-                $('#p_c_s').html(data.info.p_c_s+'元/张');
-                $('#p_c_d').html(data.info.p_c_d+'元/张');
-                $('#p_s').html(data.info.p_s+'元/张');
-                $('#p_d').html(data.info.p_d+'元/张');
-            } else {
-                $('#p_c_s').html("未设置");
-                $('#p_c_d').html("未设置");
-                $('#p_s').html("未设置");
-                $('#p_d').html("未设置");
-            }
-        });
-}
 
 Files.prototype.addFile = function(file) {
     var legal = (file instanceof PDF)||(file instanceof DOC)||(file instanceof PPT)
@@ -236,63 +193,6 @@ function File(id,name,suffix)
     this.uploadStatus = false;
     this.newname = null;
 }
-
-
-// function completeHandler (myXhr,status) {
-//     if (myXhr.readyState==4) {
-//         // var temp_name = myXhr.
-//         var file_view = $('#file_'+myXhr.id);
-//         var span = file_view.find(span);
-//         if (myXhr.status==200) {
-//             myXhr.uploadStatus = true;
-//             span.html('uploaded');
-//             span.append('<button type="button" class="btn btn-danger btn-xs delete" onclick="deleteFile(this)">delete</button>');
-//         }
-//         else {
-//             span.html('upload failed');
-//             span.append('<button type="button" class="btn btn-primary btn-xs re-upload" onclick="reUpload(this)">reUpload</button>');
-//         }
-//     }
-// }
-// function beforeSendHandler (myXhr,settings) {
-    
-// }
-// function errorHandler (myXhr,status,error) {
-    
-// }
-
-// function progressHandlingFunction (e) {
-//     if (e.lengthComputable) {
-//         $('#progress').html('value:'+e.loaded+'max:'+e.total);
-//     };
-// }
-// File.prototype.uploadFile = function() {
-//     var url = 'http://upload.qiniu.com/';
-//     var file = document.getElementById('upload-file').files[this.id];
-//     var fd = new FormData();
-//     fd.append('file',file);
-//     fd.append('token',this.token);
-//     fd.append('key',this.newname);
-//     $.ajax({
-//         url:url,
-//         type:'POST',
-//         xhr:function  () {
-//             var myXhr = $.ajaxSettings.xhr();
-//             if (myXhr.upload) {
-//                 myXhr.upload.addEventListener('progress',progressHandlingFunction,false);
-//             };
-//             return myXhr;
-//         },
-//         beforeSend: beforeSendHandler,
-//         complete: completeHandler,
-//         error: errorHandler,
-//         data: fd,
-//         cache: false,
-//         contentType:false,
-//         processData: false
-//     });
-// };
-
 
 File.prototype.uploadFile = function() {
     var url = 'http://upload.qiniu.com/';
@@ -563,6 +463,48 @@ function reUpload (e) {
         span.html('uploading');
 }
 
+function priceChange(n){
+    var pid = n.value;
+    var URL = "/Printers/getPrice";
+    $.post(URL, {
+            pid : pid
+        }, function(data) {
+            if (data.status) {
+                $('#p_c_s').html(data.info.p_c_s+'元/张');
+                $('#p_c_d').html(data.info.p_c_d+'元/张');
+                $('#p_s').html(data.info.p_s+'元/张');
+                $('#p_d').html(data.info.p_d+'元/张');
+            } else {
+                $('#p_c_s').html("未设置");
+                $('#p_c_d').html("未设置");
+                $('#p_s').html("未设置");
+                $('#p_d').html("未设置");
+            }
+        });
+}
+
+$(function(){
+    $("[type='checkbox']").bootstrapSwitch();
+    $('.setting').hide();
+    $('#wait').on('switchChange.bootstrapSwitch',function(){
+    var fn = $('#upload-file').val();
+    var pos = fn.lastIndexOf('.');
+    var suf = fn.substring(pos + 1);
+    var other_suffix =['ppt' , 'pptx'];
+    if($('#wait').bootstrapSwitch('state') ==true){
+        $('.setting').hide(100);
+        $('#default').removeAttr('required');
+    } else {
+        $('.setting').show(100);
+        if(other_suffix.indexOf(suf) < 0) {
+            $('#default').removeAttr('required');
+            $('#pptprint').hide();
+        } else {
+            $('#default').attr('required','true');
+        }
+    }
+    });
+});
 
 </script>
 </BLOCK>
