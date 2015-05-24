@@ -160,9 +160,6 @@ create table school
    primary key (id)
 );
 
-INSERT INTO `school` (`id`, `name`, `address`) VALUES
-(1, '南开大学', '天津市 南开区 卫津路94号'),
-(2, '天津大学', '天津市 南开区 卫津路92号');
 
 /*==============================================================*/
 /* Table: token                                                 */
@@ -226,3 +223,10 @@ alter table printer add constraint FK_printer_blong_to_school foreign key (sch_i
 alter table user add constraint FK_user_blong_to_school foreign key (sch_id)
       references school (id) on delete restrict on update restrict;
 
+INSERT INTO `school` (`id`, `name`, `address`) VALUES
+(1, '南开大学', '天津市 南开区 卫津路94号'),
+(2, '天津大学', '天津市 南开区 卫津路92号'),
+(0, '无学校', '')；
+
+INSERT INTO 'user'('id','sch_id') VALUES ('0','0' );
+INSERT INTO 'card'('id') VALUES ('0');
