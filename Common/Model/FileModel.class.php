@@ -67,6 +67,7 @@ class FileModel extends Model {
 			}
 			else
 			{
+				$this->data['copies']=$copies;
 				$this->data['double_side'] = I('post.double_side', 0, 'int');
 				$this->data['color'] = I('post.color', 0, 'int');
 				$this->data['ppt_layout'] = I('post.ppt_layout', 0, 'int');
