@@ -60,6 +60,16 @@
     </FOREACH>
     </EMPTY>
 </section>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal_label">TA的手机</h3>
+            </div>
+                <div class="modal-body" id='modal_content'></div>
+        </div>
+    </div>
+</div>
 </BLOCK>
 <BLOCK name='end'>
 <script>
@@ -111,9 +121,11 @@ $(".showPhone").click(function(){
     $.post(url, {
             'id': id
         }, function(data, result){
-            if (result == 'success') {
-                alert("TA的手机号码是：" + data.info.phone);
+            if (result == 'success'){
+                $("#modal_label").html('查询结果');
+                $("#modal_content").html('TA的手机号码是:<strong>' + data.info.phone +'</strong>');
             }
+            $("#modal").modal('show');
         }                   
     );
 });
