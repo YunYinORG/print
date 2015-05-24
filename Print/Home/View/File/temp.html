@@ -156,11 +156,11 @@ Files.prototype.addFile = function(file) {
     };
 };
 
-Files.prototype.delete = function(id) {
+Files.prototype.delete = function(id) { 
+    var temp = this;
     if (file_queue.files[id].uploadStatus) 
     {
         var URL = "/File/deleteTempFile";
-        var temp = this;
         $.post(URL, {
                 path : temp.files[id].newname
             }, function(data) {
@@ -213,7 +213,6 @@ File.prototype.uploadFile = function() {
     }
     fd.append('file',files[id]);
     fd.append('token',this.token);
-    fd.append('key','temp_'+this.newname);
     var xmlhttp=null;
     if (window.XMLHttpRequest)
     {
@@ -347,7 +346,7 @@ function checkSuffix() {
         }
         if (other_suffix.indexOf(suffix)>=0)
         {
-            newFile = new PPT(file_queue.files.length,filename,suffix);
+            newFile = new PPT(file_queue.files.length,filename,suffix); 
             newFile.getToken();
             file_queue.addFile(newFile);
             $('#pptprint').show();
@@ -355,15 +354,15 @@ function checkSuffix() {
         }
         else if (pdf_suffix.indexOf(suffix)>=0) 
         {
-            newFile = new PDF(file_queue.files.length,filename,suffix);
+            newFile = new PDF(file_queue.files.length,filename,suffix); 
             newFile.getToken();
             file_queue.addFile(newFile);
         }
         else if (doc_suffix.indexOf(suffix)>=0)
         {            
-            newFile = new DOC(file_queue.files.length,filename,suffix);
+            newFile = new DOC(file_queue.files.length,filename,suffix); 
             newFile.getToken();
-            file_queue.addFile(newFile);
+            file_queue.addFile(newFile); 
         }
         else
         {
@@ -456,10 +455,8 @@ function reUpload (e) {
     id = parseInt(id);
     file_queue.reUpload(id);
 
-        var file_view = $('#file_'+this.id);
+        var file_view = $('#file_'+id);
         var span = file_view.find('span');
-        file_queue.files[this.id].uploadStatus = true;
-        file_queue.length++;
         span.html('uploading');
 }
 
