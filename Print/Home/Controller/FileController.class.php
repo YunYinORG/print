@@ -264,7 +264,7 @@ class FileController extends Controller {
 			{
 				/*更新上传映射*/
 				unset($upload_list[$path]);
-				session('uploads',$file_cache);
+				session('uploads',$upload_list);
 				
 				/*删除文件*/
 				if (delete_file($path,'QINIU'))

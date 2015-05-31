@@ -18,7 +18,7 @@
         <div class="row">
             <div class="text-center col-lg-8 col-lg-offset-1  col-md-8 col-xs-12">
                 <div class="form-group">
-                    <div class="upload-btn">
+                    <div class="upload-btn" id="upload-btn">
                         <div class="upload-area"><span class="glyphicon glyphicon-open"></span>点击上传文件<small>(不超过10MB)</small></div>
                         <input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="checkSuffix()" 
                         multiple="multiple">
@@ -120,6 +120,7 @@ var Files = function() {
     this.print_ahead = null;
     this.pptnum = 0;
     this.length = 0;
+    this.uploaded = 0;
 };
 
 Files.prototype.addFile = function(file) {
@@ -134,7 +135,6 @@ Files.prototype.delete = function(id) {
     if(this.files[id].suffix=="ppt")
     {
         this.pptnum--;
-
     }
     $('#file_'+id).remove();
     this.length--;
@@ -147,13 +147,29 @@ Files.prototype.delete = function(id) {
     {
         $('.setting').hide();
         $('#wait').bootstrapSwitch('disabled',true);
+        $('#fileUploadButton').attr('disabled', false);
     }
     this.files[id]=undefined;
+    this.updateInput();
 }
 
 Files.prototype.reUpload = function(id) {
     this.files[id].getToken();
 };
+
+Files.prototype.updateInput = function()
+{
+    if(this.uploaded==this.length)
+    {
+        var temp = document.getElementById('upload-file');
+        temp.remove();
+        temp = document.getElementById('upload-btn');
+        temp =$('#upload-btn');
+        temp.append('<input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="checkSuffix()" multiple="multiple">');
+    }
+}
+
+
 
 function File(id,name,suffix)
 {
@@ -215,6 +231,8 @@ function uploaded() {
         var attr = file_view.find('.file_attr');
         if (this.status==200){
             file_queue.files[this.id].uploadStatus = true;
+            file_queue.uploaded++;
+            file_queue.updateInput();
             attr.removeClass();
             attr.addClass("file_attr label label-success");
             attr.html('上传成功');
@@ -281,12 +299,6 @@ var pdf_suffix = ['pdf'];
 var other_suffix = ['ppt', 'pptx'];
 
 function checkSuffix() {
-    $("#wait").bootstrapSwitch('disabled',false);
-    $("#pptprint").hide();
-    $('#copies').attr('disabled', false);
-    $('#double_side').bootstrapSwitch('disabled', false);
-    $('#printcolor').bootstrapSwitch('disabled', false);
-    $("#fileUploadButton").attr('disabled', false);
     var files = document.getElementById('upload-file').files;
     for (var i = 0; file = files[i]; i++) 
     {
@@ -319,10 +331,6 @@ function checkSuffix() {
             newFile = new PPT(file_queue.files.length,filename,suffix); 
             newFile.getToken();
             file_queue.addFile(newFile);
-            if(file_queue.pptnum==0&&($('#wait').bootstrapSwitch('state')==false))
-            {
-                $('#pptprint').show();
-            }
             file_queue.pptnum++;
             $('#default').attr('required','true');
         }
@@ -343,18 +351,25 @@ function checkSuffix() {
             newFile = new UNKNOWN(filename,'suffix');
         }
     }
+    if(file_queue.files.length)
+    {
+    $("#wait").bootstrapSwitch('disabled',false);
+    $("#pptprint").hide();
+    $('#copies').attr('disabled', false);
+    $('#double_side').bootstrapSwitch('disabled', false);
+    $('#printcolor').bootstrapSwitch('disabled', false);
+    $("#fileUploadButton").attr('disabled', false);
+    if(file_queue.pptnum>0&&($('#wait').bootstrapSwitch('state')==false))
+    {
+        $('#pptprint').show();
+    }
+    }
 }
 
 $("#upload-file").click(function(e){
-    for (var i = 0; i < file_queue.files.length; i++) {
-             var file = file_queue.files[i];
-             if (file!==undefined) {
-             if(file.uploadStatus==false)
-             {
-                //alert('wait');
-                return false;
-             }
-             }
+    if(file_queue.uploaded!=file_queue.length)
+    {
+        return false;
     }
 });
 
@@ -409,7 +424,6 @@ function deleteFile (e) {
     var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
     id = parseInt(id);
     var temp = file_queue.files[id];
-
     if (temp.uploadStatus) 
     {
         var URL = "/File/deleteTempFile";
@@ -417,6 +431,7 @@ function deleteFile (e) {
                 path : temp.newname
             }, function(data) {
                 if (data.status) {
+                    file_queue.uploaded--;
                     file_queue.delete(id);
                 } else {
                     alert(data.info);
