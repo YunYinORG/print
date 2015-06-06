@@ -175,6 +175,27 @@ function upload_token($save_name)
 	$token = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($config['secretKey'], $config['accessKey'], json_encode($setting));
 	return $token;
 }
+
+
+function test($name)
+{
+    $config = C('UPLOAD_CONFIG_QINIU');
+    $key    = str_replace('/', '_', $name);
+    $qiniu   = new \Think\Upload\Driver\Qiniu\QiniuStorage($config);
+    $fops = 'odconv/jpg/page/1/density/150/quality/80/resize/800';
+    $url = "http://".$config['domain'].$key."?".$fops;
+    $deadline = time() + 3600;
+    $pos = strpos($url, '?');
+    if ($pos !== false) {
+        $url .= '&e=';
+    } else {
+        $url .= '?e=';
+    }
+    $url .= $deadline;
+    $token = $qiniu->sign($config['secretKey'],$config['accessKey'],$url);
+    return $url."&token=".$token;
+}
+
 /**
  * 上传文件
  * upload_file($storage='')
@@ -231,6 +252,7 @@ function rename_file($old_name,$new_name)
 	$qiniu   = new \Think\Upload\Driver\Qiniu\QiniuStorage($config);
 	return $qiniu->rename($old_url, $new_url);
 }
+
 
 /**
  *  删除上传文件
