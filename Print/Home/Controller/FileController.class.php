@@ -48,6 +48,7 @@ class FileController extends Controller {
 			foreach ($result as &$file)
 			{
 				$file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
+                $file['pdf'] = substr($file['name'],-4)==".pdf";
 			}
 			unset($file);
 			$this->data = $result;
@@ -336,10 +337,19 @@ class FileController extends Controller {
 		$this->error('当前状态不允许删除！');
 	}
 
+    public function getThumbnail()
+    {
+        $fid = I('id');
+        $map['id'] = $fid;
+		$File = M('File');
+		$result = $File->where($map)->Field('url')->find();		
+        redirect(test($result['url']));
+    }
+
 	public function _empty()
 	{
 		$this->redirect('index');
-	}
+    }
 
 	/**
 	 * 获取文件后缀名
