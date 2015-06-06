@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/3/15 15:00:34                           */
+/* Created on:     2015/6/6 19:00:00                           */
 /*==============================================================*/
 
 
@@ -25,6 +25,12 @@ drop table if exists school;
 drop table if exists token;
 
 drop table if exists user;
+
+drop table if exists share;
+
+drop table if exists hastag;
+
+drop table if exists tag;
 
 /*==============================================================*/
 /* Table: card                                                  */
@@ -193,6 +199,42 @@ create table user
    unique key AK_student_number_unique (student_number)
 );
 
+/*==============================================================*/
+/* Table: share                                                  */
+/*==============================================================*/
+create table share
+(
+	id 					bigint not null auto_increment,
+	fil_id				bigint not null,
+	time 				timestamp not null default CURRENT_TIMESTAMP,
+	name 				char(32) not null,
+	anomonity 			bool,
+	primary key(id)
+);
+
+/*==============================================================*/
+/* Table: tag                                                  */
+/*==============================================================*/
+create table tag
+(
+	id 					bigint not null auto_increment,
+	user_id 			bigint not null,
+	content 			char(16) not null,
+	count 				bigint,
+	time 				timestamp not null default CURRENT_TIMESTAMP,
+	primary key(id)
+);
+
+/*==============================================================*/
+/* Table: hastag                                            */
+/*==============================================================*/
+create table hastag
+(
+	share_id 			bigint not null,
+	tag_id 				bigint not null,
+	time 				timestamp not null default CURRENT_TIMESTAMP
+);
+
 alter table card add constraint FK_card_info_of_user foreign key (id)
       references user (id) on delete restrict on update restrict;
 
@@ -223,10 +265,22 @@ alter table printer add constraint FK_printer_blong_to_school foreign key (sch_i
 alter table user add constraint FK_user_blong_to_school foreign key (sch_id)
       references school (id) on delete restrict on update restrict;
 
+alter table share add constraint FK_share_of_file foreign key (fil_id) 
+	  references file (id) on delete restrict on update restrict;
+
+alter table tag add constraint FK_tag_of_user foreign key (user_id) 
+      references user (id) on delete restrict on update restrict;	 
+
+alter table hastag add constraint FK_connection_of_share foreign key (share_id) 
+	  references share (id) on delete restrict on update restrict;
+
+alter table hastag add constraint FK_connetction_of_tag foreign key (tag_id) 
+      references tag (id) on delete restrict on update restrict;	  
+
 INSERT INTO `school` (`id`, `name`, `address`) VALUES
 (1, '南开大学', '天津市 南开区 卫津路94号'),
 (2, '天津大学', '天津市 南开区 卫津路92号'),
-(0, '无学校', '')；
+(0, '无学校', '');
 
-INSERT INTO 'user'('id','sch_id') VALUES ('0','0' );
-INSERT INTO 'card'('id') VALUES ('0');
+INSERT INTO `user`(`id`,`sch_id`) VALUES ('0','0' );
+INSERT INTO `card`(`id`) VALUES ('0');
