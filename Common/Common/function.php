@@ -177,7 +177,7 @@ function upload_token($save_name)
 }
 
 
-function test($name)
+function get_thumbnail_url($name)
 {
     $config = C('UPLOAD_CONFIG_QINIU');
     $key    = str_replace('/', '_', $name);

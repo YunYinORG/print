@@ -343,7 +343,14 @@ class FileController extends Controller {
         $map['id'] = $fid;
 		$File = M('File');
 		$result = $File->where($map)->Field('url')->find();		
-        redirect(test($result['url']));
+        echo(get_thumbnail_url($result['url']));
+    }
+
+    public function getLabel()
+    {
+        $label = I('label');
+        $label_list = array(['id'=>'1','name'=>$label.rand()],['id'=>'2','name'=>$label.rand()],['id'=>'3','name'=>$label.rand()]);
+        $this->success($label_list);
     }
 
 	public function _empty()

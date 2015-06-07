@@ -89,18 +89,26 @@
               <div class="modal-body">   
                   <form>
                       <div class="form-group">
-                          <label for="recipient-name" class="control-label">Recipient:</label>
-                          <input type="text" class="form-control" id="recipient-name">
-                      </div>
+                          <label for="filename-input" class="control-label">filename:</label>
+                          <input type="text" class="form-control" id="filename-input">
+                     </div>
+                     <div class="form-group" id="chosen-label">
+                     </div>
                       <div class="form-group">
-                          <label for="message-text" class="control-label">Message:</label>
-                          <textarea class="form-control" id="message-text"></textarea>
-                      </div>    
+                          <label for="label-input" class="control-label">label:</label>
+                            <input type="text" id="label-input" list="label-list" placeholder="input your label" onkeyup="getLabel()" onkeydown="addLabel()"> 
+                            <datalist id="label-list"></datalist>
+                      </div>
+                      <div class="checkbox">
+                          <label>
+                              <input type="checkbox" id="display-name">display name? 
+                          </label>
+                      </div>
                   </form>
               </div>                       
               <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>                                                                                
-                    <button type="button" class="btn btn-primary">Share</button>                                                                
+                    <button type="button" id="share-btn" class="btn btn-primary">Share</button>            
                 </div>
             </div>
         </div>    
@@ -127,12 +135,119 @@
             });
             }
         });
+
+var label_data = null;
+var label_arr = new Array();
+var share_fid = -1;
+
 $('#share').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
-        var fid = button.data('fid');
+        share_fid = button.data('fid');
         var filename = button.parent().text().trim();
         var modal = $(this);
-        modal.find('.modal-title').text('Share ' + filename);
-        })
+        modal.find('.modal-title').text('Share your file');
+        $('#filename-input').val(filename);
+        $('#chosen-label').html('');
+        label_arr = null;
+        label_arr = new Array();
+        label_data = null;
+})
+
+function checkInput(input)
+{
+    return input;
+}
+
+function getLabel()
+{
+    if(event.KeyCode==13) return;
+    var datalist = $('#label-list');
+    datalist.html('');
+    var input = $('#label-input');
+        var URL = "__ROOT__/File/getLabel";
+            $.post(URL,{
+                label: checkInput(input.val())
+            },function(data){
+                if(data.status)
+                {
+                    var datalist = $('#label-list');
+                    label_data = data.info;
+                    for(var i=0;info = label_data[i];i++)
+                    {
+                        datalist.append('<option id="'+info.id+'" value="'+info.name+'"></option>'); 
+                    }
+                }
+            });
+}
+
+
+function addLabel()
+{
+    if(event.keyCode!=13) return;
+    var input = document.getElementById('label-input');
+    var input_val = checkInput(input.value);
+    if(input_val=='') return;
+    var label_id=-1;
+    for(var i=0;label=label_data[i];i++)
+    {
+        if(label.name==input_val)
+        {
+            label_id=label.id;
+            break;
+        }
+    }
+    if(label_id==-1)
+    {
+
+        var URL = "__ROOT__/File/addLabel";
+        $.post(URL,{
+            label: input_val
+        },function(data){
+            if(data.status){
+            label_id = data.info;
+            }else{
+                alert('fail to add label');
+            }
+        });
+    }
+    if(label_id!=-1)
+    {
+        var i=0;
+        for(;i<label_arr.length;i++)
+        {
+            if(label_arr[i]!==undefined&&label_arr[i]==label_id)
+            {
+                alert('already there');
+                input.value='';
+                break;
+            }
+        }
+        if(i==label_arr.length)
+        {
+        label_arr.push(label_id);
+        var chosen_label = $('#chosen-label');
+        chosen_label.append('<span id="label" class="label label-primary">'+input.value+'</span>');
+        input.value='';
+        }
+    }
+}
+
+        $("#share-btn").on('click',function(){
+            var URL = "__ROOT__/File/share";
+            var input = $('#label-input');
+            var input_val = checkInput(input.value);
+            if(share_fid==-1) return;
+            $.post(URL,{
+                fid:share_fid,
+                label:label_arr
+            },function(data){
+                if(data.status)
+                {
+                    $('#share').modal('hide');
+                }else{
+                    alert('操作失败：'+data.info);
+                }
+            });
+        });
 </script>
 </BLOCK>
