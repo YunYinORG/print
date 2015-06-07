@@ -40,7 +40,8 @@
                 </td>
                 <td style="width:20%">[{$vo.id}]{$vo.name}
                     <IF condition="$vo.pdf eq 1">
-                    <button type="button" class="glyphicon glyphicon-share share" data-toggle="modal" data-target="#share" data-fid="{$vo.id}" style="color:red"></button>    
+                    <a style="text-decoration :none;"><span class="glyphicon glyphicon-share share" data-toggle="modal" data-target="#share" data-fid="{$vo.id}" ></span></a>
+                    <!--button type="button" class="glyphicon glyphicon-share share" data-toggle="modal" data-target="#share" data-fid="{$vo.id}"></button-->
                     </IF>
                 </td>
                 <td>{$vo.time}</td>
@@ -84,7 +85,7 @@
           <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                  <h4 class="modal-title" id="myModalLabel"></h4>
               </div>
               <div class="modal-body">   
                   <form>
@@ -107,8 +108,8 @@
                   </form>
               </div>                       
               <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>                                                                                
-                    <button type="button" id="share-btn" class="btn btn-primary">Share</button>            
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" id="share-btn" class="btn btn-primary">分享</button>     
                 </div>
             </div>
         </div>    
@@ -145,7 +146,7 @@ $('#share').on('show.bs.modal', function (event) {
         share_fid = button.data('fid');
         var filename = button.parent().text().trim();
         var modal = $(this);
-        modal.find('.modal-title').text('Share your file');
+        modal.find('.modal-title').text('分享');
         $('#filename-input').val(filename);
         $('#chosen-label').html('');
         label_arr = null;
