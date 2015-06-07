@@ -70,32 +70,73 @@ class ShareController extends Controller {
 	/**
 	 * 文件详细信息页
 	 * @method detail
-	 * @param  输入
+	 * @param  GET： id
 	 * @author NewFuture[newfuture@yunyin.org]
 	 */
 	public function detail()
 	{
-		$fid = I('id',null,'int');
+		$fid = I('id', null, 'int');
 		$map['id'] = $fid;
-		$File   = M('Share')->getById($fid);//field('name,time,fid,anomonity')
+		$File = M('Share')->getById($fid); //field('name,time,fid,anomonity')
 		$this->data = array('id' => '3', 'name' => 'fsdafadsf', 'upload_user' => 'dafdsf', 'time' => '1999-10-11', 'thumbnail' => get_thumbnail_url($result['url']));
-		$this->tags=M('hastag')->where('sha_id=%d',$fid)->field('name','tag_id')->select();
+		$this->tags = M('hastag')->where('share_id=%d', $fid)->field('name', 'tag_id')->select();
 		$this->display();
 	}
 
 	/**
 	 * 添加分享文件
-	 * @method push
-	 * @param  输入
+	 * 添加成功返回id
+	 * @method add
+	 * @param  输入POST：fid ,name,tags[]数组
 	 * @author NewFuture[newfuture@yunyin.org]
 	 */
 	public function add()
 	{
+		$uid  = use_id();
+		$fid  = I('fid', null, 'int');
+		$name = I('name', null, 'trim');
+		$tags = I('tags', [], 'int');
+		if ( ! $uid)
+		{
+			$this->error('未登录！');
+		}
+		elseif ( ! $fid ||  ! $name)
+		{
+			$this->error('信息不全');
+		}
+		elseif ($uid != M('File')->getFieldById($fid, 'use_id'))
+		{
+			$this->error('这份文件不属于你！');
+		}
+		else
+		{
+			$share['name'] = $name;
+			$share['fil_id'] = $fid;
+			$sid = M('share')->add($share);
+			if (!$sid)
+			{
+				$this->error('共享失败！');
+			}
+			else
+			{
+				$hastag=array();
+				foreach ($tags as $tag) {
+					$hastag=array(
+						'share_id'=>$sid,
+						'tag_id'=>$tag
+						);
+				}
+				M('hastag')->addAll($hastag);
+				$this->success($sid,U('detail','id='.$sid));
+			}
+		}
 	}
 
 	/**
 	 * 创建新的标签
+	 * 创建成功返回 标签id
 	 * @method addTag
+	 * @param POST：name标签名称
 	 * @author NewFuture[newfuture@yunyin.org]
 	 */
 	public function createTag()
