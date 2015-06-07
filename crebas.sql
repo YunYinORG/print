@@ -218,8 +218,8 @@ create table share
 create table tag
 (
 	id 					bigint not null auto_increment,
-	user_id 			bigint not null,
-	content 			char(16) not null,
+	use_id 			bigint not null,
+	name 			char(16) not null,
 	count 				bigint,
 	time 				timestamp not null default CURRENT_TIMESTAMP,
 	primary key(id)
@@ -268,7 +268,7 @@ alter table user add constraint FK_user_blong_to_school foreign key (sch_id)
 alter table share add constraint FK_share_of_file foreign key (fil_id) 
 	  references file (id) on delete restrict on update restrict;
 
-alter table tag add constraint FK_tag_of_user foreign key (user_id) 
+alter table tag add constraint FK_tag_of_user foreign key (use_id) 
       references user (id) on delete restrict on update restrict;	 
 
 alter table hastag add constraint FK_connection_of_share foreign key (share_id) 
