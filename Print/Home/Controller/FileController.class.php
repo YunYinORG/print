@@ -337,13 +337,6 @@ class FileController extends Controller {
 		$this->error('当前状态不允许删除！');
 	}
 
-    public function getLabel()
-    {
-        $label = I('label');
-        $label_list = array(['id'=>'1','name'=>$label],['id'=>'2','name'=>$label.rand()],['id'=>'3','name'=>$label.rand()]);
-        $this->success($label_list);
-    }
-
 	public function _empty()
 	{
 		$this->redirect('index');

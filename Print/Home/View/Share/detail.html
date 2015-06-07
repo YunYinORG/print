@@ -119,7 +119,7 @@ function getLabel()
     var datalist = $('#label-list');
     datalist.html('');
     var input = $('#label-input');
-    var URL = "__ROOT__/File/getLabel";
+    var URL = "__ROOT__/Share/getTags";
     $.post(URL,{
         label: checkInput(input.val())
     },function(data){

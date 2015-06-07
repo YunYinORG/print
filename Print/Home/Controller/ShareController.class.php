@@ -105,7 +105,9 @@ class ShareController extends Controller {
 	 */
 	public function getTags()
 	{
-
+		$label = I('label');
+        $label_list = array(['id'=>'1','name'=>$label],['id'=>'2','name'=>$label.rand()],['id'=>'3','name'=>$label.rand()]);
+        $this->success($label_list);
 	}
 
 
