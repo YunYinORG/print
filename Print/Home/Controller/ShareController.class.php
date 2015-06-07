@@ -44,10 +44,21 @@ class ShareController extends Controller {
 	 */
 	public function search()
 	{
-		$this->data = array( array('id' =>'3' ,'name'=>'fsdafadsf','upload_user'=>'dafdsf','time'=>'1999-10-11' ),array('id' =>'1' ,'name'=>'fsdafadsf','upload_user'=>'dafdsf','time'=>'1999-10-11' ),array('id' =>'2' ,'name'=>'fsdafadsf','upload_user'=>'dafdsf','time'=>'1999-10-11' ) );
+		$this->data = array( array('id' =>'3' ,'name'=>'fsdafadsf','uploader'=>'dafdsf','time'=>'1999-10-11' ),array('id' =>'1' ,'name'=>'fsdafadsf','uploader'=>'dafdsf','time'=>'1999-10-11' ),array('id' =>'2' ,'name'=>'fsdafadsf','uploader'=>'dafdsf','time'=>'1999-10-11' ) );
 	    $this->display();	
 	}
 
+	/**
+	 * 分享文件搜索api
+	 * @method searchAPI
+	 * @param  输入
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
+	public function searchAPI()
+	{
+		$data = array( array('id' =>'1' ,'name'=>'bla','uploader'=>'dafdsf','time'=>'1999-12-11' ),array('id' =>'3' ,'name'=>'fadsf','uploader'=>'dafdsf','time'=>'1999-10-11' ),array('id' =>'2' ,'name'=>'fsdafadsf','uploader'=>'dafdsf','time'=>'1999-10-11' ) );
+	    $this->success($data);	
+	}
 	/**
 	 * 文件详细信息页
 	 * @method detail

@@ -231,10 +231,12 @@ $("#share-btn").on('click',function(){
     var URL = "__ROOT__/File/share";
     var input = $('#label-input');
     var input_val = checkInput(input.value);
+    var display_name = document.getElementById('display-name');
     if(share_fid==-1) return;
     $.post(URL,{
         fid:share_fid,
-        label:label_arr
+        label:label_arr,
+        display_name: display_name.checked
     },function(data){
         if(data.status)
         {

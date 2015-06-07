@@ -6,7 +6,7 @@
 <BLOCK name='content'>
 <div class="container-fluid">
 <div>
-    <h2>文档记录 <button class="btn btn-default btn-success">search</button>
+    <h2>文档记录 <button id="search" class="btn btn-default btn-success">search</button>
 </div>
 <div class="search-bar">   
     <div class="form-group" id="chosen-label">
@@ -32,15 +32,12 @@
             <tr>          
                 <td style="width:20%">{$vo.name}</td>
                 <td>{$vo.time}</td>
-                <td>{$vo.upload_user}</td>
-                <td>                    <button type="button" fid="{$vo.id}"class="detail btn btn-danger">detail</button>
-                </td>
+                <td>{$vo.uploader}</td>
+                <td><a type="button" href="__URL__/detail/fid/{$vo.id}" class="detail btn btn-danger">detail</a></td>
             </tr>
             </volist>
         </tbody>
     </table>
-    <div class="result page">{$page}</div>
-    </div>
 
 </div>
 </BLOCK>
@@ -122,17 +119,30 @@ function addLabel()
 }
 
 $("#search").on('click',function(){
-    var URL = "__ROOT__/Share/search";
+    var URL = "__ROOT__/Share/searchAPI";
     $.post(URL,{
         label:label_arr
     },function(data){
         if(data.status)
         {
+            var table = $('tbody');
+            table.html('');
+            for(var key in data.info)
+            {
+                insert(data.info[key]);
+            }
         }else{
             alert('操作失败：'+data.info);
         }
     });
 });
+
+function insert(data)
+{
+    var html='<tr><td style="width:20%">' + data.name + '</td><td>' +data.time+ '</td><td>'+data.uploader +'</td><td><a href="__URL__/detail/fid/'+data.id+'" type="button" class="detail btn btn-danger">detail</a></td></tr>';
+    var table = $('tbody');
+    table.append(html);
+}
 
 function deleteLabel(e){
     var label_id = e.getAttribute('id');
