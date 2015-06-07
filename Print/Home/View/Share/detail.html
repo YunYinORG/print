@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -53,6 +52,7 @@ body {
             <span id="{$vo.id}" class="label label-primary">{$vo.name}</span>
           </volist>
       </div>
+      <button type="button" class="btn btn btn-danger" data-toggle="modal" data-target="#add-label" data-fid="{$data.id}">add label</button>
     </div>
 
     <footer class="footer">
@@ -61,7 +61,7 @@ body {
       </div>
     </footer>
 
-  <div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="add-label" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">    
       <div class="modal-content">
         <div class="modal-header">
@@ -69,42 +69,43 @@ body {
           <h4 class="modal-title" id="myModalLabel"></h4>
         </div>
         <div class="modal-body">   
-          <div class="form-group" id="chosen-label">
-          </div>
+          <div class="label-holder">
+          <p>chosen label
+          <volist name="label" id="vo">
+            <span id="{$vo.id}" class="label label-primary">{$vo.name}</span>
+          </volist></p>
+      </div>
+      <div class="label-holder">
+          <p>you chosen</p>
+      </div>
           <div class="form-group">
-              <label for="label-input" class="control-label">label:</label>
-                <input type="text" id="label-input" list="label-list" placeholder="input your label" onkeyup="getLabel()" onkeydown="addLabel()"> 
-                <datalist id="label-list"></datalist>
-          </div>
-          <div class="checkbox">
-              <label>
-                  <input type="checkbox" id="display-name">display name? 
-              </label>
+            <label for="label-input" class="control-label">label:</label>
+            <input type="text" id="label-input" list="label-list" placeholder="input your label" onkeyup="getLabel()" onkeydown="addLabel()"> 
+            <datalist id="label-list"></datalist>
           </div>
         </div>                       
         <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-              <button type="button" id="share-btn" class="btn btn-primary">分享</button>     
+              <button type="button" id="submit-btn" class="btn btn-primary">confirm</button>
           </div>
         </div>
       </div>    
     </div>
+
   </body>
+<script src="__CDNLIB__/bootstrap/3.3.0/js/bootstrap.min.js" defer="defer"></script>
+<script src="__CDNLIB__/jquery/2.1.1/jquery.min.js"></script>
 <script>
+
 var label_data = new Array();
 var label_arr = new Array();
-var share_fid = -1;
+var fid = -1;
 
-$('#share').on('show.bs.modal', function (event) {
+$('#add-label').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         share_fid = button.data('fid');
-        var filename = button.parent().text().trim();
         var modal = $(this);
-        modal.find('.modal-title').text('分享');
-        $('#filename-input').val(filename);
-        $('#chosen-label').html('');
-        label_arr = null;
-        label_arr = new Array();
+        modal.find('.modal-title').text('add label');
 })
 
 function checkInput(input)
@@ -184,7 +185,7 @@ function addLabel()
     }
 }
 
-$("#share-btn").on('click',function(){
+$("#submit-btn").on('click',function(){
     var URL = "__ROOT__/File/share";
     var input = $('#label-input');
     var input_val = checkInput(input.value);
@@ -195,7 +196,7 @@ $("#share-btn").on('click',function(){
     },function(data){
         if(data.status)
         {
-            $('#share').modal('hide');
+            $('#add-label').modal('hide');
         }else{
             alert('操作失败：'+data.info);
         }
@@ -216,5 +217,4 @@ function deleteLabel(e){
     }
 }
 </script>
-
 </html>
