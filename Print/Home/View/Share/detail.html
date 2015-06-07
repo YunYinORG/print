@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Sticky Footer Template for Bootstrap</title>
+
+    <link href="__CDNLIB__/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+.container {
+  width: auto;
+  max-width: 680px;
+  padding: 0 15px;
+}
+.container .text-muted {
+  margin: 20px 0;
+}
+</style>
+  </head>
+
+  <body>
+
+
+    <div class="container">
+      <div class="page-header">
+        <h1>{$data.name}</h1>
+      </div>
+      <p class="lead">from {$data.upload_user}, upload time {$data.time}</p>
+      <p>See <a href="{$data.thumbnail}">thumbnail</a></p>
+      <div class="label-holder">
+          <volist name="label" id="vo">
+            <span id="{$vo.id}" class="label label-primary">{$vo.name}</span>
+          </volist>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+      </div>
+    </footer>
+
+  <div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">    
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel"></h4>
+        </div>
+        <div class="modal-body">   
+          <div class="form-group" id="chosen-label">
+          </div>
+          <div class="form-group">
+              <label for="label-input" class="control-label">label:</label>
+                <input type="text" id="label-input" list="label-list" placeholder="input your label" onkeyup="getLabel()" onkeydown="addLabel()"> 
+                <datalist id="label-list"></datalist>
+          </div>
+          <div class="checkbox">
+              <label>
+                  <input type="checkbox" id="display-name">display name? 
+              </label>
+          </div>
+        </div>                       
+        <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button type="button" id="share-btn" class="btn btn-primary">分享</button>     
+          </div>
+        </div>
+      </div>    
+    </div>
+  </body>
+<script>
+var label_data = new Array();
+var label_arr = new Array();
+var share_fid = -1;
+
+$('#share').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        share_fid = button.data('fid');
+        var filename = button.parent().text().trim();
+        var modal = $(this);
+        modal.find('.modal-title').text('分享');
+        $('#filename-input').val(filename);
+        $('#chosen-label').html('');
+        label_arr = null;
+        label_arr = new Array();
+})
+
+function checkInput(input)
+{
+    return input;
+}
+
+function getLabel()
+{
+    if(event.KeyCode==13) return;
+    var datalist = $('#label-list');
+    datalist.html('');
+    var input = $('#label-input');
+    var URL = "__ROOT__/File/getLabel";
+    $.post(URL,{
+        label: checkInput(input.val())
+    },function(data){
+        if(data.status)
+        {
+            for(var i=0;info = data.info[i];i++)
+            {
+                label_data.push(info);
+                datalist.append('<option id="'+info.id+'" value="'+info.name+'"></option>'); 
+            }
+        }
+    });
+}
+
+
+function addLabel()
+{
+    if(event.keyCode!=13) return;
+    var input = document.getElementById('label-input');
+    var input_val = checkInput(input.value);
+    if(input_val=='') return;
+    var label_id=-1;
+    for(var i=0;label=label_data[i];i++)
+    {
+        if(label.name==input_val)
+        {
+            label_id=label.id;
+            break;
+        }
+    }
+    if(label_id==-1)
+    {
+        var URL = "__ROOT__/File/addLabel";
+        $.post(URL,{
+            label: input_val
+        },function(data){
+            if(data.status){
+            label_id = data.info;
+            }else{
+                alert('fail to add label');
+            }
+        });
+    }
+    if(label_id!=-1)
+    {
+        var i=0;
+        for(;i<label_arr.length;i++)
+        {
+            if(label_arr[i]!==undefined&&label_arr[i]==label_id)
+            {
+                alert('already there');
+                input.value='';
+                break;
+            }
+        }
+        if(i==label_arr.length)
+        {
+            label_arr.push(label_id);
+            var chosen_label = $('#chosen-label');
+            chosen_label.append('<span id="'+label_id+'" class="label label-primary" onclick="deleteLabel(this)">'+input.value+'</span>');
+            input.value='';
+        }
+    }
+}
+
+$("#share-btn").on('click',function(){
+    var URL = "__ROOT__/File/share";
+    var input = $('#label-input');
+    var input_val = checkInput(input.value);
+    if(share_fid==-1) return;
+    $.post(URL,{
+        fid:share_fid,
+        label:label_arr
+    },function(data){
+        if(data.status)
+        {
+            $('#share').modal('hide');
+        }else{
+            alert('操作失败：'+data.info);
+        }
+    });
+});
+
+
+function deleteLabel(e){
+    var label_id = e.getAttribute('id');
+    for(var i=0 ;i<label_arr.length;i++)
+    {
+        if(label_arr[i]==parseInt(label_id))
+        {
+            e.remove();
+            label_arr[i]=undefined;
+            break;
+        }
+    }
+}
+</script>
+
+</html>

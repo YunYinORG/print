@@ -44,7 +44,8 @@ class ShareController extends Controller {
 	 */
 	public function search()
 	{
-		# code...
+		$this->data = array( array('id' =>'3' ,'name'=>'fsdafadsf','upload_user'=>'dafdsf','time'=>'1999-10-11' ),array('id' =>'1' ,'name'=>'fsdafadsf','upload_user'=>'dafdsf','time'=>'1999-10-11' ),array('id' =>'2' ,'name'=>'fsdafadsf','upload_user'=>'dafdsf','time'=>'1999-10-11' ) );
+	    $this->display();	
 	}
 
 	/**
@@ -54,10 +55,25 @@ class ShareController extends Controller {
 	 * @author NewFuture[newfuture@yunyin.org]
 	 */
 	public function detail()
-	{
-
+	{	
+		$fid = I('id');
+        $map['id'] = $fid;
+		$File = M('File');
+		$result = $File->where($map)->find();
+		$this->data = array(
+			'id' =>'3' ,
+			'name'=>'fsdafadsf',
+			'upload_user'=>'dafdsf',
+			'time'=>'1999-10-11',
+			'thumbnail'=>get_thumbnail_url($result['url'])
+		);
+		$this->label = array(
+			array('id' => 18,'name'=>'fafdsa' ),
+			array('id' => 1,'name'=>'fafdsddddda' ),
+			array('id' => 13,'name'=>'fafdddsa' )
+			);
+		$this->display();
 	}
-
 
 	/**
 	 * 添加分享文件

@@ -1,0 +1,151 @@
+{//文件管理页}
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name='header'>
+<INCLUDE file="Print/Template/nav.html" list="active"/>
+</BLOCK>
+<BLOCK name='content'>
+<div class="container-fluid">
+<div>
+    <h2>文档记录 <button class="btn btn-default btn-success">search</button>
+</div>
+<div class="search-bar">   
+    <div class="form-group" id="chosen-label">
+    </div>
+    <div class="form-group">
+        <label for="label-input" class="control-label">label:</label>
+        <input type="text" id="label-input" list="label-list" placeholder="input your label" onkeyup="getLabel()" onkeydown="addLabel()"> 
+        <datalist id="label-list"></datalist>
+    </div>
+</div>
+    <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>文件名</th>    
+                <th>上传时间</th>
+                <th>Upload User</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="data" id="vo">
+            <tr>          
+                <td style="width:20%">{$vo.name}</td>
+                <td>{$vo.time}</td>
+                <td>{$vo.upload_user}</td>
+                <td>                    <button type="button" fid="{$vo.id}"class="detail btn btn-danger">detail</button>
+                </td>
+            </tr>
+            </volist>
+        </tbody>
+    </table>
+    <div class="result page">{$page}</div>
+    </div>
+
+</div>
+</BLOCK>
+<BLOCK name='end'>
+<script>
+
+var label_data = null;
+var label_arr = new Array();
+
+function checkInput(input)
+{
+    return input;
+}
+
+function getLabel()
+{
+    if(event.KeyCode==13) return;
+    label_data=null;
+    var datalist = $('#label-list');
+    datalist.html('');
+    var input = $('#label-input');
+    var URL = "__ROOT__/File/getLabel";
+    $.post(URL,{
+        label: checkInput(input.val())
+    },function(data){
+        if(data.status)
+        {
+            var datalist = $('#label-list');
+            label_data = data.info;
+            for(var i=0;info = label_data[i];i++)
+            {
+                datalist.append('<option id="'+info.id+'" value="'+info.name+'"></option>'); 
+            }
+        }
+    });
+}
+
+function addLabel()
+{
+    if(event.keyCode!=13) return;
+    var input = document.getElementById('label-input');
+    var input_val = checkInput(input.value);
+    if(input_val=='') return;
+    var label_id=-1;
+    var i=0;
+    for(;label=label_data[i];i++)
+    {
+        if(label.name==input_val)
+        {
+            label_id=label.id;
+            break;
+        }
+    }
+    if(label_id==-1&&i==label_data.length)
+    {
+        alert('not such label');
+        return;
+    }
+    if(label_id!=-1)
+    {
+        var i=0;
+        for(;i<label_arr.length;i++)
+        {
+            if(label_arr[i]!==undefined&&label_arr[i]==label_id)
+            {
+                alert('already there');
+                input.value='';
+                break;
+            }
+        }
+        if(i==label_arr.length)
+        {
+            label_arr.push(label_id);
+            var chosen_label = $('#chosen-label');
+            chosen_label.append('<span id="'+label_id+'" class="label label-primary" onclick="deleteLabel(this)">'+input.value+'</span>');
+            input.value='';
+        }
+    }
+}
+
+$("#search").on('click',function(){
+    var URL = "__ROOT__/Share/search";
+    $.post(URL,{
+        label:label_arr
+    },function(data){
+        if(data.status)
+        {
+        }else{
+            alert('操作失败：'+data.info);
+        }
+    });
+});
+
+function deleteLabel(e){
+    var label_id = e.getAttribute('id');
+    for(var i=0 ;i<label_arr.length;i++)
+    {
+        if(label_arr[i]==parseInt(label_id))
+        {
+            e.remove();
+            label_arr[i]=undefined;
+            break;
+        }
+    }
+}
+
+</script>
+</BLOCK>

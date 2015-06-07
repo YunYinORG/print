@@ -76,7 +76,6 @@
         </tbody>
     </table>
     <div class="result page">{$page}</div>
-    
     </div>
 
 </div>
@@ -88,7 +87,6 @@
                   <h4 class="modal-title" id="myModalLabel"></h4>
               </div>
               <div class="modal-body">   
-                  <form>
                       <div class="form-group">
                           <label for="filename-input" class="control-label">filename:</label>
                           <input type="text" class="form-control" id="filename-input">
@@ -105,7 +103,6 @@
                               <input type="checkbox" id="display-name">display name? 
                           </label>
                       </div>
-                  </form>
               </div>                       
               <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -137,7 +134,7 @@
             }
         });
 
-var label_data = null;
+var label_data = new Array();
 var label_arr = new Array();
 var share_fid = -1;
 
@@ -151,7 +148,6 @@ $('#share').on('show.bs.modal', function (event) {
         $('#chosen-label').html('');
         label_arr = null;
         label_arr = new Array();
-        label_data = null;
 })
 
 function checkInput(input)
@@ -165,20 +161,19 @@ function getLabel()
     var datalist = $('#label-list');
     datalist.html('');
     var input = $('#label-input');
-        var URL = "__ROOT__/File/getLabel";
-            $.post(URL,{
-                label: checkInput(input.val())
-            },function(data){
-                if(data.status)
-                {
-                    var datalist = $('#label-list');
-                    label_data = data.info;
-                    for(var i=0;info = label_data[i];i++)
-                    {
-                        datalist.append('<option id="'+info.id+'" value="'+info.name+'"></option>'); 
-                    }
-                }
-            });
+    var URL = "__ROOT__/File/getLabel";
+    $.post(URL,{
+        label: checkInput(input.val())
+    },function(data){
+        if(data.status)
+        {
+            for(var i=0;info = data.info[i];i++)
+            {
+                label_data.push(info);
+                datalist.append('<option id="'+info.id+'" value="'+info.name+'"></option>'); 
+            }
+        }
+    });
 }
 
 
@@ -199,7 +194,6 @@ function addLabel()
     }
     if(label_id==-1)
     {
-
         var URL = "__ROOT__/File/addLabel";
         $.post(URL,{
             label: input_val
@@ -225,30 +219,46 @@ function addLabel()
         }
         if(i==label_arr.length)
         {
-        label_arr.push(label_id);
-        var chosen_label = $('#chosen-label');
-        chosen_label.append('<span id="label" class="label label-primary">'+input.value+'</span>');
-        input.value='';
+            label_arr.push(label_id);
+            var chosen_label = $('#chosen-label');
+            chosen_label.append('<span id="'+label_id+'" class="label label-primary" onclick="deleteLabel(this)">'+input.value+'</span>');
+            input.value='';
         }
     }
 }
 
-        $("#share-btn").on('click',function(){
-            var URL = "__ROOT__/File/share";
-            var input = $('#label-input');
-            var input_val = checkInput(input.value);
-            if(share_fid==-1) return;
-            $.post(URL,{
-                fid:share_fid,
-                label:label_arr
-            },function(data){
-                if(data.status)
-                {
-                    $('#share').modal('hide');
-                }else{
-                    alert('操作失败：'+data.info);
-                }
-            });
-        });
+$("#share-btn").on('click',function(){
+    var URL = "__ROOT__/File/share";
+    var input = $('#label-input');
+    var input_val = checkInput(input.value);
+    if(share_fid==-1) return;
+    $.post(URL,{
+        fid:share_fid,
+        label:label_arr
+    },function(data){
+        if(data.status)
+        {
+            $('#share').modal('hide');
+        }else{
+            alert('操作失败：'+data.info);
+        }
+    });
+});
+
+
+function deleteLabel(e){
+    var label_id = e.getAttribute('id');
+    for(var i=0 ;i<label_arr.length;i++)
+    {
+        if(label_arr[i]==parseInt(label_id))
+        {
+            e.remove();
+            label_arr[i]=undefined;
+            break;
+        }
+    }
+}
+
+
 </script>
 </BLOCK>

@@ -337,19 +337,10 @@ class FileController extends Controller {
 		$this->error('当前状态不允许删除！');
 	}
 
-    public function getThumbnail()
-    {
-        $fid = I('id');
-        $map['id'] = $fid;
-		$File = M('File');
-		$result = $File->where($map)->Field('url')->find();		
-        echo(get_thumbnail_url($result['url']));
-    }
-
     public function getLabel()
     {
         $label = I('label');
-        $label_list = array(['id'=>'1','name'=>$label.rand()],['id'=>'2','name'=>$label.rand()],['id'=>'3','name'=>$label.rand()]);
+        $label_list = array(['id'=>'1','name'=>$label],['id'=>'2','name'=>$label.rand()],['id'=>'3','name'=>$label.rand()]);
         $this->success($label_list);
     }
 
