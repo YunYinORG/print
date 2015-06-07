@@ -1,123 +1,107 @@
 <EXTEND name="Print/Template/base.html"/>
+<BLOCK name="title">云印南天</BLOCK>
+<BLOCK name="header"></BLOCK>
 <BLOCK name="addhead">
-        <link href="__PUBLIC__/css/new.css" rel="stylesheet" type="text/css"/>
+<link href="__PUBLIC__/css/index.css" rel="stylesheet" type="text/css"/>
+<link href="__PUBLIC__/css/flickerplate.css" rel="stylesheet" type="text/css"/>
 </BLOCK>
-
-<BLOCK name="header">
-<h1 class=" text-center text-primary">
-<strong class="hidden-xs">南开大学 天津大学 校园云打印平台</strong>
-<span class="visible-xs">南开北洋云打印平台</span>
-</h1>
-<div class="text-center"><span class="label label-danger">无需“忧”盘</span> <span class="label label-info">提前打印</span> <span class="label label-warning">随时随地</span> <span class="label label-success">状态可知</span></div>
-<br/>
-</BLOCK>
-
 <BLOCK name='main'>
-<main class="container-fluid">
-<div class="col-lg-10 col-lg-offset-1 col-xs-12">
-            <div id="myCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-            <div class="item active">
-                <img src="__PUBLIC__/images/map_nku.png" class="index-img" alt="云印南天——云印南天南开大学地图">
-             </div>
-            <div class="item">
-                <img src="__PUBLIC__/images/map_tju.png" class="index-img" id="map-tju" alt="云印北洋——云印南天天津大学地图">
-            </div>
-            </div>
-             <a class="carousel-control left-bar" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-            <a class="carousel-control right-bar" href="#myCarousel" data-slide="next">&rsaquo;</a>
-            </div>       
-         </div>
-         <SWITCH name="status">
-                <CASE value='login'>
-                    <div  class="col-md-4 col-md-offset-4 alert">
-                    <div class="btn-group-justified">
-                    <a class="btn btn-lg btn-success" href="__ROOT__/File/add">GO,去打印！</a>
+<div class="container container-fluid floatup">
+    <div class="row">
+        <div class="col-md-offset-6 col-md-5 col-sm-offset-6 col-sm-5">
+            <div class="loginbox">
+                <SWITCH name="status">
+                <CASE value='register'>
+                <div class="title">
+                    <span class="loginfont">还差一步</span>
+                </div>
+                <div class="inputbox">
+                    <p class="text-danger"><span class="text-center">恭喜你，已通过实名认证！</span></p>
+                    <div class="wrap btnw">
+                        <a class="btn btn-lg btn-success" href="__ROOT__/User/register"><span class="streach text-center">继续</span></a>
                     </div>
-                    </div>
+                </div>
                 </CASE>
-              <CASE value='register'>
-              <div  class="col-md-4 col-md-offset-4 alert">
-                    <div class="btn-group-justified">
-                    <a class="btn btn-lg btn-success" href="__ROOT__/User/register">还差一步！</a>
-                    </div>
-                    </div>
-              </CASE>
-              <DEFAULT/>
-                 <form method="post" action="{$status}/Auth/" onsubmit="return checkForm();">                   
-                   <div class="row text-center">
-                    <div class="col-lg-4 col-md-5 col-sm-8 col-lg-offset-1">
-                        <div class="input-group">
-                            <span class="input-group-addon">账号</span>
-                            <input type="text"  id="name" tabindex="1" name="number"  class="form-control" placeholder="学号" pattern="(\d{7}|\d{10})" required>
+                <DEFAULT/>
+                <div class="title">
+                    <span class="loginfont">云印登陆</span>
+                </div>
+                <div class="inputbox">
+                    <form id="loginForm" method="post" action="{$status}/Auth/" onsubmit="return checkForm();">
+                        <div class="wrap">
+                            <span class="glyphicon glyphicon-user" style="color: white;  font-size: 23px; top: 33px; left: -40px;" aria-hidden="true"></span>
+                            <input type="text"  id="name" tabindex="1" name="number"  class="form-control" placeholder="输入学号" pattern="(\d{7}|\d{10})" aria-describedby="basic-addon1" required>
                         </div>
-                    </div>
-                    <div class="col-lg-4 col-md-5 col-sm-8">
-                        <div class="input-group">
-                            <span class="input-group-addon">密码</span>
-                            <input type="password" tabindex="2" class="form-control" id="pwd" name="password" placeholder="首次用URP或办公网密码" required>
-                            <a class="PwdEye btn input-group-addon" data-query='#pwd'></a>
+                        <div class="wrap">
+                            <a class="PwdEye glyphicon" style="color: white;  font-size: 23px; top: 33px; left: -40px;"  aria-hidden="true" data-query='#pwd'></a>
+                            <input type="password" tabindex="2" class="form-control" id="pwd" name="password" placeholder="输入密码" data-toggle="tooltip" data-placement="top" title="第一次使用，请用南开URP密码或者天大办公网密码登录"
+                            data-original-title="Tooltip on top" aria-describedby="basic-addon2" required/>
                         </div>
-                    </div>
-                    <div class="col-lg-2 col-md-1 col-sm-8">
-                        <div class="input-group" id="login">
-                        <button id="submit-btn" type="submit" tabindex="3" class="form-control btn btn-success" title="初次密码为南开URP密码或者天大办公网密码">
-                            登录
-                        </button >
+                        <div class="wrap btnw">
+                            <button type="submit" class="btn btn-warning" id="submit-btn"><span class="streach text-center">登陆</span></button>
                         </div>
+                        <div class="wrap">
+                             <a class="text-left" id="point">第一次使用？</a> <a class="text-right" rel="nofollow" href="__ROOT__/User/forget">找回密码</a>
+                        </div>
+                    </form>
+
+                    <div id="tip" class="tipcontent">
+                        <p>天津大学同学可以使用天大办公网用户名密码登录<br/>南开大学同学可以使用URP系统用户名密码登录</p>
                     </div>
-                 </div>
-                 <div class="col-sm-8 col-sm-offset-2 alert alert-info">
-                        <p id="info" class="text-center">
-                            <strong>天津大学</strong>同学<strong>首次</strong>登录时,使用<code>天大办公网</code>账号密码登录即可！<br><strong>南开大学</strong>同学<strong>首次</strong>登录时,使用<code>ＵＲＰ系统</code>账号密码登录即可！
-                        </p>
-                 </div>
-             </form>
-             <script src='{$status}__PUBLIC__/js/pwd.js' defer></script>       
-    	</SWITCH> 
-    </main>
-	<footer class='copyright text-center'>
-	<ul class="list-inline">
-		<li><a href="http://www.yunyin.org/">&copy;云印南天</a></li>
-        <li><a rel="nofollow" href="__ROOT__/User/forget">找回密码</a></li>
+                </div>
+                </SWITCH>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="flicker-example under-login" style="position:absolute" data-block-text="false">
+    <ul>
+        <li data-background="__PUBLIC__/images/field.jpg">
+        </li>
+        <li data-background="__PUBLIC__/images/forest.jpg">
+        </li>
+        <li data-background="__PUBLIC__/images/frozen-water.jpg">
+        </li>
+    </ul>
+</div>
+<footer class='text-center' style="float: left;width: 100%;margin-top:2em">
+    <ul class="list-inline">
+        <li><a href="http://www.yunyin.org/">&copy;云印南天</a></li>
         <li><a rel="nofollow" href="__ROOT__/Printer/">打印店</a></li>
         <li><a href="__ROOT__/Index/privacy">隐私声明</a></li>
         <li><a rel="nofollow" href="https://github.com/YunYinORG/print">开源项目</a></li>
         <li><a href="http://www.yunyin.org/pages/">文档中心</a></li>
-        <li><a href="__ROOT__/Card/">招卡中心</a></li>
-	</ul>
-	</footer>
+        <li><a href="__ROOT__/Card/">招卡服务</a></li>
+    </ul>
+</footer>
 </BLOCK>
-<BLOCK name="end">
+<BLOCK name='end'>
+<script src="__PUBLIC__/js/modernizr.js" type="text/javascript"></script>
+<script src="__PUBLIC__/js/jquery-finger-v0.1.0.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/js/flickerplate.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/js/pwd.js" type="text/javascript"></script>
 <script>
-    function checkForm()
-    {
-        var name = document.getElementById("name").value;
-        var btn = document.getElementById("submit-btn");
-        var re1 = /^[1][0-4]\d{5}$/;                 // undergraduate stu_num
-        var re2 = /^\d{2}[1-2][0|9][0|1|8|9]\d{5}$/; // graduate and P.H.D. stu_num
-        var re3=/^[1-3]01[0-4]\d{6}$/;//天大学号
-        if(!re1.test(name) && !re2.test(name)&&!re3.test(name))
-        {
-            document.getElementById("info").innerHTML = "请输入格式正确的学号！(仅支持南开和天大在读学生)";
-            document.getElementById("name").focus();
-            return false;
-        }
-        btn.innerHTML = '正在验证中...';
-        btn.disabled = true;
-        return true;
+$(document).ready(function(){
+$('.flicker-example').flicker();
+$('#point').click(function(){
+$('#tip').toggle("normal");
+});
+});
+function checkForm(){
+    var name = document.getElementById("name").value;
+    var btn = document.getElementById("submit-btn");
+    var re1 = /^[1][0-4]\d{5}$/;                 // undergraduate stu_num
+    var re2 = /^\d{2}[1-2][0|9][0|1|8|9]\d{5}$/; // graduate and P.H.D. stu_num
+    var re3 = /^[1-3]01[0-4]\d{6}$/; //tju stu_num
+    if(!re1.test(name) && !re2.test(name)&&!re3.test(name)) {
+        document.getElementById("tip").innerHTML = "请输入格式正确的学号！(仅支持南开和天大在读学生)";
+        $('#tip').toggle("normal");
+        document.getElementById("name").focus();
+        return false;
     }
-	//控制图片轮播时间
-	$(function(){
-		var tju_map=document.getElementById('map-tju');
-		var carousel=function(){
-			setTimeout(function(){$('#myCarousel').carousel('next').carousel({interval: 5000});},500);};
-		if(tju_map.complete)
-		{
-			carousel();
-		}else{
-			tju_map.onload=carousel;
-		}
-	});
-    </script>
+    btn.innerHTML = '<span class="streach text-center">验证中</span>';
+    btn.disabled = true;
+    return true;
+}
+</script>
 </BLOCK>

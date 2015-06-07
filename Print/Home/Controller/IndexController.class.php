@@ -34,7 +34,8 @@ class IndexController extends Controller {
 	{
 		if (use_id())
 		{
-			$this->status = 'login';
+			redirect('/User');
+			// $this->status = 'login';
 		}
 		elseif (session('authData'))
 		{
@@ -46,7 +47,7 @@ class IndexController extends Controller {
 		}else{
 			$this->status=__ROOT__;
 		}
-		$this->display();
+		$this->display('index');
 	}
 
 	/**
