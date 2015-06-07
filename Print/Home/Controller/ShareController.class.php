@@ -1,5 +1,4 @@
 <?php
-
 // ===================================================================
 // | FileName:      ShareController.class.php
 // ===================================================================
@@ -17,15 +16,22 @@
  * Class and Function List:
  * Function list:
  * - index()
+ * - search()
+ * - searchAPI()
+ * - detail()
+ * - add()
+ * - createTag()
+ * - getTags()
+ * - addTags()
+ * - rename()
+ * - _empty()
  * Classes list:
- * - EmptyController extends Controller
+ * - ShareController extends Controller
  */
 namespace Home\Controller;
 use Think\Controller;
 
 class ShareController extends Controller {
-
-
 	/**
 	 * 自己分享的文件列表页
 	 * @method index
@@ -34,6 +40,7 @@ class ShareController extends Controller {
 	public function index()
 	{
 		# code...
+
 	}
 
 	/**
@@ -44,8 +51,8 @@ class ShareController extends Controller {
 	 */
 	public function search()
 	{
-		$this->data = array( array('id' =>'3' ,'name'=>'fsdafadsf','uploader'=>'dafdsf','time'=>'1999-10-11' ),array('id' =>'1' ,'name'=>'fsdafadsf','uploader'=>'dafdsf','time'=>'1999-10-11' ),array('id' =>'2' ,'name'=>'fsdafadsf','uploader'=>'dafdsf','time'=>'1999-10-11' ) );
-	    $this->display();	
+		$this->data = array(array('id' => '3', 'name' => 'fsdafadsf', 'uploader' => 'dafdsf', 'time' => '1999-10-11'), array('id' => '1', 'name' => 'fsdafadsf', 'uploader' => 'dafdsf', 'time' => '1999-10-11'), array('id' => '2', 'name' => 'fsdafadsf', 'uploader' => 'dafdsf', 'time' => '1999-10-11'));
+		$this->display();
 	}
 
 	/**
@@ -56,9 +63,10 @@ class ShareController extends Controller {
 	 */
 	public function searchAPI()
 	{
-		$data = array( array('id' =>'1' ,'name'=>'bla','uploader'=>'dafdsf','time'=>'1999-12-11' ),array('id' =>'3' ,'name'=>'fadsf','uploader'=>'dafdsf','time'=>'1999-10-11' ),array('id' =>'2' ,'name'=>'fsdafadsf','uploader'=>'dafdsf','time'=>'1999-10-11' ) );
-	    $this->success($data);	
+		$data = array(array('id' => '1', 'name' => 'bla', 'uploader' => 'dafdsf', 'time' => '1999-12-11'), array('id' => '3', 'name' => 'fadsf', 'uploader' => 'dafdsf', 'time' => '1999-10-11'), array('id' => '2', 'name' => 'fsdafadsf', 'uploader' => 'dafdsf', 'time' => '1999-10-11'));
+		$this->success($data);
 	}
+
 	/**
 	 * 文件详细信息页
 	 * @method detail
@@ -66,23 +74,12 @@ class ShareController extends Controller {
 	 * @author NewFuture[newfuture@yunyin.org]
 	 */
 	public function detail()
-	{	
-		$fid = I('id');
-        $map['id'] = $fid;
-		$File = M('File');
-		$result = $File->where($map)->find();
-		$this->data = array(
-			'id' =>'3' ,
-			'name'=>'fsdafadsf',
-			'upload_user'=>'dafdsf',
-			'time'=>'1999-10-11',
-			'thumbnail'=>get_thumbnail_url($result['url'])
-		);
-		$this->label = array(
-			array('id' => 18,'name'=>'fafdsa' ),
-			array('id' => 1,'name'=>'fafdsddddda' ),
-			array('id' => 13,'name'=>'fafdddsa' )
-			);
+	{
+		$fid = I('id',null,'int');
+		$map['id'] = $fid;
+		$File   = M('Share')->getById($fid);//field('name,time,fid,anomonity')
+		$this->data = array('id' => '3', 'name' => 'fsdafadsf', 'upload_user' => 'dafdsf', 'time' => '1999-10-11', 'thumbnail' => get_thumbnail_url($result['url']));
+		$this->tags=M('hastag')->where('sha_id=%d',$fid)->field('name','tag_id')->select();
 		$this->display();
 	}
 
@@ -94,9 +91,7 @@ class ShareController extends Controller {
 	 */
 	public function add()
 	{
-
 	}
-
 
 	/**
 	 * 创建新的标签
@@ -105,7 +100,33 @@ class ShareController extends Controller {
 	 */
 	public function createTag()
 	{
+		$uid  = use_id();
+		$name = I('tag', null, 'trim');
+		if ( ! $uid)
+		{
+			$this->error('未登录！', '/');
+		}
+		elseif ( ! $tag)
+		{
+			$this->error('无效标签');
+		}
+		else
+		{
+			$tag = array(
+				'name'   => $name,
+				'use_id' => $uid,
+			);
 
+			$tid = M('Tag')->add($tag);
+			if ($tid)
+			{
+				$this->success($tid);
+			}
+			else
+			{
+				$this->error('添加失败!');
+			}
+		}
 	}
 
 	/**
@@ -116,11 +137,18 @@ class ShareController extends Controller {
 	 */
 	public function getTags()
 	{
-		$label = I('label');
-        $label_list = array(['id'=>'1','name'=>$label],['id'=>'2','name'=>$label.rand()],['id'=>'3','name'=>$label.rand()]);
-        $this->success($label_list);
-	}
+		if ( ! use_id())
+		{
+			$this->error('未登录!', '/');
+		}
+		else
+		{
+			$tag  = I('tag', null, 'trim');
+			$tags = M('Tag')->where('name LIKE "%s"', $tag)->order('count desc')->limit(10)->select();
+			$this->success($tags);
+		}
 
+	}
 
 	/**
 	 * 为分享的文件添加标签
@@ -131,6 +159,7 @@ class ShareController extends Controller {
 	public function addTags()
 	{
 		# code...
+
 	}
 
 	/**
@@ -143,10 +172,11 @@ class ShareController extends Controller {
 	public function rename()
 	{
 		# code...
+
 	}
 
 	public function _empty()
 	{
-		$this->redirect('Index/index');
+		$this->redirect('/');
 	}
 }

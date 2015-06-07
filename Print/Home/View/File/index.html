@@ -79,34 +79,34 @@
     </div>
 
 </div>
-<div class="modal fade" id="share" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="share" tabindex="-1" role="dialog" aria-tagledby="myModalTag" aria-hidden="true">
       <div class="modal-dialog">    
           <div class="modal-content">
               <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="myModalLabel"></h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-tag="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalTag"></h4>
               </div>
               <div class="modal-body">   
                       <div class="form-group">
-                          <label for="filename-input" class="control-label">filename:</label>
-                          <input type="text" class="form-control" id="filename-input">
+                          <label for="filename-input" class="control-tag">共享名称:</label>
+                          <input type="text" placeholder="设置共享的名字" class="form-control" id="filename-input">
                      </div>
-                     <div class="form-group" id="chosen-label">
+                     <div class="form-group" id="chosen-tag">
                      </div>
                       <div class="form-group">
-                          <label for="label-input" class="control-label">label:</label>
-                            <input type="text" id="label-input" list="label-list" placeholder="input your label" onkeyup="getLabel()" onkeydown="addLabel()"> 
-                            <datalist id="label-list"></datalist>
+                          <label for="tag-input" class="control-tag">添加标签:</label>
+                            <input type="text" id="tag-input" list="tag-list"  placeholder="输入标签" onkeyup="getTag()" onkeydown="addTag()"> 
+                            <datalist id="tag-list"></datalist>
                       </div>
                       <div class="checkbox">
                           <label>
-                              <input type="checkbox" id="display-name">display name? 
+                              <input type="checkbox" id="display-name">匿名分享
                           </label>
                       </div>
               </div>                       
               <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" id="share-btn" class="btn btn-primary">分享</button>     
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" id="share-btn" class="btn btn-primary">共享</button>     
                 </div>
             </div>
         </div>    
@@ -134,8 +134,8 @@
             }
         });
 
-var label_data = new Array();
-var label_arr = new Array();
+var tag_data = new Array();
+var tag_arr = new Array();
 var share_fid = -1;
 
 $('#share').on('show.bs.modal', function (event) {
@@ -145,9 +145,9 @@ $('#share').on('show.bs.modal', function (event) {
         var modal = $(this);
         modal.find('.modal-title').text('分享');
         $('#filename-input').val(filename);
-        $('#chosen-label').html('');
-        label_arr = null;
-        label_arr = new Array();
+        $('#chosen-tag').html('');
+        tag_arr = null;
+        tag_arr = new Array();
 })
 
 function checkInput(input)
@@ -155,21 +155,21 @@ function checkInput(input)
     return input;
 }
 
-function getLabel()
+function getTag()
 {
     if(event.KeyCode==13) return;
-    var datalist = $('#label-list');
+    var datalist = $('#tag-list');
     datalist.html('');
-    var input = $('#label-input');
+    var input = $('#tag-input');
     var URL = "__ROOT__/Share/getTags";
     $.post(URL,{
-        label: checkInput(input.val())
+        tag: checkInput(input.val())
     },function(data){
         if(data.status)
         {
             for(var i=0;info = data.info[i];i++)
             {
-                label_data.push(info);
+                tag_data.push(info);
                 datalist.append('<option id="'+info.id+'" value="'+info.name+'"></option>'); 
             }
         }
@@ -177,51 +177,51 @@ function getLabel()
 }
 
 
-function addLabel()
+function addTag()
 {
     if(event.keyCode!=13) return;
-    var input = document.getElementById('label-input');
+    var input = document.getElementById('tag-input');
     var input_val = checkInput(input.value);
     if(input_val=='') return;
-    var label_id=-1;
-    for(var i=0;label=label_data[i];i++)
+    var tag_id=-1;
+    for(var i=0;tag=tag_data[i];i++)
     {
-        if(label.name==input_val)
+        if(tag.name==input_val)
         {
-            label_id=label.id;
+            tag_id=tag.id;
             break;
         }
     }
-    if(label_id==-1)
+    if(tag_id==-1)
     {
-        var URL = "__ROOT__/File/addLabel";
+        var URL = "__ROOT__/File/addTag";
         $.post(URL,{
-            label: input_val
+            tag: input_val
         },function(data){
             if(data.status){
-            label_id = data.info;
+            tag_id = data.info;
             }else{
-                alert('fail to add label');
+                alert('fail to add tag');
             }
         });
     }
-    if(label_id!=-1)
+    if(tag_id!=-1)
     {
         var i=0;
-        for(;i<label_arr.length;i++)
+        for(;i<tag_arr.length;i++)
         {
-            if(label_arr[i]!==undefined&&label_arr[i]==label_id)
+            if(tag_arr[i]!==undefined&&tag_arr[i]==tag_id)
             {
                 alert('already there');
                 input.value='';
                 break;
             }
         }
-        if(i==label_arr.length)
+        if(i==tag_arr.length)
         {
-            label_arr.push(label_id);
-            var chosen_label = $('#chosen-label');
-            chosen_label.append('<span id="'+label_id+'" class="label label-primary" onclick="deleteLabel(this)">'+input.value+'</span>');
+            tag_arr.push(tag_id);
+            var chosen_tag = $('#chosen-tag');
+            chosen_tag.append('<span id="'+tag_id+'" class="tag tag-primary" onclick="deleteTag(this)">'+input.value+'</span>');
             input.value='';
         }
     }
@@ -229,13 +229,13 @@ function addLabel()
 
 $("#share-btn").on('click',function(){
     var URL = "__ROOT__/File/share";
-    var input = $('#label-input');
+    var input = $('#tag-input');
     var input_val = checkInput(input.value);
     var display_name = document.getElementById('display-name');
     if(share_fid==-1) return;
     $.post(URL,{
         fid:share_fid,
-        label:label_arr,
+        tag:tag_arr,
         display_name: display_name.checked
     },function(data){
         if(data.status)
@@ -248,14 +248,14 @@ $("#share-btn").on('click',function(){
 });
 
 
-function deleteLabel(e){
-    var label_id = e.getAttribute('id');
-    for(var i=0 ;i<label_arr.length;i++)
+function deleteTag(e){
+    var tag_id = e.getAttribute('id');
+    for(var i=0 ;i<tag_arr.length;i++)
     {
-        if(label_arr[i]==parseInt(label_id))
+        if(tag_arr[i]==parseInt(tag_id))
         {
             e.remove();
-            label_arr[i]=undefined;
+            tag_arr[i]=undefined;
             break;
         }
     }
