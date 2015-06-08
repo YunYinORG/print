@@ -280,7 +280,13 @@ class FileController extends Controller {
 		}
 	}
 
-	public function temp()
+	/**
+	 * 多文件上传页
+	 * @method multi
+	 * @return [type] [description]
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
+	public function multi()
 	{
 		$uid = use_id(U('Index/index'));
 		if ($uid)
@@ -297,7 +303,7 @@ class FileController extends Controller {
 		}
 		else
 		{
-			$this->redirect('/Index/index');
+			$redirect(__ROOT__);
 		}
 	}
 

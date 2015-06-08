@@ -200,6 +200,7 @@ File.prototype.uploadFile = function() {
     }
     fd.append('file',files[id]);
     fd.append('token',this.token);
+    fd.append('key','temp_'+this.newname);
     var xmlhttp=null;
     if (window.XMLHttpRequest)
     {
@@ -220,7 +221,7 @@ File.prototype.uploadFile = function() {
     {
         var file_view = $('#file_'+this.id);
         var span = file_view.find(span);
-        span.html('Your browser does not support XMLHTTP');
+        span.html('您的浏览器版本不支持XMLHTTP,请切换到<<a href="__URL__/add">单文件上传</a>！');
     }
 }
 
@@ -236,7 +237,7 @@ function uploaded() {
             attr.removeClass();
             attr.addClass("file_attr label label-success");
             attr.html('上传成功');
-            span.html('<span class="glyphicon glyphicon-remove delete" onclick="deleteFile(this)"></span>');
+            span.html('<span class="glyphicon text-danger glyphicon-remove delete" onclick="deleteFile(this)"></span>');
         }
         else {
             attr.removeClass();

@@ -169,7 +169,7 @@ function upload_token($save_name)
 	$config = C('UPLOAD_CONFIG_QINIU');
 	$timeout= 300;
 	$setting = array(
-		'scope' => $config['bucket'],
+		'scope' => $config['bucket'].':'.$save_name,
 		 'deadline' => $timeout + time(),
 	  	);
 	$token = \Think\Upload\Driver\Qiniu\QiniuStorage::SignWithData($config['secretKey'], $config['accessKey'], json_encode($setting));
