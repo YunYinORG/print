@@ -1,119 +1,118 @@
 {//文件上传页}
 <EXTEND name="Print/Template/base.html"/>
 <BLOCK name='addhead'>
-    <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
-    <link href="__PUBLIC__/css/upload.css" rel="stylesheet" type="text/css"/>
+<link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
+<link href="__PUBLIC__/css/upload.css" rel="stylesheet" type="text/css"/>
 </BLOCK>
 <BLOCK name='header'>
 <INCLUDE file="Print/Template/nav.html" add="active"/>
 </BLOCK>
 <BLOCK name='content'>
-
 <div class="container-fluid">
-    <div>
-        <h2>设置打印信息</h2>
-    </div>
-    <br/>
     <form id="print" method="post" action="__URL__/uploadOne" enctype="multipart/form-data">
         <div class="row">
             <div class="text-center col-lg-8 col-lg-offset-1  col-md-8 col-xs-12">
                 <div class="form-group">
                     <div class="upload-btn" id="upload-btn">
-                        <div class="upload-area"><span class="glyphicon glyphicon-open"></span>点击上传文件<small>(不超过10MB)</small></div>
-                        <input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="checkSuffix()" 
+                        <div class="upload-area"><span class="glyphicon glyphicon-open"></span>点击上传文件</div>
+                        <input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="checkSuffix()"
                         multiple="multiple">
                     </div>
                 </div>
-                <ul id="upload-list" class="list-group"></ul>
-                <span id="progress"></span>
+            <ul id="upload-list" class="list-group"></ul>
+            <span id="progress"></span>
+        </div>
+    </div>
+    <br/>
+    <div class="row form-group">
+        <div class="col-lg-8 col-lg-offset-1 col-sm-10">
+            <label for="pri_id" class="sr-only">打印店</label>
+            <select class="form-control" name="pri_id" id="pri_id" onchange="priceChange(this)" required>
+                <option value="">选择想去的打印店....</option>
+                <volist name="data" id="vo">
+                <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
+                </volist>
+            </select>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="well col-lg-8 col-lg-offset-1  col-sm-12">
+            <h4 class="text-info">该店价格信息</h4>
+            <div id='price' class='help-block comments'>
+                黑白单面：<span id='p_s' class='text-danger'></span><br/>
+                黑白双面：<span id='p_d' class='text-danger'></span><br/>
+                彩印单面：<span id='p_c_s' class='text-danger'></span><br/>
+                彩印双面：<span id='p_c_d' class='text-danger'></span>
             </div>
         </div>
-        <br/>
-        <div class="row form-group">
-            <div class="col-lg-8 col-lg-offset-1 col-sm-10">
-                <label for="pri_id" class="sr-only">打印店</label>
-                <select class="form-control" name="pri_id" id="pri_id" onchange="priceChange(this)" required>
-                    <option value="">选择想去的打印店....</option>
-                    <volist name="data" id="vo">
-                        <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
-                    </volist>
-                </select>
-            </div>
+    </div>
+    <IF condition="$lock eq 1">
+    <div class="row form-group text-cneter">
+        <div class="col-lg-2 col-lg-offset-1 col-xs-4 col-xs-offset-1">
+            <label for="wait" class="sr-only">设置</label>
+            <input name="wait" id="wait" type="checkbox" data-label-text="设置" data-off-text="提前打印"  data-on-text="到店打印" data-off-color="warning" data-on-color="success" data-label-width="" disabled="true" checked="checked" />
         </div>
-        <br/>
-        <div class="row">        
-            <div class="well col-lg-8 col-lg-offset-1  col-sm-12">
-                <h4 class="text-info">该店价格信息</h4>
-                <div id='price' class='help-block comments'>
-                    黑白单面：<span id='p_s' class='text-danger'></span><br/>
-                    黑白双面：<span id='p_d' class='text-danger'></span><br/>
-                    彩印单面：<span id='p_c_s' class='text-danger'></span><br/>
-                    彩印双面：<span id='p_c_d' class='text-danger'></span>
-                </div>
-            </div>
-        </div>
-        <IF condition="$lock eq 1">
-        <div class="row form-group text-cneter">
-                <div class="col-lg-2 col-lg-offset-1 col-xs-4 col-xs-offset-1">
-                   <label for="wait" class="sr-only">设置</label>
-                    <input name="wait" id="wait" type="checkbox" data-label-text="设置" data-off-text="提前打印"  data-on-text="到店打印" data-off-color="warning" data-on-color="success" data-label-width="" disabled="true" checked="checked" />
-                </div>
-                <div class="setting">
-                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+        <div class="setting">
+            <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
                 <div class="input-group">
                     <label for="copies" class="sr-only">份数</label>
                     <input name="copies" type="number" placeholder="份数" class="form-control" id="copies" min="1" value="1"/>
-                     <span class="input-group-addon">份</span>
+                    <span class="input-group-addon">份</span>
                 </div>
-                </div>  
-                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
-                    <label for="printcolor" class="sr-only">颜色</label>
-                    <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox" data-label-text="颜色" data-off-text="黑白打印"  data-on-text="彩色打印" data-on-color="warning" data-off-color="success" data-label-width=""/>
-                </div>
-                <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
-                  <label for="double_side" class="sr-only">单双</label>
-                    <input type="checkbox" name="double_side" id='double_side' value="1" data-label-text="单双" data-off-text="单面打印"  data-on-text="双面打印" data-on-color="warning" data-off-color="success" data-label-width="" disabled="true"/>
-                </div>
-        </div>
-        </div>
-         <div class="row form-group setting" id="pptprint">
-                <div class="col-lg-8 col-lg-offset-1 col-sm-10">
-                 <label for="default" class="sr-only">PPT格式</label>
-                    <select id="default" class="form-control" name="ppt_layout">
-                        <option value="">选择PPT打印格式....</option>
-                        <volist name="ppt" id="vo" offset="1">
-                            <option value="{$i}">{$vo}</option>
-                        </volist>
-                    </select>
-                </div>
-        </div>
-        <div class="row form-group">
-            <div class="setting col-lg-8 col-lg-offset-1 col-sm-10 col-xs-10 col-xs-offset-1">
-                <label for="addtion-need" class='sr-only'>备注</label>
-                <textarea id="addtion-need" class="form-control" placeholder="备注，若无可空白，限制32字以内" length="32" name="requirements"></textarea>
+            </div>
+            <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                <label for="printcolor" class="sr-only">颜色</label>
+                <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox" data-label-text="颜色" data-off-text="黑白打印"  data-on-text="彩色打印" data-on-color="warning" data-off-color="success" data-label-width=""/>
+            </div>
+            <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                <label for="double_side" class="sr-only">单双</label>
+                <input type="checkbox" name="double_side" id='double_side' value="1" data-label-text="单双" data-off-text="单面打印"  data-on-text="双面打印" data-on-color="warning" data-off-color="success" data-label-width="" disabled="true"/>
             </div>
         </div>
-        <ELSE/>
-        <div>
-            <a href="__ROOT__/User"><b>绑定手机后可进行高级设置和提前打印</b></a>
+    </div>
+    <div class="row form-group setting" id="pptprint">
+        <div class="col-lg-8 col-lg-offset-1 col-sm-10">
+            <label for="default" class="sr-only">PPT格式</label>
+            <select id="default" class="form-control" name="ppt_layout">
+                <option value="">选择PPT打印格式....</option>
+                <volist name="ppt" id="vo" offset="1">
+                <option value="{$i}">{$vo}</option>
+                </volist>
+            </select>
         </div>
-        </IF>
+    </div>
+    <div class="row form-group">
+        <div class="setting col-lg-8 col-lg-offset-1 col-sm-10 col-xs-10 col-xs-offset-1">
+            <label for="addtion-need" class='sr-only'>备注</label>
+            <textarea id="addtion-need" class="form-control" placeholder="备注，若无可空白，限制32字以内" length="32" name="requirements"></textarea>
+        </div>
+    </div>
+    <ELSE/>
+    <div class="text-center">
+        <a href="__ROOT__/User"><b>绑定手机后可进行高级设置和提前打印</b></a>
+    </div>
+    </IF>
     <div class="row">
         <div class="form-group col-md-8 col-lg-offset-4 col-lg-1 ">
             <button type="submit" class="btn btn-lg btn-primary" id="fileUploadButton" disabled="true">开始传送</button>
         </div>
     </div>
-    </form>
+</form>
+<div class="modal fade" id="msgbox" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="false"><div class="modal-dialog"><div class="modal-content text-center"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3 class="modal-title" id="ModalLabel">上传<strong>完成</strong></h3></div>
+<div class="modal-body text-left" id="modal-content"></div>
+<div class="modal-footer">
+    <button type="button" onclick="location.reload();" class="btn btn-default">继续上传</button>
+    <a type="button" href="__URL__/" class="btn btn-primary">查看文件</a>
+</div>
 
+</div></div></div>
 </div>
 </BLOCK>
-
 <BLOCK name='end'>
 <script src="__PUBLIC__/js/upload.js" defer="defer"></script>
 <script src="__PUBLIC__/js/underscore-min.js" ></script>
-
 <script language="javascript" type="text/javascript">
-
 var Files = function() {
     this.files = [];
     this.printer = null;
@@ -122,7 +121,6 @@ var Files = function() {
     this.length = 0;
     this.uploaded = 0;
 };
-
 Files.prototype.addFile = function(file) {
     var legal = (file instanceof PDF)||(file instanceof DOC)||(file instanceof PPT);
     if (legal) {
@@ -130,7 +128,6 @@ Files.prototype.addFile = function(file) {
         this.length++;
     };
 };
-
 Files.prototype.delete = function(id) {
     if(this.files[id].suffix=="ppt")
     {
@@ -152,11 +149,9 @@ Files.prototype.delete = function(id) {
     this.files[id]=undefined;
     this.updateInput();
 }
-
 Files.prototype.reUpload = function(id) {
     this.files[id].getToken();
 };
-
 Files.prototype.updateInput = function()
 {
     if(this.uploaded==this.length)
@@ -168,9 +163,6 @@ Files.prototype.updateInput = function()
         temp.append('<input id="upload-file" type="file" name="file" accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/pdf, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation" onchange="checkSuffix()" multiple="multiple">');
     }
 }
-
-
-
 function File(id,name,suffix)
 {
     this.id = id;
@@ -180,7 +172,6 @@ function File(id,name,suffix)
     this.uploadStatus = false;
     this.newname = null;
 }
-
 File.prototype.uploadFile = function() {
     var url = 'http://upload.qiniu.com/';
     var fd = new FormData();
@@ -224,7 +215,6 @@ File.prototype.uploadFile = function() {
         span.html('您的浏览器版本不支持XMLHTTP,请切换到<<a href="__URL__/add">单文件上传</a>！');
     }
 }
-
 function uploaded() {
     if (this.readyState==4) {
         var file_view = $('#file_'+this.id);
@@ -247,8 +237,6 @@ function uploaded() {
         }
     }
 }
-
-
 File.prototype.getToken = function() {
     var URL = "__ROOT__/File/getToken";
     var temp = this;
@@ -265,50 +253,45 @@ File.prototype.getToken = function() {
         }
     });
 };
-var temp = function() {};
+temp=function(){};
 temp.prototype = File.prototype;
 var PDF = function(id,name,suffix) {
     File.apply(this,arguments);
     $("#upload-list").append('<li class="list-group-item" id="file_'+id+'"><span class="file_attr" style="float:left"></span><span style="float:left">'+ name +'</span><span class="file_op" style="float:right"><span class="label label-xs label-success">上传中..</span></span></li>');
 }
 PDF.prototype = new temp();
-
 var DOC = function(id,name,suffix) {
     File.apply(this,arguments);
     $("#upload-list").append('<li class="list-group-item" id="file_'+id+'"><span class="file_attr" style="float:left"></span><span style="float:left">'+ name +'(支持的格式，但更推荐pdf)</span> <span class="file_op" style="float:right"><span class="label label-xs label-success">上传中..</span></span></li>');
 }
 DOC.prototype = new temp();
-
 var PPT = function(id,name,suffix) {
     File.apply(this,arguments);
     $("#upload-list").append('<li class="list-group-item" id="file_'+id+'"><span class="file_attr" style="float:left"></span><span style="float:left">'+name +'</span><span style="float:right" class="file_op"><span class="label label-xs label-success">上传中..</span></span></li>');
 }
 PPT.prototype = new temp();
-
 var UNKNOWN = function(name,error_type) {
     if(error_type=='big') {
-      $("#upload-list").append('<li class="list-group-item"><span class="file_attr" style="float:left"></span><span style="float:left">'+filename +'</span> <span style="float:right" class="file_op"><span class="label label-xs label-danger">文件过大</span></span></li>');
+    $("#upload-list").append('<li class="list-group-item"><span class="file_attr" style="float:left"></span><span style="float:left">'+filename +'</span> <span style="float:right" class="file_op"><span class="label label-xs label-danger">文件过大</span></span></li>');
     } else if(error_typle =='suffix') {
         $("#upload-list").append('<li class="list-group-item"><span class="file_attr" style="float:left"></span><span style="float:left">'+name +'</span><span style="float:right" class="file_op"><span class="label label-xs label-danger">不支持的格式</span></span></li>');
     } else{}
 }
-
 var file_queue = new Files();
 var fileData = new FormData();
 var doc_suffix = ['doc', 'docx', 'wps'];
 var pdf_suffix = ['pdf'];
 var other_suffix = ['ppt', 'pptx'];
-
 function checkSuffix() {
     var files = document.getElementById('upload-file').files;
-    for (var i = 0; file = files[i]; i++) 
+    for (var i = 0; file = files[i]; i++)
     {
         var filename = file.name;
         var pos = filename.lastIndexOf('.');
         var suffix = filename.substring(pos+1);
         var newFile = null;
         var samename =false;
-        for (var j = 0; j< file_queue.files.length; j++)        
+                for (var j = 0; j< file_queue.files.length; j++)
         {
             if (file_queue.files[j]!==undefined) {
             if(filename == file_queue.files[j].name)
@@ -329,23 +312,23 @@ function checkSuffix() {
         }
         if (other_suffix.indexOf(suffix)>=0)
         {
-            newFile = new PPT(file_queue.files.length,filename,suffix); 
+            newFile = new PPT(file_queue.files.length,filename,suffix);
             newFile.getToken();
             file_queue.addFile(newFile);
             file_queue.pptnum++;
             $('#default').attr('required','true');
         }
-        else if (pdf_suffix.indexOf(suffix)>=0) 
+        else if (pdf_suffix.indexOf(suffix)>=0)
         {
-            newFile = new PDF(file_queue.files.length,filename,suffix); 
+            newFile = new PDF(file_queue.files.length,filename,suffix);
             newFile.getToken();
             file_queue.addFile(newFile);
         }
         else if (doc_suffix.indexOf(suffix)>=0)
-        {            
-            newFile = new DOC(file_queue.files.length,filename,suffix); 
+                    {
+            newFile = new DOC(file_queue.files.length,filename,suffix);
             newFile.getToken();
-            file_queue.addFile(newFile); 
+            file_queue.addFile(newFile);
         }
         else
         {
@@ -366,15 +349,12 @@ function checkSuffix() {
     }
     }
 }
-
 $("#upload-file").click(function(e){
     if(file_queue.uploaded!=file_queue.length)
     {
         return false;
     }
 });
-
-
 $("#print").submit(function(e){
     e.preventDefault();
     var newnames = [];
@@ -410,22 +390,27 @@ $("#print").submit(function(e){
                 var message='';
                 for(var i=0;info = data.info[i];i++)
                 {
-                    message+=info.name;
-                    message+=(info.r?':success\n':':fail\n');
+                
+                    if(info.r)
+                    {
+                        message+='<span class="text-success">提交成功:</span>';
+                    }else{
+                        message+='<span class="text-danger">上传失败:</span>';
+                    }
+                        message+='<span class="strong">'+info.name+'</span></br>'
                 }
-                confirm(message);
-                window.location.reload();
+                $('#modal-content').html(message);
             } else {
-                alert(data.info);
+                $('#modal-content').html(data.info);
             }
+            $('#msgbox').modal('show');
         });
 });
-
 function deleteFile (e) {
     var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
     id = parseInt(id);
     var temp = file_queue.files[id];
-    if (temp.uploadStatus) 
+    if (temp.uploadStatus)
     {
         var URL = "/File/deleteTempFile";
         $.post(URL, {
@@ -444,7 +429,6 @@ function deleteFile (e) {
         file_queue.delete(id);
     }
 }
-
 function reUpload (e) {
     var id = e.parentNode.parentNode.getAttribute('id').replace(/file_/,"");
     id = parseInt(id);
@@ -457,7 +441,6 @@ function reUpload (e) {
     attr.html('');
     span.html('<span class="label label-xs label-success">上传中..</span>');
 }
-
 function priceChange(n){
     var pid = n.value;
     var URL = "/Printers/getPrice";
@@ -477,7 +460,6 @@ function priceChange(n){
             }
         });
 }
-
 $(function(){
     $("[type='checkbox']").bootstrapSwitch();
     $('.setting').hide();
@@ -497,6 +479,5 @@ $(function(){
     }
     });
 });
-
 </script>
 </BLOCK>
