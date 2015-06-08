@@ -95,8 +95,8 @@ class ShareController extends Controller {
 		$uid  = use_id();
 		$fid  = I('fid', null, 'int');
 		$name = I('name', null, 'trim');
-		$tags = I('tags',array());
-		$anonymous=I('anonymity',true);
+		$tags = I('tags', array());
+		$anonymous = I('anonymity', true);
 		if ( ! $uid)
 		{
 			$this->error('未登录！');
@@ -113,23 +113,30 @@ class ShareController extends Controller {
 		{
 			$share['name'] = $name;
 			$share['fil_id'] = $fid;
-			$share['anonymous']=$anonymous;
+			$share['anonymous'] = $anonymous;
 			$sid = M('share')->add($share);
-			if (!$sid)
+			if ( ! $sid)
 			{
 				$this->error('共享失败！');
 			}
 			else
 			{
-				$hastag=array();
-				foreach ($tags as $tag) {
-					$hastag[]=array(
-						'share_id'=>$sid,
-						'tag_id'=>intval($tag)
+				$hastag = array();
+				$Tag    = M('tag');
+				foreach ($tags as $tid)
+				{
+					$tid = intval($tid);
+					if ($tid)
+					{
+						$hastag[] = array(
+							'share_id' => $sid,
+							'tag_id'   => $tid,
 						);
+						$Tag->where('id=%d', $tid)->setInc('count');
+					}
 				}
 				M('Hastag')->addAll($hastag);
-				$this->success($sid,U('detail','id='.$sid));
+				$this->success($sid, U('detail', 'id='.$sid));
 			}
 		}
 	}
@@ -155,20 +162,30 @@ class ShareController extends Controller {
 		}
 		else
 		{
-			$tag = array(
-				'name'   => $name,
-				'use_id' => $uid,
-			);
-
-			$tid = M('Tag')->add($tag);
+			$Tag = M('tag');
+			$tid = $Tag->getFieldByName($name, 'id');
 			if ($tid)
 			{
 				$this->success($tid);
 			}
 			else
 			{
-				$this->error('添加失败!');
+				$tag = array(
+					'name'   => $name,
+					'use_id' => $uid,
+				);
+
+				$tid = $Tag->add($tag);
+				if ($tid)
+				{
+					$this->success($tid);
+				}
+				else
+				{
+					$this->error('添加失败!');
+				}
 			}
+
 		}
 	}
 
@@ -186,8 +203,15 @@ class ShareController extends Controller {
 		}
 		else
 		{
-			$tag  = I('tag', null, 'trim');
-			$tags = M('Tag')->where('name LIKE "%s"', $tag)->order('count desc')->limit(10)->select();
+			$name = I('tag', null, 'trim');
+			if ($name)
+			{
+				$tags = M('Tag')->where('name LIKE "%%%s%%"', $name)->order('count desc')->limit(10)->select();
+			}
+			else
+			{
+				$tags = M('Tag')->order('count desc')->limit(10)->select();
+			}
 			$this->success($tags);
 		}
 
