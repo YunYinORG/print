@@ -1,127 +1,21 @@
-
-html 
-{
-   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-   background-color: #fff;
-   font-weight: 300;
-}
-body 
-{
-	margin: 0px;
-	padding: 0px;
-}
-.documentation 
-{
-    width: 1100px;
-	margin: 0px auto;
-	padding: 100px 0px;
-}
-.documentation h3, p 
-{
- text-align: center;
-}
-.documentation h3
-{
-	margin: 0px 0px 20px 0px;
-	font-weight: 300;
-	font-size: 2em;
-}
-a
-{
-	color: #337ab7;
-	text-decoration: none;
-}
-	
-a:hover,a:visited 
-{
-	color: white;
-	text-decoration: none;
-	cursor: pointer;
-}
-.loginbox
-	{
-	border-radius:7px;
-	padding-top:20px;
-	width:350px;
-	height:400px;
-	background-color:rgba(0,0,0,0.6);
-	float:right;
-	margin-top:140px;
-	}
-.under-login
-{
-	left:0px;
-	top:0px;
-	z-index:-999;
-}
-.floatup
-{
-	float:right;
-	z-index:0;
-}
-.title
-{
-	margin-top:5px;
-}
-.inputbox
-{
-	margin-left:30px;
-	margin-right:30px;
-}
-.wrap
-{
-	margin-top:10px;
-	padding-left:25px;
-	padding-right:25px;
-}
-.streach
-{
-	display:block;
-	padding:0px 90px;
-}
-.btnw
-{
-	margin-top:35px;
-}
-.iconlocation
-{
-	color: white;
-    font-size: 23px;
-    top: 33px;
-    left: -40px;
-}
-.loginfont
-{
-	color: white;
-    font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Hiragino Sans GB W3", "WenQuanYi Micro Hei", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
-	font-family:"Helvetica Neue",Helvetica,"Hiragino Sans GB","Segoe UI","Microsoft Yahei",Tahoma,Arial,STHeiti,sans-serif;
-    font-size: 30px;
-    display: block;
-    padding-left: 29%;
-	line-height:1.8em;
-}
-.newuserfont
-{
-    font-size: 12px;
-    float: right;
-}
-.feature
-{
-	font-size: 30px;
-    padding-left: 33%;
-	font-family:"Helvetica Neue",Helvetica,"Hiragino Sans GB","Segoe UI","Microsoft Yahei",Tahoma,Arial,STHeiti,sans-serif;
-}
-.tipcontent
-{
-height: 45px;
-width: 275px;
-color: white;
-font-size: 10px;
-border-style: solid;
-border-width: 2px;
-border-color: rgba(255, 255, 255, 0.49);
-border-radius: 8px;
-padding: 2px 2px;
-display: none;
-margin-top: 5%;
-}
+html { width: 100%; min-height: 100%; }
+body { margin: 0px; padding: 0px; font-family: 'Open Sans', Helvetica, Arial, sans-serif; background: rgb(73, 157, 255) url('../images/bg.jpg'); font-weight: 300; background-position: center; background-size: cover; background-repeat: no-repeat;}
+.documentation { width: 1100px; margin: 0px auto; padding: 100px 0px; }
+.documentation h3, p { text-align: center; }
+.documentation h3 { margin: 0px 0px 20px 0px; font-weight: 300; font-size: 2em; }
+a { color: white; text-decoration: none; }
+a:hover, a:visited {	/*color: white;*/
+text-decoration: none; cursor: pointer; }
+.loginbox { border-radius: 7px; padding-top: 20px; height: 400px; background-color: rgba(0, 0, 0, 0.6); margin-top: 140px; }
+.under-login { left: 0px; top: 0px; z-index: -999; }
+.floatup { float: right; z-index: 0; }
+.title { margin-top: 5px; }
+.inputbox { margin-left: 30px; margin-right: 30px; }
+.wrap { margin-top: 10px; padding-left: 25px; padding-right: 25px; }
+.streach { display: block; padding: 0px 60px; }
+.btnw { margin-top: 35px; }
+.iconlocation { color: white; font-size: 23px; top: 33px; left: -40px; }
+.loginfont { color: white; font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Hiragino Sans GB W3", "WenQuanYi Micro Hei", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif; font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Segoe UI", "Microsoft Yahei", Tahoma, Arial, STHeiti, sans-serif; font-size: 30px; display: block; padding-left: 29%; line-height: 1.8em; }
+.newuserfont { font-size: 12px; float: right; }
+.feature { font-size: 30px; padding-left: 33%; font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Segoe UI", "Microsoft Yahei", Tahoma, Arial, STHeiti, sans-serif; }
+.tipcontent { height: 50px; width: 275px; color: white; font-size: 10px; border-style: solid; border-width: 2px; border-color: rgba(255, 255, 255, 0.49); border-radius: 8px; padding: 2px 2px; display: none; margin-top: 5%; }
