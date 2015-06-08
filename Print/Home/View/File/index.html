@@ -38,9 +38,9 @@
                     <default />未知状态
                     </switch>
                 </td>
-                <td style="width:20%">[{$vo.id}]{$vo.name}
+                <td style="width:20%">[{$vo.id}]<span id='{$vo.id}_name'>{$vo.name}</span>
                     <IF condition="$vo.pdf eq 1">
-                    <a style="text-decoration :none;"><span class="glyphicon glyphicon-share share" data-toggle="modal" data-target="#share" data-fid="{$vo.id}" ></span></a>
+                    <a><span class="glyphicon glyphicon-share share" data-toggle="modal" data-target="#share" data-fid="{$vo.id}" ></span></a>
                     <!--button type="button" class="glyphicon glyphicon-share share" data-toggle="modal" data-target="#share" data-fid="{$vo.id}"></button-->
                     </IF>
                 </td>
@@ -79,7 +79,7 @@
     </div>
 
 </div>
-<div class="modal fade" id="share" tabindex="-1" role="dialog" aria-tagledby="myModalTag" aria-hidden="true">
+<div class="modal fade" id="share" tabindex="-1" role="dialog" aria-tagledby="myModalTag" aria-hidden="false">
       <div class="modal-dialog">    
           <div class="modal-content">
               <div class="modal-header">
@@ -88,25 +88,25 @@
               </div>
               <div class="modal-body">   
                       <div class="form-group">
-                          <label for="filename-input" class="control-tag">共享名称:</label>
+                          <label for="filename-input" class="control-label">共享名称:(别人看到此文件的名字)</label>
                           <input type="text" placeholder="设置共享的名字" class="form-control" id="filename-input">
                      </div>
                      <div class="form-group" id="chosen-tag">
                      </div>
                       <div class="form-group">
                           <label for="tag-input" class="control-tag">添加标签:</label>
-                            <input type="text" id="tag-input" list="tag-list"  placeholder="输入标签" onkeyup="getTag()" onkeydown="addTag()"> 
+                            <input type="text" id="tag-input" list="tag-list"  placeholder="输入标签" onkeyup="getTag()"> 
                             <datalist id="tag-list"></datalist>
                       </div>
                       <div class="checkbox">
                           <label>
-                              <input type="checkbox" id="display-name">匿名分享
+                              <input type="checkbox" id="anonymity">匿名共享（将不显示你的名字）
                           </label>
                       </div>
               </div>                       
               <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" id="share-btn" class="btn btn-primary">共享</button>     
+                    <button type="button" id="share-btn" class="btn btn-primary">共享此文件</button>     
                 </div>
             </div>
         </div>    
@@ -138,22 +138,28 @@ var tag_data = new Array();
 var tag_arr = new Array();
 var share_fid = -1;
 
-$('#share').on('show.bs.modal', function (event) {
+$('#share').bind('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         share_fid = button.data('fid');
-        var filename = button.parent().text().trim();
+        var filename = $('#'+share_fid+'_name').text().trim();
         var modal = $(this);
-        modal.find('.modal-title').text('分享');
+        modal.find('.modal-title').text('共享设置');
         $('#filename-input').val(filename);
         $('#chosen-tag').html('');
         tag_arr = null;
         tag_arr = new Array();
 })
 
-function checkInput(input)
+function checkTags(input)
 {
-    return input;
+    return input?input.trim():null;
 }
+
+//按键
+$('#tag-input').keydown(
+function(){
+    addTag();
+});
 
 function getTag()
 {
@@ -163,9 +169,9 @@ function getTag()
     var input = $('#tag-input');
     var URL = "__ROOT__/Share/getTags";
     $.post(URL,{
-        tag: checkInput(input.val())
+        tag: checkTags(input.val())
     },function(data){
-        if(data.status)
+        if(data.status&&data.info)
         {
             for(var i=0;info = data.info[i];i++)
             {
@@ -181,7 +187,7 @@ function addTag()
 {
     if(event.keyCode!=13) return;
     var input = document.getElementById('tag-input');
-    var input_val = checkInput(input.value);
+    var input_val = checkTags(input.value);
     if(input_val=='') return;
     var tag_id=-1;
     for(var i=0;tag=tag_data[i];i++)
@@ -194,7 +200,7 @@ function addTag()
     }
     if(tag_id==-1)
     {
-        var URL = "__ROOT__/File/addTag";
+        var URL = "__ROOT__/Share/createTag";
         $.post(URL,{
             tag: input_val
         },function(data){
@@ -221,22 +227,23 @@ function addTag()
         {
             tag_arr.push(tag_id);
             var chosen_tag = $('#chosen-tag');
-            chosen_tag.append('<span id="'+tag_id+'" class="tag tag-primary" onclick="deleteTag(this)">'+input.value+'</span>');
+            chosen_tag.append('<span id="'+tag_id+'" class="label label-primary" onclick="deleteTag(this)">'+input.value+'</span> ');
             input.value='';
         }
     }
 }
 
 $("#share-btn").on('click',function(){
-    var URL = "__ROOT__/File/share";
+    var URL = "__ROOT__/Share/add";
     var input = $('#tag-input');
-    var input_val = checkInput(input.value);
-    var display_name = document.getElementById('display-name');
+    var input_val = checkTags(input.value);
+    var anonymity = document.getElementById('anonymity');
     if(share_fid==-1) return;
     $.post(URL,{
         fid:share_fid,
-        tag:tag_arr,
-        display_name: display_name.checked
+        name:$('#filename-input').val().trim(),
+        tags:tag_arr,
+        anonymity: anonymity.checked
     },function(data){
         if(data.status)
         {

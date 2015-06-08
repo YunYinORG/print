@@ -77,7 +77,7 @@ class ShareController extends Controller {
 	{
 		$fid = I('id', null, 'int');
 		$map['id'] = $fid;
-		$File = M('Share')->getById($fid); //field('name,time,fid,anomonity')
+		$File = M('Share')->getById($fid); //field('name,time,fid,anonymous')
 		$this->data = array('id' => '3', 'name' => 'fsdafadsf', 'upload_user' => 'dafdsf', 'time' => '1999-10-11', 'thumbnail' => get_thumbnail_url($result['url']));
 		$this->tags = M('hastag')->where('share_id=%d', $fid)->field('name', 'tag_id')->select();
 		$this->display();
@@ -95,7 +95,8 @@ class ShareController extends Controller {
 		$uid  = use_id();
 		$fid  = I('fid', null, 'int');
 		$name = I('name', null, 'trim');
-		$tags = I('tags', [], 'int');
+		$tags = I('tags',array());
+		$anonymous=I('anonymity',true);
 		if ( ! $uid)
 		{
 			$this->error('未登录！');
@@ -112,6 +113,7 @@ class ShareController extends Controller {
 		{
 			$share['name'] = $name;
 			$share['fil_id'] = $fid;
+			$share['anonymous']=$anonymous;
 			$sid = M('share')->add($share);
 			if (!$sid)
 			{
@@ -121,12 +123,12 @@ class ShareController extends Controller {
 			{
 				$hastag=array();
 				foreach ($tags as $tag) {
-					$hastag=array(
+					$hastag[]=array(
 						'share_id'=>$sid,
-						'tag_id'=>$tag
+						'tag_id'=>intval($tag)
 						);
 				}
-				M('hastag')->addAll($hastag);
+				M('Hastag')->addAll($hastag);
 				$this->success($sid,U('detail','id='.$sid));
 			}
 		}
@@ -147,7 +149,7 @@ class ShareController extends Controller {
 		{
 			$this->error('未登录！', '/');
 		}
-		elseif ( ! $tag)
+		elseif ( ! $name)
 		{
 			$this->error('无效标签');
 		}

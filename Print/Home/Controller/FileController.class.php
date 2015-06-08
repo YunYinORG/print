@@ -1,5 +1,4 @@
 <?php
-
 // ===================================================================
 // | FileName:      FileController.class.php
 // ===================================================================
@@ -17,8 +16,13 @@
  * - index()
  * - add()
  * - uploadOne()
+ * - upload()
+ * - getToken()
+ * - deleteTempFile()
+ * - multi()
  * - delete()
  * - _empty()
+ * - _getExt()
  * Classes list:
  * - FileController extends Controller
  */
@@ -26,7 +30,6 @@ namespace Home\Controller;
 use Think\Controller;
 
 class FileController extends Controller {
-
 	/**
 	 * 文件列表页
 	 */
@@ -48,7 +51,7 @@ class FileController extends Controller {
 			foreach ($result as &$file)
 			{
 				$file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
-                $file['pdf'] = substr($file['name'],-4)==".pdf";
+				$file['pdf'] = (substr($file['name'], -4) == '.pdf');
 			}
 			unset($file);
 			$this->data = $result;
@@ -101,7 +104,6 @@ class FileController extends Controller {
 				{
 					$name = mb_substr($name, 0, 58).'.'.$info['file']['ext'];
 				}
-
 				// $data['status'] = 1;
 				// $data['pri_id'] = I('post.pri_id', 0, 'int');
 				$data['use_id'] = $uid;
@@ -110,6 +112,7 @@ class FileController extends Controller {
 
 				$File = D('File');
 				if ($File->create($data) && $File->add()) //上传
+
 				{
 					$this->redirect('File/index', null, 0, '上传成功');
 				}
@@ -138,57 +141,60 @@ class FileController extends Controller {
 	 */
 	public function upload()
 	{
-		$uid = use_id();
+		$uid   = use_id();
 		$files = I('post.files');
-		if (!$uid)
+		if ( ! $uid)
 		{
 			/*未登录*/
 			$this->error(L('UNLOGIN'), __ROOT__);
-		}elseif(!$files)
+		}
+		elseif ( ! $files)
 		{
 			/*未登录*/
 			$this->error('无文件');
-		}else
+		}
+		else
 		{
 			/*批量获取文件名*/
-			
 			/*获取文件设置基本信息*/
-			$File      = D('File');
-			$file_data=array();
+			$File = D('File');
+			$file_data = array();
 			$file_data['use_id'] = $uid;
-			$file_data=$File->create($file_data);
-
+			$file_data = $File->create($file_data);
 			/*获取和更新session中的缓存表信息*/
-			$upload_list=session('uploads');
-			session('uploads',null);
+			$upload_list = session('uploads');
+			session('uploads', null);
 
-			$result    = array();
-			foreach ($files as $path) 
+			$result = array();
+			foreach ($files as $path)
 			{
-				$old_name=$upload_list[$path];
-				if($old_name)
+				$old_name = $upload_list[$path];
+				if ($old_name)
 				{
-					$url='upload_'.$path;
-					rename_file('temp_'.$path,$url);
-					$file_data['url']=$url;
-					$file_data['name']=$old_name;
-					if($File->add($file_data))
+					$url = 'upload_'.$path;
+					rename_file('temp_'.$path, $url);
+					$file_data['url'] = $url;
+					$file_data['name'] = $old_name;
+					if ($File->add($file_data))
 					{
 						$result[] = array('name' => $old_name, 'r' => 1);
-					}else{
+					}
+					else
+					{
 						$result[] = array('name' => $old_name, 'r' => 0);
 					}
 				}
 			}
-			if(empty($result))
+			if (empty($result))
 			{
 				$this->error('上传失败');
-			}else{
+			}
+			else
+			{
 				$this->success($result);
 			}
-    	}
+		}
 	}
-
 
 	/**
 	 * 获取上传token
@@ -199,40 +205,39 @@ class FileController extends Controller {
 	public function getToken()
 	{
 		$uid = use_id();
-        $file_name=I('post.filename');
-        if (!$uid)
-        {
-        	$this->error(L('UNLOGIN'), __ROOT__);
-        }elseif(!$file_name)
-        {
-        	$this->error('无效文件名');
-        }else
-		{	
+		$file_name = I('post.filename');
+		if ( ! $uid)
+		{
+			$this->error(L('UNLOGIN'), __ROOT__);
+		}
+		elseif ( ! $file_name)
+		{
+			$this->error('无效文件名');
+		}
+		else
+		{
 			/*获取token*/
 			$suffix = $this->_getExt($file_name);
-			$path= date('Y-m-d').'_'.uniqid().'.'.$suffix;
-			$token=upload_token('temp_'.$path);
+			$path   = date('Y-m-d').'_'.uniqid().'.'.$suffix;
+			$token  = upload_token('temp_'.$path);
 
-			if(!$token)
+			if ( ! $token)
 			{
 				$this->error('获取token失败');
-			}else{
+			}
+			else
+			{
 				/*token获取成功*/
 				/*更新上传缓存表映射*/
-				$upload_list=session('uploads');
-				$upload_list[$path]=$file_name;
-				session('uploads',$upload_list);
-
+				$upload_list = session('uploads');
+				$upload_list[$path] = $file_name;
+				session('uploads', $upload_list);
 				/*返回上传凭证*/
 				header('Access-Control-Allow-Origin:http://upload.qiniu.com');
 				/*最好返回上传url而不是name*/
-				$token_info = array(
-					'name' => $path, 
-					'token' => $token
-					);
+				$token_info = array('name' => $path, 'token' => $token);
 				$this->success($token_info);
 			}
-
 		}
 	}
 
@@ -244,31 +249,31 @@ class FileController extends Controller {
 	 */
 	public function deleteTempFile()
 	{
-		$path    = I('post.path');
-		$uid = use_id();
-		if (!$uid)
-        {
-        	$this->error(L('UNLOGIN'), __ROOT__);
-        }
-        elseif(!$path)
-        {
-        	$this->error('无效文件名');
-        }
-        else
-		{		
+		$path = I('post.path');
+		$uid  = use_id();
+		if ( ! $uid)
+		{
+			$this->error(L('UNLOGIN'), __ROOT__);
+		}
+		elseif ( ! $path)
+		{
+			$this->error('无效文件名');
+		}
+		else
+		{
 			/*检查文件是否是真正上传的文件*/
-			$upload_list=session('uploads');
-			if(!isset($upload_list[$path]))
+			$upload_list = session('uploads');
+			if ( ! isset($upload_list[$path]))
 			{
 				$this->error('文件不存在');
-			}else
+			}
+			else
 			{
 				/*更新上传映射*/
 				unset($upload_list[$path]);
-				session('uploads',$upload_list);
-				
+				session('uploads', $upload_list);
 				/*删除文件*/
-				if (delete_file($path,'QINIU'))
+				if (delete_file($path, 'QINIU'))
 				{
 					$this->success(true);
 				}
@@ -276,7 +281,7 @@ class FileController extends Controller {
 				{
 					$this->error('删除失败');
 				}
-			}			
+			}
 		}
 	}
 
@@ -307,7 +312,7 @@ class FileController extends Controller {
 		}
 	}
 
-		/**
+	/**
 	 * 	删除文件记录
 	 * @method delete
 	 * @author NewFuture[newfuture@yunyin.org]
@@ -346,7 +351,7 @@ class FileController extends Controller {
 	public function _empty()
 	{
 		$this->redirect('index');
-    }
+	}
 
 	/**
 	 * 获取文件后缀名
@@ -358,11 +363,13 @@ class FileController extends Controller {
 	 */
 	private function _getExt($filename)
 	{
-		$pos=strrpos($filename, '.');
-		if($pos>0)
+		$pos = strrpos($filename, '.');
+		if ($pos > 0)
 		{
-			return strtolower(substr($filename,  $pos+ 1));
-		}else{
+			return strtolower(substr($filename, $pos + 1));
+		}
+		else
+		{
 			return '';
 		}
 	}
