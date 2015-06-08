@@ -95,7 +95,7 @@
                      </div>
                       <div class="form-group">
                           <label for="tag-input" class="control-tag">添加标签:</label>
-                            <input type="text" id="tag-input" list="tag-list"  placeholder="输入标签" onkeyup="getTag()" onkeypress="addTag()"> 
+                            <input type="text" id="tag-input" list="tag-list"  placeholder="输入标签" onpropertychange="getTag()" onkeypress="addTag()"> 
                             <datalist id="tag-list"></datalist>
                       </div>
                       <div class="checkbox">
@@ -155,11 +155,8 @@ function checkTags(input)
     return input?input.trim():null;
 }
 
-//按键
-// $('#tag-input').keydown(
-// function(){
-//     addTag();
-// });
+$('#tag-input').bind('input propertychange',getTag);
+$('#tag-input').bind('input focus',getTag);
 
 function getTag()
 {
@@ -229,6 +226,7 @@ function addTag()
             var chosen_tag = $('#chosen-tag');
             chosen_tag.append('<span id="'+tag_id+'" class="label label-primary" onclick="deleteTag(this)">'+input.value+'</span> ');
             input.value='';
+            getTag();
         }
     }
 }
