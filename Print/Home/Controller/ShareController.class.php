@@ -39,32 +39,33 @@ class ShareController extends Controller {
 	 */
 	public function index()
 	{
-		# code...
-
+		$uid = use_id();
+		if ( ! $uid)
+		{
+			$this->error('请登录！', U('/'));
+		}
+		else
+		{
+			$this->tags=M('Tag')->cache(120)->order('count desc')->limit(10)->select();
+			$this->share;
+			$this->display();
+		}
 	}
 
 	/**
-	 * 分享文件搜索页
+	 * 分享文件搜
 	 * @method search
-	 * @param  输入
+	 * @param  输入 tid
 	 * @author NewFuture[newfuture@yunyin.org]
 	 */
 	public function search()
 	{
-		$this->data = array(array('id' => '3', 'name' => 'fsdafadsf', 'uploader' => 'dafdsf', 'time' => '1999-10-11'), array('id' => '1', 'name' => 'fsdafadsf', 'uploader' => 'dafdsf', 'time' => '1999-10-11'), array('id' => '2', 'name' => 'fsdafadsf', 'uploader' => 'dafdsf', 'time' => '1999-10-11'));
-		$this->display();
-	}
-
-	/**
-	 * 分享文件搜索api
-	 * @method searchAPI
-	 * @param  输入
-	 * @author NewFuture[newfuture@yunyin.org]
-	 */
-	public function searchAPI()
-	{
-		$data = array(array('id' => '1', 'name' => 'bla', 'uploader' => 'dafdsf', 'time' => '1999-12-11'), array('id' => '3', 'name' => 'fadsf', 'uploader' => 'dafdsf', 'time' => '1999-10-11'), array('id' => '2', 'name' => 'fsdafadsf', 'uploader' => 'dafdsf', 'time' => '1999-10-11'));
-		$this->success($data);
+		$tid=I('tid',0,'int');
+		if($tid)
+		{
+			M('hastag')->join('');
+		}
+		
 	}
 
 	/**
@@ -210,7 +211,7 @@ class ShareController extends Controller {
 			}
 			else
 			{
-				$tags = M('Tag')->order('count desc')->limit(10)->select();
+				$tags = M('Tag')->cache(120)->order('count desc')->limit(10)->select();
 			}
 			$this->success($tags);
 		}

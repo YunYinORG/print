@@ -1,0 +1,126 @@
+{//文件管理页}
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name='header'>
+<INCLUDE file="Print/Template/nav.html" share="active"/>
+</BLOCK>
+<BLOCK name='content'>
+<div class="container-fluid">
+    <div class="input-group col-md-offset-2 col-md-8">
+        <input type="search" list="tag-list" id="tag-input" placeholder="输入标签搜索" value="" class="form-control"aria-describedby="search-btn">
+        <datalist id="tag-input"></datalist>
+        <span class="input-group-addon btn btn-success" id="search-btn"><i class="glyphicon glyphicon-search"></i></span>
+    </div>
+
+
+</div>
+</BLOCK>
+<BLOCK name='end'>
+<script>
+    var label_data = null;
+    var label_arr = new Array();
+    function checkInput(input)
+    {
+        return input;
+    }
+    function getLabel()
+    {
+        if(event.KeyCode==13) return;
+        label_data=null;
+        var datalist = $('#label-list');
+        datalist.html('');
+        var input = $('#label-input');
+        var URL = "__ROOT__/Share/getTags";
+        $.post(URL,{
+            label: checkInput(input.val())
+        },function(data){
+            if(data.status)
+            {
+                var datalist = $('#label-list');
+                label_data = data.info;
+                for(var i=0;info = label_data[i];i++)
+                {
+                    datalist.append('<option id="'+info.id+'" value="'+info.name+'"></option>');
+                }
+            }
+        });
+    }
+    function addLabel()
+    {
+        if(event.keyCode!=13) return;
+        var input = document.getElementById('label-input');
+        var input_val = checkInput(input.value);
+        if(input_val=='') return;
+        var label_id=-1;
+        var i=0;
+        for(;label=label_data[i];i++)
+        {
+            if(label.name==input_val)
+            {
+                label_id=label.id;
+                break;
+            }
+        }
+        if(label_id==-1&&i==label_data.length)
+        {
+            alert('not such label');
+            return;
+        }
+        if(label_id!=-1)
+        {
+            var i=0;
+            for(;i<label_arr.length;i++)
+                            {
+                                if(label_arr[i]!==undefined&&label_arr[i]==label_id)
+                                {
+                                    alert('already there');
+                                    input.value='';
+                                    break;
+                                }
+                            }
+                            if(i==label_arr.length)
+                            {
+                                label_arr.push(label_id);
+                                var chosen_label = $('#chosen-label');
+                                chosen_label.append('<span id="'+label_id+'" class="label label-primary" onclick="deleteLabel(this)">'+input.value+'</span>');
+                                input.value='';
+                            }
+                        }
+                    }
+                    $("#search").on('click',function(){
+                        var URL = "__ROOT__/Share/searchAPI";
+                        $.post(URL,{
+                            label:label_arr
+                        },function(data){
+                            if(data.status)
+                            {
+                                var table = $('tbody');
+                                table.html('');
+                                for(var key in data.info)
+                                {
+                                    insert(data.info[key]);
+                                }
+                            }else{
+                                alert('操作失败：'+data.info);
+                            }
+                        });
+                    });
+                    function insert(data)
+                    {
+                        var html='<tr><td style="width:20%">' + data.name + '</td><td>' +data.time+ '</td><td>'+data.uploader +'</td><td><a href="__URL__/detail/fid/'+data.id+'" type="button" class="detail btn btn-danger">detail</a></td></tr>';
+                        var table = $('tbody');
+                        table.append(html);
+                    }
+                    function deleteLabel(e){
+                        var label_id = e.getAttribute('id');
+                        for(var i=0 ;i<label_arr.length;i++)
+                                        {
+                                            if(label_arr[i]==parseInt(label_id))
+                                            {
+                                                e.remove();
+                                                label_arr[i]=undefined;
+                                                break;
+                                            }
+                                        }
+                                    }
+</script>
+</BLOCK>
