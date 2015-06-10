@@ -210,6 +210,7 @@ create table share
 	name 				char(32) not null,
 	anomonity 			bool,
 	primary key(id)
+	unique key share_file_unique (fil_id)
 );
 
 /*==============================================================*/
@@ -223,6 +224,7 @@ create table tag
 	count 				bigint,
 	time 				timestamp not null default CURRENT_TIMESTAMP,
 	primary key(id)
+	unique key tag_name_unique (name)
 );
 
 /*==============================================================*/
@@ -233,6 +235,7 @@ create table hastag
 	share_id 			bigint not null,
 	tag_id 				bigint not null,
 	time 				timestamp not null default CURRENT_TIMESTAMP
+	primary key(share_id,tag_id)
 );
 
 alter table card add constraint FK_card_info_of_user foreign key (id)
