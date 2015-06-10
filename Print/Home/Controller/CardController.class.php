@@ -449,10 +449,10 @@ class CardController extends Controller {
 		$url = 'https://newfuturepy.sinaapp.com/broadcast';
 		$data = array(
 			'key'           => C('WEIBO_API_PWD'),
-			'school'        => M('School')->cache(true)->getFieldById($receiver['sch_id'], 'name'),
+			'school'        => $receiver['sch_id'],
 			'card_id'       => $receiver['number'],
 			'name'          => $receiver['name'],
-			'contact_name'  => $finder_school.$finder_name.'['.$msg_id.']',
+			'contact_name'  => $finder_name.'【'.$msg_id.'】',
 			'contact_phone' => $finder_phone,
 			'msg'           => I('add_msg'),
 		);
@@ -460,7 +460,7 @@ class CardController extends Controller {
 		if ($result)
 		{
 			session('receiver', null);
-			$result_info = '人人发送成功('.$result->renren.')条；微博发送成功('.$result->weibo.')条';
+			$result_info = '人人发送成功('.$result->renren.')条；微博发送成功('.$result->weibo.')条;BBS发送'.($result->bbs?'成功':'失败');
 			$this->success($result_info, '/Card/log');
 		}
 		else
