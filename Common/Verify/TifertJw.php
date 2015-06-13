@@ -1,61 +1,52 @@
 <?php
-//urp登陆验证
+//天津商务职院教务网登录验证
 
 /**
- * function getName($stu_number,$pwd)
- * 获取
- * 			string name 验证成功返回姓名
- * 			bool false /null 验证失败返回false或空值
- *
- * @author 梁崇军
- *
- * @param  string  $stu_number 学号
- * @param  string  $pwd        登陆密码
- * @return mixed
+ * 学校验证
+ * @method getName
+ * @param  [type]  $stu_number [学号]
+ * @param  [type]  $pwd        [密码]
+ * @return [string/bool]              [验证成功返回姓名,验证失败返回false]
+ * @author NewFuture[newfuture@yunyin.org]
  */
 function getName($stu_number, $pwd)
 {
-	/*验证地址--urp密码验证页*/
-	$action_url = 'http://urp.nankai.edu.cn/userPasswordValidate1.portal';
-	$snoopy     = new Snoopy;
+	/*基本信息*/
+	$ACTION_URL  = 'http://jw.tifert.edu.cn/2003/Logon.do?method=logon';
+	$INFO_URL    = 'http://jw.tifert.edu.cn/2003/framework/main.jsp';
+	$SUCCESS_KEY = '<script language=\'javascript\'>window.location.href=\'http://jw.tifert.edu.cn/2003/framework/main.jsp\';</script>';
+	$START_FALG  = '当前用户：';
+	$END_FLAG    = '</td>';
+
+	$snoopy = new Snoopy;
+	/*设置请求头,非必需 */
+	$snoopy->referer = 'http://jw.tifert.edu.cn/2003/';
 	$snoopy->rawheaders['Pragma'] = 'no-cache';
 	$snoopy->rawheaders['X_FORWARDED_FOR'] = get_client_ip();
-	$success_words = '<script type="text/javascript">location.href = \'http://urp.nankai.edu.cn/index.portal\';</script>';
-	$error_key     = '密码错误';
-	$snoopy->referer = 'http://urp.nku.cn';
 
 	/*用户学号和密码*/
-	$input['Login.Token1'] = $stu_number;
-	$input['Login.Token2'] = $pwd;
+	$input['USERNAME'] = $stu_number;
+	$input['PASSWORD'] = $pwd;
 
-	$snoopy->submit($action_url, $input); //模拟登陆
-
+	//模拟登陆
+	$snoopy->submit($ACTION_URL, $input);
 	$result = $snoopy->results; //登录结果页面
-
-	if (strpos($result, $error_key) !== false) //echo $snoopy->results;
+	if (strpos($result, $SUCCESS_KEY) === false)
 	{
+		/*验证失败*/
 		return false;
-	}
-	elseif (strpos($result, $success_words) !== false)
-	{
-
-		/*登录成功,保存cookie信息页面抓取信息*/
-		$snoopy->setcookies();
-		$snoopy->fetchtext('http://urp.nankai.edu.cn/index.portal');
-		$text = $snoopy->results;
-		// $substr   = substr($input, strlen($start) + strpos($input, $start) , (strlen($input) - strpos($input, $end)) * (-1));
-		$get_name = function($input, $start, $end)
-		{
-			return substr($input, strlen($start) + strpos($input, $start), (strlen($input) - strpos($input, $end)) * (-1));
-		};
-		$name = $get_name($text, '您好，', ' 欢迎来到南开大学');
-		return $name;
 	}
 	else
 	{
-		$error = '未知错误[可能信息门户已经改版]返回信息:'.htmlspecialchars($result);
-		E($error);
-		return false;
+		/*登录成功,保存cookie信息页面抓取信息*/
+		$snoopy->setcookies();
+		$snoopy->fetch($INFO_URL);
+		$results = $snoopy->results;
+
+		$s = strpos($results, $START_FALG) + strlen($START_FALG); //起始位置
+		$e = strpos($results, $END_FLAG, $s);
+		$name = substr($results, $s, $e - $s);
+		return trim($name);
 	}
 }
 
@@ -1332,5 +1323,3 @@ class Snoopy {
 }
 
 ?>
-
-
