@@ -17,9 +17,6 @@ return array(
 	//SQL生成缓存
 	'DB_SQL_BUILD_CACHE' => true,
 
-	//验证方式
-	'VERIFY_NKU' => 'Verify.NankaiUrp',
-	'VERIFY_TJU' => 'Verify.TjuE',
 	'NKU_OPEN'   => true,
 
 	//URL设定
@@ -67,10 +64,15 @@ return array(
 		4 => '3X3',
 	),
 
+	//验证方式
+	'VERIFY_NKU' => 'Verify.nankai_urp',
+	'VERIFY_TJU' => 'Verify.tju_e',
+	'VERIFY_TIFERT'=>'Verify.tifert_jw',
 	//验证正则表达式
-	'REGEX_NUMBER'     => '/^(\d{7}|\d{10})$/', //学号正则
-	'REGEX_NUMBER_NKU' => '/^(([1][0-4]\d{5})|([1|2]1201[0-4]\d{4}))$/', //南开学号
-	'REGEX_NUMBER_TJU' => '/^[1-3]01[0-4]\d{6}$/', //天大学号
+	'REGEX_NUMBER'     => '/^(\d{7}|\d{10})$/', //学号正则7或者10
+	'REGEX_NUMBER_NKU' => '/^(([1][0-4]\d{5})|([1|2]1201[0-4]\d{4}))$/', //南开学号本科7硕博10
+	'REGEX_NUMBER_TJU' => '/^[1-3]01[0-4]\d{6}$/', //天大学号10
+	'REGEX_NUMBER_TIFERT'=>'/^((0[1-4]0[1-9])|(1[139][05][1-4]))1[2-5]0\d{3}$/',//天津商职10位
 	'REGEX_ACCOUNT'    => '/^\w{3,16}$/', //打印店账号正则
 	'REGEX_TOKEN'      => '/^\w{38,48}$/',
 	'REGEX_PHONE'      => '/^1[34578]\d{9}$/',

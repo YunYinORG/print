@@ -66,6 +66,10 @@ class UserController extends Controller
     {
         if ($data=session('authData')) 
         {
+            if(!isset($data['school']))
+            {
+                $data['school']=M('School')->cache(true)->getFieldById($data['sch_id'],'name');
+            }
             $this->data=$data;
             $this->display();
         } 

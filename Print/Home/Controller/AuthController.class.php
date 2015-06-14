@@ -79,7 +79,7 @@ class AuthController extends Controller {
 			$data = $this->_verify($number, $password);
 			if ( ! $data)
 			{
-				$this->error(L('VERIFY_FAIL'), C('BASE_URL'));
+				$this->error($this->err, C('BASE_URL'));
 			}
 			else
 			{
@@ -157,7 +157,7 @@ class AuthController extends Controller {
 		/*验证账号*/
 		if ( ! $this->_verify($number, $urp_password))
 		{
-			$this->error(L('VERIFY_FAIL'));
+			$this->error($this->err);
 		}
 		else
 		{
@@ -283,33 +283,45 @@ class AuthController extends Controller {
 	 *
 	 * @param  [type]  $number                     [学号]
 	 * @param  [type]  $password                   [密码]
+	 * @param [type] $sch_id 学校默认逐个匹配
 	 * @return [array] [验证信息,失败null]
 	 */
-	private function _verify($number, $password)
+	private function _verify($number, $password, $sch_id = null)
 	{
 		/*尚未注册，先判断学校导入学校验证文件*/
 		if (preg_match(C('REGEX_NUMBER_NKU'), $number))
 		{
-			if ( C('NKU_OPEN'))
+			//南开大学
+			if (C('NKU_OPEN'))
 			{
 				//$this->error(L('AUTH_NKU_CLOSE'));
 				$verify_way = C('VERIFY_NKU');
 				$data['sch_id'] = 1;
-			}else{
+			}
+			else
+			{
 				//内网关闭时启用被动验证
 				$verify_way = 'Verify.NankaiInside';
 				$data['sch_id'] = 1;
 			}
-			
+
 		}
 		elseif (preg_match(C('REGEX_NUMBER_TJU'), $number))
 		{
+			//天津大学
 			$verify_way = C('VERIFY_TJU');
 			$data['sch_id'] = 2;
 		}
+		elseif (preg_match(C('REGEX_NUMBER_TIFERT'), $number))
+		{
+			//天津商职
+			$verify_way = C('VERIFY_TIFERT');
+			$data['sch_id'] = 3;
+		}
 		else
 		{
-			//	$this->error('你输入的学号'.$number.',不是南开或者天大在读学生的的学号，如果你是南开或者天大的在读学生请联系我们！');
+			//匹配失败
+			$this->err = L('VERIFY_NUMBER_ERROR', array('number' => $number));
 			return false;
 		}
 
@@ -328,6 +340,8 @@ class AuthController extends Controller {
 		}
 		else
 		{
+			$school=M('School')->cache(true)->getFieldById($data['sch_id'],'name');
+			$this->err = L('VERIFY_FAIL', array('school'=>$school));
 			return null;
 		}
 	}

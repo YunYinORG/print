@@ -26,17 +26,18 @@ return array(
 	/*校园卡招领广播*/
 	/*参数 $reciever["school"，"name"，"number"]，$finder["school"，'name'。'msg']*/
 	//此人在平台内，
-	'CARD_MSG_IN'=>'#{$card_school}失物招领#{$card_name}同学（学号{$card_number}）离家出走的校园卡已经被{$finder_school}的{$finder_name}同学捡到。请尽快登录#云印南天校园卡招领中心#（yunyin.org/Card/log）联系,TA的留言：{$msg}',
+	'CARD_MSG_IN' => '#{$card_school}失物招领#{$card_name}同学（学号{$card_number}）离家出走的校园卡已经被{$finder_school}的{$finder_name}同学捡到。请尽快登录#云印南天校园卡招领中心#（yunyin.org/Card/log）联系,TA的留言：{$msg}',
 	//此人不在平台
-	'CARD_MSG_OUT'=>'#云印南天校园卡招领中心##{$card_school}失物招领#{$card_name}同学（学号{$card_number}）离家出走的校园卡已经被{$finder_school}的{$finder_name}同学捡到。TA的留言：{$msg}',
+	'CARD_MSG_OUT' => '#云印南天校园卡招领中心##{$card_school}失物招领#{$card_name}同学（学号{$card_number}）离家出走的校园卡已经被{$finder_school}的{$finder_name}同学捡到。TA的留言：{$msg}',
 
 	/*登录验证*/
 	'NOT_HTTPS_ERROR'      => '必须通过https安全信道进行登录或注册操作!', //不是使用的https通道
-	'TRIES_LIMIT'         => '尝试次数太多，已被临时锁定',
+	'TRIES_LIMIT'          => '尝试次数太多，已被临时锁定',
 	'WRONG_FORMAT'         => '格式错误',
 	'LOGIN_FAIL'           => '登录失败,学号或者密码错误',
 	'USER_BAN'             => '此用户已被封禁',
-	'VERIFY_FAIL'          => '学校账号实名信息验证失败',
+	'VERIFY_NUMBER_ERROR'  => '你输入的学号 {$number} ,不是目前所支持学校在读学生的的学号，如果你确定无误，请联系我们！',
+	'VERIFY_FAIL'          => '{$school}学校实名验证失败，如果系统出错请立即联系我们',
 	'AUTH_NKU_CLOSE'       => '对不起，由于南开内网原因，目前注册暂时关闭，请您谅解！如果有问题请及时联系我们！',
 	'ACCOUNT_FORMAT_ERROR' => '账号格式错误',
 	'UNLOGIN'              => '未登录',
