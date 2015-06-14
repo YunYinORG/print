@@ -48,6 +48,7 @@ class PrinterController extends Controller {
 		}
 		else
 		{
+			$this->schlist=M('School')->field('id,name')->cache('schlist',7200)->select();
 			$this->display();
 		}
 	}

@@ -64,9 +64,10 @@
                     </div>
                     <div class="form-group">
                         <select class="form-control" name="sch_id">
-                            <option value="1">南开大学</option>
-                            <option value="2">天津大学</option>
-                        </select>
+                        <foreach name="schlist" item="school">
+                            <option value="{$school['id']}">{$school['name']}</option>
+                        </foreach>
+                     </select>
                     </div>
                 </div>
             </div>
