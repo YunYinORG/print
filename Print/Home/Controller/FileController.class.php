@@ -197,6 +197,49 @@ class FileController extends Controller {
 	}
 
 	/**
+	 * 共享文件打印
+	 * @method sharePrint
+	 * @return [type]     [description]
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
+	public function sharePrint()
+	{
+		$uid = use_id();
+		$sid = I('share_id', 0, 'int');
+		if ( ! $uid)
+		{
+			$this->error(L('UNLOGIN'), '/');
+		}
+		elseif ( ! $sid)
+		{
+			$this->error(L('PARAM_ERROR'));
+		}
+		else
+		{
+
+			$data = D('ShareView')->where('share.id=%d', $sid)->field('url,name')->find();
+			if ( ! $data['url'])
+			{
+				$this->error('文件已经删除！');
+			}
+			$data['use_id'] = $uid;
+			$File = D('File');
+			if ( ! $File->create($data))
+			{
+				$this->error('数据获取失败:'.$File->getError());
+			}
+			elseif ($File->add())
+			{
+				$this->success('传送成功！',U('File/index'));
+			}
+			else
+			{
+				$this->error('传送失败');
+			}
+		}
+	}
+
+	/**
 	 * 获取上传token
 	 * @method getToken
 	 * @return [type]   [description]

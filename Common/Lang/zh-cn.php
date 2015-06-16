@@ -49,6 +49,8 @@ return array(
 	'REG_ERROR'   => '注册失败！',
 	'REG_SUCC'    => '注册成功！',
 
+	'PARAM_ERROR' => '参数或者缺少错误！',
+
 	'CARD_PLEASE_BIND_PHONE'    => '使用此功能必须绑定手机号！',
 	'CARD_NOT_SEND_TO_SELF'     => '不要用自己的做实验哦！',
 	'CARD_ACCOUNT_BEEN_DISABLE' => '由于恶意使用,您的此功能已被禁用',

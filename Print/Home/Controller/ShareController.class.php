@@ -46,8 +46,9 @@ class ShareController extends Controller {
 		}
 		else
 		{
-			$this->tags=M('Tag')->cache(120)->order('count desc')->limit(10)->select();
-			$this->share;
+			$this->tags = $this->_getTopTags();
+			$share = D('ShareView')->where('user.id=%d', $uid)->group('share.id')->select();
+			$this->share = $share;
 			$this->display();
 		}
 	}
@@ -60,12 +61,41 @@ class ShareController extends Controller {
 	 */
 	public function search()
 	{
-		$tid=I('tid',0,'int');
-		if($tid)
+		$tid    = I('tid', 0, 'int');
+		$string = I('q');
+		$page   = I('p', 1, 'int');
+		$Share  = D('ShareView')->field('id,fil_id,time,name,anonymous,user_name');
+		if ($tid)
 		{
-			M('hastag')->join('');
+			$Share = $Share->where('file.status > 0 AND hastag.tag_id=%d', $tid)->join('hastag ON hastag.share_id=share.id');
+
 		}
-		
+		elseif ($string)
+		{
+			$Share = $Share->where('share.name LIKE "%%%s%%"', $string);
+		}
+		else
+		{
+			$this->error(L('PARAM_ERROR'));
+		}
+
+		$files = $Share->page($page)->limit(20)->select();
+		foreach ($files as $file)
+		{
+			if ($file['anonymous'])
+			{
+				$file['user_name'] = '匿名';
+			}
+		}
+
+		if ($files)
+		{
+			$this->success($files);
+		}
+		else
+		{
+			$this->error('无查询结果╮(╯-╰)╭');
+		}
 	}
 
 	/**
@@ -76,11 +106,23 @@ class ShareController extends Controller {
 	 */
 	public function detail()
 	{
-		$fid = I('id', null, 'int');
-		$map['id'] = $fid;
-		$File = M('Share')->getById($fid); //field('name,time,fid,anonymous')
-		$this->data = array('id' => '3', 'name' => 'fsdafadsf', 'upload_user' => 'dafdsf', 'time' => '1999-10-11', 'thumbnail' => get_thumbnail_url($result['url']));
-		$this->tags = M('hastag')->where('share_id=%d', $fid)->field('name', 'tag_id')->select();
+		$sid   = I('id', null, 'int');
+		$uid   = use_id();
+		$share = D('ShareView')->where('share.id=%d', $sid)->find();
+		if ($share)
+		{
+			$share['url'] = get_thumbnail_url($share['url']);
+		}
+		$this->share = $share;
+		$this->tags = M('hastag')->join('tag ON tag.id=hastag.tag_id')->where('share_id=%d', $sid)->field('tag.name as name,tag_id')->select();
+		if($uid)
+		{
+			$user    = M('User')->Field('sch_id,phone')->getById($uid);
+			$this->lock = $user['phone'] ? 1 : 0;
+			$condition['sch_id'] = $user['sch_id'];
+			$condition['status'] = 1;
+			$this->data = M('printer')->where($condition)->order('rank desc')->Field('id,name,address')->select();
+		}
 		$this->display();
 	}
 
@@ -211,7 +253,7 @@ class ShareController extends Controller {
 			}
 			else
 			{
-				$tags = M('Tag')->cache(120)->order('count desc')->limit(10)->select();
+				$tags = $this->_getTopTags();
 			}
 			$this->success($tags);
 		}
@@ -241,6 +283,19 @@ class ShareController extends Controller {
 	{
 		# code...
 
+	}
+
+	/**
+	 * 获取最热标签
+	 * @method _getTopTags
+	 * @param  string      $n=10 	[个数，默认10个]
+	 * @return [type]             [description]
+	 * @access private
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
+	private function _getTopTags($n = 10)
+	{
+		return M('Tag')->cache(120)->order('count desc')->limit($n)->select();
 	}
 
 	public function _empty()

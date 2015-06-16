@@ -1,126 +1,135 @@
-{//文件管理页}
+{//分享页}
 <EXTEND name="Print/Template/base.html"/>
 <BLOCK name='header'>
 <INCLUDE file="Print/Template/nav.html" share="active"/>
 </BLOCK>
 <BLOCK name='content'>
 <div class="container-fluid">
-    <div class="input-group col-md-offset-2 col-md-8">
-        <input type="search" list="tag-list" id="tag-input" placeholder="输入标签搜索" value="" class="form-control"aria-describedby="search-btn">
-        <datalist id="tag-input"></datalist>
-        <span class="input-group-addon btn btn-success" id="search-btn"><i class="glyphicon glyphicon-search"></i></span>
+    <div class="row">
+        <div class="input-group col-md-offset-2 col-md-8">
+            <input type="search" list="tag-list" id="input-box" placeholder="输入标签搜索" value="" class="form-control"aria-describedby="search-btn" data-url='__CONTROLLER__/search'>
+            <datalist id="tag-list"></datalist>
+            <span class="input-group-addon btn btn-success" id="search-btn"><i class="glyphicon glyphicon-search"></i></span>
+        </div>
+        <div class="col-md-offset-1 col-md-10">
+            <small>常用标签：</small>
+            <volist name="tags" id="tag"><button class="tag btn btn-default btn-xs" role="button" data-tid="{$tag['id']}" style="margin:3px;"><i class="glyphicon glyphicon-tag text-info">{$tag['name']}</i></button> </volist>
+        </div>
     </div>
-
-
+    <hr/>
+    <div id='share-list' class="content text-center">
+        <volist name="share" id="file">
+        <div class="row well">
+            <div class="col-sm-offset-1 col-sm-10 clear-right">
+                <a href="__CONTROLLER__/detail?id={$file.id}" title="{$file.name}"> <strong>{$file.name}</strong></a>
+            </div>
+            <div class="col-sm-offset-1 col-sm-10 clear-left">
+                <span >贡献者： <IF condition='$file.anonymous eq 1'> 匿名<ELSE/>{$file.user_name}</IF> <small>分享时间 ：{$file.time}</small></span>
+            </div>
+        </div>
+        </volist>
+    </div>
 </div>
 </BLOCK>
 <BLOCK name='end'>
 <script>
-    var label_data = null;
-    var label_arr = new Array();
-    function checkInput(input)
-    {
-        return input;
-    }
-    function getLabel()
-    {
-        if(event.KeyCode==13) return;
-        label_data=null;
-        var datalist = $('#label-list');
-        datalist.html('');
-        var input = $('#label-input');
-        var URL = "__ROOT__/Share/getTags";
-        $.post(URL,{
-            label: checkInput(input.val())
-        },function(data){
-            if(data.status)
+taglist=[];
+$(function(){
+     $('.tag').click(function(){
+         var tag=$(this);
+         $('#input-box').val(tag.text()).data('tid',tag.data('tid'));
+         search();
+     }); 
+    
+    $('#search-btn').click(search);
+    $('#input-box').bind('change',getTag).bind('input propertychange',getTag);
+    // $('#tag-list').change=function(){ 
+    //     $('#input-box').data('tid',$(this).data('tid'));
+    // });
+});
+
+/**
+ * 请求搜索并呈现结果
+ * @method search
+ * @return {[type]} [description]
+ * @author NewFuture[newfuture@yunyin.org]
+ */
+function search()
+{
+    var input=$('#input-box');
+    var data={};
+    var s=input.val().trim();
+    var tid=0
+    if(s){
+        for (var i = taglist.length - 1; i >= 0; i--) {
+            if(taglist[i].name==s)
             {
-                var datalist = $('#label-list');
-                label_data = data.info;
-                for(var i=0;info = label_data[i];i++)
-                {
-                    datalist.append('<option id="'+info.id+'" value="'+info.name+'"></option>');
-                }
-            }
-        });
-    }
-    function addLabel()
-    {
-        if(event.keyCode!=13) return;
-        var input = document.getElementById('label-input');
-        var input_val = checkInput(input.value);
-        if(input_val=='') return;
-        var label_id=-1;
-        var i=0;
-        for(;label=label_data[i];i++)
-        {
-            if(label.name==input_val)
-            {
-                label_id=label.id;
-                break;
+                tid=taglist[i].id;
+                  data={'tid':tid};
             }
         }
-        if(label_id==-1&&i==label_data.length)
+    };
+    if(!tid)
+    {
+      tid=input.data('tid');
+        if(input.data('tid'))
         {
-            alert('not such label');
-            return;
+            data={'tid':tid};
+        }else if(s){
+            data={'q':s};
+        }else{
+            input.focus();
+            return false;
         }
-        if(label_id!=-1)
+    }
+    input.data('tid',0);
+    var url=input.data('url');
+    $.post(url,data,function(result,response)
+    {
+        // if(response.s)
+        var list=$('#share-list');
+        list.empty();
+        if(result.status)
         {
-            var i=0;
-            for(;i<label_arr.length;i++)
-                            {
-                                if(label_arr[i]!==undefined&&label_arr[i]==label_id)
-                                {
-                                    alert('already there');
-                                    input.value='';
-                                    break;
-                                }
-                            }
-                            if(i==label_arr.length)
-                            {
-                                label_arr.push(label_id);
-                                var chosen_label = $('#chosen-label');
-                                chosen_label.append('<span id="'+label_id+'" class="label label-primary" onclick="deleteLabel(this)">'+input.value+'</span>');
-                                input.value='';
-                            }
-                        }
-                    }
-                    $("#search").on('click',function(){
-                        var URL = "__ROOT__/Share/searchAPI";
-                        $.post(URL,{
-                            label:label_arr
-                        },function(data){
-                            if(data.status)
-                            {
-                                var table = $('tbody');
-                                table.html('');
-                                for(var key in data.info)
-                                {
-                                    insert(data.info[key]);
-                                }
-                            }else{
-                                alert('操作失败：'+data.info);
-                            }
-                        });
-                    });
-                    function insert(data)
-                    {
-                        var html='<tr><td style="width:20%">' + data.name + '</td><td>' +data.time+ '</td><td>'+data.uploader +'</td><td><a href="__URL__/detail/fid/'+data.id+'" type="button" class="detail btn btn-danger">detail</a></td></tr>';
-                        var table = $('tbody');
-                        table.append(html);
-                    }
-                    function deleteLabel(e){
-                        var label_id = e.getAttribute('id');
-                        for(var i=0 ;i<label_arr.length;i++)
-                                        {
-                                            if(label_arr[i]==parseInt(label_id))
-                                            {
-                                                e.remove();
-                                                label_arr[i]=undefined;
-                                                break;
-                                            }
-                                        }
-                                    }
-</script>
-</BLOCK>
+            var html='';
+            for (var i = 0;i<result.info.length; i++) {
+                s=result.info[i];
+                html='<div class="row well"><div class="col-sm-offset-1 col-sm-10 clear-right"><a href="__CONTROLLER__/detail?id='+s['id']+'" title="{$file.name}"> <strong>'+s['name']+'</strong></a></div><div class="col-sm-offset-1 col-sm-10 clear-left"><span >贡献者：'+s['user_name']+'<small>分享时间 ：'+s['time']+'</small></span></div></div>';
+                list.append(html);
+            }
+        }else{
+            list.html(result.info);
+        } 
+    });
+}
+
+/**
+ * 获取tag列表
+ * @method getTag
+ * @return {[type]} [description]
+ * @author NewFuture[newfuture@yunyin.org]
+ */
+function getTag()
+{
+
+    var input = $('#input-box');
+    var URL = "__CONTROLLER__/getTags";
+    $.post(URL,{
+        'tag': input.val().trim()
+    },function(data){
+        if(data.status&&data.info)
+        { 
+            var datalist = $('#tag-list');
+            datalist.html('');
+            taglist=data.info;
+            for(var i=0;i<taglist.length;i++)
+            {
+                datalist.append('<option data-tid="'+taglist[i].id+'" value="'+taglist[i].name+'"></option>');
+            }
+        }
+    });
+}
+
+
+        </script>
+        </BLOCK>

@@ -176,11 +176,17 @@ function upload_token($save_name)
 	return $token;
 }
 
-
-function get_thumbnail_url($name)
+/**
+ * [获取缩略图]
+ * @method get_thumbnail_url
+ * @param  [type]            $url [description]
+ * @return [type]                  [description]
+ * @author 孙卓豪
+ */
+function get_thumbnail_url($url)
 {
     $config = C('UPLOAD_CONFIG_QINIU');
-    $key    = str_replace('/', '_', $name);
+    $key    = str_replace('/', '_', $url);
     $qiniu   = new \Think\Upload\Driver\Qiniu\QiniuStorage($config);
     $fops = 'odconv/jpg/page/1/density/150/quality/80/resize/800';
     $url = "http://".$config['domain'].$key."?".$fops;
