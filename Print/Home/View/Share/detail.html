@@ -8,6 +8,7 @@
 <BLOCK name="addhead">{//头部添加}
 <PRESENT name="printers">
      <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
+     <link href="__PUBLIC__/css/upload.css" rel="stylesheet" type="text/css"/>
  </PRESENT>
 </BLOCK>
 
@@ -69,39 +70,56 @@
     </div>
     <br/>
     <IF condition="$lock eq 1">
-    <div class="row form-group text-cneter">
-        <div class="col-lg-2 col-lg-offset-1 col-xs-4 col-xs-offset-1">
-            <label for="wait" class="sr-only">设置</label>
-            <input name="wait" id="wait" type="checkbox" data-label-text="设置" data-off-text="提前打印"  data-on-text="到店打印" data-off-color="warning" data-on-color="success" data-label-width="" disabled="true" checked="checked" />
-        </div>
-        <div class="setting">
-            <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
-                <div class="input-group">
-                    <label for="copies" class="sr-only">份数</label>
-                    <input name="copies" type="number" placeholder="份数" class="form-control" id="copies" min="1" value="1"/>
-                    <span class="input-group-addon">份</span>
-                </div>
+        <div class="row form-group">
+            <div class="col-xs-5 col-xs-offset-1 ">
+                <label for="wait" class="sr-only">设置</label>
+                <input name="wait" id="wait" type="checkbox" data-label-text="设置" data-off-text="提前打印"  data-on-text="到店打印" data-off-color="warning" data-on-color="success" data-label-width="" checked="checked" />
             </div>
-            <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+            <div class="setting col-xs-3 col-xs-offset-1">
+                    <div class="input-group">
+                        <label for="copies" class="sr-only">份数</label>
+                        <input name="copies" type="number" placeholder="份数" class="form-control" id="copies" min="1" value="1"/>
+                        <span class="input-group-addon">份</span>
+                    </div>
+            </div>
+        </div>
+        <div class="row form-group setting">
+        <div class="col-xs-5 col-xs-offset-1">
                 <label for="printcolor" class="sr-only">颜色</label>
-                <input type="checkbox" name="color" id="printcolor" value="1" type="checkbox" data-label-text="颜色" data-off-text="黑白打印"  data-on-text="彩色打印" data-on-color="warning" data-off-color="success" data-label-width=""/>
-            </div>
-            <div class="col-lg-2 col-lg-offset-0 col-xs-4 col-xs-offset-1">
+                <input type="checkbox" name="printcolor" id="printcolor" value="1"  data-label-text="颜色" data-off-text="黑白打印"  data-on-text="彩色打印" data-on-color="warning" data-label-width="" data-off-color="success"/>
+         </div>
+         <div class="col-xs-5 ">
                 <label for="double_side" class="sr-only">单双</label>
-                <input type="checkbox" name="double_side" id='double_side' value="1" data-label-text="单双" data-off-text="单面打印"  data-on-text="双面打印" data-on-color="warning" data-off-color="success" data-label-width="" disabled="true"/>
-            </div>
+                <input type="checkbox" name="double_side" id='double_side' value="1" data-label-text="单双" data-off-text="单面打印"  data-on-text="双面打印" data-on-color="warning" data-label-width="" data-off-color="success" />
+        </div>            
         </div>
-    </div>
-    <div class="row form-group">
-        <div class="setting col-lg-8 col-lg-offset-1 col-sm-10 col-xs-10 col-xs-offset-1">
+
+         <div class="row form-group">
+            <div class="setting col-xs-10 col-xs-offset-1">
             <label for="addtion-need" class='sr-only'>备注</label>
             <textarea id="addtion-need" class="form-control" placeholder="备注，若无可空白，限制32字以内" length="32" name="requirements"></textarea>
+            </div>
         </div>
-    </div>
-    <ELSE/>
-    <div class="text-center">
-        <a href="__ROOT__/User"><b>绑定手机后可进行高级设置和提前打印</b></a>
-    </div>
+         <script src="__PUBLIC__/js/upload.js" defer="defer"></script>
+         <script >
+         $(function () {
+                $('.setting').show({size:'mini'});
+                $("[type='checkbox']").bootstrapSwitch();
+               
+                $('#wait').on('switchChange.bootstrapSwitch',function(){
+                if($('#wait').bootstrapSwitch('state') ==true){
+                    $('.setting').hide(100);
+                } else {
+                    $('.setting').show(100);
+                }
+                });
+    });
+         </script>
+        <ELSE/>
+        
+        <div class="text-center">
+         <a href="__ROOT__/User"><b>绑定手机后可进行高级设置和提前打印</b></a>
+        </div>
     </IF> 
     </div>                       
     <div class="modal-footer">
@@ -121,7 +139,14 @@
 <BLOCK name='end'>
 <script>
 $(function(){
-    $('#goto-print').click(function(){$('#print-modal').modal('show');});
+    $('#goto-print').click(function(){
+        $('#print-modal').modal('show');     
+    }).one('click',function(){
+        setTimeout(function () {
+           $('.setting').hide();
+        },300);
+     });
+
 });
 </script>
 </BLOCK>
