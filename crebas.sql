@@ -196,7 +196,7 @@ create table user
    status               tinyint default 1,
    last_login           timestamp default CURRENT_TIMESTAMP,
    primary key (id),
-   unique key AK_student_number_unique (student_number)
+   unique key AK_student_number_unique (student_number,sch_id)
 );
 
 /*==============================================================*/
@@ -219,9 +219,9 @@ create table share
 create table tag
 (
 	id 					bigint not null auto_increment,
-	use_id 			bigint not null,
-	name 			char(16) not null,
-	count 				bigint,
+	use_id 			   bigint not null,
+	name 			      char(16) not null,
+	count 				bigint default 0,
 	time 				timestamp not null default CURRENT_TIMESTAMP,
 	primary key(id)
 	unique key tag_name_unique (name)
