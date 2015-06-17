@@ -1,13 +1,28 @@
 {//分享页}
 <EXTEND name="Print/Template/base.html"/>
-<BLOCK name='header'>
-<INCLUDE file="Print/Template/nav.html" share="active"/>
+
+<BLOCK name="title">
+云印文件共享—{$share['name']}
 </BLOCK>
+
+<BLOCK name="addhead">{//头部添加}
+<PRESENT name="printers">
+     <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
+ </PRESENT>
+</BLOCK>
+
+<BLOCK name='header'>
+<PRESENT name="printers">
+    <INCLUDE file="Print/Template/nav.html" share="active"/>
+</PRESENT>
+</BLOCK>
+
 <BLOCK name='content'>
 <div class="container-fluid">
     <div class="text-center"><h1>{$share['name']}</h1></div>
     <hr/>
     <div class="row text-center">
+    <h5>文件预览图</h5>
            <img class="img-thumbnail img-responsive" alt="{$share['name']} 预览图" src="{$share['url']}">
     </div>
     <div class="text-center">
@@ -19,7 +34,7 @@
             <volist name="tags" id="tag"><span class="tag label label-default" role="button" data-tid="{$tag['tag_id']}" style="margin:3px;"><i class="glyphicon glyphicon-tag">{$tag['name']}</i></span> </volist>
         </div>
     </div>
-    <div class="row text-center"> <span >贡献者： <IF condition='$share.anonymous eq 1'> 云印用户<ELSE/>{$share.user_name}</IF> <small>分享时间 ：{$share.time}</small></span></div>
+    <div class="row text-center"> <span >贡献者： <IF condition='$share.anonymous eq 1'> 云印用户<ELSE/>{$share.user_name}</IF> <small>共享时间 ：{$share.time}</small></span> <small>如果这份文件侵犯了您的权益请立即联系我们</small></div>
 </div>
 
 
@@ -30,15 +45,23 @@
                   <button type="button" class="close" data-dismiss="modal" aria-tag="Close"><span aria-hidden="true">&times;</span></button>
                   <h4 class="modal-title" id="ModalTag">快速打印设置</h4>
               </div>
-    <form id="print" method="post" action="__ROOT__/File/sharePrint">
-              <div class="modal-body">   
+
+             
+<NOTPRESENT name="printers">
+
+ <div class="modal-body text-center"> 
+<a href="/?r=__SELF__" class="btn btn-lg btn-danger ">请登陆后使用</a>
+    </div>
+<ELSE/>
+ <form id="print" method="post" action="__ROOT__/File/sharePrint">
+ <div class="modal-body text-center">  
 <input type="hidden" value="{$share['id']}" name='share_id'>
     <div class="row form-group">
-        <div class="col-lg-8 col-lg-offset-2 col-sm-10">
+        <div class="col-lg-8 col-lg-offset-2 col-sm-10 col-sm-offset-1">
             <label for="pri_id" class="sr-only">打印店</label>
             <select class="form-control" name="pri_id" id="pri_id" required>
                 <option value="">选择打印店....</option>
-                <volist name="data" id="vo">
+                <volist name="printers" id="vo">
                 <option value="{$vo['id']}">{$vo.name}({$vo.address})</option>
                 </volist>
             </select>
@@ -79,14 +102,17 @@
     <div class="text-center">
         <a href="__ROOT__/User"><b>绑定手机后可进行高级设置和提前打印</b></a>
     </div>
-    </IF>
+    </IF> 
+    </div>                       
+    <div class="modal-footer">
+            <a type="button" role="button" class="btn btn-default" data-dismiss="modal">取消</a>
+            <button type="submit" id="print-btn" class="btn btn-primary">打印</button>  
+    </div>   
+  </form>
+</NOTPRESENT>
 
-              </div>                       
-              <div class="modal-footer">
-                    <a type="button" role="button" class="btn btn-default" data-dismiss="modal">取消</a>
-                    <button type="submit" id="print-btn" class="btn btn-primary">打印</button>     
-                </div>
-    </form>
+          
+ 
             </div>
         </div>    
     </div>

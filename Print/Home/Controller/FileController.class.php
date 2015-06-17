@@ -373,18 +373,22 @@ class FileController extends Controller {
 			if ($file)
 			{
 				$url = $file['url'];
-				if (delete_file($url))
-				{
+				/*此处需要修改，将文件和任务拆分后，可删除原文件*/
+				// if (delete_file($url))
+				// {
 					$data['status'] = 0;
 					$data['url'] = '';
 					$result = $File->where($map)->save($data);
 					if ($result)
 					{
 						$this->success($result);
+					}else
+					{
+						$this->error('记录更新异常');
 					}
-					$this->error('记录更新异常');
-				}
-				$this->error('文件不可删除');
+					
+				// }
+				// $this->error('文件不可删除');
 			}
 			$this->error('记录已不存在');
 		}

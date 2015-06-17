@@ -32,6 +32,7 @@ namespace Home\Controller;
 use Think\Controller;
 
 class ShareController extends Controller {
+
 	/**
 	 * 自己分享的文件列表页
 	 * @method index
@@ -46,7 +47,9 @@ class ShareController extends Controller {
 		}
 		else
 		{
+			//获取热门标签
 			$this->tags = $this->_getTopTags();
+			//自己的分享
 			$share = D('ShareView')->where('user.id=%d', $uid)->group('share.id')->select();
 			$this->share = $share;
 			$this->display();
@@ -61,17 +64,19 @@ class ShareController extends Controller {
 	 */
 	public function search()
 	{
-		$tid    = I('tid', 0, 'int');
-		$string = I('q');
-		$page   = I('p', 1, 'int');
+		$tid    = I('tid', 0, 'int');//标签id
+		$string = I('q');//字符搜索
+		$page   = I('p', 1, 'int');//翻页
 		$Share  = D('ShareView')->field('id,fil_id,time,name,anonymous,user_name');
 		if ($tid)
 		{
+			//通过标签搜索
 			$Share = $Share->where('file.status > 0 AND hastag.tag_id=%d', $tid)->join('hastag ON hastag.share_id=share.id');
 
 		}
 		elseif ($string)
 		{
+			//通过关键字搜索
 			$Share = $Share->where('share.name LIKE "%%%s%%"', $string);
 		}
 		else
@@ -82,6 +87,7 @@ class ShareController extends Controller {
 		$files = $Share->page($page)->limit(20)->select();
 		foreach ($files as $file)
 		{
+			/*匿名隐藏姓名*/
 			if ($file['anonymous'])
 			{
 				$file['user_name'] = '匿名';
@@ -106,22 +112,29 @@ class ShareController extends Controller {
 	 */
 	public function detail()
 	{
-		$sid   = I('id', null, 'int');
+		$sid   = I('id', null, 'int');//分享的ID
 		$uid   = use_id();
+
+		/*读取分享内容*/
 		$share = D('ShareView')->where('share.id=%d', $sid)->find();
 		if ($share)
 		{
 			$share['url'] = get_thumbnail_url($share['url']);
 		}
 		$this->share = $share;
+		/*获取分享内容的标签*/
 		$this->tags = M('hastag')->join('tag ON tag.id=hastag.tag_id')->where('share_id=%d', $sid)->field('tag.name as name,tag_id')->select();
 		if($uid)
 		{
+			/*判断是否登录*/
 			$user    = M('User')->Field('sch_id,phone')->getById($uid);
 			$this->lock = $user['phone'] ? 1 : 0;
 			$condition['sch_id'] = $user['sch_id'];
 			$condition['status'] = 1;
-			$this->data = M('printer')->where($condition)->order('rank desc')->Field('id,name,address')->select();
+			$this->printers = M('printer')->where($condition)->order('rank desc')->Field('id,name,address')->select();
+		}else
+		{
+
 		}
 		$this->display();
 	}
@@ -175,7 +188,7 @@ class ShareController extends Controller {
 							'share_id' => $sid,
 							'tag_id'   => $tid,
 						);
-						$Tag->where('id=%d', $tid)->setInc('count');
+						$Tag->where('id=%d', $tid)->setInc('count',1);
 					}
 				}
 				M('Hastag')->addAll($hastag);
