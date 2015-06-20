@@ -2,7 +2,7 @@
 <EXTEND name="Print/Template/base.html"/>
 
 <BLOCK name="title">
-云印文件共享—{$share['name']}
+云印文件共享.公测版—{$share['name']}
 </BLOCK>
 
 <BLOCK name="addhead">{//头部添加}
@@ -35,7 +35,8 @@
             <volist name="tags" id="tag"><span class="tag label label-default" role="button" data-tid="{$tag['tag_id']}" style="margin:3px;"><i class="glyphicon glyphicon-tag">{$tag['name']}</i></span> </volist>
         </div>
     </div>
-    <div class="row text-center"> <span >贡献者： <IF condition='$share.anonymous eq 1'> 云印用户<ELSE/>{$share.user_name}</IF> <small>共享时间 ：{$share.time}</small></span> <small>如果这份文件侵犯了您的权益请立即联系我们</small></div>
+    <div class="row text-center"><span>{$share['school']}</span> <span >贡献者： <IF condition='$share.anonymous eq 1'> 云印用户<ELSE/>{$share.user_name}</IF> <small>共享时间 ：{$share.time}</small></span> <small>解释权和所有权归共享者所有</small></div>
+    <div class="text-center"><small>文件共享目前处于局部公测阶段，关于体验和协议等任何相关问题和想法欢迎通过下面方式联系我们！</small></div>
 </div>
 
 

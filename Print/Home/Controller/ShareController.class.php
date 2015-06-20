@@ -64,27 +64,36 @@ class ShareController extends Controller {
 	 */
 	public function search()
 	{
+		$uid = use_id();
+		if(!$uid)
+		{
+			$this->error('未登录！');
+		}
 		$tid    = I('tid', 0, 'int');//标签id
 		$string = I('q');//字符搜索
 		$page   = I('p', 1, 'int');//翻页
 		$Share  = D('ShareView')->field('id,fil_id,time,name,anonymous,user_name');
+		$condition=array();
 		if ($tid)
 		{
 			//通过标签搜索
-			$Share = $Share->where('file.status > 0 AND hastag.tag_id=%d', $tid)->join('hastag ON hastag.share_id=share.id');
+			$condition['hastag.tag_id']=$tid;
+			$Share = $Share->join('hastag ON hastag.share_id=share.id');
 
 		}
 		elseif ($string)
 		{
 			//通过关键字搜索
-			$Share = $Share->where('share.name LIKE "%%%s%%"', $string);
+			$condition['share.name']= array('LIKE' ,'%'.$string.'%' );
+			// $Share = $Share->where('share.name LIKE "%%%s%%"', $string);
 		}
 		else
 		{
 			$this->error(L('PARAM_ERROR'));
 		}
-
-		$files = $Share->page($page)->limit(20)->select();
+		$condition['user.sch_id']=M('User')->getFieldById($uid,'sch_id');
+		$condition['file.status']=array('GT', 0);
+		$files = $Share->where($condition)->page($page)->limit(20)->select();
 		foreach ($files as $file)
 		{
 			/*匿名隐藏姓名*/
@@ -134,7 +143,7 @@ class ShareController extends Controller {
 			$this->printers = M('printer')->where($condition)->order('rank desc')->Field('id,name,address')->select();
 		}else
 		{
-
+			$share['user_name']= mb_substr($share['user_name'], 0, 1, 'utf-8').'**';
 		}
 		$this->display();
 	}
