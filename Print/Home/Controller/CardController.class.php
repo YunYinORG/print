@@ -40,6 +40,10 @@ class CardController extends Controller {
 		{
 			$this->display('intro');
 		}
+		elseif (sch_id() > 2)
+		{
+			$this->error('学校暂未开通此功能！');
+		}
 		else
 		{
 			$user = M('User')->field('phone,status')->getById($uid);
@@ -460,7 +464,7 @@ class CardController extends Controller {
 		if ($result)
 		{
 			session('receiver', null);
-			$result_info = '人人发送成功('.$result->renren.')条；微博发送成功('.$result->weibo.')条;BBS发送'.($result->bbs?'成功':'失败');
+			$result_info = '人人发送成功('.$result->renren.')条；微博发送成功('.$result->weibo.')条;BBS发送'.($result->bbs ? '成功' : '失败');
 			$this->success($result_info, '/Card/log');
 		}
 		else

@@ -58,15 +58,15 @@ function use_id($redirect_url = null)
 }
 
 /**
- * student_number()
+ * number()
  * 获取学号，后端验证
  * 如果未登录使用cookie自动登陆并更新session
  * @param  $redirect_url 重定向url,空不跳转
  * @return string        用户学号
  */
-function student_number($redirect_url = null)
+function number($redirect_url = null)
 {
-	$sid = session('student_number');
+	$sid = session('stu_num');
 	if ($sid)
 	{
 		return $sid;
@@ -92,4 +92,30 @@ function student_number($redirect_url = null)
 	{
 		return 0;
 	}
+}
+
+/**
+ * 获取用户学校
+ * @method sch_id
+ * @param  boolean $use_cookie [是否相信cookie信息]
+ * @return [type]              [description]
+ * @author NewFuture[newfuture@yunyin.org]
+ */
+function sch_id($use_cookie = false)
+{
+	$sid = session('sch_id');
+	if ($sid)
+	{
+		return $sid;
+	}
+	elseif ($uid = use_id())
+	{
+		$sid = M('User')->getFieldById($uid, 'sch_id');
+		session('sch_id', $sid);
+	}
+	elseif ($use_cookie)
+	{
+		$sid = I('cookie.sch_id');
+	}
+	return $sid;
 }
