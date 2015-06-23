@@ -79,7 +79,7 @@ function number($redirect_url = null)
 			$sid = M('User')->getFieldById($uid, 'student_number');
 			if ($sid)
 			{
-				session('student_number', $sid);
+				session('stu_num', $sid);
 				return $sid;
 			}
 		}
