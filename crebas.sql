@@ -208,8 +208,8 @@ create table share
 	fil_id				bigint not null,
 	time 				timestamp not null default CURRENT_TIMESTAMP,
 	name 				char(32) not null,
-	anomonity 			bool,
-	primary key(id)
+	anonymous 			bool,
+	primary key(id),
 	unique key share_file_unique (fil_id)
 );
 
@@ -223,7 +223,7 @@ create table tag
 	name 			      char(16) not null,
 	count 				bigint default 0,
 	time 				timestamp not null default CURRENT_TIMESTAMP,
-	primary key(id)
+	primary key(id),
 	unique key tag_name_unique (name)
 );
 
@@ -234,7 +234,7 @@ create table hastag
 (
 	share_id 			bigint not null,
 	tag_id 				bigint not null,
-	time 				timestamp not null default CURRENT_TIMESTAMP
+	time 				timestamp not null default CURRENT_TIMESTAMP,
 	primary key(share_id,tag_id)
 );
 
