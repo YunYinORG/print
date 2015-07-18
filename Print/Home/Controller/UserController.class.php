@@ -180,7 +180,7 @@ class UserController extends Controller
             $this->error('此手机号已经绑定过账号！');
         }
         $code   = I('code', false, '/^\d{6}$/');
-        $sid    = student_number();
+        $sid    = number();
         $uid    = use_id();
         if ($code && $sid && $uid) 
         {
