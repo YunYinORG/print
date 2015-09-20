@@ -3,7 +3,7 @@ use Think\Model\ViewModel;
 
 class BookViewModel extends ViewModel {
 	public $viewFields = array(
-		'Book' => array(
+		'book' => array(
 			'id',
 			'pri_id',
 			'name',
