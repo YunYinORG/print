@@ -1,0 +1,128 @@
+{//分享页}
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name='header'>
+<INCLUDE file="Print/Template/nav.html" books="active"/>
+</BLOCK>
+<BLOCK name='content'>
+<div class="container-fluid">
+<h1>查看打印店内的资源</h1>
+    <div class="row">
+        <div class="input-group col-md-offset-2 col-md-8">
+            <input type="search" list="tag-list" id="input-box" placeholder="输入关键字搜索" value="" class="form-control"aria-describedby="search-btn" data-url='__CONTROLLER__/search'>
+            <datalist id="tag-list"></datalist>
+            <span class="input-group-addon btn btn-success" id="search-btn"><i class="glyphicon glyphicon-search"></i></span>
+        </div>
+      
+    </div>
+    <hr/>
+    <div id='share-list' class="content text-center">
+        <volist name="books" id="book">
+        <div class="row well">
+            <div class="col-sm-offset-1 col-sm-10 clear-right">
+                <a href="__CONTROLLER__/detail/id/{$book.id}" title="{$book.name}"> <strong>{$book.name}</strong></a>
+            </div>
+            <div class="col-sm-offset-1 col-sm-10 clear-left">
+                <span >所属打印店： {$book.printer}【地点:{$book.address}】<small>发布时间 ：{$book.time}</small></span>
+            </div>
+        </div>
+        </volist>
+    </div>
+</div>
+</BLOCK>
+<BLOCK name='end'>
+<script>
+taglist=[];
+$(function(){
+    $('.tag').click(function(){
+        var tag=$(this);
+        $('#input-box').val(tag.text()).data('tid',tag.data('tid'));
+        search();
+    });
+    
+    $('#search-btn').click(search);
+    $('#input-box').bind('change',getTag).bind('input propertychange',getTag);
+    // $('#tag-list').change=function(){
+        //     $('#input-box').data('tid',$(this).data('tid'));
+    // });
+});
+/**
+* 请求搜索并呈现结果
+* @method search
+* @return {[type]} [description]
+* @author NewFuture[newfuture@yunyin.org]
+*/
+function search()
+{
+    var input=$('#input-box');
+    var data={};
+    var s=input.val().trim();
+    var tid=0
+    if(s){
+        for (var i = taglist.length - 1; i >= 0; i--) {
+            if(taglist[i].name==s)
+            {
+                tid=taglist[i].id;
+                data={'tid':tid};
+            }
+        }
+    };
+    if(!tid)
+    {
+    tid=input.data('tid');
+        if(input.data('tid'))
+        {
+            data={'tid':tid};
+        }else if(s){
+            data={'q':s};
+        }else{
+            input.focus();
+            return false;
+        }
+    }
+    input.data('tid',0);
+    var url=input.data('url');
+    $.post(url,data,function(result,response)
+    {
+        // if(response.s)
+        var list=$('#share-list');
+        list.empty();
+        if(result.status)
+        {
+            var html='';
+            for (var i = 0;i<result.info.length; i++) {
+                s=result.info[i];
+                html='<div class="row well"><div class="col-sm-offset-1 col-sm-10 clear-right"><a href="__CONTROLLER__/detail?id='+s['id']+'" title="{$file.name}"> <strong>'+s['name']+'</strong></a></div><div class="col-sm-offset-1 col-sm-10 clear-left"><span >贡献者：'+s['user_name']+'<small>分享时间 ：'+s['time']+'</small></span></div></div>';
+                list.append(html);
+            }
+        }else{
+            list.html(result.info);
+        }
+    });
+}
+/**
+* 获取tag列表
+* @method getTag
+* @return {[type]} [description]
+* @author NewFuture[newfuture@yunyin.org]
+*/
+function getTag()
+{
+    var input = $('#input-box');
+    var URL = "__CONTROLLER__/getTags";
+    $.post(URL,{
+        'tag': input.val().trim()
+    },function(data){
+        if(data.status&&data.info)
+        {
+            var datalist = $('#tag-list');
+            datalist.html('');
+            taglist=data.info;
+            for(var i=0;i<taglist.length;i++)
+            {
+                datalist.append('<option data-tid="'+taglist[i].id+'" value="'+taglist[i].name+'"></option>');
+            }
+        }
+    });
+}
+</script>
+</BLOCK>
