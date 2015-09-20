@@ -11,8 +11,9 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-8">
-                <h4><strong>添加书籍</strong></h4>
-                <form  role="form" method="post" action="__URL__/insert">
+                <h4><strong>批量添加书籍</strong></h4>
+                <p class="text-danger">一次尽量不要超过500行</p>
+                <form role="form" method="post" action="__URL__/insert">
                     <div class="form-group">
                         <textarea class="form-control" rows="12" placeholder="书名写在这里,一行一个" name="books"></textarea>
                     </div>
@@ -20,6 +21,8 @@
                         <button type="submit" class="btn btn-success" >添加</button>
                     </div>
                 </form>
+                <p>提示 批量提取文件名<code>DIR/ON/B>LIST.TXT</code></p>
+                <p>所有文件的版权和对应责任归上传店所有</p>
         </div>
     </div>
 </div>
