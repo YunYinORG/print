@@ -1,0 +1,26 @@
+{//信息界面}
+<EXTEND name="Print/Template/printerbase.html"/>
+<BLOCK name='header'>
+<include file="Print/Template/printernav.html" books="active"/>
+</BLOCK>
+<BLOCK name='content'>
+<div>
+    <h2>{$data['name']}</h2>
+    <br/>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+                <h4><strong>添加书籍</strong></h4>
+                <form  role="form" method="post" action="__URL__/insert">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="12" placeholder="书名写在这里,一行一个" name="books"></textarea>
+                    </div>
+                    <div class="input-group text-center">
+                        <button type="submit" class="btn btn-success" >添加</button>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>
+</BLOCK>

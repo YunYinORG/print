@@ -1,0 +1,39 @@
+{//信息界面}
+<EXTEND name="Print/Template/printerbase.html"/>
+<BLOCK name='header'>
+<include file="Print/Template/printernav.html" books="active"/>
+</BLOCK>
+<BLOCK name='content'>
+<div>
+    <div>
+        <h2>资源列表</h2>
+    </div>
+    <div class="container-fulid">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>费用</th>
+                        <th>详情</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tablehead">
+                    <volist name="books" id="vo">
+                    <tr file_id="{$vo.id}">
+                        <td><a href="__URL__/detail/id/{$vo.id}">{$vo.name}</a></td>
+                        <td>{$vo.price}</td>
+                        <td>{$vo.detail}</td>
+                        <td>{$vo.time}</td>
+                        <td><a href="__URL__/del/id/{$vo.id}">删除</a></td>
+                    </tr>
+                    </volist>
+                </tbody>
+            </table>
+            <div class="result page"><a href="__URL__/index/page/{$page-1}">上一页</a> <strong>第{$page}页</strong> <a href="__URL__/index/page/{$page+1}">下一页</a></div>
+        </div>
+    </div>
+</div>
+</BLOCK>
