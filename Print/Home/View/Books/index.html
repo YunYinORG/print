@@ -5,7 +5,7 @@
 </BLOCK>
 <BLOCK name='content'>
 <div class="container-fluid">
-    <h1>查看打印店内的资源</h1>
+    <h1>查看打印店的资源</h1>
     <div class="row">
         <div class="input-group col-md-offset-2 col-md-8">
             <input type="search" list="tag-list" id="input-box" placeholder="输入关键字搜索" value="" class="form-control"aria-describedby="search-btn" data-url='__CONTROLLER__/search'>
@@ -18,10 +18,10 @@
         <volist name="books" id="book">
         <div class="row well">
             <div class="col-sm-offset-1 col-sm-10 clear-right">
-                <a href="__CONTROLLER__/detail/id/{$book.id}" title="{$book.name}"> <strong>{$book.name}</strong></a>
+                <a href="__CONTROLLER__/detail/id/{$book.id}" title="{$book.name}"> <strong class="text-success">{$book['name']}</strong></a>
             </div>
             <div class="col-sm-offset-1 col-sm-10 clear-left">
-                <span >所属打印店： {$book.printer}【地点:{$book.address}】<small>发布时间 ：{$book.time}</small></span>
+                <span >所属打印店： <a href="/printers/detail/id/{$book['pri_id']}">{$book['printer']}</a><small>发布时间 ：{$book['time']}</small></span>
             </div>
         </div>
         </volist>
@@ -67,7 +67,7 @@ if(s){
             var html='';
             for (var i = 0;i<result.info.length; i++) {
                 s=result.info[i];
-                html='<div class="row well"><div class="col-sm-offset-1 col-sm-10 clear-right"><a href="__CONTROLLER__/detail?id='+s['id']+'" title="{$file.name}"> <strong>'+s['name']+'</strong></a></div><div class="col-sm-offset-1 col-sm-10 clear-left"><span >所属打印店'+s['printer']+'【地点:'+s['address']+'】<small>发布时间 ：'+s['time']+'</small></span></div></div>';
+                html='<div class="row well"><div class="col-sm-offset-1 col-sm-10 clear-right"><a href="__CONTROLLER__/detail?id='+s['id']+'" title="{$file.name}"> <strong class="text-success">'+s['name']+'</strong></a></div><div class="col-sm-offset-1 col-sm-10 clear-left"><span >所属打印店:<a>'+s['printer']+'</a><small> 发布时间 ：'+s['time']+'</small></span></div></div>';
                 list.append(html);
             }
         }else{

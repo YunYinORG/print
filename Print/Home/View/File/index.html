@@ -14,19 +14,19 @@
         <thead>
             <tr>
                 <th>文件状态</th>
-                <th>文件名</th>    
+                <th>文件名</th>
                 <th>上传时间</th>
-                <th>所选打印店</th>
+                <th>打印店</th>
                 <th>份数</th>
                 <th>单双</th>
                 <th>彩印</th>
-                <th>PPT格式</th>                
+                <th>格式</th>
                 <th>操作</th>
             </tr>
         </thead>
         <tbody>
             <volist name="data" id="vo">
-            <tr>          
+            <tr>
                 <td id="{$vo.id}_status">
                     <switch name="vo['status']">
                     <case value="1">已上传</case>
@@ -47,7 +47,7 @@
                 <td>{$vo.time}</td>
                 <td>{$vo.pri_name}[{$vo.pri_id}]</td>
             <IF condition="$vo.copies eq 0">
-            <td>现打</td><td>-</td><td>-</td><td>-</td>    
+            <td>现打</td><td>-</td><td>-</td><td>-</td>
             <ELSE/>
             <td> {$vo.copies}</td><td>
                 <IF condition="$vo.double_side gt 0">
@@ -63,7 +63,7 @@
                     {$vo.ppt_layout}
                 </td>
             </IF>
-       
+
                 <td>
                 <IF condition="($vo.status gt 1)AND($vo.status lt 5)">
                     <button type="button" fid="{$vo.id}"class="btn btn-danger" disabled="disabled">删除</button>
@@ -80,13 +80,13 @@
 
 </div>
 <div class="modal fade" id="share" tabindex="-1" role="dialog" aria-tagledby="myModalTag" aria-hidden="false">
-      <div class="modal-dialog">    
+      <div class="modal-dialog">
           <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-tag="Close"><span aria-hidden="true">&times;</span></button>
                   <h4 class="modal-title" id="myModalTag"></h4>
               </div>
-              <div class="modal-body">   
+              <div class="modal-body">
                       <div class="form-group">
                           <label for="filename-input" class="control-label">共享名称:(别人看到此文件的名字)</label>
                           <input type="text" placeholder="设置共享的名字" class="form-control" id="filename-input">
@@ -95,7 +95,7 @@
                      </div>
                       <div class="form-group">
                           <label for="tag-input" class="control-tag">添加标签:</label>
-                            <input type="text" id="tag-input" list="tag-list"  placeholder="输入标签" onpropertychange="getTag()" onkeypress="addTag()"> 
+                            <input type="text" id="tag-input" list="tag-list"  placeholder="输入标签" onpropertychange="getTag()" onkeypress="addTag()">
                             <datalist id="tag-list"></datalist>
                       </div>
                       <div class="checkbox">
@@ -103,13 +103,13 @@
                               <input type="checkbox" id="anonymity">匿名共享（将不显示你的名字）
                           </label>
                       </div>
-              </div>                       
+              </div>
               <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" id="share-btn" class="btn btn-primary">共享此文件</button>     
+                    <button type="button" id="share-btn" class="btn btn-primary">共享此文件</button>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
 </BLOCK>
 <BLOCK name='end'>
@@ -173,7 +173,7 @@ function getTag()
             for(var i=0;info = data.info[i];i++)
             {
                 tag_data.push(info);
-                datalist.append('<option data-id="'+info.id+'" value="'+info.name+'">'+info.name+'</option>'); 
+                datalist.append('<option data-id="'+info.id+'" value="'+info.name+'">'+info.name+'</option>');
             }
         }
     });

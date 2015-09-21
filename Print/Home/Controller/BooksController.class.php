@@ -45,7 +45,7 @@ class BooksController extends Controller
 		if ($string)
 		{
 			//通过关键字搜索
-			$condition['book.name'] = array('LIKE', '%' . strtr($string,' ','%') . '%');
+			$condition['book.name'] = array('LIKE', '%' . strtr($string, ' ', '%') . '%');
 			// $Share = $Share->where('share.name LIKE "%%%s%%"', $string);
 			$Book->where($condition);
 		}
@@ -63,15 +63,58 @@ class BooksController extends Controller
 	public function detail($id = 0)
 	{
 
-		$pid = use_id();
+		$uid = use_id();
 		if ($id && $book = M('Book')->field('id,name,price,detail,image')->find($id))
 		{
 			$this->book = $book;
+			if ($uid)
+			{
+				$this->printer = M('Printer')->field('id,name,address,email,phone,qq,profile,open_time AS open,price,price_more AS more')->find($book['pri_id']);
+			}
 			$this->display();
 		}
 		else
 		{
-			$this->error('无权访问！');
+			$this->error('不存在');
+		}
+	}
+
+	public function prints($id = 0)
+	{
+
+		if (!$uid = use_id())
+		{
+			$this->error('请登录后打印！');
+		}
+		elseif (!$book = M('book')->find($id))
+		{
+			$this->error('资源不存在');
+		}
+		elseif (!$copies = I('copies'))
+		{
+			$this->error('份数大于0');
+		}
+		else
+		{
+			$file['pri_id'] = $book['pri_id'];
+			$file['use_id'] = $uid;
+			$file['status'] = 1;
+			$file['ppt_layout'] = 10;
+			$file['copies'] = $copies;
+			$file['url'] ='book:'.$book['name'].'/'.$id ;
+			$file['name']   = $book['name'] . '【店内书】';
+			if ($requirements = I('post.requirements', 0, 'htmlspecialchars'))
+			{
+				$file['requirements'] = $requirements;
+			}
+			if (M('file')->add($file))
+			{
+				$this->success('打印订单设置成功', '/File');
+			}
+			else
+			{
+				$this->success('打印失败');
+			}
 		}
 	}
 

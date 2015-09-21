@@ -27,7 +27,8 @@
 namespace Printer\Controller;
 use Think\Controller;
 
-class FileController extends Controller {
+class FileController extends Controller
+{
 
 	/**
 	 * index()
@@ -44,9 +45,9 @@ class FileController extends Controller {
 			$condition['status'] = array('between', '1,4');
 			$this->assign('history', false);
 			$this->title = '打印任务列表';
-			$File       = D('FileView');
-			$ppt_layout = C('PPT_LAYOUT');
-			$result     = $File->where($condition)->order('file.id desc')->select(); //cache($cache_key, 10)->select();
+			$File        = D('FileView');
+			$ppt_layout  = C('PPT_LAYOUT');
+			$result      = $File->where($condition)->order('file.id desc')->select(); //cache($cache_key, 10)->select();
 			if ($result)
 			{
 				foreach ($result as &$file)
@@ -75,16 +76,16 @@ class FileController extends Controller {
 		if ($pid)
 		{
 			$condition['pri_id'] = $pid;
-			$status = 5;
+			$status              = 5;
 			$condition['status'] = $status;
 			$this->assign('history', true);
 			$this->title = '已打印文件历史记录';
-			$File       = D('FileView');
-			$count      = $File->where($condition)->count();
-			$Page       = new \Think\Page($count, 10);
-			$show       = $Page->show();
-			$ppt_layout = C('PPT_LAYOUT');
-			$result     = $File->where($condition)->order('file.id desc')->limit($Page->firstRow.','.$Page->listRows)->select(); //cache($cache_key, 10)->select();
+			$File        = D('FileView');
+			$count       = $File->where($condition)->count();
+			$Page        = new \Think\Page($count, 10);
+			$show        = $Page->show();
+			$ppt_layout  = C('PPT_LAYOUT');
+			$result      = $File->where($condition)->order('file.id desc')->limit($Page->firstRow . ',' . $Page->listRows)->select(); //cache($cache_key, 10)->select();
 			foreach ($result as &$file)
 			{
 				$file['ppt_layout'] = $ppt_layout[$file['ppt_layout']];
@@ -111,12 +112,12 @@ class FileController extends Controller {
 		if ($pid)
 		{
 			$map['pri_id'] = $pid;
-			$map['id'] = array('gt', I('file_id', null, 'intval'));
+			$map['id']     = array('gt', I('file_id', null, 'intval'));
 			$map['status'] = array('between', '1,4');
-			$File = D('FileView');
+			$File          = D('FileView');
 			// $cache_key  = cache_name('printer', $pid);
 			$ppt_layout = C('PPT_LAYOUT');
-			$result = $File->where($map)->order('file.id asc')->limit(10)->select();
+			$result     = $File->where($map)->order('file.id asc')->limit(10)->select();
 
 			if ($result)
 			{
@@ -152,24 +153,24 @@ class FileController extends Controller {
 	public function set()
 	{
 
-		$pid      = pri_id(U('Index/index'));
-		$fid      = I('fid', null, 'intval');
-		$download = I('download', 0, 'intval');
-		$File     = M('File');
-		$result   = $File->where('id="%d"', $fid)->field('status,copies')->find();
+		$pid              = pri_id(U('Index/index'));
+		$fid              = I('fid', null, 'intval');
+		$download         = I('download', 0, 'intval');
+		$File             = M('File');
+		$result           = $File->where('id="%d"', $fid)->field('status,copies')->find();
 		$status['copies'] = $result['copies'];
 		if ($result['status'] == C('FILE_UPLOAD'))
 		{
 			$status['status'] = C('FILE_DOWNLOAD');
 			if ($result['copies'] == 0)
 			{
-				$status['operation'] = C('FILE_PRINTED');
+				$status['operation']           = C('FILE_PRINTED');
 				$status['sendDownloadMessage'] = $this->_sendDownloadMessage($pid, $fid);
 			}
 			else
 			{
 				$status['operation'] = $status['status'];
-			
+
 			}
 		}
 		elseif (($result['status'] == C('FILE_DOWNLOAD')) && ($download != 1))
@@ -186,7 +187,7 @@ class FileController extends Controller {
 		}
 		elseif (($result['status'] == C('FILE_PRINTED')) && ($download != 1))
 		{
-			$status['status'] = C('FILE_PAID');
+			$status['status']    = C('FILE_PAID');
 			$status['operation'] = $status['status'];
 		}
 		else
@@ -231,31 +232,35 @@ class FileController extends Controller {
  */
 	public function download()
 	{
-		$pid = pri_id(U('Index/index'));
-		$fid = I('fid', null, 'intval');
+		$pid           = pri_id(U('Index/index'));
+		$fid           = I('fid', null, 'intval');
 		$map['pri_id'] = $pid;
-		$map['id'] = $fid;
+		$map['id']     = $fid;
 		$map['status'] = array('gt', 0);
-		$File = M('File');
-		$info = $File->where($map)->field('url,status,copies,ppt_layout,color,double_side,name')->find();
+		$File          = M('File');
+		$info          = $File->where($map)->field('url,status,copies,ppt_layout,color,double_side,name')->find();
 		if ($info)
 		{
+			if (strpos($info['url'],'book')=== 0)
+			{
+				$this->error('店内资源不可下载！');
+			}
 			if ($info['copies'])
 			{
-				$file_name = $info['copies'].'份_'.($info['double_side'] ? '双面_' : '单面_').($info['color'] ? '彩印_' : '黑白_');
+				$file_name = $info['copies'] . '份_' . ($info['double_side'] ? '双面_' : '单面_') . ($info['color'] ? '彩印_' : '黑白_');
 				if ($ppt_layout = $info['ppt_layout'])
 				{
-					$layouts=C('PPT_LAYOUT');
-					$file_name .= $layouts[$ppt_layout].'版_';
+					$layouts = C('PPT_LAYOUT');
+					$file_name .= $layouts[$ppt_layout] . '版_';
 				}
 			}
 			else
 			{
 				$file_name = '到店打印_';
 			}
-			$file_name = $file_name."[$fid]".$info['name'];
+			$file_name = $file_name . "[$fid]" . $info['name'];
 
-			redirect(download_file($info['url'], 'attname='.urlencode($file_name)));
+			redirect(download_file($info['url'], 'attname=' . urlencode($file_name)));
 		}
 		else
 		{
@@ -265,9 +270,9 @@ class FileController extends Controller {
 
 	private function _sendDownloadMessage($pid, $fid)
 	{
-		$File = D('FileView');
+		$File      = D('FileView');
 		$map['id'] = $fid;
-		$info = $File->where($map)->field('use_id,phone,name')->find();
+		$info      = $File->where($map)->field('use_id,phone,name')->find();
 		if ($info['phone'] && $info['name'])
 		{
 			unset($info['phone']);
@@ -275,12 +280,12 @@ class FileController extends Controller {
 			{
 				$info['name'] = mb_substr($info['name'], 0, 18);
 			}
-			$phone = get_phone_by_id($info['use_id']);
+			$phone             = get_phone_by_id($info['use_id']);
 			$info['user_name'] = M('User')->getFieldById($info['use_id'], 'name');
 			unset($info['use_id']);
-			$info['info'] = $info['name'];
+			$info['info']   = $info['name'];
 			$info['status'] = '已下载';
-			$SMS = new \Vendor\Sms();
+			$SMS            = new \Vendor\Sms();
 			if ($SMS->noticeUser($phone, $info))
 			{
 				return true;

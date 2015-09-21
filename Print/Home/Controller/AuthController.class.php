@@ -292,19 +292,9 @@ class AuthController extends Controller {
 		if (preg_match(C('REGEX_NUMBER_NKU'), $number))
 		{
 			//南开大学
-			if (C('NKU_OPEN'))
-			{
-				//$this->error(L('AUTH_NKU_CLOSE'));
+		
 				$verify_way = C('VERIFY_NKU');
 				$data['sch_id'] = 1;
-			}
-			else
-			{
-				//内网关闭时启用被动验证
-				$verify_way = 'Verify.NankaiInside';
-				$data['sch_id'] = 1;
-			}
-
 		}
 		elseif (preg_match(C('REGEX_NUMBER_TJU'), $number))
 		{

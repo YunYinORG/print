@@ -1,7 +1,7 @@
 <?php
 /*SAE配置*/
 return array(
-	'VERIFY_NKU'       => 'Verify.NankaiProxy',
+	// 'VERIFY_NKU'       => 'Verify.NankaiProxy',
 	'SHOW_PAGE_TRACE'  => 0,
 	'NKU_OPEN'         => 1,
 	'FILE_UPLOAD_TYPE' => 'QINIU',

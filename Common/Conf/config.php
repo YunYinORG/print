@@ -63,6 +63,7 @@ return array(
 		2 => '2X3',
 		3 => '2X4',
 		4 => '3X3',
+		10 =>'电子书',
 	),
 
 	//验证方式
@@ -71,8 +72,8 @@ return array(
 	'VERIFY_TIFERT'=>'Verify.tifert_jw',
 	//验证正则表达式
 	'REGEX_NUMBER'     => '/^(\d{7}|\d{10})$/', //学号正则7或者10
-	'REGEX_NUMBER_NKU' => '/^(([1][0-4]\d{5})|([1|2]1201[0-4]\d{4}))$/', //南开学号本科7硕博10
-	'REGEX_NUMBER_TJU' => '/^[1-3]01[0-4]\d{6}$/', //天大学号10
+	'REGEX_NUMBER_NKU' => '/^(([1][0-5]\d{5})|([1|2]1201[0-5]\d{4}))$/', //南开学号本科7硕博10
+	'REGEX_NUMBER_TJU' => '/^[1-3]01[0-5]\d{6}$/', //天大学号10
 	'REGEX_NUMBER_TIFERT'=>'/^((0[1-4][01][0-9])|(1[139][05][1-4]))1[2-5]0\d{3}$/',//天津商职10位
 	'REGEX_ACCOUNT'    => '/^\w{3,16}$/', //打印店账号正则
 	'REGEX_TOKEN'      => '/^\w{38,48}$/',
@@ -96,5 +97,4 @@ return array(
 	/*HTTPS安全连接是否开启，Home/Conf/config.php有对应的safe_url为https*/
 	'HTTPS_ON' => true, //本地调试开发时，在secret中设置'HTTPS_ON'=>false；
 	'BASE_URL' => 'http://yunyin.org', //本地调试开发时，在secret中设置'BASE_URL'=>'http://localhost';
-
 );
