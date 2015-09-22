@@ -18,48 +18,90 @@
 <div class="container-fluid">
     <div class="text-center"><h1>{$book['name']}</h1></div>
     <hr/>
-    <div class="row text-center text-success">
-        <h5>资源详情</h5>
-        <p class="text-center">说明：{$book['detail']|default='暂无说明'}</p>
-        <p class="text-center">价格：{$book['price']|default='询问店家'}</p>
-        <p class="text-center text-danger">配送：{$book['send']|default='联系店家询问(qq,或者电话)'}</p>
-    </div>
-    <div class="row text-center col-sm-offset-2 col-sm-8 text-primary">
-    <h5>所在打印店信息</h5>
-        <table class="table ">
-            <tr>
-                <th>店名</th>
-                <td align="right">{$printer['name']}</td>
-            </tr>
-            <tr>
-                <th>电话联系</th>
-                <td align="right"><a href="tel:{$printer['phone']}">{$printer['phone']}</a></td>
-            </tr>
-            <tr>
-                <th>QQ联系</th>
-                <td align="right"><a href="tencent://message/?uin={$printer['qq']}&Site=yunyin.org&Menu=yes">{$printer['qq']}</a></td>
-            </tr>
-             <tr>
-                <th>邮箱联系</th>
-                <td align="right"><a href="mailto:$printer['email']">{$printer['email']}</a></td>
-            </tr>
-            <tr>
-                <th>地址</th>
-                <td align="right">{$printer['address']}</td>
-            </tr>
-            <tr>
-                <th>其他</th>
-                <td align="right">{$printer['more']}</td>
-            </tr>
+    <div class="well row text-center col-sm-offset-1 col-sm-10  text-success">
 
+        <table class="table-responsive table">
+        <tr><h5 class="lead text-center">资源详情</h5></tr>
+        <tr class="text-center"><th>说明：</th><td>{$book['detail']|default='暂无说明(请咨询打印店)'}</td></tr>
+        <tr class="text-center"><th>价格：</th><td>{$book['price']|default='可议'}</td></tr>
+        <tr class="text-center text-danger"><th>配送：</th><td>{$book['send']|default='联系店家询问(qq,或者电话)'}</td></tr>
+    </table>
+
+</div>
+<div class="well row text-center col-sm-offset-1 col-sm-10 text-primary">
+    <NOTPRESENT name="printer">
+    <h5 class="text-center">
+    <a href="/?r=__SELF__">请登陆后查看打印店信息</a>
+    </h5>
+    <ELSE/>
+    <h5>所属打印店({$printer['name']})的信息</h5>
+    <p>
+    {//分享页}
+    <EXTEND name="Print/Template/base.html"/>
+    <BLOCK name="title">
+    云印文件共享.公测版—{$book['name']}
+    </BLOCK>
+    <BLOCK name="addhead">{//头部添加}
+<PRESENT name="printers">
+         <link href="__PUBLIC__/css/default.css" rel="stylesheet" type="text/css"/>
+         <link href="__PUBLIC__/css/upload.css" rel="stylesheet" type="text/css"/>
+</PRESENT>
+    </BLOCK>
+    <BLOCK name='header'>
+<PRESENT name="printers">
+    <INCLUDE file="Print/Template/nav.html" share="active"/>
+</PRESENT>
+    </BLOCK>
+    <BLOCK name='content'>
+    <div class="container-fluid">
+        <div class="text-center"><h1>{$book['name']}</h1></div>
+        <div class="text-center"><a href="__CONTROLLER__/">查看更多资料</a></div>
+        <hr/>
+        <div class="well row text-center col-sm-offset-1 col-sm-10  text-success">
+            <table class="table-responsive table">
+            <tr><h5 class="lead text-center">资源详情</h5></tr>
+            <tr class="text-center"><th>说明：</th><td>{$book['detail']|default='暂无说明(请咨询打印店)'}</td></tr>
+            <tr class="text-center"><th>价格：</th><td>{$book['price']|default='可议'}</td></tr>
+            <tr class="text-center text-danger"><th>配送：</th><td>{$book['send']|default='联系店家询问(qq,或者电话)'}</td></tr>
         </table>
+
+    </div>
+    <div class="well row text-center col-sm-offset-1 col-sm-10">
+        <NOTPRESENT name="printer">
+        <h5 class="text-center">
+        <a href="/?r=__SELF__">请登陆后查看打印店信息</a>
+        </h5>
+        <ELSE/>
+        <h5 class="lead">由<a href="/Printers/detail/id/{$printer['id']}">{$printer['name']}</a>打印店提供</h5>
+        <p>
+        <div>
+            <span> 电话: </span>
+            <span class="strong"><a href="tel:{$printer['phone']}">{$printer['phone']}</a></span>
+            <span> QQ: </span>
+            <span class="strong"><a href="tencent://message/?uin={$printer['qq']}&Site=yunyin.org&Menu=yes">{$printer['qq']}</a></span>
+            <span> 邮箱: </span>
+            <span class="strong"><a href="mailto:$printer['email']">{$printer['email']|default="无"}</a></span>
+        </div>
+        <div>
+            <span>其他说明:</span>
+            <span class="strong text-center">{$printer['more']|default='联系商议'}</span>
+        </div>
+        <div>
+            <span >打印店地址：</span>
+            <span class="strong text-center">{$printer['address']|default=$printer['name']}</span>
+        </div>
+        </p>
+        <hr/>
+        <p class="row text-center small"><span>{$pinter['school']}</span><span >由<a href="__ROOT__/Printers/detail/id/{$printer['id']}">{$printer['name']}</a>发布于</span><span> ：{$book['time']}</span> | <small>责任和资源归打印店所有</small></p>
+        </NOTPRESENT>
     </div>
     <div class="row"></div>
     <div class="row text-center">
         <button class="btn btn-success btn-lg" id="goto-print">立即打印这份资料</button>
     </div>
-    <p class="row text-center"><span>{$pinter['school']}</span><span >由<a href="__ROOT__/Printers/detail/id/{$printer['id']}">{$printer['name']}</a>发布</span><span>发布时间 ：{$book['time']}</span> <small>责任和版权归打印店所有</small></p>
+
     <hr/>
+    <p class="row text-center">打印店资源只能由发布资源打印店打印</p>
     <p class="row text-center"><small>资源信息由打印店发布,平台不保存也不提供这些文件,侵权投诉report@yunyin.org</small></p>
     <div class="text-center"><small>打印店资源服务目前处于局部公测阶段，任何问题通过下面方式联系我们！</small></div>
 </div>
@@ -71,24 +113,22 @@
                 <button type="button" class="close" data-dismiss="modal" aria-tag="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="ModalTag">快速打印设置</h4>
             </div>
-
             <NOTPRESENT name="printer">
             <div class="modal-body text-center">
                 <a href="/?r=__SELF__" class="btn btn-lg btn-danger ">请登陆后使用</a>
             </div>
             <ELSE/>
             <div>
-            <form id="print" method="post" action="__CONTROLLER__/prints/id/{$book['id']}">
-                <div class="modal-body text-center">
-                       <div class="col-xs-8 col-xs-offset-2">
+                <form id="print" method="post" action="__CONTROLLER__/prints/id/{$book['id']}">
+                    <div class="modal-body text-center">
+                        <div class="col-xs-8 col-xs-offset-2">
                             <span class="input-group">
                             <label for="copies" class="input-group-addon">份数:</label>
-                                <input name="copies" type="number" placeholder="份数" class="form-control" id="copies" min="1" value="1"/>
-                                <span class="input-group-addon">份</span>
+                            <input name="copies" type="number" placeholder="份数" class="form-control" id="copies" min="1" value="1"/>
+                            <span class="input-group-addon">份</span>
                             </span>
                         </div>
                     </div>
-
                     <div class="row form-group">
                         <div class="col-xs-8 col-xs-offset-2">
                             <label for="addtion-need" class='sr-only'>备注</label>
@@ -105,7 +145,6 @@
         </div>
     </div>
 </div>
-
 </BLOCK>
 <BLOCK name='end'>
 <script>
@@ -116,3 +155,6 @@ $(function(){
 });
 </script>
 </BLOCK>
+</p>
+</NOTPRESENT>
+</div>

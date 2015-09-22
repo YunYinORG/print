@@ -18,7 +18,7 @@ class BooksController extends Controller
 		// 	$this->error('请登录！', U('/'));
 		// }
 
-		$books       = D('BookView')->Page(1, 20)->select();
+		$books       = D('BookView')->Page(1, 20)->cache(600)->select();
 		$this->books = $books;
 		$this->display();
 	}
@@ -64,12 +64,12 @@ class BooksController extends Controller
 	{
 
 		$uid = use_id();
-		if ($id && $book = M('Book')->field('id,name,price,detail,image')->find($id))
+		if ($id && $book = M('Book')->cache(60)->field('id,pri_id,time,name,price,detail,image')->find($id))
 		{
 			$this->book = $book;
 			if ($uid)
 			{
-				$this->printer = M('Printer')->field('id,name,address,email,phone,qq,profile,open_time AS open,price,price_more AS more')->find($book['pri_id']);
+				$this->printer = M('Printer')->cache(600)->field('id,name,address,email,phone,qq,profile,open_time AS open,price,price_more AS more')->find($book['pri_id']);
 			}
 			$this->display();
 		}

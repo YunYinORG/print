@@ -11,7 +11,6 @@
             <input type="search" list="tag-list" id="input-box" placeholder="输入关键字搜索" value="" class="form-control"aria-describedby="search-btn" data-url='__CONTROLLER__/search'>
             <span class="input-group-addon btn btn-success" id="search-btn"><i class="glyphicon glyphicon-search"></i></span>
         </div>
-
     </div>
     <hr/>
     <div id='share-list' class="content text-center">
@@ -27,6 +26,7 @@
         </volist>
     </div>
 </div>
+<p class="text-center">资源信息来自打印店</p>
 </BLOCK>
 <BLOCK name='end'>
 <script>
@@ -34,9 +34,15 @@ $(function(){
     $('#search-btn').click(search);
     $('#input-box').keydown(function(event){
 if(event.keyCode == 13){ //绑定回车
-search(); 
+search();
 }
 });
+    var s=decodeURI(location.search);
+    s=s.replace('?','');
+    if(s){
+    $('#input-box').val(s);
+    search();
+}
 });
 /**
 * 请求搜索并呈现结果
