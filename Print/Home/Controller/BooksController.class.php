@@ -4,7 +4,12 @@ use Think\Controller;
 
 class BooksController extends Controller
 {
-
+CONST SCHOOL=array(
+	0=>'未知学校',
+	1=>'南开大学',
+	2=>'天津大学',
+	3=>'天津商职',
+	);
 	/**
 	 * 自己分享的文件列表页
 	 * @method index
@@ -18,7 +23,8 @@ class BooksController extends Controller
 		// 	$this->error('请登录！', U('/'));
 		// }
 
-		$books       = D('BookView')->Page(1, 20)->cache(600)->select();
+		$books = D('BookView')->Page(1, 20)->cache(600)->select();
+		array_walk($books,function(&$book){$book['school']=self::SCHOOL[$book['school']];return $book;});
 		$this->books = $books;
 		$this->display();
 	}
@@ -50,8 +56,9 @@ class BooksController extends Controller
 			$Book->where($condition);
 		}
 
-		if ($books = $Book->page($page)->limit(20)->select())
+		if ($books = $Book->page($page)->limit(50)->select())
 		{
+			array_walk($books,function(&$book){$book['school']=self::SCHOOL[$book['school']];return $book;});
 			$this->success($books);
 		}
 		else

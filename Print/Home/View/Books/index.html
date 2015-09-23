@@ -20,7 +20,7 @@
                 <a href="__CONTROLLER__/detail/id/{$book.id}" title="{$book.name}"> <strong class="text-success">{$book['name']}</strong></a>
             </div>
             <div class="col-sm-offset-1 col-sm-10 clear-left">
-                <span >所属打印店： <a href="/printers/detail/id/{$book['pri_id']}">{$book['printer']}</a><small>发布时间 ：{$book['time']}</small></span>
+            <span >所属打印店： <a href="/printers/detail/id/{$book['pri_id']}">{$book['printer']}</a><em>({$book['school']})</em><small>发布时间 ：{$book['time']}</small></span>
             </div>
         </div>
         </volist>
@@ -73,7 +73,7 @@ if(s){
             var html='';
             for (var i = 0;i<result.info.length; i++) {
                 s=result.info[i];
-                html='<div class="row well"><div class="col-sm-offset-1 col-sm-10 clear-right"><a href="__CONTROLLER__/detail?id='+s['id']+'" title="{$file.name}"> <strong class="text-success">'+s['name']+'</strong></a></div><div class="col-sm-offset-1 col-sm-10 clear-left"><span >所属打印店:<a>'+s['printer']+'</a><small> 发布时间 ：'+s['time']+'</small></span></div></div>';
+                html='<div class="row well"><div class="col-sm-offset-1 col-sm-10 clear-right"><a href="__CONTROLLER__/detail?id='+s['id']+'"> <strong class="text-success">'+s['name']+'</strong></a></div><div class="col-sm-offset-1 col-sm-10 clear-left"><span >所属打印店:<a>'+s['printer']+'</a><em>('+s['school']+')</em><small> 发布时间 ：'+s['time']+'</small></span></div></div>';
                 list.append(html);
             }
         }else{
