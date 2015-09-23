@@ -31,7 +31,8 @@
 namespace Home\Controller;
 use Think\Controller;
 
-class AuthController extends Controller {
+class AuthController extends Controller
+{
 	/**
 	 * index()
 	 * 登录和注册验证处理
@@ -46,7 +47,7 @@ class AuthController extends Controller {
 		$number   = I('post.number', null, C('REGEX_NUMBER'));
 		$password = I('post.password');
 
-		if ( ! $number ||  ! $password) //学号或者密码不存在
+		if (!$number || !$password) //学号或者密码不存在
 		{
 			$this->error(L('WRONG_FORMAT'), C('BASE_URL'));
 		}
@@ -60,7 +61,7 @@ class AuthController extends Controller {
 		{
 
 			$login_id = $this->_login($number, $password, $user);
-			if ( ! $login_id) //登录失败
+			if (!$login_id) //登录失败
 			{
 				$this->error(L('LOGIN_FAIL'), C('BASE_URL'));
 			}
@@ -69,15 +70,15 @@ class AuthController extends Controller {
 				/*登录成功开始跳转*/
 				S($key, null);
 				$token = md5(token($login_id));
-				S('AUTH_'.$token, $login_id, 300);
-				redirect(C('BASE_URL').'/Auth/token?type=login&key='.$token);
+				S('AUTH_' . $token, $login_id, 300);
+				redirect(C('BASE_URL') . '/Auth/token?type=login&key=' . $token);
 			}
 		}
 		else
 		{
 			/*未注册尝试验证*/
 			$data = $this->_verify($number, $password);
-			if ( ! $data)
+			if (!$data)
 			{
 				$this->error($this->err, C('BASE_URL'));
 			}
@@ -85,9 +86,9 @@ class AuthController extends Controller {
 			{
 				/*验证成功缓存验证信息并跳转*/
 				S($key, null);
-				$token = md5($number.token($number));
-				S('REG_'.$token, $data, 300);
-				redirect(C('BASE_URL').'/Auth/token?type=register&key='.$token);
+				$token = md5($number . token($number));
+				S('REG_' . $token, $data, 300);
+				redirect(C('BASE_URL') . '/Auth/token?type=register&key=' . $token);
 			}
 		}
 	}
@@ -111,22 +112,22 @@ class AuthController extends Controller {
 			case 'login':	//登录验证
 
 			/* 登录，根据key读取缓存的id，写入session和cookie完成登录,跳转到信息页 */
-				if ($id = S('AUTH_'.$key))
+				if ($id = S('AUTH_' . $key))
 				{
 					session('use_id', $id);
 					$token = update_token($id, C('STUDENT'));
 					cookie('token', $token, 3600 * 24 * 30);
-					S('AUTH_'.$key, null);
+					S('AUTH_' . $key, null);
 					redirect('/User/', 0, L('AUTH_SUCCESS'));
 				}
 				break;
 			case 'register':	//注册验证
 
 			/* 登录，根据key读取缓存的注册数据，写入session,跳转到注册页面 */
-				if ($data = S('REG_'.$key))
+				if ($data = S('REG_' . $key))
 				{
 					session('authData', $data);
-					S('REG_'.$key, null);
+					S('REG_' . $key, null);
 					$this->redirect('/User/register');
 				}
 				break;
@@ -146,27 +147,27 @@ class AuthController extends Controller {
 		$number       = I('post.number', false, C('REGEX_NUMBER_NKU'));
 		$urp_password = I('post.urp_password');
 		$password     = I('post.password');
-		if ( ! $number)
+		if (!$number)
 		{
 			$this->error(L('ACCOUNT_FORMAT_ERROR'));
 		}
-		elseif ( ! $urp_password ||  ! $password)
+		elseif (!$urp_password || !$password)
 		{
 			$this->error(L('PASSWORD_EMPTY'));
 		}
 		/*验证账号*/
-		if ( ! $this->_verify($number, $urp_password))
+		if (!$this->_verify($number, $urp_password))
 		{
 			$this->error($this->err);
 		}
 		else
 		{
-			if ( ! I('isMD5'))
+			if (!I('isMD5'))
 			{
 				$password = md5($password);
 			}
 			/*重置密码*/
-			if (false === M('User')->where('student_number='.$number)->setField('password', encode($password, $number)))
+			if (false === M('User')->where('student_number=' . $number)->setField('password', encode($password, $number)))
 			{
 				$this->error(L('PASSWORD_RESET_ERROR'));
 			}
@@ -194,6 +195,13 @@ class AuthController extends Controller {
 		session(null);
 		session('[destroy]');
 		redirect(C('BASE_URL'));
+	}
+
+	public function getCode()
+	{
+		import('Verify.tju', COMMON_PATH, '.php');
+       header('Content-type: image/jpg');
+		echo getCode();
 	}
 
 	/**
@@ -229,7 +237,7 @@ class AuthController extends Controller {
 
 		$this->_checkTries($number);
 
-		if ( ! $user)
+		if (!$user)
 		{
 			$user = M('User')->field('id,password,status')->getByStudentNumber($number);
 		}
@@ -244,8 +252,8 @@ class AuthController extends Controller {
 			else
 			{
 				/*更新密码加密方式，过渡到新的加密方式*/
-				$password = md5($password);
-				$password = encode($password, $number);
+				$password         = md5($password);
+				$password         = encode($password, $number);
 				$user['password'] = $password;
 				$User->save($user);
 			}
@@ -269,7 +277,7 @@ class AuthController extends Controller {
 		}
 		else
 		{
-			S('AUTH_'.$number, null);
+			S('AUTH_' . $number, null);
 			return $user['id'];
 		}
 	}
@@ -292,20 +300,20 @@ class AuthController extends Controller {
 		if (preg_match(C('REGEX_NUMBER_NKU'), $number))
 		{
 			//南开大学
-		
-				$verify_way = C('VERIFY_NKU');
-				$data['sch_id'] = 1;
+
+			$verify_way     = C('VERIFY_NKU');
+			$data['sch_id'] = 1;
 		}
 		elseif (preg_match(C('REGEX_NUMBER_TJU'), $number))
 		{
 			//天津大学
-			$verify_way = C('VERIFY_TJU');
+			$verify_way     = C('VERIFY_TJU');
 			$data['sch_id'] = 2;
 		}
 		elseif (preg_match(C('REGEX_NUMBER_TIFERT'), $number))
 		{
 			//天津商职
-			$verify_way = C('VERIFY_TIFERT');
+			$verify_way     = C('VERIFY_TIFERT');
 			$data['sch_id'] = 3;
 		}
 		else
@@ -321,17 +329,17 @@ class AuthController extends Controller {
 		$name = getName($number, $password);
 		if ($name)
 		{
-			S('AUTH_'.$number, null); //清楚尝试次数
+			S('AUTH_' . $number, null); //清楚尝试次数
 
-			$data['name'] = $name;
+			$data['name']           = $name;
 			$data['student_number'] = $number;
-			$data['password'] = md5($password);
+			$data['password']       = md5($password);
 			return $data;
 		}
 		else
 		{
-			$school=M('School')->cache(true)->getFieldById($data['sch_id'],'name');
-			$this->err = L('VERIFY_FAIL', array('school'=>$school));
+			$school    = M('School')->cache(true)->getFieldById($data['sch_id'], 'name');
+			$this->err = L('VERIFY_FAIL', array('school' => $school));
 			return null;
 		}
 	}
@@ -350,11 +358,11 @@ class AuthController extends Controller {
 	 */
 	private function _checkTries($number)
 	{
-		$key   = 'auth_'.$number;
+		$key   = 'auth_' . $number;
 		$times = S($key);
 		if ($times > C('MAX_TRIES'))
 		{
-			\Think\Log::record('auth爆破警告：ip:'.get_client_ip().',number:'.$number, 'NOTIC', true);
+			\Think\Log::record('auth爆破警告：ip:' . get_client_ip() . ',number:' . $number, 'NOTIC', true);
 			$this->error(L('TRIES_LIMIT'), C('BASE_URL'), 5);
 			return false;
 		}

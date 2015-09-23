@@ -29,11 +29,18 @@
                     <form id="loginForm" method="post" action="{$status}/Auth/" onsubmit="return checkForm();">
                         <div class="wrap">
                             <span class="glyphicon glyphicon-user" style="color: white;  font-size: 23px; top: 33px; left: -40px;" aria-hidden="true"></span>
-                            <input type="text"  id="name" tabindex="1" name="number"  class="form-control" placeholder="输入学号" maxlength="10" aria-describedby="basic-addon1" required>
+                            <input type="text"  id="number" tabindex="1" name="number"  class="form-control" placeholder="输入学号" maxlength="10" aria-describedby="basic-addon1" required>
                         </div>
                         <div class="wrap">
                             <a class="PwdEye glyphicon" style="color: white;  font-size: 23px; top: 33px; left: -40px;"  aria-hidden="true" data-query='#pwd'></a>
                             <input type="password" tabindex="2" class="form-control" id="pwd" name="password" placeholder="输入密码" data-toggle="tooltip" data-placement="top" title="第一次使用，请用指定的学校认证系统账号登录"
+                            data-original-title="Tooltip on top" aria-describedby="basic-addon2" required/>
+                        </div>
+                        <div class="wrap" id="code-area" style="display: none">
+                            <span class="glyphicon" style="color: white;  font-size: 23px; top: 33px; left: -40px;"  aria-hidden="true" data-query='#code'>
+                                <img src="/Auth/getCode"/>
+                            </span>
+                            <input type="text" tabindex="3" class="form-control" id="code" name="code" placeholder="验证码" data-toggle="tooltip" data-placement="top" title="天大首次登录需要"
                             data-original-title="Tooltip on top" aria-describedby="basic-addon2" required/>
                         </div>
                         <div class="wrap btnw">
@@ -44,7 +51,7 @@
                         </div>
                     </form>
 
-                    <div id="tip" class="tipcontent">
+                    <div id="tip" class="tipcontent" style='display:block'>
                     <p>天津大学同学,首次登录请用<a target="_blank" href="http://e.tju.edu.cn/">办公网</a>学号密码<br/>南开大学同学,首次登录请用<a target="_blank" href="http://urp.nku.cn/">ＵＲＰ</a>学号密码<br/>天津商职同学,首次登录请用<a target="_blank" href="http://jw.tifert.edu.cn/2003/">教务网</a>学号密码</p>
                     </div>
                 </div>
@@ -92,21 +99,32 @@ $(function(){
 $('#point').click(function(){
 $('#tip').toggle("normal");
 });
-
-});
-function checkForm(){
-    var name = document.getElementById("name").value;
-    var btn = document.getElementById("submit-btn");
-    reg=/^\d{7}|\d{10}$/;
+$('#number').blur(function(input){
+    // alert(input);
+var number=$('#number').val();
+// alert(number);
+    var reg=/^\d{7}|\d{10}$/;
     // var re1 = /^[1][0-4]\d{5}$/;                 // undergraduate stu_num
     // var re2 = /^\d{2}[1-2][0|9][0|1|8|9]\d{5}$/; // graduate and P.H.D. stu_num
-    // var re3 = /^[1-3]01[0-4]\d{6}$/; //tju stu_num
-    if(!reg.test(name)) {
+     var tju = /^[1-3]01[0-5]\d{6}$/; //tju stu_num
+    if(!reg.test(number)) {
         document.getElementById("tip").innerHTML = "请输入格式正确的学号！(仅支持南开和天大和天津商职在读学生)";
-        $('#tip').toggle("normal");
-        document.getElementById("name").focus();
+        $('#tip').show();
+        document.getElementById("number").focus();
         return false;
     }
+    if(tju.test(number))
+    {
+        $('#code-area').show();
+        $('#tip').hide();
+    }else{
+          $('#code-area').hide();
+    }
+
+});
+});
+function checkForm(){
+    var btn = document.getElementById("submit-btn");
     btn.innerHTML = '<span class="streach text-center">验证中</span>';
     btn.disabled = true;
     return true;

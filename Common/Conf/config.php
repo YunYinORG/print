@@ -95,6 +95,6 @@ return array(
 	// 'VAR_LANGUAGE'     => 'l', // 默认语言切换变量
 
 	/*HTTPS安全连接是否开启，Home/Conf/config.php有对应的safe_url为https*/
-	'HTTPS_ON' => true, //本地调试开发时，在secret中设置'HTTPS_ON'=>false；
+	'HTTPS_ON' => false, //本地调试开发时，在secret中设置'HTTPS_ON'=>false；
 	'BASE_URL' => 'http://yunyin.org', //本地调试开发时，在secret中设置'BASE_URL'=>'http://localhost';
 );

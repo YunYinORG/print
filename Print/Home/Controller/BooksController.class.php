@@ -2,20 +2,15 @@
 namespace Home\Controller;
 use Think\Controller;
 
+
 class BooksController extends Controller
 {
-CONST SCHOOL=array(
-	0=>'未知学校',
-	1=>'南开大学',
-	2=>'天津大学',
-	3=>'天津商职',
-	);
 	/**
 	 * 自己分享的文件列表页
 	 * @method index
 	 * @author NewFuture[newfuture@yunyin.org]
 	 */
-	public function index()
+	function index()
 	{
 		// $uid = use_id();
 		// if (!$uid)
@@ -24,7 +19,10 @@ CONST SCHOOL=array(
 		// }
 
 		$books = D('BookView')->Page(1, 20)->cache(600)->select();
-		array_walk($books,function(&$book){$book['school']=self::SCHOOL[$book['school']];return $book;});
+		array_walk($books, function(&$book){
+			$SCHOOL = array('未知学校','南开大学','天津大学', '天津商职');
+	$book['school'] = $SCHOOL[$book['school']];
+	return $book;});
 		$this->books = $books;
 		$this->display();
 	}
@@ -35,7 +33,7 @@ CONST SCHOOL=array(
 	 * @param  输入 tid
 	 * @author NewFuture[newfuture@yunyin.org]
 	 */
-	public function search()
+	function search()
 	{
 		// $uid = use_id();
 		// if (!$uid)
@@ -52,13 +50,15 @@ CONST SCHOOL=array(
 		{
 			//通过关键字搜索
 			$condition['book.name'] = array('LIKE', '%' . strtr($string, ' ', '%') . '%');
-			// $Share = $Share->where('share.name LIKE "%%%s%%"', $string);
+			$Share = $Share->where('share.name LIKE "%%%s%%"', $string);
 			$Book->where($condition);
 		}
 
 		if ($books = $Book->page($page)->limit(50)->select())
 		{
-			array_walk($books,function(&$book){$book['school']=self::SCHOOL[$book['school']];return $book;});
+			array_walk($books,function(&$book){
+			$SCHOOL = array('未知学校','南开大学','天津大学', '天津商职');
+			$book['school'] = $SCHOOL[$book['school']];return $book;});
 			$this->success($books);
 		}
 		else
@@ -67,7 +67,7 @@ CONST SCHOOL=array(
 		}
 	}
 
-	public function detail($id = 0)
+	function detail($id = 0)
 	{
 
 		$uid = use_id();
@@ -86,7 +86,7 @@ CONST SCHOOL=array(
 		}
 	}
 
-	public function prints($id = 0)
+	function prints($id = 0)
 	{
 
 		if (!$uid = use_id())
@@ -103,13 +103,13 @@ CONST SCHOOL=array(
 		}
 		else
 		{
-			$file['pri_id'] = $book['pri_id'];
-			$file['use_id'] = $uid;
-			$file['status'] = 1;
+			$file['pri_id']     = $book['pri_id'];
+			$file['use_id']     = $uid;
+			$file['status']     = 1;
 			$file['ppt_layout'] = 10;
-			$file['copies'] = $copies;
-			$file['url'] ='book:'.$book['name'].'/'.$id ;
-			$file['name']   = $book['name'] . '【店内书】';
+			$file['copies']     = $copies;
+			$file['url']        = 'book:' . $book['name'] . '/' . $id;
+			$file['name']       = $book['name'] . '【店内书】';
 			if ($requirements = I('post.requirements', 0, 'htmlspecialchars'))
 			{
 				$file['requirements'] = $requirements;
