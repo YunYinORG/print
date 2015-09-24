@@ -68,7 +68,7 @@ return array(
 
 	//验证方式
 	'VERIFY_NKU' => 'Verify.nankai_urp',
-	'VERIFY_TJU' => 'Verify.tju_e',
+	'VERIFY_TJU' => 'Verify.tju',
 	'VERIFY_TIFERT'=>'Verify.tifert_jw',
 	//验证正则表达式
 	'REGEX_NUMBER'     => '/^(\d{7}|\d{10})$/', //学号正则7或者10
@@ -95,6 +95,6 @@ return array(
 	// 'VAR_LANGUAGE'     => 'l', // 默认语言切换变量
 
 	/*HTTPS安全连接是否开启，Home/Conf/config.php有对应的safe_url为https*/
-	'HTTPS_ON' => false, //本地调试开发时，在secret中设置'HTTPS_ON'=>false；
+	'HTTPS_ON' => true, //本地调试开发时，在secret中设置'HTTPS_ON'=>false；
 	'BASE_URL' => 'http://yunyin.org', //本地调试开发时，在secret中设置'BASE_URL'=>'http://localhost';
 );

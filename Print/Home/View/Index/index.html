@@ -37,11 +37,11 @@
                             data-original-title="Tooltip on top" aria-describedby="basic-addon2" required/>
                         </div>
                         <div class="wrap" id="code-area" style="display: none">
-                            <span class="glyphicon" style="color: white;  font-size: 23px; top: 33px; left: -40px;"  aria-hidden="true" data-query='#code'>
-                                <img src="/Auth/getCode"/>
+                            <span aria-hidden="true">
+                                <img id="code-img">
                             </span>
                             <input type="text" tabindex="3" class="form-control" id="code" name="code" placeholder="验证码" data-toggle="tooltip" data-placement="top" title="天大首次登录需要"
-                            data-original-title="Tooltip on top" aria-describedby="basic-addon2" required/>
+                            data-original-title="Tooltip on top" aria-describedby="basic-addon2"/>
                         </div>
                         <div class="wrap btnw">
                             <button type="submit" class="btn btn-warning col-xs-12" id="submit-btn"><span class="text-center">进入</span></button>
@@ -116,6 +116,7 @@ var number=$('#number').val();
     if(tju.test(number))
     {
         $('#code-area').show();
+        $('#code-img').attr('src','https://nkuprint.sinaapp.com/Auth/getCode');
         $('#tip').hide();
     }else{
           $('#code-area').hide();

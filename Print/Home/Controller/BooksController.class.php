@@ -2,7 +2,6 @@
 namespace Home\Controller;
 use Think\Controller;
 
-
 class BooksController extends Controller
 {
 	/**
@@ -10,7 +9,7 @@ class BooksController extends Controller
 	 * @method index
 	 * @author NewFuture[newfuture@yunyin.org]
 	 */
-	function index()
+	public function index()
 	{
 		// $uid = use_id();
 		// if (!$uid)
@@ -19,10 +18,11 @@ class BooksController extends Controller
 		// }
 
 		$books = D('BookView')->Page(1, 20)->cache(600)->select();
-		array_walk($books, function(&$book){
-			$SCHOOL = array('未知学校','南开大学','天津大学', '天津商职');
-	$book['school'] = $SCHOOL[$book['school']];
-	return $book;});
+		array_walk($books, function (&$book)
+		{
+			$SCHOOL = array('未知学校', '南开大学', '天津大学', '天津商职');
+			$book['school'] = $SCHOOL[$book['school']];
+			return $book;});
 		$this->books = $books;
 		$this->display();
 	}
@@ -33,7 +33,7 @@ class BooksController extends Controller
 	 * @param  输入 tid
 	 * @author NewFuture[newfuture@yunyin.org]
 	 */
-	function search()
+	public function search()
 	{
 		// $uid = use_id();
 		// if (!$uid)
@@ -50,15 +50,15 @@ class BooksController extends Controller
 		{
 			//通过关键字搜索
 			$condition['book.name'] = array('LIKE', '%' . strtr($string, ' ', '%') . '%');
-			$Share = $Share->where('share.name LIKE "%%%s%%"', $string);
 			$Book->where($condition);
 		}
 
 		if ($books = $Book->page($page)->limit(50)->select())
 		{
-			array_walk($books,function(&$book){
-			$SCHOOL = array('未知学校','南开大学','天津大学', '天津商职');
-			$book['school'] = $SCHOOL[$book['school']];return $book;});
+			array_walk($books, function (&$book)
+			{
+				$SCHOOL = array('未知学校', '南开大学', '天津大学', '天津商职');
+				$book['school'] = $SCHOOL[$book['school']];return $book;});
 			$this->success($books);
 		}
 		else
@@ -67,7 +67,7 @@ class BooksController extends Controller
 		}
 	}
 
-	function detail($id = 0)
+	public function detail($id = 0)
 	{
 
 		$uid = use_id();
@@ -86,7 +86,7 @@ class BooksController extends Controller
 		}
 	}
 
-	function prints($id = 0)
+	public function prints($id = 0)
 	{
 
 		if (!$uid = use_id())
