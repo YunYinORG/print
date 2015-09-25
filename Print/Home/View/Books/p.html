@@ -1,0 +1,90 @@
+{//分享页}
+<EXTEND name="Print/Template/base.html"/>
+<BLOCK name="title">{$printer}·云印南天店家资源</BLOCK>
+
+<BLOCK name="addhead">{//头部添加}
+</BLOCK>
+<BLOCK name='header'>
+</BLOCK>
+
+<BLOCK name='content'>
+<div class="container-fluid">
+    <h1 class="text-center"><strong>{$printer}</strong> 打印店内资源搜索</h1>
+    <div class="row">
+        <div class="input-group col-md-offset-2 col-md-8">
+            <input type="search" list="tag-list" id="input-box" placeholder="输入关键字搜索" value="" class="form-control"aria-describedby="search-btn" data-url='__CONTROLLER__/searchIn/printer/{$pid}'>
+            <span class="input-group-addon btn btn-success" id="search-btn"><i class="glyphicon glyphicon-search"></i></span>
+        </div>
+    </div>
+    <hr/>
+    <div id='share-list' class="content text-center">
+        <volist name="books" id="book">
+        <div class="row well">
+            <div class="col-sm-offset-1 col-sm-10 clear-right">
+                <a href="__CONTROLLER__/detail/id/{$book.id}" title="{$book.name}"> <strong class="text-success">{$book['name']}</strong></a>
+            </div>
+            <div class="col-sm-offset-1 col-sm-10 clear-left">
+            <span><small>发布时间 ：{$book['time']}</small></span>
+            </div>
+        </div>
+        </volist>
+    </div>
+</div>
+<p class="text-center">资源信息由<q>{$printer}</q>发布；由<a href="http://www.yunyin.org">云印南天</a>提供技术支持</p>
+<hr/>
+</BLOCK>
+<BLOCK name='end'>
+<script>
+$(function(){
+    $('#search-btn').click(search);
+    $('#input-box').keydown(function(event){
+if(event.keyCode == 13){ //绑定回车
+search();
+}
+});
+    var s=decodeURI(location.search);
+    s=s.replace('?','');
+    if(s){
+    $('#input-box').val(s);
+    search();
+}
+});
+/**
+* 请求搜索并呈现结果
+* @method search
+* @return {[type]} [description]
+* @author NewFuture[newfuture@yunyin.org]
+*/
+function search()
+{
+    var input=$('#input-box');
+    var data={};
+    var s=input.val().trim();
+    var tid=0
+if(s){
+            data={'q':s};
+        }else{
+            input.focus();
+            return false;
+        }
+    var url=input.data('url');
+    $.post(url,data,function(result,response)
+    {
+        // if(response.s)
+        var list=$('#share-list');
+        list.empty();
+        if(result.status)
+        {
+            var html='';
+            for (var i = 0;i<result.info.length; i++) {
+                s=result.info[i];
+                html='<div class="row well"><div class="col-sm-offset-1 col-sm-10 clear-right"><a href="__CONTROLLER__/detail?id='+s['id']+'"> <strong class="text-success">'+s['name']+'</strong></a></div><div class="col-sm-offset-1 col-sm-10 clear-left"><span><small> 发布时间 ：'+s['time']+'</small></span></div></div>';
+                list.append(html);
+            }
+        }else{
+            list.html(result.info);
+        }
+    });
+}
+</script>
+</BLOCK>

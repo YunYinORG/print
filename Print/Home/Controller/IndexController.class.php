@@ -47,6 +47,10 @@ class IndexController extends Controller {
 		}else{
 			$this->status=__ROOT__;
 		}
+		if($redirect=I('r'))
+		{
+			cookie('redirect',$redirect);
+		}
 		$this->display('index');
 	}
 

@@ -41,8 +41,9 @@ class BooksController extends Controller
 		// 	$this->error('未登录！');
 		// }
 
-		$string    = I('q');           //字符搜索
-		$page      = I('p', 1, 'int'); //翻页
+		$string = I('q');           //字符搜索
+		$page   = I('p', 1, 'int'); //翻页
+		                            // $pid       = I('pid', 0, 'int');
 		$Book      = D('BookView');
 		$condition = array();
 
@@ -50,6 +51,11 @@ class BooksController extends Controller
 		{
 			//通过关键字搜索
 			$condition['book.name'] = array('LIKE', '%' . strtr($string, ' ', '%') . '%');
+
+		}
+
+		if (!empty($condition))
+		{
 			$Book->where($condition);
 		}
 
@@ -125,4 +131,71 @@ class BooksController extends Controller
 		}
 	}
 
+	/**
+	 * 店内书
+	 * @method p
+	 * @return [type]  [description]
+	 * @author NewFuture
+	 */
+	public function p()
+	{
+		$id            = I('path.2', 0, 'int');
+		// var_dump(I('path.2'));
+		$books         = M('Book')->where('pri_id=%d', $id)->Page(1, 20)->cache(600)->select();
+		$this->books   = $books;
+		$this->pid     = $id;
+		$this->printer = M('printer')->getFieldById($id, 'name');
+		$this->display();
+	}
+
+	/**
+	 * 分享文件搜
+	 * @method search
+	 * @param  输入 tid
+	 * @author NewFuture[newfuture@yunyin.org]
+	 */
+	public function searchIn($printer = 0)
+	{
+		// $uid = use_id();
+		// if (!$uid)
+		// {
+		// 	$this->error('未登录！');
+		// }
+
+		$string = I('q'); //字符搜索
+		                  // $page      = I('p', 1, 'int'); //翻页
+		                  // $pid       = I('pid', 0, 'int');
+		$Book      = M('Book');
+		$condition = array();
+
+		if ($printer && intval($printer))
+		{
+			$condition['pri_id'] = $printer;
+		}
+		else
+		{
+			$this->error('未选择打印店');
+		}
+
+		if ($string)
+		{
+			//通过关键字搜索
+			$condition['book.name'] = array('LIKE', '%' . strtr($string, ' ', '%') . '%');
+
+		}
+
+		if (!empty($condition))
+		{
+			$Book->where($condition);
+		}
+
+		if ($books = $Book->page($page)->limit(50)->select())
+		{
+			$this->success($books);
+		}
+		else
+		{
+			$this->error('无查询结果╮(╯-╰)╭');
+		}
+	}
 }

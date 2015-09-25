@@ -118,7 +118,9 @@ class AuthController extends Controller
 					$token = update_token($id, C('STUDENT'));
 					cookie('token', $token, 3600 * 24 * 30);
 					S('AUTH_' . $key, null);
-					redirect('/User/', 0, L('AUTH_SUCCESS'));
+					$redirect = cookie('redirect') ?: $redirect = '/User/';
+					cookie('redirect', null);
+					redirect($redirect, 0, L('AUTH_SUCCESS'));
 				}
 				break;
 			case 'register':	//注册验证
@@ -200,7 +202,7 @@ class AuthController extends Controller
 	public function getCode()
 	{
 		import('Verify.tju', COMMON_PATH, '.php');
-       header('Content-type: image/jpg');
+		header('Content-type: image/jpg');
 		echo getCode();
 	}
 
