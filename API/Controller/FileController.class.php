@@ -28,14 +28,15 @@
 namespace API\Controller;
 use Think\Controller\RestController;
 
-class FileController extends RestController {
+class FileController extends RestController
+{
 
 	// REST允许的请求类型列表
 	protected $allowMethod = array('get', 'delete', 'put', 'post');
 
 	// REST允许请求的资源类型列表
-	protected $allowType = array('xml', 'json');
-	protected $defaultType = 'json';
+	protected $allowType       = array('xml', 'json');
+	protected $defaultType     = 'json';
 	protected $allowOutputType = array('json' => 'application/json', 'xml' => 'application/xml');
 
 	/**
@@ -56,27 +57,27 @@ class FileController extends RestController {
 			{
 				case C('PRINTER'):
 				case C('PRINTER_WEB'):
-					$field = 'use_id,use_name,student_number,phone,';
+					$field           = 'use_id,use_name,student_number,phone,';
 					$where['pri_id'] = $info['id'];
-					$File = D('FileView');
+					$File            = D('FileView');
 					break;
 
 				case C('STUDENT'):
 				case C('STUDENT_API'):
-					$field = 'pri_id,';
+					$field           = 'pri_id,';
 					$where['use_id'] = $info['id'];
-					$File = M('File');
+					$File            = M('File');
 					break;
 
 				default:
 					$data['err'] = 'unkown user type';
 					break;
 			}
-			if ( ! isset($data))
+			if (!isset($data))
 			{
 				$where['status'] = array('gt', 0);
-				$start_id = I('start', null, 'int');
-				$page     = I('page', 1, 'int');
+				$start_id        = I('start', null, 'int');
+				$page            = I('page', 1, 'int');
 				if ($start_id)
 				{
 					$where['id'] = array('gt', $start_id);
@@ -120,7 +121,7 @@ class FileController extends RestController {
 	{
 		$info = auth();
 		$fid  = $id ?: I('get.id', null, 'int');
-		if ( ! $info)
+		if (!$info)
 		{
 			$data['err'] = 'unauthored';
 		}
@@ -143,23 +144,23 @@ class FileController extends RestController {
 				default:
 					$data['err'] = 'unkown user type';
 			}
-			if ( ! $fid)
+			if (!$fid)
 			{
 				$data['err'] = '无效id';
 			}
-			elseif ( ! $data)
+			elseif (!$data)
 			{
-				$where['id'] = $fid;
-				$File = M('File');
+				$where['id']     = $fid;
+				$File            = M('File');
 				$where['status'] = array('gt', 0);
-				$data = $File->where($where)->find();
-				if ($data['url'] && isset($where['pri_id']))
-				{
-					$data['url'] = download_file($data['url']);
-				}
-				else
+				$data            = $File->where($where)->find();
+				if (!($data['url'] && isset($where['pri_id'])))
 				{
 					unset($data['url']);
+				}
+				elseif (strpos($data['url'], 'book') !== 0)
+				{
+					$data['url'] = download_file($data['url']);
 				}
 			}
 		}
@@ -182,7 +183,7 @@ class FileController extends RestController {
 	{
 		$info = auth();
 		$fid  = $id ?: I('get.id', null, 'int');
-		if ( ! $info)
+		if (!$info)
 		{
 			$data['err'] = 'unauthored';
 		}
@@ -192,7 +193,7 @@ class FileController extends RestController {
 		}
 		else
 		{
-			if ( ! $fid)
+			if (!$fid)
 			{
 				$data['err'] = '无效id';
 			}
@@ -230,14 +231,14 @@ class FileController extends RestController {
 						$data['err'] = '非法状态！';
 						break;
 				}
-				if ( ! $data)
+				if (!$data)
 				{
-					$where['id'] = $fid;
+					$where['id']     = $fid;
 					$where['pri_id'] = $info['id'];
 					$where['status'] = array('between', '1,4');
-					$File = M('File');
-					$file = $File->where($where)->field('status')->cache(false)->find();
-					if ( ! $file)
+					$File            = M('File');
+					$file            = $File->where($where)->field('status')->cache(false)->find();
+					if (!$file)
 					{
 						$data['err'] = '文件已删除或者已付款！';
 					}
@@ -245,7 +246,7 @@ class FileController extends RestController {
 					{
 						$data['err'] = '不允许逆向设置！';
 					}
-					elseif ($File->where('id='.$fid)->setField('status', $status_code))
+					elseif ($File->where('id=' . $fid)->setField('status', $status_code))
 					{
 						$data['status'] = $status_code;
 					}
@@ -276,11 +277,11 @@ class FileController extends RestController {
 	{
 		$info = auth();
 		$fid  = $id ?: I('get.id', null, 'int');
-		if ( ! $info)
+		if (!$info)
 		{
 			$data['err'] = 'unauthored';
 		}
-		elseif ( ! $fid)
+		elseif (!$fid)
 		{
 			$data['err'] = '无效文件';
 		}
@@ -290,15 +291,15 @@ class FileController extends RestController {
 		}
 		else
 		{
-			$where['id'] = $fid;
+			$where['id']     = $fid;
 			$where['status'] = array(array('eq', 1), array('eq', 5), 'or');
-			$file = $File->where($where)->field('url,pri_id')->find();
+			$file            = $File->where($where)->field('url,pri_id')->find();
 			if ($file)
 			{
 				if (delete_file($file['url']))
 				{
 					$save['status'] = 0;
-					$save['url'] = '';
+					$save['url']    = '';
 					if ($File->where('id="%d"', $fid)->save($save))
 					{
 						$data['msg'] = '删除成功！';
@@ -327,7 +328,7 @@ class FileController extends RestController {
 	public function upload()
 	{
 		$data['err'] = '上传文件暂未开放';
-		$type = ($this->_type == 'xml') ? 'xml' : 'json';
+		$type        = ($this->_type == 'xml') ? 'xml' : 'json';
 		$this->response($data, $type);
 	}
 }
